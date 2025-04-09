@@ -1,0 +1,323 @@
+/* .wrapper-chart {
+    height: 300px;
+} */
+
+.rounded {
+    border-radius: 20px !important;
+    background-color: #fff;
+    color: #000;
+}
+h3,
+h5,
+h6 {
+    color: #000;
+}
+.rounded h3,
+h5,
+h6 {
+    color: #000;
+}
+/* .donutChar {
+    background-color: brown;
+    height: 250px;
+    padding: 20px;
+}
+
+.donutChar canvas {
+    background-color: rgb(42, 110, 165);
+    height: 200px;
+    padding: 20px;
+} */
+
+.chartSistem span {
+    height: 10px;
+    width: 20px;
+    background-color: red;
+}
+
+.box {
+    height: 10px !important;
+    width: 20px !important;
+    background-color: rgb(0, 255, 94) !important;
+}
+
+.dark-mode {
+    background-color: #212830;
+    /* Dark background for the whole page */
+    color: #ffffff !important;
+    /* Light text color */
+}
+
+/* Navbar - Dark mode */
+.dark-mode .navbar.bg-navbar-theme {
+    background-color: #151b23 !important;
+    color: #ffffff;
+}
+
+.dark-mode .navbar.bg-navbar-theme .navbar-brand,
+.dark-mode .navbar.bg-navbar-theme .navbar-search-wrapper .navbar-search-icon,
+.dark-mode .navbar.bg-navbar-theme .navbar-nav .nav-link {
+    color: #ffffff;
+}
+.dark-mode .rounded {
+    border-radius: 20px !important;
+    background-color: #151b23;
+    border: 1px solid #303234 !important;
+    border-color: #9198a1 !important;
+    color: #ffffff !important;
+}
+.dark-mode hr {
+    border-color: #9198a1 !important;
+}
+
+.dark-mode * {
+    border-color: #9198a1 !important;
+}
+
+.dark-mode .navbar.bg-navbar-theme .navbar-nav .nav-link:hover,
+.dark-mode .navbar.bg-navbar-theme .navbar-nav .nav-item > .nav-link:focus {
+    color: #bbbbbb;
+}
+.dark-mode h3,
+.dark-mode h5,
+.dark-mode h6 {
+    color: #ffffff; /* White text for dark mode */
+}
+h3,
+h5,
+h6 {
+    color: #000000;
+}
+/* Menu - Dark mode */
+.dark-mode .bg-menu-theme {
+    background-color: #151b23 !important;
+    color: #ffffff;
+}
+
+.dark-mode .bg-menu-theme .menu-link {
+    color: #ffffff;
+}
+
+.dark-mode .bg-menu-theme .menu-link:hover,
+.dark-mode .bg-menu-theme .menu-link:focus {
+    color: #bbbbbb;
+}
+
+/* Button Styles - Dark mode */
+.dark-mode .btn-primary {
+    background-color: #696cff !important;
+    color: #ffffff;
+    border-color: #696cff !important;
+}
+
+.dark-mode .btn-primary:hover {
+    background-color: #5f61e6 !important;
+    border-color: #5f61e6 !important;
+}
+
+/* Footer - Dark mode */
+.dark-mode .bg-footer-theme {
+    background-color: #151b23;
+    color: #ffffff;
+}
+
+.dark-mode .bg-footer-theme .footer-link {
+    color: #696cff;
+}
+
+.dark-mode .bg-footer-theme .footer-link:hover {
+    color: #5f61e6;
+}
+option {
+    color: #000;
+}
+/* Dark Mode for Tables */
+.dark-mode .table {
+    --bs-table-color: #ffffff; /* Light text color for the table */
+    --bs-table-bg: #121212; /* Dark background for the table */
+    --bs-table-border-color: #444; /* Darker border color */
+    --bs-table-accent-bg: #1e1e1e; /* Accent background for table */
+    --bs-table-striped-color: #ffffff; /* Light text color for striped rows */
+    --bs-table-striped-bg: #333333; /* Darker striped rows */
+    --bs-table-active-color: #ffffff; /* Light text color for active rows */
+    --bs-table-active-bg: rgba(
+        255,
+        255,
+        255,
+        0.1
+    ); /* Active row background color */
+    --bs-table-hover-color: #ffffff; /* Light text color for hovered rows */
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.1); /* Hover background color */
+    width: 100%;
+    margin-bottom: 1rem;
+    vertical-align: middle;
+    border-color: var(--bs-table-border-color);
+}
+
+.dark-mode .table > :not(caption) > * > * {
+    color: var(
+        --bs-table-color-state,
+        var(--bs-table-color-type, var(--bs-table-color))
+    );
+    background-color: var(--bs-table-bg);
+    border-bottom-width: var(--bs-border-width);
+    box-shadow: inset 0 0 0 9999px
+        var(
+            --bs-table-bg-state,
+            var(--bs-table-bg-type, var(--bs-table-accent-bg))
+        );
+}
+
+.dark-mode .table > tbody {
+    vertical-align: inherit;
+}
+
+.dark-mode .table > thead {
+    vertical-align: bottom;
+}
+
+.dark-mode .table-group-divider {
+    border-top: calc(var(--bs-border-width) * 2) solid #444; /* Darker divider */
+}
+
+.dark-mode .caption-top {
+    caption-side: top;
+}
+
+.dark-mode .table-sm > :not(caption) > * > * {
+    padding: 0.594rem 1.25rem;
+}
+
+.dark-mode .table-bordered > :not(caption) > * {
+    border-width: var(--bs-border-width) 0;
+}
+.dark-mode .table-bordered > :not(caption) > * > * {
+    border-width: 0 var(--bs-border-width);
+}
+
+.dark-mode .table-borderless > :not(caption) > * > * {
+    border-bottom-width: 0;
+}
+.dark-mode .table-borderless > :not(:first-child) {
+    border-top-width: 0;
+}
+
+.dark-mode .table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-color-type: var(--bs-table-striped-color);
+    --bs-table-bg-type: var(--bs-table-striped-bg);
+}
+
+.dark-mode .table-striped-columns > :not(caption) > tr > :nth-child(even) {
+    --bs-table-color-type: var(--bs-table-striped-color);
+    --bs-table-bg-type: var(--bs-table-striped-bg);
+}
+
+.dark-mode .table-active {
+    --bs-table-color-state: var(--bs-table-active-color);
+    --bs-table-bg-state: var(--bs-table-active-bg);
+}
+
+.dark-mode .table-hover > tbody > tr:hover > * {
+    --bs-table-color-state: var(--bs-table-hover-color);
+    --bs-table-bg-state: var(--bs-table-hover-bg);
+}
+
+/* Dark Mode Active and Hover States for Menu */
+.dark-mode .bg-menu-theme .menu-item.active > .menu-link:not(.menu-toggle) {
+    background-color: #232846 !important; /* Dark background for active menu item */
+    color: #696cff; /* Light blue text for active menu item */
+}
+
+/* Dark Mode Hover State for Menu */
+.dark-mode .bg-menu-theme .menu-item > .menu-link:not(.menu-toggle):hover {
+    background-color: #2a3456 !important; /* Darker background for hover effect */
+    color: #ffffff; /* White text color on hover */
+}
+
+.dark-mode input {
+    color: #ffffff;
+}
+
+.custom-toggle {
+    background-color: #fafafa;
+    color: #696cff;
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    padding: 5px;
+    border: none !important;
+}
+
+.custom-toggle:hover {
+    background-color: #f0f0f0;
+}
+
+.dark-mode .custom-toggle:hover {
+    background-color: #25272a;
+}
+
+.dark-mode .custom-toggle {
+    background-color: #151b23;
+}
+
+.matahari,
+.bulan {
+    font-size: 20px;
+}
+
+.dark-mode .daterangepicker {
+    background-color: #151b23 !important;
+    color: #000000 !important;
+}
+
+.dark-mode select#status.form-control {
+    color: #fff;
+}
+
+.dark-mode option#status.form-control {
+    color: #9a1010;
+}
+select#status.form-control {
+    color: #000;
+}
+
+#status * {
+    color: #000;
+}
+.dark-mode #dataUserChuck_length.dataTables_length {
+    color: #ffffff;
+}
+/* .activity-card .card-body {
+    height: 70px;
+} */
+.activity-card {
+    transition: transform 0.2s;
+}
+.activity-card:hover {
+    transform: translateY(-3px);
+}
+
+#JSCharting_89351 {
+    height: 3000px !important;
+}
+
+/* #chartDiv {
+    background-color: #212830 !important;
+}
+
+#chartDiv rect {
+    background-color: #212830 !important;
+} */
+
+.avatar-icon {
+    color: #fff;
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    font-weight: 600;
+    background: #696cff;
+}
