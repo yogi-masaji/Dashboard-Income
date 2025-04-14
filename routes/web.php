@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Login;
+use App\Http\Controllers\TransactionController;
 use App\Models\lokasi;
 use App\Models\grupMenu;
 use App\Models\grupLokasi;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Session;
 
 Route::get('/', function () {
     return view('main');
+});
+route::get('/tester', function () {
+    return view('tester');
 });
 
 Route::get('/login', [Login::class, 'LoginView'])->name('login');
@@ -31,8 +35,12 @@ Route::post('/set-location', function (Illuminate\Http\Request $request) {
             'selected_location_id_grup' => $lokasi->id_Group,
             'selected_location_name' => $lokasi->nama_Lokasi,
             'selected_location_ip_lokasi' => $lokasi->ip_Lokasi,
+            'selected_location_kode_lokasi' => $lokasi->kode_Lokasi,
         ]);
     }
 
     return redirect()->back();
 })->name('set.location');
+
+Route::get('/weekly-transaction', [TransactionController::class, 'WeeklyTransaction'])->name('weeklyTransaction');
+Route::get('/monthly-transaction', [TransactionController::class, 'MonthlyTransaction'])->name('monthlyTransaction');
