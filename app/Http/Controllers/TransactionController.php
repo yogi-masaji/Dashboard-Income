@@ -9,6 +9,60 @@ use Symfony\Component\CssSelector\Node\FunctionNode;
 
 class TransactionController extends Controller
 {
+    public function dailyTransaction()
+    {
+        $locationCode = session('selected_location_kode_lokasi');
+
+        $response = Http::get('http://110.0.100.70:8080/v3/api/daily-quantity', [
+            'location_code' => $locationCode,
+        ]);
+
+        $data = $response->json();
+
+        // Cek apakah data ada
+        if (empty($data['data']) || empty($data['data'][0]['today']) || empty($data['data'][0]['yesterday'])) {
+            // Jika data kosong, langsung kembalikan data kosong atau beri pesan
+            return view('tester', ['processedData' => []]);
+        }
+
+        // Kalau ada data, lanjutkan proses seperti biasa
+        $todayData = $data['data'][0]['today'][0];
+        $yesterdayData = $data['data'][0]['yesterday'][0];
+
+        // Lanjutkan dengan proses perhitungan persen perubahan
+        $categories = [
+            'grandcasual' => 'Total Casual',
+            'grandpass' => 'Total Pass',
+            'grandtotal' => 'All Vehicle',
+        ];
+
+        $processedData = [];
+
+        foreach ($categories as $key => $label) {
+            $todayValue = $todayData[$key] ?? 0;  // Gunakan 0 jika nilai tidak ada
+            $yesterdayValue = $yesterdayData[$key] ?? 0;  // Gunakan 0 jika nilai tidak ada
+
+            // Hitung perubahan persentase
+            $change = $todayValue - $yesterdayValue;
+            $percentChange = $yesterdayValue != 0 ? (($change / $yesterdayValue) * 100) : 0;
+            $direction = $percentChange >= 0 ? '↑' : '↓';
+            $color = $percentChange >= 0 ? 'green' : 'red';
+
+            $processedData[] = [
+                'label' => $label,
+                'today' => $todayValue,
+                'yesterday' => $yesterdayValue,
+                'percent_change' => number_format($percentChange, 1),
+                'direction' => $direction,
+                'color' => $color,
+            ];
+        }
+
+        return view('tester', ['processedData' => $processedData]);
+    }
+
+
+
     public function WeeklyTransaction()
     {
         try {
@@ -143,12 +197,33 @@ class TransactionController extends Controller
                     fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd)
                 )->toArray());
 
-                // Hitung total
+                // Hitung total bulanan
                 $thisMonthCasualTotals = $this->calculateTotals($thisMonthCasual, 'casual');
                 $thisMonthPassTotals = $this->calculateTotals($thisMonthPass, 'pass');
 
                 $lastMonthCasualTotals = $this->calculateTotals($lastMonthCasual, 'casual');
                 $lastMonthPassTotals = $this->calculateTotals($lastMonthPass, 'pass');
+
+                // Group mingguan
+                $thisMonthCasualByWeek = $this->groupByWeek($thisMonthCasual);
+                $thisMonthPassByWeek = $this->groupByWeek($thisMonthPass);
+
+                // Hitung total mingguan
+                $thisMonthCasualWeekTotals = [
+                    'week_1' => $this->calculateTotals($thisMonthCasualByWeek['week_1'], 'casual'),
+                    'week_2' => $this->calculateTotals($thisMonthCasualByWeek['week_2'], 'casual'),
+                    'week_3' => $this->calculateTotals($thisMonthCasualByWeek['week_3'], 'casual'),
+                    'week_4' => $this->calculateTotals($thisMonthCasualByWeek['week_4'], 'casual'),
+                    'week_5' => $this->calculateTotals($thisMonthCasualByWeek['week_5'], 'casual'),
+                ];
+
+                $thisMonthPassWeekTotals = [
+                    'week_1' => $this->calculateTotals($thisMonthPassByWeek['week_1'], 'pass'),
+                    'week_2' => $this->calculateTotals($thisMonthPassByWeek['week_2'], 'pass'),
+                    'week_3' => $this->calculateTotals($thisMonthPassByWeek['week_3'], 'pass'),
+                    'week_4' => $this->calculateTotals($thisMonthPassByWeek['week_4'], 'pass'),
+                    'week_5' => $this->calculateTotals($thisMonthPassByWeek['week_5'], 'pass'),
+                ];
 
                 return response()->json([
                     'response' => 'Success Get Monthly Data',
@@ -156,16 +231,18 @@ class TransactionController extends Controller
                     'status_code' => 200,
                     'location_code' => $locationCode,
                     'this_month' => [
-                        'casual' => $thisMonthCasual,
-                        'pass' => $thisMonthPass,
+                        // 'pass' => $thisMonthPass, // Data casual disembunyikan
                         'totals' => [
                             'casual' => $thisMonthCasualTotals,
                             'pass' => $thisMonthPassTotals,
                         ],
+                        'weekly_totals' => [
+                            'casual' => $thisMonthCasualWeekTotals,
+                            'pass' => $thisMonthPassWeekTotals,
+                        ],
                     ],
                     'last_month' => [
-                        'casual' => $lastMonthCasual,
-                        'pass' => $lastMonthPass,
+                        // 'pass' => $lastMonthPass, // Data casual disembunyikan
                         'totals' => [
                             'casual' => $lastMonthCasualTotals,
                             'pass' => $lastMonthPassTotals,
@@ -181,6 +258,8 @@ class TransactionController extends Controller
     }
 
 
+
+
     // Helper function to calculate totals for casual or pass data
     private function calculateTotals($data, $type = 'casual')
     {
@@ -191,7 +270,6 @@ class TransactionController extends Controller
         $totalTaxi = 0;
 
         foreach ($data as $item) {
-            // Determine key based on type (casual or pass)
             $vehicleKey = $type === 'casual' ? 'vehiclecasual' : 'vehiclepass';
             $carKey = $type === 'casual' ? 'carcasual' : 'carpass';
             $motorbikeKey = $type === 'casual' ? 'motorbikecasual' : 'motorbikepass';
@@ -211,7 +289,36 @@ class TransactionController extends Controller
             'total_motorbike' => $totalMotorbike,
             'total_truck' => $totalTruck,
             'total_taxi' => $totalTaxi,
-            'total_all' => $totalVehicle, // Total semua kendaraan
+            'total_all' => $totalVehicle,
         ];
+    }
+
+    private function groupByWeek($data)
+    {
+        $weeks = [
+            'week_1' => [],
+            'week_2' => [],
+            'week_3' => [],
+            'week_4' => [],
+            'week_5' => [],
+        ];
+
+        foreach ($data as $item) {
+            $day = Carbon::parse($item['tanggal'])->day;
+
+            if ($day >= 1 && $day <= 7) {
+                $weeks['week_1'][] = $item;
+            } elseif ($day >= 8 && $day <= 14) {
+                $weeks['week_2'][] = $item;
+            } elseif ($day >= 15 && $day <= 21) {
+                $weeks['week_3'][] = $item;
+            } elseif ($day >= 22 && $day <= 28) {
+                $weeks['week_4'][] = $item;
+            } else {
+                $weeks['week_5'][] = $item;
+            }
+        }
+
+        return $weeks;
     }
 }

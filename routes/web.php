@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\EpaymentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\EpaymentControllerController;
 use App\Models\lokasi;
 use App\Models\grupMenu;
 use App\Models\grupLokasi;
@@ -42,5 +45,10 @@ Route::post('/set-location', function (Illuminate\Http\Request $request) {
     return redirect()->back();
 })->name('set.location');
 
+Route::get('/transaction', [TransactionController::class, 'dailyTransaction'])->name('dailyTransaction');
 Route::get('/weekly-transaction', [TransactionController::class, 'WeeklyTransaction'])->name('weeklyTransaction');
 Route::get('/monthly-transaction', [TransactionController::class, 'MonthlyTransaction'])->name('monthlyTransaction');
+Route::get('/weekly-income', [IncomeController::class, 'weeklyIncome'])->name('weeklyIncome');
+Route::get('/monthly-income', [IncomeController::class, 'monthlyIncome'])->name('monthlyIncome');
+Route::get('/weekly-epayment', [EpaymentController::class, 'weeklyEpayment'])->name('weeklyEpayment');
+Route::get('/monthly-epayment', [EpaymentController::class, 'monthlyEpayment'])->name('monthlyEpayment');

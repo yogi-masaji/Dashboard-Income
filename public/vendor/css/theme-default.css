@@ -379,7 +379,7 @@ button.list-group-item-primary.active {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-link.active:hover,
 .nav-tabs .nav-link.active:focus {
-    box-shadow: 0 -2px 0 #696cff inset;
+    box-shadow: 0 -2px 0 #FCB900 inset;
 }
 
 .nav-align-bottom .nav-tabs .nav-link.active,
@@ -388,7 +388,7 @@ button.list-group-item-primary.active {
 .nav-align-bottom .nav-tabs .nav-link.active,
 .nav-align-bottom .nav-tabs .nav-link.active:hover,
 .nav-align-bottom .nav-tabs .nav-link.active:focus {
-    box-shadow: 0 2px 0 #696cff inset;
+    box-shadow: 0 -2px 0 #FCB900 inset;
 }
 
 .nav-align-left .nav-tabs .nav-link.active,
@@ -397,7 +397,7 @@ button.list-group-item-primary.active {
 .nav-align-left .nav-tabs .nav-link.active,
 .nav-align-left .nav-tabs .nav-link.active:hover,
 .nav-align-left .nav-tabs .nav-link.active:focus {
-    box-shadow: -2px 0px 0 #696cff inset;
+    box-shadow: -2px 0px 0 #FCB900 inset;
 }
 
 .nav-align-right .nav-tabs .nav-link.active,
@@ -406,7 +406,7 @@ button.list-group-item-primary.active {
 .nav-align-right .nav-tabs .nav-link.active,
 .nav-align-right .nav-tabs .nav-link.active:hover,
 .nav-align-right .nav-tabs .nav-link.active:focus {
-    box-shadow: 2px 0px 0 #696cff inset;
+    box-shadow: 2px 0px 0 #FCB900 inset;
 }
 
 .form-control:focus,

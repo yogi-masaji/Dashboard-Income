@@ -26,7 +26,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link rel="stylesheet" href="vendor/fonts/boxicons.css" />
 
     <!-- Core CSS -->
@@ -121,22 +122,37 @@
 
 
                     @foreach ($groupedMenus as $group => $menus)
-                        <li class="menu-item active open">
-                            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                <i class="menu-icon tf-icons bx bx-home-smile"></i>
-                                <div class="text-truncate" data-i18n="Dashboards">{{ $group }}</div>
-                            </a>
-                            @foreach ($menus as $menu)
+                        @if (is_string($menus))
+                            {{-- Untuk link tanpa submenu --}}
+                            <li class="menu-item active ">
+                                <a href="{{ url($menus) }}" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-folder"></i>
+                                    <div class="text-truncate">{{ $group }}</div>
+                                </a>
+                            </li>
+                        @elseif ($menus->isNotEmpty())
+                            {{-- Untuk menu dengan submenu --}}
+                            <li class="menu-item active ">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons bx bx-folder"></i>
+                                    <div class="text-truncate">{{ $group }}</div>
+                                </a>
                                 <ul class="menu-sub">
-                                    <li class="menu-item active">
-                                        <a href="{{ url($menu->nama_File ?? '#') }}" class="menu-link">
-                                            <i class="bi bi-person me-2"></i>{{ $menu->nama_Menu }}
-                                        </a>
-                                    </li>
+                                    @foreach ($menus as $menu)
+                                        <li class="menu-item active ">
+                                            <a href="{{ url($menu->nama_File ?? '#') }}" class="menu-link">
+                                                <i class="bi bi-person me-2"></i>{{ $menu->nama_Menu }}
+                                            </a>
+                                        </li>
+                                    @endforeach
                                 </ul>
-                            @endforeach
-                        </li>
+                            </li>
+                        @endif
                     @endforeach
+
+
+
+
 
 
 

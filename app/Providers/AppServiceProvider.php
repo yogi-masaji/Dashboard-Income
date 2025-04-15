@@ -9,17 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         View::composer('*', function ($view) {
@@ -27,31 +21,41 @@ class AppServiceProvider extends ServiceProvider
             $locations = lokasi::orderBy('nama_lokasi', 'asc')->get();
             $view->with('locations', $locations);
 
-            // Default kosong
             $groupedMenus = [];
 
-            // Cek apakah user sudah pilih lokasi
             if (session()->has('selected_location_id_grup')) {
                 $idGroup = session('selected_location_id_grup');
 
-                // Ambil semua id_menu yang tersedia di group_menu untuk group ini
-                $menuIds = DB::table('group_menu')
-                    ->where('id_Group', $idGroup)
-                    ->pluck('id_Menu');
-
-                // Ambil hanya menu yang masuk dalam grup tersebut
+                // Ambil seluruh menu sekali query
                 $menus = DB::table('ms_menu')
-                    ->whereIn('id_Menu', $menuIds)
-                    ->orderBy('id_Menu')
+                    ->join('group_menu', 'ms_menu.id_Menu', '=', 'group_menu.id_Menu')
+                    ->where('group_menu.id_Group', $idGroup)
+                    ->orderBy('ms_menu.id_Menu')
+                    ->select('ms_menu.*')
                     ->get();
 
-                // Kelompokkan berdasarkan id_Menu
-                $groupedMenus = [
-                    'Transaction' => $menus->whereIn('id_Menu', [1, 2, 3, 4]),
-                    'Income' => $menus->whereIn('id_Menu', [5, 6, 7, 10]),
-                    'E-Payment' => $menus->whereIn('id_Menu', [8, 9, 11]),
-                    'Traffic Management' => $menus->whereIn('id_Menu', [22, 23, 24, 25]),
-                    'Search' => $menus->whereIn('id_Menu', [
+                // Definisi grup tanpa submenu dan link khusus
+                $singleLinks = [
+                    'Transaction' => [1, 2, 3, 4],
+                    'Income' => [5, 6, 7, 10],
+                    'E-Payment' => [8, 9, 11],
+                ];
+
+                foreach ($singleLinks as $name => $ids) {
+                    if ($menus->whereIn('id_Menu', $ids)->isNotEmpty()) {
+                        // Kamu bisa ganti link-nya di sini sesuai kebutuhan
+                        $groupedMenus[$name] = match ($name) {
+                            'Transaction' => '/transaction',
+                            'Income' => '/income-url',
+                            'E-Payment' => '/e-payment-url',
+                        };
+                    }
+                }
+
+                // Definisi grup dengan submenu
+                $subGroups = [
+                    'Traffic Management' => [22, 23, 24, 25],
+                    'Search' => [
                         12,
                         13,
                         15,
@@ -77,12 +81,18 @@ class AppServiceProvider extends ServiceProvider
                         151,
                         152,
                         153
-                    ]),
-                    'My Account' => $menus->whereIn('id_Menu', [27]),
+                    ],
+                    'My Account' => [27],
                 ];
+
+                foreach ($subGroups as $name => $ids) {
+                    $filtered = $menus->whereIn('id_Menu', $ids);
+                    if ($filtered->isNotEmpty()) {
+                        $groupedMenus[$name] = $filtered;
+                    }
+                }
             }
 
-            // Share hasil groupedMenus ke semua view
             View::share('groupedMenus', $groupedMenus);
         });
     }
