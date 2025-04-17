@@ -371,6 +371,7 @@ button.list-group-item-primary.active {
 .nav-pills .nav-link.active:focus {
     background-color: #696cff;
     color: #fff;
+    border-radius: 10px;
 }
 
 .nav-tabs .nav-link.active,
@@ -379,7 +380,9 @@ button.list-group-item-primary.active {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-link.active:hover,
 .nav-tabs .nav-link.active:focus {
-    box-shadow: 0 -2px 0 #FCB900 inset;
+    
+    background-color: #FCB900;
+    border-radius: 10px;
 }
 
 .nav-align-bottom .nav-tabs .nav-link.active,
@@ -389,6 +392,7 @@ button.list-group-item-primary.active {
 .nav-align-bottom .nav-tabs .nav-link.active:hover,
 .nav-align-bottom .nav-tabs .nav-link.active:focus {
     box-shadow: 0 -2px 0 #FCB900 inset;
+    border-radius: 10px;
 }
 
 .nav-align-left .nav-tabs .nav-link.active,
@@ -398,6 +402,7 @@ button.list-group-item-primary.active {
 .nav-align-left .nav-tabs .nav-link.active:hover,
 .nav-align-left .nav-tabs .nav-link.active:focus {
     box-shadow: -2px 0px 0 #FCB900 inset;
+    border-radius: 10px;
 }
 
 .nav-align-right .nav-tabs .nav-link.active,
@@ -407,6 +412,7 @@ button.list-group-item-primary.active {
 .nav-align-right .nav-tabs .nav-link.active:hover,
 .nav-align-right .nav-tabs .nav-link.active:focus {
     box-shadow: 2px 0px 0 #FCB900 inset;
+    border-radius: 10px;
 }
 
 .form-control:focus,
@@ -1006,3 +1012,10 @@ html:not(.layout-menu-collapsed)
 .bg-footer-theme hr {
     border-color: rgba(105, 108, 255, 0.075);
 }
+
+.nav {
+
+    --bs-nav-link-color: #ffffff !important;
+    --bs-nav-link-hover-color: #a8a8a8 !important;
+    --bs-nav-link-disabled-color: #a7acb2;
+  }

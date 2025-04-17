@@ -58,7 +58,7 @@ class TransactionController extends Controller
             ];
         }
 
-        return view('tester', ['processedData' => $processedData]);
+        return view('pages.test', ['processedData' => $processedData]);
     }
 
 
@@ -210,19 +210,19 @@ class TransactionController extends Controller
 
                 // Hitung total mingguan
                 $thisMonthCasualWeekTotals = [
-                    'week_1' => $this->calculateTotals($thisMonthCasualByWeek['week_1'], 'casual'),
-                    'week_2' => $this->calculateTotals($thisMonthCasualByWeek['week_2'], 'casual'),
-                    'week_3' => $this->calculateTotals($thisMonthCasualByWeek['week_3'], 'casual'),
-                    'week_4' => $this->calculateTotals($thisMonthCasualByWeek['week_4'], 'casual'),
-                    'week_5' => $this->calculateTotals($thisMonthCasualByWeek['week_5'], 'casual'),
+                    'week 1' => $this->calculateTotals($thisMonthCasualByWeek['week 1'], 'casual'),
+                    'week 2' => $this->calculateTotals($thisMonthCasualByWeek['week 2'], 'casual'),
+                    'week 3' => $this->calculateTotals($thisMonthCasualByWeek['week 3'], 'casual'),
+                    'week 4' => $this->calculateTotals($thisMonthCasualByWeek['week 4'], 'casual'),
+                    'week 5' => $this->calculateTotals($thisMonthCasualByWeek['week 5'], 'casual'),
                 ];
 
                 $thisMonthPassWeekTotals = [
-                    'week_1' => $this->calculateTotals($thisMonthPassByWeek['week_1'], 'pass'),
-                    'week_2' => $this->calculateTotals($thisMonthPassByWeek['week_2'], 'pass'),
-                    'week_3' => $this->calculateTotals($thisMonthPassByWeek['week_3'], 'pass'),
-                    'week_4' => $this->calculateTotals($thisMonthPassByWeek['week_4'], 'pass'),
-                    'week_5' => $this->calculateTotals($thisMonthPassByWeek['week_5'], 'pass'),
+                    'week 1' => $this->calculateTotals($thisMonthPassByWeek['week 1'], 'pass'),
+                    'week 2' => $this->calculateTotals($thisMonthPassByWeek['week 2'], 'pass'),
+                    'week 3' => $this->calculateTotals($thisMonthPassByWeek['week 3'], 'pass'),
+                    'week 4' => $this->calculateTotals($thisMonthPassByWeek['week 4'], 'pass'),
+                    'week 5' => $this->calculateTotals($thisMonthPassByWeek['week 5'], 'pass'),
                 ];
 
                 return response()->json([
@@ -296,26 +296,26 @@ class TransactionController extends Controller
     private function groupByWeek($data)
     {
         $weeks = [
-            'week_1' => [],
-            'week_2' => [],
-            'week_3' => [],
-            'week_4' => [],
-            'week_5' => [],
+            'week 1' => [],
+            'week 2' => [],
+            'week 3' => [],
+            'week 4' => [],
+            'week 5' => [],
         ];
 
         foreach ($data as $item) {
             $day = Carbon::parse($item['tanggal'])->day;
 
             if ($day >= 1 && $day <= 7) {
-                $weeks['week_1'][] = $item;
+                $weeks['week 1'][] = $item;
             } elseif ($day >= 8 && $day <= 14) {
-                $weeks['week_2'][] = $item;
+                $weeks['week 2'][] = $item;
             } elseif ($day >= 15 && $day <= 21) {
-                $weeks['week_3'][] = $item;
+                $weeks['week 3'][] = $item;
             } elseif ($day >= 22 && $day <= 28) {
-                $weeks['week_4'][] = $item;
+                $weeks['week 4'][] = $item;
             } else {
-                $weeks['week_5'][] = $item;
+                $weeks['week 5'][] = $item;
             }
         }
 

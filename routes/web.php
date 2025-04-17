@@ -45,6 +45,7 @@ Route::post('/set-location', function (Illuminate\Http\Request $request) {
     return redirect()->back();
 })->name('set.location');
 
+Route::get('/income', [IncomeController::class, 'incomePage'])->name('income');
 Route::get('/transaction', [TransactionController::class, 'dailyTransaction'])->name('dailyTransaction');
 Route::get('/weekly-transaction', [TransactionController::class, 'WeeklyTransaction'])->name('weeklyTransaction');
 Route::get('/monthly-transaction', [TransactionController::class, 'MonthlyTransaction'])->name('monthlyTransaction');
@@ -52,3 +53,7 @@ Route::get('/weekly-income', [IncomeController::class, 'weeklyIncome'])->name('w
 Route::get('/monthly-income', [IncomeController::class, 'monthlyIncome'])->name('monthlyIncome');
 Route::get('/weekly-epayment', [EpaymentController::class, 'weeklyEpayment'])->name('weeklyEpayment');
 Route::get('/monthly-epayment', [EpaymentController::class, 'monthlyEpayment'])->name('monthlyEpayment');
+
+Route::get('/testable', function () {
+    return view('pages.test');
+});

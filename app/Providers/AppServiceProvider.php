@@ -46,8 +46,8 @@ class AppServiceProvider extends ServiceProvider
                         // Kamu bisa ganti link-nya di sini sesuai kebutuhan
                         $groupedMenus[$name] = match ($name) {
                             'Transaction' => '/transaction',
-                            'Income' => '/income-url',
-                            'E-Payment' => '/e-payment-url',
+                            'Income' => '/income',
+                            'E-Payment' => '/e-payment',
                         };
                     }
                 }

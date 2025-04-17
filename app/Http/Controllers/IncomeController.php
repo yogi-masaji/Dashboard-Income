@@ -11,6 +11,11 @@ use Symfony\Component\CssSelector\Node\FunctionNode;
 
 class IncomeController extends Controller
 {
+    public function incomePage()
+    {
+        return view('pages.income');
+    }
+
     public function weeklyIncome()
     {
         try {
@@ -97,7 +102,16 @@ class IncomeController extends Controller
                     return Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd);
                 })->values();
 
-                // Hitung total income mingguan
+                $thisMonthWeekly = $this->groupByWeek($thisMonthData);
+                $lastMonthWeekly = $this->groupByWeek($lastMonthData);
+                $thisMonthWeeklyTotals = collect($thisMonthWeekly)->map(function ($weekData) {
+                    return $this->calculateIncomeTotals(collect($weekData));
+                });
+
+                $lastMonthWeeklyTotals = collect($lastMonthWeekly)->map(function ($weekData) {
+                    return $this->calculateIncomeTotals(collect($weekData));
+                });
+
                 $thisMonthTotals = $this->calculateIncomeTotals($thisMonthData);
                 $lastMonthTotals = $this->calculateIncomeTotals($lastMonthData);
 
@@ -107,12 +121,14 @@ class IncomeController extends Controller
                     'status_code' => 200,
                     'location_code' => $locationCode,
                     'this_Month' => [
-                        'data' => $thisMonthData,
+
                         'totals' => $thisMonthTotals,
+                        'weekly_totals' => $thisMonthWeeklyTotals,
                     ],
                     'last_Month' => [
-                        'data' => $lastMonthData,
+
                         'totals' => $lastMonthTotals,
+                        'weekly_totals' => $lastMonthWeeklyTotals,
                     ],
                 ]);
             }
@@ -122,6 +138,7 @@ class IncomeController extends Controller
             return response()->json(['message' => 'Internal Server Error: ' . $e->getMessage()], 500);
         }
     }
+
 
     private function calculateIncomeTotals($data)
     {
@@ -138,5 +155,34 @@ class IncomeController extends Controller
             'stickerincome' => $data->sum('stickerincome'),
             'totalnetSales' => $data->sum('totalnetSales'),
         ];
+    }
+
+    private function groupByWeek($data)
+    {
+        $weeks = [
+            'week 1' => [],
+            'week 2' => [],
+            'week 3' => [],
+            'week 4' => [],
+            'week 5' => [],
+        ];
+
+        foreach ($data as $item) {
+            $day = Carbon::parse($item['tanggal'])->day;
+
+            if ($day >= 1 && $day <= 7) {
+                $weeks['week 1'][] = $item;
+            } elseif ($day >= 8 && $day <= 14) {
+                $weeks['week 2'][] = $item;
+            } elseif ($day >= 15 && $day <= 21) {
+                $weeks['week 3'][] = $item;
+            } elseif ($day >= 22 && $day <= 28) {
+                $weeks['week 4'][] = $item;
+            } else {
+                $weeks['week 5'][] = $item;
+            }
+        }
+
+        return $weeks;
     }
 }

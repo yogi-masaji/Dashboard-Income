@@ -96,6 +96,8 @@
                     </a>
                 </div>
 
+
+
                 <div class="menu-inner-shadow"></div>
                 <form method="POST" action="{{ route('set.location') }}">
                     @csrf
@@ -310,6 +312,7 @@
     <script src="vendor/js/main.js"></script>
 
     <!-- Page JS -->
+
 
 
     <!-- Place this tag before closing body tag for github widget button. -->
