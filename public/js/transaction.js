@@ -1,221 +1,5 @@
-{{-- tabs/home.blade.php --}}
-
-
-
-
-<div class="nav nav-tabs custom-nav" id="inner-tab" role="tablist">
-    <button class="nav-link active" id="inner-one-tab" data-bs-toggle="tab" data-bs-target="#inner-one" type="button"
-        role="tab">Daily</button>
-    <button class="nav-link" id="inner-two-tab" data-bs-toggle="tab" data-bs-target="#inner-two" type="button"
-        role="tab">Weekly</button>
-    <button class="nav-link" id="inner-three-tab" data-bs-toggle="tab" data-bs-target="#inner-three" type="button"
-        role="tab">Monthly</button>
-</div>
-
-<div class="tab-content">
-
-    <div class="tab-pane fade show active mt-5" id="inner-one" role="tabpanel" aria-labelledby="inner-one-tab">
-        <div class="row">
-            <div class="col-12">
-                <div class="row" id="dashboardRow">
-                    <div class="row" id="daily-transaction-comparison"></div>
-
-
-
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="content-custom">
-
-                            <table id="dailyQuantity" class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Type</th>
-                                        <th>Yesterday</th>
-                                        <th>Today</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="2" style="text-align:left">All Vehicle</th>
-                                        <th id="totalYesterday"></th>
-                                        <th id="totalToday"></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="content-custom">
-                            <nav>
-                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
-                                        data-bs-target="#nav-home" type="button" role="tab"
-                                        aria-controls="nav-home" aria-selected="true">Bar</button>
-                                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
-                                        data-bs-target="#nav-profile" type="button" role="tab"
-                                        aria-controls="nav-profile" aria-selected="false">Line</button>
-                                </div>
-                            </nav>
-
-                            <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
-                                    aria-labelledby="nav-home-tab" tabindex="0">
-                                    <canvas id="dailyQuantityBar" height="200"></canvas>
-                                </div>
-                                <div class="tab-pane fade" id="nav-profile" role="tabpanel"
-                                    aria-labelledby="nav-profile-tab" tabindex="0">
-                                    <canvas id="dailyQuantityLine" height="200"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="tab-pane fade" id="inner-two" role="tabpanel" aria-labelledby="inner-two-tab">
-        <div class="row">
-            <div class="col-12">
-                <h5>Weekly Quantity</h5>
-
-                <div class="row" id="dashboardRow">
-                    {{-- @foreach ($processedData as $data)
-                        <!-- Total Casual Card -->
-                        <div class="col-md-4">
-                            <div class="dashboard-card">
-                                <div class="card-title">{{ $data['label'] }}</div>
-                                <div class="d-flex align-items-baseline">
-                                    <h2 class="card-value">{{ $data['today'] }}</h2>
-                                    <span class=" ms-2" style="color: {{ $data['color'] }}">
-                                        {{ $data['percent_change'] }}%
-                                        {{ $data['direction'] }}</span>
-                                </div>
-                                <div class="yesterday">Yesterday: {{ $data['yesterday'] }}</div>
-                            </div>
-                        </div>
-                    @endforeach --}}
-                    <div class="row" id="weekly-transaction-comparison"></div>
-
-
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <table id="weeklyQuantity" class="table ">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Vehicle</th>
-                                    <th>Last Week</th>
-                                    <th>This Week</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="2" style="text-align:left">All Vehicle</th>
-                                    <th id="totalLastWeek"></th>
-                                    <th id="totalThisWeek"></th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <nav>
-                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <button class="nav-link active" id="nav-weekly-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-weekly" type="button" role="tab"
-                                    aria-controls="nav-weekly" aria-selected="true">Bar</button>
-                                <button class="nav-link" id="nav-weekly-line-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-weekly-line" type="button" role="tab"
-                                    aria-controls="nav-weekly-line" aria-selected="false">Line</button>
-                            </div>
-                        </nav>
-                        <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-weekly" role="tabpanel"
-                                aria-labelledby="nav-weekly-tab" tabindex="0">
-                                <canvas id="weeklyQuantityBar" height="200" width="auto"></canvas>
-                            </div>
-                            <div class="tab-pane fade" id="nav-weekly-line" role="tabpanel"
-                                aria-labelledby="nav-weekly-line-tab" tabindex="0">
-                                <canvas id="weeklyQuantityLine" height="200" width="auto"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="tab-pane fade" id="inner-three" role="tabpanel" aria-labelledby="inner-three-tab">
-        <div class="row">
-            <div class="col-12">
-                <h5>Monthly Quantity</h5>
-                <div class="row" id="dashboardRow">
-                    <div class="row" id="monthly-transaction-comparison"></div>
-
-
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <table id="monthlyQuantity" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Vehicle</th>
-                                    <th>Last Month</th>
-                                    <th>This Month</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="2" style="text-align:left">All Vehicle</th>
-                                    <th id="totalLastMonth"></th>
-                                    <th id="totalThisMonth"></th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <nav>
-                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <button class="nav-link active" id="nav-monthly-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-monthly" type="button" role="tab"
-                                    aria-controls="nav-monthly" aria-selected="true">Bar</button>
-                                <button class="nav-link" id="nav-monthly-line-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-monthly-line" type="button" role="tab"
-                                    aria-controls="nav-monthly-line" aria-selected="false">Line</button>
-                            </div>
-                        </nav>
-                        <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-monthly" role="tabpanel"
-                                aria-labelledby="nav-monthly-tab" tabindex="0">
-                                <canvas id="monthlyQuantityBar" height="200" width="auto"></canvas>
-
-                            </div>
-                            <div class="tab-pane fade" id="nav-monthly-line" role="tabpanel"
-                                aria-labelledby="nav-monthly-line-tab" tabindex="0">
-                                <canvas id="monthlyQuantityLine" height="200" width="auto"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    const dailyTransactionURL = "{{ route('getDailyTransaction') }}";
-    const weeklyTransactionURL = "{{ route('weeklyTransaction') }}";
-    const monthlyTransactionURL = "{{ route('monthlyTransaction') }}";
-</script>
-<script src="js/transaction.js"></script>
-
-{{-- 
-<script>
-    $(document).ready(function() {
-        const kodeLokasi = @json($kodeLokasi);
+$(document).ready(function() {
+    
         const table = $('#dailyQuantity').DataTable({
             searching: false,
             paging: false,
@@ -282,11 +66,38 @@
         });
 
         $.ajax({
-            url: `http://110.0.100.70:8080/v3/api/daily-quantity?location_code=${kodeLokasi}`,
+            url: dailyTransactionURL,
             method: 'GET',
             success: function(response) {
                 const today = response.data[0].today[0];
                 const yesterday = response.data[0].yesterday[0];
+
+                const compare = response.vehicle_comparison;
+
+                // console.log(compare);
+            
+                const container = $('#daily-transaction-comparison');
+
+        container.empty(); // Biar gak dobel kalau dipanggil ulang
+
+        compare.forEach(vehicle => {
+            const html = `
+                <div class="col-md-3">
+                    <div class="dashboard-card">
+                        <div class="card-title">${vehicle.type}</div>
+                        <div class="d-flex align-items-baseline">
+                            <h2 class="card-value">${vehicle.today}</h2>
+                            <span class="ms-2" style="color: ${vehicle.color}">
+                                ${vehicle.percent_change}
+                                ${vehicle.direction}
+                            </span>
+                        </div>
+                        <div class="yesterday">Yesterday: ${vehicle.yesterday}</div>
+                    </div>
+                </div>
+            `;
+            container.append(html);
+        });
 
                 const rows = [{
                         type: 'Total Casual',
@@ -479,13 +290,38 @@
         });
 
         $.ajax({
-            url: "{{ route('weeklyTransaction') }}",
+            url: weeklyTransactionURL,
             method: 'GET',
             success: function(response) {
                 const thisWeek = response.this_week.totals.casual;
                 const lastWeek = response.last_week.totals.casual;
                 const thisWeekChart = response.this_week.casual;
 
+                const compare = response.vehicle_comparison;
+
+            
+                const container = $('#weekly-transaction-comparison');
+
+        container.empty(); // Biar gak dobel kalau dipanggil ulang
+
+        compare.forEach(vehicle => {
+            const html = `
+                <div class="col-md-4">
+                    <div class="dashboard-card">
+                        <div class="card-title">${vehicle.vehicle}</div>
+                        <div class="d-flex align-items-baseline">
+                            <h2 class="card-value">${vehicle.this_week}</h2>
+                            <span class="ms-2" style="color: ${vehicle.color}">
+                                ${vehicle.percent_change}
+                                ${vehicle.direction}
+                            </span>
+                        </div>
+                        <div class="yesterday">Last Week: ${vehicle.last_week}</div>
+                    </div>
+                </div>
+            `;
+            container.append(html);
+        });
                 const rows = [{
                         type: 'Car',
                         thisWeek: thisWeek.total_car,
@@ -763,12 +599,38 @@
         });
 
         $.ajax({
-            url: "{{ route('monthlyTransaction') }}",
+            url: monthlyTransactionURL,
             method: 'GET',
             success: function(response) {
                 const thisMonth = response.this_month.totals.casual;
                 const lastMonth = response.last_month.totals.casual;
 
+                const compare = response.vehicle_comparison;
+
+                
+                const container = $('#monthly-transaction-comparison');
+
+        container.empty(); // Biar gak dobel kalau dipanggil ulang
+
+        compare.forEach(vehicle => {
+            const html = `
+                <div class="col-md-4">
+                    <div class="dashboard-card">
+                        <div class="card-title">${vehicle.vehicle}</div>
+                        <div class="d-flex align-items-baseline">
+                            <h2 class="card-value">${vehicle.this_month}</h2>
+                            <span class="ms-2" style="color: ${vehicle.color}">
+                                ${vehicle.percent_change}
+                                ${vehicle.direction}
+                            </span>
+                        </div>
+                        <div class="yesterday">Last Month: ${vehicle.last_month}</div>
+                    </div>
+                </div>
+            `;
+            container.append(html);
+        });
+                
                 const rows = [{
                         type: 'Car',
                         thisMonth: thisMonth.total_car,
@@ -1043,4 +905,4 @@
             }
         });
     });
-</script> --}}
+

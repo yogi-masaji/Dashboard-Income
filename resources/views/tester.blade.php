@@ -83,7 +83,7 @@
             background-color: #2A3A5A;
             border-radius: 10px;
             border: 2px solid #D9D9D9;
-            padding: 20px;
+            padding: 13px;
             margin-bottom: 15px;
         }
 
@@ -1185,7 +1185,7 @@
                     const dashboardRow = section.querySelector('#dashboardRow');
                     if (dashboardRow) {
                         dashboardRow.classList.toggle('d-none', index !==
-                        0); // Only show on the first section
+                            0); // Only show on the first section
                     }
                 });
 

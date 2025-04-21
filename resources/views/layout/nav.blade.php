@@ -9,7 +9,7 @@
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>Dashboard Income</title>
-
+    <link rel="stylesheet" href="css/main.css">
     <meta name="description" content="" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Favicon -->
@@ -36,9 +36,6 @@
     {{-- <link rel="stylesheet" href="vendor/css/demo.css" /> --}}
 
     {{-- DATE RANGE --}}
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     {{-- DATE RANGE --}}
     <!-- Vendors CSS -->
     {{-- <link rel="stylesheet" href="vendor/libs/perfect-scrollbar/perfect-scrollbar.css" /> --}}
@@ -49,7 +46,7 @@
     <script src="vendor/js/helpers.js"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="vendor/js/config.js"></script>
+    {{-- <script src="vendor/js/config.js"></script> --}}
 
     @stack('scripts')
 </head>
@@ -61,7 +58,7 @@
         }
 
         .btn-submit {
-            background-color: #696CFF;
+            background-color: #fcb900;
             border: none;
             font-weight: 600;
             padding: 8px 20px;
@@ -69,13 +66,74 @@
         }
 
         .btn-submit:hover {
-            background-color: rgb(105, 108, 255);
+            background-color: #ffa600;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(105, 108, 255, 0.212);
+            box-shadow: 0 5px 15px rgba(222, 215, 84, 0.212);
+        }
+
+        /* Ensure that the sidebar has a transition */
+        .layout-menu {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            will-change: transform, opacity;
+        }
+
+        /* Add styles for when the sidebar is toggled */
+        .layout-menu-collapsed .layout-menu {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        .layout-menu .layout-menu-toggle {
+            transition: transform 0.3s ease;
         }
 
         /* Dark Mode Styles */
     </style>
+    <style>
+        /* When navbar is collapsed */
+        .layout-menu-collapsed .layout-menu {
+            width: 0 !important;
+            overflow: hidden;
+        }
+
+        .layout-menu-collapsed .layout-menu .menu-inner>li>a .text-truncate {
+            display: none !important;
+        }
+
+        .layout-menu-collapsed .layout-menu .app-brand-logo img {
+            max-width: 40px;
+            height: auto;
+        }
+
+        /* When navbar is open */
+        .layout-page {
+            margin-left: 0px;
+            /* No margin when the navbar is open */
+            width: calc(100% - 0px);
+            /* Content takes the remaining space after the navbar */
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        /* When navbar is collapsed */
+        .layout-menu-collapsed .layout-page {
+            margin-left: 0 !important;
+            /* Remove any margin */
+            width: 100% !important;
+            /* Ensure it takes full width */
+            padding-left: 0 !important;
+            /* Ensure no padding is applied */
+        }
+
+        /* Ensure the body or the container around layout-page also has full width */
+        body,
+        .layout-wrapper {
+            width: 100% !important;
+            /* Ensure the parent containers are also taking full width */
+            margin: 0 !important;
+            /* Remove any margin */
+        }
+    </style>
+
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -85,7 +143,7 @@
                 <div class="app-brand demo mt-3">
                     <a href="/" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="/storage/logo.png" alt="logo" height="70">
+                            <img src="/storage/logo.png" alt="logo" height="60">
                         </span>
 
                     </a>
@@ -118,39 +176,40 @@
                     </div>
                 </form>
 
-                <ul class="menu-inner py-1">
+                <div style="max-height: calc(100vh - 100px); overflow-y: auto;overflow-x: hidden;">
+                    <ul class="menu-inner py-1">
+                        <!-- Dashboards -->
 
-                    <!-- Dashboards -->
-
-
-                    @foreach ($groupedMenus as $group => $menus)
-                        @if (is_string($menus))
-                            {{-- Untuk link tanpa submenu --}}
-                            <li class="menu-item active ">
-                                <a href="{{ url($menus) }}" class="menu-link">
-                                    <i class="menu-icon tf-icons bx bx-folder"></i>
-                                    <div class="text-truncate">{{ $group }}</div>
-                                </a>
-                            </li>
-                        @elseif ($menus->isNotEmpty())
-                            {{-- Untuk menu dengan submenu --}}
-                            <li class="menu-item active ">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <i class="menu-icon tf-icons bx bx-folder"></i>
-                                    <div class="text-truncate">{{ $group }}</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    @foreach ($menus as $menu)
-                                        <li class="menu-item active ">
-                                            <a href="{{ url($menu->nama_File ?? '#') }}" class="menu-link">
-                                                <i class="bi bi-person me-2"></i>{{ $menu->nama_Menu }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </li>
-                        @endif
-                    @endforeach
+                        @foreach ($navbarMenus as $group => $menus)
+                            @if (is_string($menus))
+                                {{-- Untuk link tanpa submenu --}}
+                                <li class="menu-item active">
+                                    <a href="{{ url($menus) }}" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-folder"></i>
+                                        <div class="text-truncate">{{ $group }}</div>
+                                    </a>
+                                </li>
+                            @elseif ($menus->isNotEmpty())
+                                {{-- Untuk menu dengan submenu --}}
+                                <li class="menu-item active">
+                                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                        <i class="menu-icon tf-icons bx bx-folder"></i>
+                                        <div class="text-truncate">{{ $group }}</div>
+                                    </a>
+                                    <ul class="menu-sub">
+                                        @foreach ($menus as $menu)
+                                            <li class="menu-item active">
+                                                <a href="{{ url($menu->nama_File ?? '#') }}" class="menu-link">
+                                                    <i class="bi bi-person me-2"></i>{{ $menu->nama_Menu }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </div>
 
 
 
@@ -170,11 +229,17 @@
 
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
                     id="layout-navbar">
+                    <div class="layout-menu-toggle navbar-nav align-items-center me-3 d-none d-xl-block">
+                        <a class="nav-item nav-link px-0" href="javascript:void(0);" id="desktop-toggle">
+                            <i class="bx bx-chevron-left bx-md"></i>
+                        </a>
+                    </div>
                     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
-                        <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
+                        <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)" id="mobile-toggle">
                             <i class="bx bx-menu bx-md"></i>
                         </a>
                     </div>
+
 
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                         <!-- Search -->
@@ -205,14 +270,14 @@
 
                             <!-- User -->
                             <!-- User -->
-                            <li class="nav-item me-4">
+                            {{-- <li class="nav-item me-4">
                                 <button id="dark-mode-toggle" class="custom-toggle">
                                     <i class="bi bi-moon-fill bulan " id="moon-icon"></i>
                                     <i class="bi bi-brightness-high-fill  matahari" id="sun-icon"
                                         style="display: none;"></i>
                                     <!-- Initially hide sun icon -->
                                 </button>
-                            </li>
+                            </li> --}}
 
                             <li class="nav-item navbar-dropdown dropdown-user dropdown ">
                                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
@@ -220,7 +285,7 @@
                                     <!-- Flex container to align name and avatar in the same row -->
                                     <div class="d-flex align-items-center">
                                         <!-- User's name -->
-                                        <span class="me-2">test</span>
+                                        {{-- <span class="me-2">test</span> --}}
                                         <div class="avatar-icon avatar avatar-online"> t
                                         </div>
                                         <!-- Avatar image -->
@@ -317,5 +382,13 @@
 
     <!-- Place this tag before closing body tag for github widget button. -->
 </body>
+<script>
+    document.getElementById("desktop-toggle").addEventListener("click", function() {
+        document.querySelector(".layout-wrapper").classList.toggle("layout-menu-collapsed");
+    });
+    document.getElementById("mobile-toggle").addEventListener("click", function() {
+        document.querySelector(".layout-wrapper").classList.toggle("layout-menu-collapsed");
+    });
+</script>
 
 </html>

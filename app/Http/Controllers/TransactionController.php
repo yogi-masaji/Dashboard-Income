@@ -6,59 +6,85 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use Symfony\Component\CssSelector\Node\FunctionNode;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
+    public function tab()
+    {
+        return view('pages.test');
+    }
     public function dailyTransaction()
     {
-        $locationCode = session('selected_location_kode_lokasi');
+        return view('pages.test');
+    }
 
-        $response = Http::get('http://110.0.100.70:8080/v3/api/daily-quantity', [
-            'location_code' => $locationCode,
-        ]);
+    public function getDailyTransaction(Request $request)
+    {
+        try {
+            $locationCode = session('selected_location_kode_lokasi');
 
-        $data = $response->json();
+            $response = Http::get("http://110.0.100.70:8080/v3/api/daily-quantity", [
+                'location_code' => $locationCode
+            ]);
 
-        // Cek apakah data ada
-        if (empty($data['data']) || empty($data['data'][0]['today']) || empty($data['data'][0]['yesterday'])) {
-            // Jika data kosong, langsung kembalikan data kosong atau beri pesan
-            return view('tester', ['processedData' => []]);
+            if ($response->successful()) {
+                $originalData = $response->json();
+                $data = $originalData['data'][0] ?? null;
+
+                if ($data && isset($data['today'][0]) && isset($data['yesterday'][0])) {
+                    $today = $data['today'][0];
+                    $yesterday = $data['yesterday'][0];
+
+                    $comparisonItems = [
+                        'grandcasual' => 'Total Casual',
+                        'grandpass' => 'Total Pass',
+                        'grandtotal' => 'All Vehicle'
+                    ];
+
+                    $comparison = [];
+
+                    foreach ($comparisonItems as $key => $label) {
+                        $todayValue = isset($today[$key]) ? (int) $today[$key] : 0;
+                        $yesterdayValue = isset($yesterday[$key]) ? (int) $yesterday[$key] : 0;
+
+                        $percentChange = $yesterdayValue != 0
+                            ? (($todayValue - $yesterdayValue) / $yesterdayValue) * 100
+                            : 0;
+
+                        $direction = $percentChange >= 0 ? '↑' : '↓';
+                        $color = $percentChange >= 0 ? 'green' : 'red';
+
+                        $comparison[] = [
+                            'type' => $label,
+                            'yesterday' => $yesterdayValue,
+                            'today' => $todayValue,
+                            'percent_change' => number_format($percentChange, 1) . '%',
+                            'direction' => $direction,
+                            'color' => $color,
+                        ];
+                    }
+
+                    // Tambahkan hasil compare ke response
+                    $originalData['vehicle_comparison'] = $comparison;
+                }
+
+                return response()->json($originalData, $response->status());
+            } else {
+                return response()->json([
+                    'message' => 'Failed to fetch data from API',
+                    'status_code' => $response->status(),
+                    'error' => $response->body(),
+                ], $response->status());
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching daily quantity: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Internal Server Error',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        // Kalau ada data, lanjutkan proses seperti biasa
-        $todayData = $data['data'][0]['today'][0];
-        $yesterdayData = $data['data'][0]['yesterday'][0];
-
-        // Lanjutkan dengan proses perhitungan persen perubahan
-        $categories = [
-            'grandcasual' => 'Total Casual',
-            'grandpass' => 'Total Pass',
-            'grandtotal' => 'All Vehicle',
-        ];
-
-        $processedData = [];
-
-        foreach ($categories as $key => $label) {
-            $todayValue = $todayData[$key] ?? 0;  // Gunakan 0 jika nilai tidak ada
-            $yesterdayValue = $yesterdayData[$key] ?? 0;  // Gunakan 0 jika nilai tidak ada
-
-            // Hitung perubahan persentase
-            $change = $todayValue - $yesterdayValue;
-            $percentChange = $yesterdayValue != 0 ? (($change / $yesterdayValue) * 100) : 0;
-            $direction = $percentChange >= 0 ? '↑' : '↓';
-            $color = $percentChange >= 0 ? 'green' : 'red';
-
-            $processedData[] = [
-                'label' => $label,
-                'today' => $todayValue,
-                'yesterday' => $yesterdayValue,
-                'percent_change' => number_format($percentChange, 1),
-                'direction' => $direction,
-                'color' => $color,
-            ];
-        }
-
-        return view('pages.test', ['processedData' => $processedData]);
     }
 
 
@@ -69,15 +95,15 @@ class TransactionController extends Controller
             $today = Carbon::now()->timezone('Asia/Jakarta');
 
             // This week: 7 hari terakhir sampai hari ini
-            $thisWeekStart = $today->copy()->subDays(6)->format('Y-m-d'); // 8 April
-            $thisWeekEnd = $today->format('Y-m-d'); // 14 April
+            $thisWeekStart = $today->copy()->subDays(6)->format('Y-m-d');
+            $thisWeekEnd = $today->format('Y-m-d');
 
             // Last week: 7 hari sebelumnya
-            $lastWeekStart = $today->copy()->subDays(13)->format('Y-m-d'); // 1 April
-            $lastWeekEnd = $today->copy()->subDays(7)->format('Y-m-d'); // 7 April
+            $lastWeekStart = $today->copy()->subDays(13)->format('Y-m-d');
+            $lastWeekEnd = $today->copy()->subDays(7)->format('Y-m-d');
+
             $locationCode = session('selected_location_kode_lokasi');
 
-            // Request data
             $response = Http::post('http://110.0.100.70:8080/v3/api/getquantity', [
                 'effective_start_date' => $lastWeekStart,
                 'effective_end_date' => $thisWeekEnd,
@@ -91,46 +117,76 @@ class TransactionController extends Controller
                 $passData = $data['pass'];
 
                 $thisWeekCasual = array_values(collect($casualData)->filter(
-                    fn($item) =>
-                    Carbon::parse($item['tanggal'])->between($thisWeekStart, $thisWeekEnd)
+                    fn($item) => Carbon::parse($item['tanggal'])->between($thisWeekStart, $thisWeekEnd)
                 )->toArray());
 
                 $thisWeekPass = array_values(collect($passData)->filter(
-                    fn($item) =>
-                    Carbon::parse($item['tanggal'])->between($thisWeekStart, $thisWeekEnd)
+                    fn($item) => Carbon::parse($item['tanggal'])->between($thisWeekStart, $thisWeekEnd)
                 )->toArray());
 
                 $lastWeekCasual = array_values(collect($casualData)->filter(
-                    fn($item) =>
-                    Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd)
+                    fn($item) => Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd)
                 )->toArray());
 
                 $lastWeekPass = array_values(collect($passData)->filter(
-                    fn($item) =>
-                    Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd)
+                    fn($item) => Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd)
                 )->toArray());
 
-                // Calculate totals for this week
+                // Calculate totals (only casual)
                 $thisWeekCasualTotals = $this->calculateTotals($thisWeekCasual, 'casual');
-                $thisWeekPassTotals = $this->calculateTotals($thisWeekPass, 'pass');
-
-                // Calculate totals for last week
                 $lastWeekCasualTotals = $this->calculateTotals($lastWeekCasual, 'casual');
-                $lastWeekPassTotals = $this->calculateTotals($lastWeekPass, 'pass');
 
-                // Return the response with totals
+                // Vehicle comparison (only casual)
+                $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
+                $vehicleData = [];
+                $totalLastWeek = 0;
+                $totalThisWeek = 0;
+
+                foreach ($vehicleTypes as $type) {
+                    $lastWeekValue = $lastWeekCasualTotals['total_' . $type];
+                    $thisWeekValue = $thisWeekCasualTotals['total_' . $type];
+
+                    $totalLastWeek += $lastWeekValue;
+                    $totalThisWeek += $thisWeekValue;
+
+                    $percentChange = $lastWeekValue != 0 ? (($thisWeekValue - $lastWeekValue) / $lastWeekValue) * 100 : 0;
+                    $direction = $percentChange >= 0 ? '↑' : '↓';
+                    $color = $percentChange >= 0 ? 'green' : 'red';
+
+                    $vehicleData[] = [
+                        'vehicle' => ucfirst($type),
+                        'last_week' => $lastWeekValue,
+                        'this_week' => $thisWeekValue,
+                        'percent_change' => number_format($percentChange, 1) . '%',
+                        'direction' => $direction,
+                        'color' => $color,
+                    ];
+                }
+
+                // All Vehicle Total
+                $percentChangeTotal = $totalLastWeek != 0 ? (($totalThisWeek - $totalLastWeek) / $totalLastWeek) * 100 : 0;
+                $directionTotal = $percentChangeTotal >= 0 ? '↑' : '↓';
+                $colorTotal = $percentChangeTotal >= 0 ? 'green' : 'red';
+
+                $vehicleData[] = [
+                    'vehicle' => 'All Vehicle',
+                    'last_week' => $totalLastWeek,
+                    'this_week' => $totalThisWeek,
+                    'percent_change' => number_format($percentChangeTotal, 1) . '%',
+                    'direction' => $directionTotal,
+                    'color' => $colorTotal,
+                ];
+
                 return response()->json([
                     'response' => 'Success Get Data',
                     'message' => 'Get Quantity Data for Period ' . $locationCode . ' - ' . $thisWeekEnd . ' (This Week) and ' . $lastWeekStart . ' - ' . $lastWeekEnd . ' (Last Week)',
                     'status_code' => 200,
-                    'location_code' => 'GI2',
+                    'location_code' => $locationCode,
                     'this_week' => [
                         'casual' => $thisWeekCasual,
                         'pass' => $thisWeekPass,
                         'totals' => [
                             'casual' => $thisWeekCasualTotals,
-                            'pass' => $thisWeekPassTotals,
-                            // 'total' => array_merge($thisWeekCasualTotals, $thisWeekPassTotals),
                         ],
                     ],
                     'last_week' => [
@@ -138,10 +194,9 @@ class TransactionController extends Controller
                         'pass' => $lastWeekPass,
                         'totals' => [
                             'casual' => $lastWeekCasualTotals,
-                            'pass' => $lastWeekPassTotals,
-                            // 'total' => array_merge($lastWeekCasualTotals, $lastWeekPassTotals),
                         ],
                     ],
+                    'vehicle_comparison' => $vehicleData,
                 ]);
             }
 
@@ -150,6 +205,7 @@ class TransactionController extends Controller
             return response()->json(['message' => 'Internal Server Error: ' . $e->getMessage()], 500);
         }
     }
+
 
     public function MonthlyTransaction()
     {
@@ -166,7 +222,6 @@ class TransactionController extends Controller
 
             $locationCode = session('selected_location_kode_lokasi');
 
-            // Request data
             $response = Http::post('http://110.0.100.70:8080/v3/api/getquantity', [
                 'effective_start_date' => $lastMonthStart,
                 'effective_end_date' => $thisMonthEnd,
@@ -179,7 +234,6 @@ class TransactionController extends Controller
                 $casualData = $data['casual'];
                 $passData = $data['pass'];
 
-                // Filter data untuk bulan ini
                 $thisMonthCasual = array_values(collect($casualData)->filter(
                     fn($item) => Carbon::parse($item['tanggal'])->between($thisMonthStart, $thisMonthEnd)
                 )->toArray());
@@ -188,7 +242,6 @@ class TransactionController extends Controller
                     fn($item) => Carbon::parse($item['tanggal'])->between($thisMonthStart, $thisMonthEnd)
                 )->toArray());
 
-                // Filter data untuk bulan lalu
                 $lastMonthCasual = array_values(collect($casualData)->filter(
                     fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd)
                 )->toArray());
@@ -197,18 +250,56 @@ class TransactionController extends Controller
                     fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd)
                 )->toArray());
 
-                // Hitung total bulanan
                 $thisMonthCasualTotals = $this->calculateTotals($thisMonthCasual, 'casual');
                 $thisMonthPassTotals = $this->calculateTotals($thisMonthPass, 'pass');
 
                 $lastMonthCasualTotals = $this->calculateTotals($lastMonthCasual, 'casual');
                 $lastMonthPassTotals = $this->calculateTotals($lastMonthPass, 'pass');
 
-                // Group mingguan
+                // VEHICLE COMPARISON (like weekly)
+                $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
+                $vehicleData = [];
+                $totalLastMonth = 0;
+                $totalThisMonth = 0;
+
+                foreach ($vehicleTypes as $type) {
+                    $lastMonthValue = $lastMonthCasualTotals['total_' . $type];
+                    $thisMonthValue = $thisMonthCasualTotals['total_' . $type];
+
+                    $totalLastMonth += $lastMonthValue;
+                    $totalThisMonth += $thisMonthValue;
+
+                    $percentChange = $lastMonthValue != 0 ? (($thisMonthValue - $lastMonthValue) / $lastMonthValue) * 100 : 0;
+                    $direction = $percentChange >= 0 ? '↑' : '↓';
+                    $color = $percentChange >= 0 ? 'green' : 'red';
+
+                    $vehicleData[] = [
+                        'vehicle' => ucfirst($type),
+                        'last_month' => $lastMonthValue,
+                        'this_month' => $thisMonthValue,
+                        'percent_change' => number_format($percentChange, 1) . '%',
+                        'direction' => $direction,
+                        'color' => $color,
+                    ];
+                }
+
+                $percentChangeTotal = $totalLastMonth != 0 ? (($totalThisMonth - $totalLastMonth) / $totalLastMonth) * 100 : 0;
+                $directionTotal = $percentChangeTotal >= 0 ? '↑' : '↓';
+                $colorTotal = $percentChangeTotal >= 0 ? 'green' : 'red';
+
+                $vehicleData[] = [
+                    'vehicle' => 'All Vehicle',
+                    'last_month' => $totalLastMonth,
+                    'this_month' => $totalThisMonth,
+                    'percent_change' => number_format($percentChangeTotal, 1) . '%',
+                    'direction' => $directionTotal,
+                    'color' => $colorTotal,
+                ];
+
+                // Optional: Grouping per minggu
                 $thisMonthCasualByWeek = $this->groupByWeek($thisMonthCasual);
                 $thisMonthPassByWeek = $this->groupByWeek($thisMonthPass);
 
-                // Hitung total mingguan
                 $thisMonthCasualWeekTotals = [
                     'week 1' => $this->calculateTotals($thisMonthCasualByWeek['week 1'], 'casual'),
                     'week 2' => $this->calculateTotals($thisMonthCasualByWeek['week 2'], 'casual'),
@@ -231,7 +322,6 @@ class TransactionController extends Controller
                     'status_code' => 200,
                     'location_code' => $locationCode,
                     'this_month' => [
-                        // 'pass' => $thisMonthPass, // Data casual disembunyikan
                         'totals' => [
                             'casual' => $thisMonthCasualTotals,
                             'pass' => $thisMonthPassTotals,
@@ -242,12 +332,12 @@ class TransactionController extends Controller
                         ],
                     ],
                     'last_month' => [
-                        // 'pass' => $lastMonthPass, // Data casual disembunyikan
                         'totals' => [
                             'casual' => $lastMonthCasualTotals,
                             'pass' => $lastMonthPassTotals,
                         ],
                     ],
+                    'vehicle_comparison' => $vehicleData,
                 ]);
             }
 
@@ -256,6 +346,7 @@ class TransactionController extends Controller
             return response()->json(['message' => 'Internal Server Error: ' . $e->getMessage()], 500);
         }
     }
+
 
 
 

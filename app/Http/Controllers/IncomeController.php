@@ -16,6 +16,48 @@ class IncomeController extends Controller
         return view('pages.income');
     }
 
+    public function getDailyIncome()
+    {
+        try {
+            $locationCode = session('selected_location_kode_lokasi');
+
+            $response = Http::get("http://110.0.100.135:8081/v3/api/daily-income", [
+                'location_code' => $locationCode
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                $data = $responseData['data'][0];
+
+                $todayData = collect($data['today'][0] ?? []);
+                $yesterdayData = collect($data['yesterday'][0] ?? []);
+
+                $comparison = $this->formatDailyIncomeTable($todayData, $yesterdayData);
+                $data['table_data'] = $comparison; // <<< INI AJA YANG DITAMBAH
+
+                return response()->json([
+                    'response' => $responseData['response'],
+                    'message' => $responseData['message'],
+                    'status_code' => $responseData['status_code'],
+                    'location_code' => $responseData['location_code'],
+                    'lastupdate' => $responseData['lastupdate'],
+                    'data' => [$data] // tetep array
+                ]);
+            }
+
+            return response()->json(['message' => 'Failed to fetch data from API'], $response->status());
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Internal Server Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+
+
+
+
     public function weeklyIncome()
     {
         try {
@@ -63,6 +105,7 @@ class IncomeController extends Controller
                         'data' => $lastWeekData,
                         'totals' => $lastWeekTotals,
                     ],
+                    'table_data' => $this->formatIncomeTable($thisWeekTotals, $lastWeekTotals),
                 ]);
             }
 
@@ -130,6 +173,8 @@ class IncomeController extends Controller
                         'totals' => $lastMonthTotals,
                         'weekly_totals' => $lastMonthWeeklyTotals,
                     ],
+                    'table_data' => $this->formatMonthlyIncomeTable($thisMonthTotals, $lastMonthTotals),
+
                 ]);
             }
 
@@ -184,5 +229,152 @@ class IncomeController extends Controller
         }
 
         return $weeks;
+    }
+
+    private function formatIncomeTable($thisWeekTotals, $lastWeekTotals)
+    {
+        $vehicles = [
+            'Car' => 'carincome',
+            'Motorbike' => 'motorbikeincome',
+            'Truck' => 'truckincome',
+            'Taxi' => 'taxiincome',
+            'Lost Ticket' => 'ticketincome',
+            'Other' => 'otherincome',
+            'All Casual Income' => 'vehicleincome',
+            'All Sticker Income' => 'stickerincome',
+        ];
+
+        $result = [];
+
+        foreach ($vehicles as $vehicleName => $key) {
+            $last = $lastWeekTotals[$key] ?? 0;
+            $current = $thisWeekTotals[$key] ?? 0;
+
+            if ($last == 0 && $current == 0) {
+                $percentChange = '0.0%';
+                $direction = '-';
+                $color = 'gray';
+            } elseif ($last == 0) {
+                $percentChange = '+100%';
+                $direction = '↑';
+                $color = 'green';
+            } else {
+                $diff = $current - $last;
+                $percent = ($diff / $last) * 100;
+                $percentFormatted = number_format(abs($percent), 1) . '%';
+                $direction = $percent > 0 ? '↑' : '↓';
+                $color = $percent > 0 ? 'green' : 'red';
+                $percentChange = ($percent > 0 ? '+' : '-') . $percentFormatted;
+            }
+
+            $result[] = [
+                'vehicle' => $vehicleName,
+                'last_week' => $last,
+                'this_week' => $current,
+                'percent_change' => $percentChange,
+                'direction' => $direction,
+                'color' => $color,
+            ];
+        }
+
+        return $result;
+    }
+
+    private function formatMonthlyIncomeTable($thisMonthTotals, $lastMonthTotals)
+    {
+        $vehicles = [
+            'Car' => 'carincome',
+            'Motorbike' => 'motorbikeincome',
+            'Truck' => 'truckincome',
+            'Taxi' => 'taxiincome',
+            'Lost Ticket' => 'ticketincome',
+            'Other' => 'otherincome',
+            'All Casual Income' => 'vehicleincome',
+            'All Sticker Income' => 'stickerincome',
+        ];
+
+        $result = [];
+
+        foreach ($vehicles as $vehicleName => $key) {
+            $last = $lastMonthTotals[$key] ?? 0;
+            $current = $thisMonthTotals[$key] ?? 0;
+
+            if ($last == 0 && $current == 0) {
+                $percentChange = '0.0%';
+                $direction = '-';
+                $color = 'gray';
+            } elseif ($last == 0) {
+                $percentChange = '+100%';
+                $direction = '↑';
+                $color = 'green';
+            } else {
+                $diff = $current - $last;
+                $percent = ($diff / $last) * 100;
+                $percentFormatted = number_format(abs($percent), 1) . '%';
+                $direction = $percent > 0 ? '↑' : '↓';
+                $color = $percent > 0 ? 'green' : 'red';
+                $percentChange = ($percent > 0 ? '+' : '-') . $percentFormatted;
+            }
+
+            $result[] = [
+                'vehicle' => $vehicleName,
+                'last_month' => $last,
+                'this_month' => $current,
+                'percent_change' => $percentChange,
+                'direction' => $direction,
+                'color' => $color,
+            ];
+        }
+
+        return $result;
+    }
+
+    private function formatDailyIncomeTable($today, $yesterday)
+    {
+        $vehicles = [
+            'Car' => 'carincome',
+            'Motorbike' => 'motorbikeincome',
+            'Truck' => 'truckincome',
+            'Taxi' => 'taxiincome',
+            'Lost Ticket' => 'ticketincome',
+            'Other' => 'otherincome',
+            'All Sticker Income' => 'stickerincome',
+            'All Vehicle' => 'grandtotal',
+        ];
+
+        $result = [];
+
+        foreach ($vehicles as $vehicleName => $key) {
+            $yesterdayVal = isset($yesterday[$key]) ? (float) $yesterday[$key] : 0;
+            $todayVal = isset($today[$key]) ? (float) $today[$key] : 0;
+
+            if ($yesterdayVal == 0 && $todayVal == 0) {
+                $percentChange = '0.0%';
+                $direction = '-';
+                $color = 'gray';
+            } elseif ($yesterdayVal == 0) {
+                $percentChange = '+100%';
+                $direction = '↑';
+                $color = 'green';
+            } else {
+                $diff = $todayVal - $yesterdayVal;
+                $percent = ($diff / $yesterdayVal) * 100;
+                $percentFormatted = number_format(abs($percent), 1) . '%';
+                $direction = $percent > 0 ? '↑' : '↓';
+                $color = $percent > 0 ? 'green' : 'red';
+                $percentChange = ($percent > 0 ? '+' : '-') . $percentFormatted;
+            }
+
+            $result[] = [
+                'vehicle' => $vehicleName,
+                'yesterday' => $yesterdayVal,
+                'today' => $todayVal,
+                'percent_change' => $percentChange,
+                'direction' => $direction,
+                'color' => $color,
+            ];
+        }
+
+        return $result;
     }
 }

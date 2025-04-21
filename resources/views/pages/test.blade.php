@@ -5,6 +5,7 @@
         $ipLokasi = session('selected_location_ip_lokasi', 'IP Tidak Diketahui');
         $lokasiId = session('selected_location_id', 0);
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
+        $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 
@@ -17,56 +18,164 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script>
+        const kodeLokasi = @json($kodeLokasi);
+    </script>
 
-    <div class="container">
-        <div class="d-flex">
+    <style>
+        .nav-custom-tab {
+            background-color: #185BB4;
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
 
-            <div class="nav nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home"
-                    type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Transaction</button>
-                <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
-                    type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Income</button>
-                <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages"
-                    type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">E-Payment</button>
-                <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings"
-                    type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Button</button>
-            </div>
-        </div>
+    <style>
+        .custom-nav {
+            background-color: #185BB4 !important;
+            padding: 10px;
+            border-radius: 10px;
+            width: 40% !important;
+        }
+
+        .nav-pills~.tab-content {
+            box-shadow: none !important;
+        }
+
+        .tab-content {
+            background-color: transparent !important;
+            width: 100% !important;
+        }
+
+        .dashboard-card {
+            background-color: #2A3A5A;
+            border-radius: 10px;
+            border: 2px solid #D9D9D9;
+            padding: 13px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #FFFFFF !important;
+        }
+
+        .card-value {
+            font-size: 25px;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: #FFFFFF;
+        }
+
+        .percentage {
+            color: #ff4d4d;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .yesterday {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .tab-content:not(.doc-example-content) {
+            padding: 0.5rem;
+        }
+
+        .nav-tabs {
+            padding: 10px;
+            background-color: #003b86;
+            border-radius: 10px;
+        }
+
+        .content-custom {
+            padding: 10px !important;
+            background-color: #092953 !important;
+            border-radius: 10px !important;
+        }
+    </style>
 
 
-        <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                @include('tab-content.transaction')
-            </div>
-            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                @include('tab-content.income')
-            </div>
-            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                {{-- @include('tabs.messages') --}}3
-            </div>
-            <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                {{-- @include('tabs.settings') --}}4
-            </div>
-        </div>
-    </div>
+    <ul class="nav nav-custom-tab nav-pills mb-3 w-100" id="pills-tab" role="tablist">
+        @if (isset($tabMenus['Transaction']))
+            <li class="nav-item flex-fill text-center" role="presentation">
+                <button class="nav-link active w-100" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+                    Transaction
+                </button>
+            </li>
+        @endif
 
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
-                type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
-                type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
-                type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</button>
-        </li>
+        @if (isset($tabMenus['Income']))
+            <li class="nav-item flex-fill text-center" role="presentation">
+                <button class="nav-link {{ !isset($tabMenus['Transaction']) ? 'active' : '' }} w-100" id="pills-profile-tab"
+                    data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab"
+                    aria-controls="pills-profile" aria-selected="false">
+                    Income
+                </button>
+            </li>
+        @endif
+
+        @if (isset($tabMenus['E-Payment']))
+            <li class="nav-item flex-fill text-center" role="presentation">
+                <button
+                    class="nav-link {{ !isset($tabMenus['Transaction']) && !isset($tabMenus['Income']) ? 'active' : '' }} w-100"
+                    id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button"
+                    role="tab" aria-controls="pills-contact" aria-selected="false">
+                    E-Payment
+                </button>
+            </li>
+        @endif
+
+        @if (isset($tabMenus['Traffic Management']))
+            <li class="nav-item flex-fill text-center" role="presentation">
+                <button
+                    class="nav-link {{ !isset($tabMenus['Transaction']) && !isset($tabMenus['Income']) && !isset($tabMenus['E-Payment']) ? 'active' : '' }} w-100"
+                    id="pills-traffic-tab" data-bs-toggle="pill" data-bs-target="#pills-traffic" type="button"
+                    role="tab" aria-controls="pills-traffic" aria-selected="false">
+                    Traffic Management
+                </button>
+            </li>
+        @endif
     </ul>
+
     <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">...</div>
-        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
-        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+        @if (isset($tabMenus['Transaction']))
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                {{-- @require('tab-content.transaction') --}}
+                @include('tab-content.transaction')
+                {{-- @cachedInclude('tab-content.transaction', 'cached.transaction') --}}
+            </div>
+        @endif
+
+        @if (isset($tabMenus['Income']))
+            <div class="tab-pane fade {{ !isset($tabMenus['Transaction']) ? 'show active' : '' }}" id="pills-profile"
+                role="tabpanel" aria-labelledby="pills-profile-tab">
+                {{-- @require('tab-content.income') --}}
+                @include('tab-content.income')
+                {{-- @cachedInclude('tab-content.income', 'cached.income') --}}
+            </div>
+        @endif
+
+        @if (isset($tabMenus['E-Payment']))
+            <div class="tab-pane fade {{ !isset($tabMenus['Transaction']) && !isset($tabMenus['Income']) ? 'show active' : '' }}"
+                id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                {{-- @require('tab-content.epayment') --}}
+                @include('tab-content.epayment')
+                {{-- @cachedInclude('tab-content.epayment', 'cached.epayment') --}}
+            </div>
+        @endif
+
+        @if (isset($tabMenus['Traffic Management']))
+            <div class="tab-pane fade {{ !isset($tabMenus['Transaction']) && !isset($tabMenus['Income']) && !isset($tabMenus['E-Payment']) ? 'show active' : '' }}"
+                id="pills-traffic" role="tabpanel" aria-labelledby="pills-traffic-tab">
+                {{-- @require('tab-content.traffic') --}}
+                @include('tab-content.traffic')
+                {{-- @cachedInclude('tab-content.traffic', 'cached.traffic') --}}
+            </div>
+        @endif
     </div>
 @endsection

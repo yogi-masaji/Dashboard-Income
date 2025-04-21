@@ -1,67 +1,3 @@
-@php
-    $lokasiName = session('selected_location_name', 'Lokasi Default');
-    $ipLokasi = session('selected_location_ip_lokasi', 'IP Tidak Diketahui');
-    $lokasiId = session('selected_location_id', 0);
-    $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
-    $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
-    $navdonutTitle = $lokasiName;
-@endphp
-
-<style>
-    .custom-nav {
-        background-color: #175390 !important;
-        padding: 10px;
-        border-radius: 10px;
-        width: 40% !important;
-    }
-
-    .nav-pills~.tab-content {
-        box-shadow: none !important;
-    }
-
-    .tab-content {
-        background-color: transparent !important;
-        width: 100% !important;
-    }
-
-    .dashboard-card {
-        background-color: #2A3A5A;
-        border-radius: 10px;
-        border: 2px solid #D9D9D9;
-        padding: 20px;
-        margin-bottom: 15px;
-    }
-
-    .card-title {
-        font-size: 14px;
-        font-weight: 500;
-        margin-bottom: 5px;
-        color: #FFFFFF !important;
-    }
-
-    .card-value {
-        font-size: 42px;
-        font-weight: 700;
-        margin-bottom: 0;
-        color: #FFFFFF;
-    }
-
-    .percentage {
-        color: #ff4d4d;
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-    .yesterday {
-        font-size: 14px;
-        opacity: 0.8;
-        margin-top: 5px;
-    }
-
-    .tab-content:not(.doc-example-content) {
-        padding: 0.5rem;
-    }
-</style>
 <div class="nav nav-tabs custom-nav" id="inner-tab" role="tablist">
     <button class="nav-link active" id="inner-daily-tab" data-bs-toggle="tab" data-bs-target="#inner-daily" type="button"
         role="tab">Daily</button>
@@ -76,6 +12,9 @@
         <h5>Daily Income</h5>
         <div class="row">
             <div class="col-12">
+                <div class="row" id="dashboardRow">
+                    <div class="row" id="daily-income-comparison"></div>
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <table id="dailyIncome" class="table table-striped table-bordered">
@@ -107,6 +46,9 @@
         <h5>Weekly Income</h5>
         <div class="row">
             <div class="col-12">
+                <div class="row" id="dashboardRow">
+                    <div class="row" id="weekly-income-comparison"></div>
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <table id="weeklyIncome" class="table table-striped table-bordered">
@@ -154,8 +96,12 @@
         </div>
     </div>
     <div class="tab-pane fade" id="inner-monthly" role="tabpanel" aria-labelledby="inner-monthly-tab">
+        <h5>Monthly Income</h5>
         <div class="row">
             <div class="col-12">
+                <div class="row" id="dashboardRow">
+                    <div class="row" id="monthly-income-comparison"></div>
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <table id="monthlyIncome" class="table table-striped table-bordered">
@@ -184,11 +130,11 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-monthlyIncome" role="tabpanel"
                                 aria-labelledby="nav-monthlyIncome-tab" tabindex="0">
-                                <canvas id="monthlyIncomeBar" height="200" width="auto"></canvas>1
+                                <canvas id="monthlyIncomeBar" height="200" width="auto"></canvas>
                             </div>
                             <div class="tab-pane fade" id="nav-monthlyIncome-line" role="tabpanel"
                                 aria-labelledby="nav-monthlyIncome-line-tab" tabindex="0">
-                                <canvas id="monthlyIncomeLine" height="200" width="auto"></canvas>2
+                                <canvas id="monthlyIncomeLine" height="200" width="auto"></canvas>
                             </div>
                         </div>
                     </div>
@@ -199,6 +145,13 @@
 </div>
 
 <script>
+    const dailyIncomeURL = "{{ route('getDailyIncome') }}";
+    const weeklyIncomeURL = "{{ route('weeklyIncome') }}";
+    const monthlyIncomeURL = "{{ route('monthlyIncome') }}";
+</script>
+<script src="js/income.js"></script>
+
+{{-- <script>
     $(document).ready(function() {
         const kodeLokasi = @json($kodeLokasi);
         const formatRupiah = (number) => {
@@ -364,7 +317,13 @@
                                 color: '#000',
                                 borderColor: '#fff',
                                 backgroundColor: 'rgba(255, 255, 255, 0.63)',
-                                formatter: Math.round,
+                                formatter: function(value, context) {
+                                    return new Intl.NumberFormat('id-ID', {
+                                        style: 'currency',
+                                        currency: 'IDR',
+                                        minimumFractionDigits: 0
+                                    }).format(value);
+                                },
                                 font: {
                                     weight: 'bold'
                                 },
@@ -376,6 +335,7 @@
                     },
                     plugins: [ChartDataLabels]
                 };
+
 
                 const ctx = document.getElementById('dailyIncomedonut')?.getContext('2d');
                 if (ctx) {
@@ -391,8 +351,7 @@
             success: function(response) {
                 const thisWeekIncome = response.this_week.totals;
                 const lastWeekIncome = response.last_week.totals;
-                console.log(thisWeekIncome);
-                console.log(lastWeekIncome.carincome);
+
                 const rows = [{
                         type: 'Car',
                         thisWeekIncome: thisWeekIncome.carincome,
@@ -432,7 +391,6 @@
                     last_week: formatRupiah(item.lastWeekIncome)
                 }));
 
-                console.log(formattedWeeklyRows);
 
                 weeklyIncomeTable.rows.add(formattedWeeklyRows).draw();
 
@@ -451,7 +409,7 @@
 
                 const thisWeekIncomeBar = response.this_week.data;
 
-                console.log(thisWeekIncomeBar);
+
                 const labels = thisWeekIncomeBar.map(item => {
                     const date = new Date(item.tanggal);
                     return date.toLocaleDateString('en-GB', {
@@ -469,13 +427,6 @@
                     thisWeekIncomeBar.map(item => item.vehicleincome),
                     thisWeekIncomeBar.map(item => item.lostticketincome),
                 ];
-
-
-                console.log(thisWeekIncomeBar.map(item => item.carincome));
-
-
-
-
 
                 const barData = {
                     labels: labels,
@@ -557,7 +508,13 @@
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: function(value, context) {
+                                    return new Intl.NumberFormat('id-ID', {
+                                        style: 'currency',
+                                        currency: 'IDR',
+                                        minimumFractionDigits: 0
+                                    }).format(value);
+                                },
                                 padding: 6,
                                 offset: 8
                             }
@@ -663,7 +620,13 @@
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: function(value, context) {
+                                    return new Intl.NumberFormat('id-ID', {
+                                        style: 'currency',
+                                        currency: 'IDR',
+                                        minimumFractionDigits: 0
+                                    }).format(value);
+                                },
                                 padding: 3,
                                 offset: 4
                             }
@@ -675,7 +638,7 @@
                                     precision: 0
                                 },
                                 grace: '10%'
-                            }
+                            },
                         }
                     },
                     plugins: [
@@ -756,10 +719,251 @@
                         </tr>
                     `);
 
+                const thisMonthIncomeChart = response.this_Month.weekly_totals;
 
 
+                const labels = Object.keys(thisMonthIncomeChart)
 
+
+                const totalCars = Object.values(thisMonthIncomeChart).map(item => item.carincome);
+                const totalMotorbikes = Object.values(thisMonthIncomeChart).map(item => item
+                    .motorbikeincome);
+                const totalTrucks = Object.values(thisMonthIncomeChart).map(item => item
+                    .truckincome);
+                const totalTaxis = Object.values(thisMonthIncomeChart).map(item => item.taxiincome);
+                const totalVehicles = Object.values(thisMonthIncomeChart).map(item => item
+                    .vehicleincome);
+
+                const monthlyIncomeBarData = {
+                    labels: labels,
+                    datasets: [{
+                            label: 'Car',
+                            data: totalCars,
+                            backgroundColor: '#51AA20',
+                            borderColor: '#51AA20',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            }
+                        }, {
+                            label: 'Motorbike',
+                            data: totalMotorbikes,
+                            backgroundColor: '#DB6715',
+                            borderColor: '#DB6715',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }, {
+                            label: 'Truck',
+                            data: totalTrucks,
+                            backgroundColor: '#8D60ED',
+                            borderColor: '#8D60ED',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }, {
+                            label: 'Taxi',
+                            data: totalTaxis,
+                            backgroundColor: '#C46EA6',
+                            borderColor: '#C46EA6',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }, {
+                            label: 'Vehicle',
+                            data: totalVehicles,
+                            backgroundColor: '#D3D6DD',
+                            borderColor: '#D3D6DD',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }
+
+                    ]
+                };
+
+                const monthlyIncomeLineData = {
+                    labels: labels,
+                    datasets: [{
+                            label: 'Car',
+                            data: totalCars,
+                            backgroundColor: '#51AA20',
+                            borderColor: '#51AA20',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+
+                        }, {
+                            label: 'Motorbike',
+                            data: totalMotorbikes,
+                            backgroundColor: '#DB6715',
+                            borderColor: '#DB6715',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
+                        }, {
+                            label: 'Truck',
+                            data: totalTrucks,
+                            backgroundColor: '#8D60ED',
+                            borderColor: '#8D60ED',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
+                        }, {
+                            label: 'Taxi',
+                            data: totalTaxis,
+                            backgroundColor: '#C46EA6',
+                            borderColor: '#C46EA6',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
+
+                        }, {
+                            label: 'Vehicle',
+                            data: totalVehicles,
+                            backgroundColor: '#D3D6DD',
+                            borderColor: '#D3D6DD',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
+                        }
+
+                    ]
+                };
+
+                const barConfig = {
+                    type: 'bar',
+                    data: monthlyIncomeBarData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+
+                            datalabels: {
+                                backgroundColor: (context) => context.dataset
+                                    .backgroundColor,
+                                borderRadius: 4,
+                                color: 'white',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: function(value, context) {
+                                    return new Intl.NumberFormat('id-ID', {
+                                        style: 'currency',
+                                        currency: 'IDR',
+                                        minimumFractionDigits: 0
+                                    }).format(value);
+                                },
+                                padding: 6,
+                                offset: 8
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                },
+                                grace: '10%'
+                            }
+                        }
+                    },
+                    plugins: [
+                        ChartDataLabels
+                    ] // make sure to include this if you're using CDN
+                };
+
+                const lineConfig = {
+                    type: 'line',
+                    data: monthlyIncomeLineData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+
+                            datalabels: {
+                                backgroundColor: (context) => context.dataset
+                                    .backgroundColor,
+                                borderRadius: 4,
+                                color: 'white',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: function(value, context) {
+                                    return new Intl.NumberFormat('id-ID', {
+                                        style: 'currency',
+                                        currency: 'IDR',
+                                        minimumFractionDigits: 0
+                                    }).format(value);
+                                },
+                                padding: 3,
+                                offset: 4
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                },
+                                grace: '10%'
+                            }
+                        }
+                    },
+                    plugins: [
+                        ChartDataLabels
+                    ] // make sure to include this if you're using CDN
+                }
+
+
+                const ctxBar = document.getElementById('monthlyIncomeBar')?.getContext(
+                    '2d');
+                if (ctxBar) {
+                    new Chart(ctxBar, barConfig);
+                }
+                const ctxLine = document.getElementById('monthlyIncomeLine')?.getContext(
+                    '2d');
+                if (ctxLine) {
+                    new Chart(ctxLine, lineConfig);
+                }
             }
         })
     });
-</script>
+</script> --}}

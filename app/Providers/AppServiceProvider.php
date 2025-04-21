@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\lokasi;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,17 +18,29 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Blade::directive('cachedInclude', function ($expression) {
+            // Misal dipanggil kayak gini: @cachedInclude('tab-content.transaction', 'transaction-tab')
+            [$view, $key] = explode(',', $expression);
+
+            return "<?php echo Cache::remember(trim($key), 60, function() {
+                return view(trim($view))->render();
+            }); ?>";
+        });
+
+
+
         View::composer('*', function ($view) {
-            // Ambil semua lokasi untuk dropdown atau tampilan
+            // Ambil semua lokasi
             $locations = lokasi::orderBy('nama_lokasi', 'asc')->get();
             $view->with('locations', $locations);
 
-            $groupedMenus = [];
+            $navbarMenus = [];
+            $tabMenus = [];
 
             if (session()->has('selected_location_id_grup')) {
                 $idGroup = session('selected_location_id_grup');
 
-                // Ambil seluruh menu sekali query
+                // Ambil semua menu hanya sekali
                 $menus = DB::table('ms_menu')
                     ->join('group_menu', 'ms_menu.id_Menu', '=', 'group_menu.id_Menu')
                     ->where('group_menu.id_Group', $idGroup)
@@ -34,17 +48,60 @@ class AppServiceProvider extends ServiceProvider
                     ->select('ms_menu.*')
                     ->get();
 
-                // Definisi grup tanpa submenu dan link khusus
+                // Menu untuk navbar (sidebar)
+                if ($menus->whereIn('id_Menu', [10, 4])->isNotEmpty()) {
+                    $navbarMenus['All'] = '/all';
+                }
+                if ($menus->whereIn('id_Menu', [1, 2, 3, 4, 5, 6, 7, 10, 8, 9, 11])->isNotEmpty()) {
+                    $navbarMenus['Transaction'] = '/transaction';
+                }
+
+                $searchMenus = $menus->whereIn('id_Menu', [
+                    12,
+                    13,
+                    15,
+                    16,
+                    17,
+                    18,
+                    19,
+                    20,
+                    21,
+                    26,
+                    30,
+                    136,
+                    137,
+                    138,
+                    139,
+                    140,
+                    141,
+                    143,
+                    145,
+                    148,
+                    149,
+                    150,
+                    151,
+                    152,
+                    153
+                ]);
+                if ($searchMenus->isNotEmpty()) {
+                    $navbarMenus['Search'] = $searchMenus;
+                }
+
+                $myAccount = $menus->whereIn('id_Menu', [27]);
+                if ($myAccount->isNotEmpty()) {
+                    $navbarMenus['My Account'] = $myAccount;
+                }
+
+                // Menu untuk nav pills (tab horizontal)
                 $singleLinks = [
-                    'Transaction' => [1, 2, 3, 4],
+                    'Transaction' => [1, 2, 3, 4, 5, 6, 7, 10, 8, 9, 11],
                     'Income' => [5, 6, 7, 10],
                     'E-Payment' => [8, 9, 11],
                 ];
 
                 foreach ($singleLinks as $name => $ids) {
                     if ($menus->whereIn('id_Menu', $ids)->isNotEmpty()) {
-                        // Kamu bisa ganti link-nya di sini sesuai kebutuhan
-                        $groupedMenus[$name] = match ($name) {
+                        $tabMenus[$name] = match ($name) {
                             'Transaction' => '/transaction',
                             'Income' => '/income',
                             'E-Payment' => '/e-payment',
@@ -52,48 +109,15 @@ class AppServiceProvider extends ServiceProvider
                     }
                 }
 
-                // Definisi grup dengan submenu
-                $subGroups = [
-                    'Traffic Management' => [22, 23, 24, 25],
-                    'Search' => [
-                        12,
-                        13,
-                        15,
-                        16,
-                        17,
-                        18,
-                        19,
-                        20,
-                        21,
-                        26,
-                        30,
-                        136,
-                        137,
-                        138,
-                        139,
-                        140,
-                        141,
-                        143,
-                        145,
-                        148,
-                        149,
-                        150,
-                        151,
-                        152,
-                        153
-                    ],
-                    'My Account' => [27],
-                ];
-
-                foreach ($subGroups as $name => $ids) {
-                    $filtered = $menus->whereIn('id_Menu', $ids);
-                    if ($filtered->isNotEmpty()) {
-                        $groupedMenus[$name] = $filtered;
-                    }
+                $trafficMenus = $menus->whereIn('id_Menu', [22, 23, 24, 25]);
+                if ($trafficMenus->isNotEmpty()) {
+                    $tabMenus['Traffic Management'] = $trafficMenus;
                 }
             }
 
-            View::share('groupedMenus', $groupedMenus);
+            // Share ke semua view
+            View::share('navbarMenus', $navbarMenus);
+            View::share('tabMenus', $tabMenus);
         });
     }
 }

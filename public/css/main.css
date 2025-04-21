@@ -42,7 +42,7 @@ h6 {
 }
 
 .dark-mode {
-    background-color: #212830;
+    background-color:  #0A1525;
     /* Dark background for the whole page */
     color: #ffffff !important;
     /* Light text color */
@@ -50,7 +50,7 @@ h6 {
 
 /* Navbar - Dark mode */
 .dark-mode .navbar.bg-navbar-theme {
-    background-color: #151b23 !important;
+    background-color: #185bb4 !important;
     color: #ffffff;
 }
 
@@ -90,7 +90,7 @@ h6 {
 }
 /* Menu - Dark mode */
 .dark-mode .bg-menu-theme {
-    background-color: #151b23 !important;
+    background-color: #092953 !important;
     color: #ffffff;
 }
 
@@ -117,8 +117,8 @@ h6 {
 
 /* Footer - Dark mode */
 .dark-mode .bg-footer-theme {
-    background-color: #151b23;
-    color: #ffffff;
+    background-color: #185BB4;
+    color: #ffffff !important;
 }
 
 .dark-mode .bg-footer-theme .footer-link {
@@ -136,9 +136,9 @@ option {
     --bs-table-color: #ffffff; /* Light text color for the table */
     --bs-table-bg: #121212; /* Dark background for the table */
     --bs-table-border-color: #444; /* Darker border color */
-    --bs-table-accent-bg: #1e1e1e; /* Accent background for table */
+    --bs-table-accent-bg: #0F1A2E; /* Accent background for table */
     --bs-table-striped-color: #ffffff; /* Light text color for striped rows */
-    --bs-table-striped-bg: #333333; /* Darker striped rows */
+    --bs-table-striped-bg: #121E32; /* Darker striped rows */
     --bs-table-active-color: #ffffff; /* Light text color for active rows */
     --bs-table-active-bg: rgba(
         255,
@@ -153,6 +153,8 @@ option {
     vertical-align: middle;
     border-color: var(--bs-table-border-color);
 }
+
+
 
 .dark-mode .table > :not(caption) > * > * {
     color: var(
@@ -177,7 +179,7 @@ option {
 }
 
 .dark-mode .table-group-divider {
-    border-top: calc(var(--bs-border-width) * 2) solid #444; /* Darker divider */
+    border-top: calc(var(--bs-border-width) * 2) solid #000000; /* Darker divider */
 }
 
 .dark-mode .caption-top {
@@ -204,7 +206,7 @@ option {
 
 .dark-mode .table-striped > tbody > tr:nth-of-type(odd) > * {
     --bs-table-color-type: var(--bs-table-striped-color);
-    --bs-table-bg-type: var(--bs-table-striped-bg);
+    --bs-table-bg-type: #153259;
 }
 
 .dark-mode .table-striped-columns > :not(caption) > tr > :nth-child(even) {
@@ -224,8 +226,8 @@ option {
 
 /* Dark Mode Active and Hover States for Menu */
 .dark-mode .bg-menu-theme .menu-item.active > .menu-link:not(.menu-toggle) {
-    background-color: #232846 !important; /* Dark background for active menu item */
-    color: #696cff; /* Light blue text for active menu item */
+    background-color: #0A1525 !important; /* Dark background for active menu item */
+    color: #fff; /* Light blue text for active menu item */
 }
 
 /* Dark Mode Hover State for Menu */

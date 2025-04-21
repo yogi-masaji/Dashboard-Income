@@ -369,8 +369,8 @@ button.list-group-item-primary.active {
 .nav-pills .nav-link.active,
 .nav-pills .nav-link.active:hover,
 .nav-pills .nav-link.active:focus {
-    background-color: #696cff;
-    color: #fff;
+    background-color: #FCB900;
+    color: #175390;
     border-radius: 10px;
 }
 
@@ -959,11 +959,11 @@ html:not(.layout-menu-collapsed)
     color: #696cff;
 }
 .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
-    color: #696cff;
-    background-color: rgba(105, 108, 255, 0.16) !important;
+    color: #fff;
+    background-color: rgb(10 21 37) !important;
 }
 .bg-menu-theme .menu-inner > .menu-item.active:before {
-    background: #696cff;
+    background: #fcb900;
 }
 .bg-menu-theme .menu-sub > .menu-item > .menu-link:before {
     background-color: #a7acb2 !important;
@@ -972,7 +972,7 @@ html:not(.layout-menu-collapsed)
     .menu-sub
     > .menu-item.active
     > .menu-link:not(.menu-toggle):before {
-    background-color: #696cff !important;
+    background-color: #fcb900 !important;
     border: 3px solid #e7e7ff !important;
 }
 
