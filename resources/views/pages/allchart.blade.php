@@ -18,7 +18,34 @@
 
         table.dataTable tbody th,
         table.dataTable tbody td {
-            padding: 2px 0px;
+            padding: 2px 5px;
+        }
+
+        table.dataTable td {
+            font-size: 0.7em;
+        }
+
+        table.dataTable tfoot th {
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        table.dataTable tfoot th[colspan="2"] {
+            font-size: 0.7em;
+            font-weight: 700;
+            /* add more styles if needed */
+        }
+
+
+        table.dataTable {
+            width: 100%;
+        }
+
+        #monthlyE-Payment th,
+        #monthlyE-Payment td {
+            word-break: break-all;
+            /* IE supports this */
+            word-break: break-word;
         }
     </style>
     <div class="container">
@@ -147,30 +174,33 @@
         <div class="row">
             <div class="col-md-4 content-custom">
                 <p>Daily Income</p>
-                <div class="col-md-6">
-                    <table id="dailyIncome" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Vehicle</th>
-                                <th>Yesterday</th>
-                                <th>Today</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th colspan="2" style="text-align:left">All Vehicle</th>
-                                <th id="totalYesterday"></th>
-                                <th id="totalToday"></th>
-                            </tr>
-                        </tfoot>
-                    </table>
+
+                <table id="dailyIncome" class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Vehicle</th>
+                            <th>Yesterday</th>
+                            <th>Today</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2" style="text-align:left">All Vehicle</th>
+                            <th id="totalYesterday"></th>
+                            <th id="totalToday"></th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="" style="height: 170px;">
+
+                    <canvas id="dailyIncomedonut" height="150px"></canvas>
                 </div>
-                <canvas id="dailyIncomedonut" height="5"></canvas>
             </div>
             <div class="col-md-4 content-custom">
                 <p>Weekly Income</p>
-                <table id="weeklyIncome" class="table table-striped table-bordered">
+                <table id="weeklyIncome" class="table table-striped ">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -210,7 +240,7 @@
             </div>
             <div class="col-md-4 content-custom">
                 <p>Monthly Income</p>
-                <table id="monthlyIncome" class="table table-striped table-bordered">
+                <table id="monthlyIncome" class="table table-striped ">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -243,6 +273,184 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-4 content-custom">
+                <p>Daily E-Payment</p>
+
+                <table id="dailyE-Payment" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Payment</th>
+                            <th>Yesterday</th>
+                            <th>Today</th>
+                        </tr>
+                    </thead>
+                    <tfoot></tfoot>
+                </table>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-dailyE-Payment-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-dailyE-Payment" type="button" role="tab"
+                            aria-controls="nav-dailyE-Payment" aria-selected="true">Bar</button>
+                        <button class="nav-link" id="nav-dailyE-Payment-line-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-dailyE-Payment-line" type="button" role="tab"
+                            aria-controls="nav-dailyE-Payment-line" aria-selected="false">Line</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-dailyE-Payment" role="tabpanel"
+                        aria-labelledby="nav-dailyE-Payment-tab" tabindex="0">
+                        <canvas id="dailyE-PaymentBar" height="200" width="auto"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="nav-dailyE-Payment-line" role="tabpanel"
+                        aria-labelledby="nav-dailyE-Payment-line-tab" tabindex="0">
+                        <canvas id="dailyE-PaymentLine" height="200" width="auto"></canvas>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-4 content-custom">
+                <p>Weekly E-Payment</p>
+                <table id="weeklyE-Payment" class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Payment</th>
+                            <th>Last Week</th>
+                            <th>This Week</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-weeklyE-Payment-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-weeklyE-Payment" type="button" role="tab"
+                            aria-controls="nav-weeklyE-Payment" aria-selected="true">Bar</button>
+                        <button class="nav-link" id="nav-weeklyE-Payment-line-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-weeklyE-Payment-line" type="button" role="tab"
+                            aria-controls="nav-weeklyE-Payment-line" aria-selected="false">Line</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-weeklyE-Payment" role="tabpanel"
+                        aria-labelledby="nav-weeklyE-Payment-tab" tabindex="0">
+                        <canvas id="weeklyE-PaymentBar" height="200" width="auto"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="nav-weeklyE-Payment-line" role="tabpanel"
+                        aria-labelledby="nav-weeklyE-Payment-line-tab" tabindex="0">
+                        <canvas id="weeklyE-PaymentLine" height="200" width="auto"></canvas>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4 content-custom">
+                <p>Monthly E-Payment</p>
+                <table id="monthlyE-Payment" class="table table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Payment</th>
+                            <th>Last Month</th>
+                            <th>This Month</th>
+                        </tr>
+                    </thead>
+                    <tfoot></tfoot>
+                </table>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-monthlyE-Payment-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-monthlyE-Payment" type="button" role="tab"
+                            aria-controls="nav-monthlyE-Payment" aria-selected="true">Bar</button>
+                        <button class="nav-link" id="nav-monthlyE-Payment-line-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-monthlyE-Payment-line" type="button" role="tab"
+                            aria-controls="nav-monthlyE-Payment-line" aria-selected="false">Line</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-monthlyE-Payment" role="tabpanel"
+                        aria-labelledby="nav-monthlyE-Payment-tab" tabindex="0">
+                        <canvas id="monthlyE-PaymentBar" height="200" width="auto"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="nav-monthlyE-Payment-line" role="tabpanel"
+                        aria-labelledby="nav-monthlyE-Payment-line-tab" tabindex="0">
+                        <canvas id="monthlyE-PaymentLine" height="200" width="auto"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 content-custom">
+                <p>Weekly Pass Quantity</p>
+                <table id="weeklyQuantityPass" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Vehicle</th>
+                            <th>Last Week</th>
+                            <th>This Week</th>
+                        </tr>
+                    </thead>
+                </table>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-weekly-pass-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-weekly-pass" type="button" role="tab"
+                            aria-controls="nav-weekly-pass" aria-selected="true">Bar</button>
+                        <button class="nav-link" id="nav-weekly-pass-line-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-weekly-pass-line" type="button" role="tab"
+                            aria-controls="nav-weekly-line-pass" aria-selected="false">Line</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-weekly-pass" role="tabpanel"
+                        aria-labelledby="nav-weekly-pass-tab" tabindex="0">
+                        <canvas id="weeklyPassQuantityBar" height="150" width="auto"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="nav-weekly-pass-line" role="tabpanel"
+                        aria-labelledby="nav-weekly-pass-line-tab" tabindex="0">
+                        <canvas id="weeklyPassQuantityLine" height="150" width="auto"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 content-custom">
+                <p>Monthly Pass Quantity</p>
+                <table id="monthlyQuantityPass" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Vehicle</th>
+                            <th>Last Month</th>
+                            <th>This Month</th>
+                        </tr>
+                    </thead>
+                </table>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-monthly-pass-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-monthly-pass" type="button" role="tab"
+                            aria-controls="nav-monthly-pass" aria-selected="true">Bar</button>
+                        <button class="nav-link" id="nav-monthly-pass-line-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-monthly-pass-line" type="button" role="tab"
+                            aria-controls="nav-monthly-line-pass" aria-selected="false">Line</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-monthly-pass" role="tabpanel"
+                        aria-labelledby="nav-monthly-pass-tab" tabindex="0">
+                        <canvas id="monthlyPassQuantityBar" height="150" width="auto"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="nav-monthly-pass-line" role="tabpanel"
+                        aria-labelledby="nav-monthly-pass-line-tab" tabindex="0">
+                        <canvas id="monthlyPassQuantityLine" height="150" width="auto"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -252,7 +460,11 @@
         const dailyIncomeURL = "{{ route('getDailyIncome') }}";
         const weeklyIncomeURL = "{{ route('weeklyIncome') }}";
         const monthlyIncomeURL = "{{ route('monthlyIncome') }}";
+        const dailyEpaymentURL = "{{ route('dailyEpayment') }}";
+        const weeklyEpaymentURL = "{{ route('weeklyEpayment') }}";
+        const monthlyEpaymentURL = "{{ route('monthlyEpayment') }}";
     </script>
-    <script src="js/transaction.js"></script>
-    <script src="js/income.js"></script>
+    <script src="js/testasync.js"></script>
+    {{-- <script src="js/income.js"></script>
+    <script src="js/epayment.js"></script> --}}
 @endsection

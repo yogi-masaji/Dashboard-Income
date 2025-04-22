@@ -1,115 +1,132 @@
+let tableTransaction, weeklyTable, monthlyTable, weeklyPassTable, monthlyPassTable;
 $(document).ready(function() {
-    
-        const table = $('#dailyQuantity').DataTable({
-            searching: false,
-            paging: false,
-            autoWidth: false,
-            ordering: false,
-            info: false,
-            data: [],
-            columns: [{
-                    data: 'no'
-                },
-                {
-                    data: 'type'
-                },
-                {
-                    data: 'yesterday'
-                },
-                {
-                    data: 'today'
-                }
-            ]
-        });
-        const weeklyTable = $('#weeklyQuantity').DataTable({
-            searching: false,
-            paging: false,
-            autoWidth: false,
-            ordering: false,
-            info: false,
-            data: [],
-            columns: [{
-                    data: 'no'
-                },
-                {
-                    data: 'vehicle'
-                },
-                {
-                    data: 'last_week'
-                },
-                {
-                    data: 'this_week'
-                }
-            ]
-        });
+    tableTransaction = $('#dailyQuantity').DataTable({
+        searching: false,
+        paging: false,
+        autoWidth: false,
+        ordering: false,
+        info: false,
+        data: [],
+        columns: [{
+                data: 'no'
+            },
+            {
+                data: 'type'
+            },
+            {
+                data: 'yesterday'
+            },
+            {
+                data: 'today'
+            }
+        ]
+    });
+    weeklyTable = $('#weeklyQuantity').DataTable({
+        searching: false,
+        paging: false,
+        autoWidth: false,
+        ordering: false,
+        info: false,
+        data: [],
+        columns: [{
+                data: 'no'
+            },
+            {
+                data: 'vehicle'
+            },
+            {
+                data: 'last_week'
+            },
+            {
+                data: 'this_week'
+            }
+        ]
+    });
 
-        const monthlyTable = $('#monthlyQuantity').DataTable({
-            searching: false,
-            paging: false,
-            autoWidth: false,
-            ordering: false,
-            info: false,
-            data: [],
-            columns: [{
-                    data: 'no'
-                },
-                {
-                    data: 'vehicle'
-                },
-                {
-                    data: 'last_month'
-                },
-                {
-                    data: 'this_month'
-                }
-            ]
-        });
+    monthlyTable = $('#monthlyQuantity').DataTable({
+        searching: false,
+        paging: false,
+        autoWidth: false,
+        ordering: false,
+        info: false,
+        data: [],
+        columns: [{
+                data: 'no'
+            },
+            {
+                data: 'vehicle'
+            },
+            {
+                data: 'last_month'
+            },
+            {
+                data: 'this_month'
+            }
+        ]
+    });
 
 
-        const weeklyPassTable = $('#weeklyQuantityPass').DataTable({
-            searching: false,
-            paging: false,
-            autoWidth: false,
-            ordering: false,
-            info: false,
-            data: [],
-            columns: [{
-                    data: 'no'
-                },
-                {
-                    data: 'vehicle'
-                },
-                {
-                    data: 'last_week'
-                },
-                {
-                    data: 'this_week'
-                }
-            ]
-        });
+    weeklyPassTable = $('#weeklyQuantityPass').DataTable({
+        searching: false,
+        paging: false,
+        autoWidth: false,
+        ordering: false,
+        info: false,
+        data: [],
+        columns: [{
+                data: 'no'
+            },
+            {
+                data: 'vehicle'
+            },
+            {
+                data: 'last_week'
+            },
+            {
+                data: 'this_week'
+            }
+        ]
+    });
 
-        const monthlyPassTable = $('#monthlyQuantityPass').DataTable({
-            searching: false,
-            paging: false,
-            autoWidth: false,
-            ordering: false,
-            info: false,
-            data: [],
-            columns: [{
-                    data: 'no'
-                },
-                {
-                    data: 'vehicle'
-                },
-                {
-                    data: 'last_month'
-                },
-                {
-                    data: 'this_month'
-                }
-            ]
-        });
+    monthlyPassTable = $('#monthlyQuantityPass').DataTable({
+        searching: false,
+        paging: false,
+        autoWidth: false,
+        ordering: false,
+        info: false,
+        data: [],
+        columns: [{
+                data: 'no'
+            },
+            {
+                data: 'vehicle'
+            },
+            {
+                data: 'last_month'
+            },
+            {
+                data: 'this_month'
+            }
+        ]
+    });
+    runAllFetch();
 
+    setInterval(runAllFetch, 10000);
+});
+
+
+async function runAllFetch() {
+    try{
+        await dailyData();
+        await weeklyData();
+        await monthlyData();
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+async function dailyData() {
+    try{
         $.ajax({
             url: dailyTransactionURL,
             method: 'GET',
@@ -162,8 +179,8 @@ $(document).ready(function() {
                     yesterday: item.yesterday,
                     today: item.today
                 }));
-
-                table.rows.add(formattedRows).draw();
+                tableTransaction.clear().draw();
+                tableTransaction.rows.add(formattedRows).draw();
 
                 $('#dailyQuantity tfoot').html(`
                         <tr>
@@ -322,18 +339,25 @@ $(document).ready(function() {
                         ChartDataLabels
                     ] // make sure to include this if you're using CDN
                 }
-                const ctxLine = document.getElementById('dailyQuantityLine')?.getContext('2d');
-                if (ctxLine) {
-                    new Chart(ctxLine, lineConfig);
+                const ctxLineDailyQuantity = document.getElementById('dailyQuantityLine')?.getContext('2d');
+                if (ctxLineDailyQuantity) {
+                    new Chart(ctxLineDailyQuantity, lineConfig);
                 }
 
-                const ctx = document.getElementById('dailyQuantityBar')?.getContext('2d');
-                if (ctx) {
-                    new Chart(ctx, barConfig);
+                const ctxBarDailyQuantity = document.getElementById('dailyQuantityBar')?.getContext('2d');
+                if (ctxBarDailyQuantity) {
+                    new Chart(ctxBarDailyQuantity, barConfig);
                 }
             }
         });
+    }
+    catch (error) {
+        console.error('Error fetching daily data:', error);
+    }
+}
 
+async function weeklyData(){
+    try{
         $.ajax({
             url: weeklyTransactionURL,
             method: 'GET',
@@ -397,7 +421,7 @@ $(document).ready(function() {
                     this_week: item.thisWeek,
                     last_week: item.lastWeek
                 }));
-
+                weeklyTable.clear().draw();
                 weeklyTable.rows.add(formattedWeeklyRows).draw();
 
                 const rowsPass = [{
@@ -877,26 +901,33 @@ $(document).ready(function() {
                     ] // make sure to include this if you're using CDN
                 }
 
-                const ctxLine = document.getElementById('weeklyQuantityLine')?.getContext('2d');
-                if (ctxLine) {
-                    new Chart(ctxLine, lineConfig);
+                const ctxLineWeeklyQuantityLine = document.getElementById('weeklyQuantityLine')?.getContext('2d');
+                if (ctxLineWeeklyQuantityLine) {
+                    new Chart(ctxLineWeeklyQuantityLine, lineConfig);
                 }
 
-                const ctx = document.getElementById('weeklyQuantityBar')?.getContext('2d');
-                if (ctx) {
-                    new Chart(ctx, barConfig);
+                const ctxWeeklyQuantityBar = document.getElementById('weeklyQuantityBar')?.getContext('2d');
+                if (ctxWeeklyQuantityBar) {
+                    new Chart(ctxWeeklyQuantityBar, barConfig);
                 }
-                const ctxPass = document.getElementById('weeklyPassQuantityBar')?.getContext('2d');
-                if (ctxPass) {
-                    new Chart(ctxPass, barPassConfig);
+                const ctxWeeklyPassQuantityBar = document.getElementById('weeklyPassQuantityBar')?.getContext('2d');
+                if (ctxWeeklyPassQuantityBar) {
+                    new Chart(ctxWeeklyPassQuantityBar, barPassConfig);
                 }
-                const ctxPassLine = document.getElementById('weeklyPassQuantityLine')?.getContext('2d');
-                if (ctxPassLine) {
-                    new Chart(ctxPassLine, linePassConfig);
+                const ctxWeeklyPassQuantityLine = document.getElementById('weeklyPassQuantityLine')?.getContext('2d');
+                if (ctxWeeklyPassQuantityLine) {
+                    new Chart(ctxWeeklyPassQuantityLine, linePassConfig);
                 }
             }
         });
+    }catch (error) {
+        console.error('Error fetching weekly data:', error);
+    }
+}
+   
 
+async function monthlyData(){
+    try{
         $.ajax({
             url: monthlyTransactionURL,
             method: 'GET',
@@ -960,7 +991,7 @@ $(document).ready(function() {
                     last_month: item.lastMonth
                 }));
 
-                
+                monthlyTable.clear().draw();
             monthlyTable.rows.add(formattedMonthlyRows).draw();
 
             const rowsPass = [{
@@ -1437,25 +1468,27 @@ $(document).ready(function() {
                     ] // make sure to include this if you're using CDN
                 }
 
-                const ctxLine = document.getElementById('monthlyQuantityLine')?.getContext(
+                const ctxLineMonthlyQuantityLine = document.getElementById('monthlyQuantityLine')?.getContext(
                     '2d');
-                if (ctxLine) {
-                    new Chart(ctxLine, lineConfig);
+                if (ctxLineMonthlyQuantityLine) {
+                    new Chart(ctxLineMonthlyQuantityLine, lineConfig);
                 }
-                const ctx = document.getElementById('monthlyQuantityBar')?.getContext('2d');
-                if (ctx) {
-                    new Chart(ctx, barConfig);
+                const ctxmonthlyQuantityBar = document.getElementById('monthlyQuantityBar')?.getContext('2d');
+                if (ctxmonthlyQuantityBar) {
+                    new Chart(ctxmonthlyQuantityBar, barConfig);
                 }
-                const ctxPassLine = document.getElementById('monthlyPassQuantityLine')?.getContext(
+                const ctxmonthlyPassQuantityLine = document.getElementById('monthlyPassQuantityLine')?.getContext(
                     '2d');
-                if (ctxPassLine) {
-                    new Chart(ctxPassLine, linePassConfig);
+                if (ctxmonthlyPassQuantityLine) {
+                    new Chart(ctxmonthlyPassQuantityLine, linePassConfig);
                 }
-                const ctxPass = document.getElementById('monthlyPassQuantityBar')?.getContext('2d');
-                if (ctxPass) {
-                    new Chart(ctxPass, barPassConfig);
+                const ctxmonthlyPassQuantityBar = document.getElementById('monthlyPassQuantityBar')?.getContext('2d');
+                if (ctxmonthlyPassQuantityBar) {
+                    new Chart(ctxmonthlyPassQuantityBar, barPassConfig);
                 }
             }
         });
-    });
-
+    }catch (error) {
+        console.error('Error fetching monthly data:', error);
+    }
+}

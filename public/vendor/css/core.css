@@ -22390,7 +22390,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   padding: 0 1.5rem;
 }
 .layout-navbar.navbar-detached.container-xxl {
-  max-width: calc(1440px - 1.625rem * 2);
+  max-width: auto;
 }
 .layout-navbar-fixed .layout-navbar.navbar-detached {
   width: calc(100% - 1.625rem * 2 - 16.25rem);

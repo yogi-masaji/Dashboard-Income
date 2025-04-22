@@ -136,6 +136,8 @@ class TransactionController extends Controller
                 $thisWeekCasualTotals = $this->calculateTotals($thisWeekCasual, 'casual');
                 $lastWeekCasualTotals = $this->calculateTotals($lastWeekCasual, 'casual');
 
+                $thisWeekPassTotals = $this->calculateTotals($thisWeekPass, 'pass');
+                $lastWeekPassTotals = $this->calculateTotals($lastWeekPass, 'pass');
                 // Vehicle comparison (only casual)
                 $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
                 $vehicleData = [];
@@ -187,6 +189,7 @@ class TransactionController extends Controller
                         'pass' => $thisWeekPass,
                         'totals' => [
                             'casual' => $thisWeekCasualTotals,
+                            'pass' => $thisWeekPassTotals,
                         ],
                     ],
                     'last_week' => [
@@ -194,6 +197,7 @@ class TransactionController extends Controller
                         'pass' => $lastWeekPass,
                         'totals' => [
                             'casual' => $lastWeekCasualTotals,
+                            'pass' => $lastWeekPassTotals,
                         ],
                     ],
                     'vehicle_comparison' => $vehicleData,

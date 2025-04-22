@@ -13,7 +13,7 @@
         <h5>Pintu masuk Today</h5>
         <div class="row">
             <div class="col-6">
-                <canvas id="DailyPintuMasuk" height="auto"></canvas>
+                <canvas id="DailyPintuMasuk" height="300px"></canvas>
                 <table id="DailyPintuMasukTable" class="table table-striped table-bordered">
                     <thead>
                         <tr>
