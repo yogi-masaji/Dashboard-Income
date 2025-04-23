@@ -74,6 +74,207 @@ $(document).ready(function() {
     });
 
     $.ajax({
+        url: dailyEpaymentChart,
+        method: 'GET',
+        success: function(response) {
+            const today = response.this_week.data;
+            const labels = today.map(item => {
+                const date = new Date(item.tanggal);
+                return date.toLocaleDateString("id-ID", { day: "numeric", month: "short" });
+              });
+            const dataChart = {
+                labels: labels,
+                datasets: [{
+                        label: 'E Money',
+                        data: today.map(item => item.emoneypayment),
+                        backgroundColor: '#0D61E2',
+                        borderColor: '#0D61E2',
+                        borderWidth: 1,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        }
+                    },
+                    {
+                        label: 'Flazz',
+                        data: today.map(item => item.flazzpayment),
+                        backgroundColor: '#FFB800',
+                        borderColor: '#FFB800',
+                        borderWidth: 1,
+                        hidden: true,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        }
+                    },
+                    {
+                        label: 'Brizzi',
+                        data: today.map(item => item.brizzipayment),
+                        backgroundColor: '#FF4D4D',
+                        borderColor: '#FF4D4D',
+                        borderWidth: 1,
+                        hidden: true,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        }
+                    },
+                    {
+                        label: 'Tap Cash',
+                        data: today.map(item => item.tapcashpayment),
+                        backgroundColor: '#00C9A7',
+                        borderColor: '#00C9A7',
+                        borderWidth: 1,
+                        hidden: true,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        }
+                    },
+                    {
+                        label: 'Parkee',
+                        data: today.map(item => item.parkeepayment),
+                        backgroundColor: '#9C27B0',
+                        borderColor: '#9C27B0',
+                        borderWidth: 1,
+                        hidden: true,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        }
+                    },
+                    {
+                        label: 'Cash',
+                        data: today.map(item => item.cashpayment),
+                        backgroundColor: '#795548',
+                        borderColor: '#795548',
+                        borderWidth: 1,
+                        hidden:true,
+                        
+                    },
+                ]
+            };
+
+            const barConfig = {
+                type: 'bar',
+                data: dataChart,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+
+                        datalabels: {
+                            backgroundColor: (context) => context.dataset
+                                .backgroundColor,
+                            borderRadius: 4,
+                            color: 'white',
+                            font: {
+                                weight: 'bold',
+                                size: 9
+
+                            },
+                            formatter: function(value, context) {
+                                return new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR',
+                                    minimumFractionDigits: 0
+                                }).format(value);
+                            },
+                            padding: 6,
+                            offset: 8
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                color: '#fff'
+                            },
+                            grace: '10%'
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
+                        }
+                    }
+                },
+                plugins: [
+                    ChartDataLabels
+                ]
+            };
+            const lineConfig = {
+                type: 'line',
+                data: dataChart,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+
+                        datalabels: {
+                            backgroundColor: (context) => context.dataset
+                                .backgroundColor,
+                            borderRadius: 4,
+                            color: 'white',
+                            font: {
+                                weight: 'bold',
+                                size: 9
+
+                            },
+                            formatter: function(value, context) {
+                                return new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR',
+                                    minimumFractionDigits: 0
+                                }).format(value);
+                            },
+                            padding: 6,
+                            offset: 8
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                color: '#fff'
+                            },
+                            grace: '10%'
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
+                        }
+                    }
+                },
+                plugins: [
+                    ChartDataLabels
+                ]
+            };
+
+
+
+
+            const ctxLine = document.getElementById('dailyE-PaymentLine')?.getContext('2d');
+            if (ctxLine) {
+                new Chart(ctxLine, lineConfig);
+            }
+            const ctx = document.getElementById('dailyE-PaymentBar')?.getContext('2d');
+            if (ctx) {
+                new Chart(ctx, barConfig);
+            }
+        }
+    });
+
+    $.ajax({
         url: dailyEpaymentURL,
         method: 'GET',
         success: function(response) {
@@ -147,93 +348,93 @@ $(document).ready(function() {
                     </tr>
                 `);
 
-            const labels = ['Emoney', 'Flazz', 'Brizzi', 'Tap Cash', 'Parkee', 'Cash', 'All'];
-            const dataChart = response.data[0].today[0];
+            // const labels = ['Emoney', 'Flazz', 'Brizzi', 'Tap Cash', 'Parkee', 'Cash', 'All'];
+            // const dataChart = response.data[0].today[0];
 
-            const casualData = [
-                dataChart.emoneypayment,
-                dataChart.flazzpayment,
-                dataChart.brizzipayment,
-                dataChart.tapcashpayment,
-                dataChart.parkeepayment,
-                dataChart.cashpayment,
-                dataChart.grandtotal
-            ];
+            // // const casualData = [
+            // //     dataChart.emoneypayment,
+            // //     dataChart.flazzpayment,
+            // //     dataChart.brizzipayment,
+            // //     dataChart.tapcashpayment,
+            // //     dataChart.parkeepayment,
+            // //     dataChart.cashpayment,
+            // //     dataChart.grandtotal
+            // // ];
 
-            const barColors = [
-                '#0D61E2', // Emoney
-                '#FFB800', // Flazz
-                '#FF4D4D', // Brizzi
-                '#00C9A7', // Tap Cash
-                '#9C27B0', // Parkee
-                '#795548', // Cash
-                '#CCCCCC' // All (abu-abu muda)
-            ];
+            // // const barColors = [
+            // //     '#0D61E2', // Emoney
+            // //     '#FFB800', // Flazz
+            // //     '#FF4D4D', // Brizzi
+            // //     '#00C9A7', // Tap Cash
+            // //     '#9C27B0', // Parkee
+            // //     '#795548', // Cash
+            // //     '#CCCCCC' // All (abu-abu muda)
+            // // ];
 
-            const barPaymentData = {
-                labels: labels,
-                datasets: [{
-                    label: 'Today',
-                    data: casualData,
-                    backgroundColor: barColors,
-                    borderColor: barColors,
-                    borderWidth: 1,
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'end'
-                    }
-                }]
-            };
+            // // const barPaymentData = {
+            // //     labels: labels,
+            // //     datasets: [{
+            // //         label: 'Today',
+            // //         data: casualData,
+            // //         backgroundColor: barColors,
+            // //         borderColor: barColors,
+            // //         borderWidth: 1,
+            // //         datalabels: {
+            // //             anchor: 'end',
+            // //             align: 'end'
+            // //         }
+            // //     }]
+            // // };
 
 
-            const barConfig = {
-                type: 'bar',
-                data: barPaymentData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        },
+            // // const barConfig = {
+            // //     type: 'bar',
+            // //     data: barPaymentData,
+            // //     options: {
+            // //         responsive: true,
+            // //         maintainAspectRatio: true,
+            // //         plugins: {
+            // //             legend: {
+            // //                 position: 'top'
+            // //             },
 
-                        datalabels: {
-                            backgroundColor: (context) => context.dataset
-                                .backgroundColor,
-                            borderRadius: 4,
-                            color: 'white',
-                            font: {
-                                weight: 'bold'
-                            },
-                            formatter: function(value, context) {
-                                return new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR',
-                                    minimumFractionDigits: 0
-                                }).format(value);
-                            },
-                            padding: 6,
-                            offset: 8
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0
-                            },
-                            grace: '10%'
-                        }
-                    }
-                },
-                plugins: [
-                    ChartDataLabels
-                ] // make sure to include this if you're using CDN
-            };
-            const ctx = document.getElementById('dailyE-PaymentBar')?.getContext('2d');
-            if (ctx) {
-                new Chart(ctx, barConfig);
-            }
+            // //             datalabels: {
+            // //                 backgroundColor: (context) => context.dataset
+            // //                     .backgroundColor,
+            // //                 borderRadius: 4,
+            // //                 color: 'white',
+            // //                 font: {
+            // //                     weight: 'bold'
+            // //                 },
+            // //                 formatter: function(value, context) {
+            // //                     return new Intl.NumberFormat('id-ID', {
+            // //                         style: 'currency',
+            // //                         currency: 'IDR',
+            // //                         minimumFractionDigits: 0
+            // //                     }).format(value);
+            // //                 },
+            // //                 padding: 6,
+            // //                 offset: 8
+            // //             }
+            // //         },
+            // //         scales: {
+            // //             y: {
+            // //                 beginAtZero: true,
+            // //                 ticks: {
+            // //                     precision: 0
+            // //                 },
+            // //                 grace: '10%'
+            // //             }
+            // //         }
+            // //     },
+            // //     plugins: [
+            // //         ChartDataLabels
+            // //     ] // make sure to include this if you're using CDN
+            // // };
+            // // const ctx = document.getElementById('dailyE-PaymentBar')?.getContext('2d');
+            // // if (ctx) {
+            // //     new Chart(ctx, barConfig);
+            // // }
 
         }
     })
@@ -456,9 +657,15 @@ $(document).ready(function() {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                color: '#fff'
                             },
                             grace: '10%'
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
                         }
                     }
                 },
@@ -597,9 +804,15 @@ $(document).ready(function() {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                color: '#fff'
                             },
                             grace: '10%'
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
                         }
                     }
                 },
@@ -833,9 +1046,15 @@ $(document).ready(function() {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                color: '#fff'
                             },
                             grace: '10%'
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
                         }
                     }
                 },
@@ -974,9 +1193,15 @@ $(document).ready(function() {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                color: '#fff'
                             },
                             grace: '10%'
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
                         }
                     }
                 },

@@ -419,9 +419,15 @@ $(document).ready(function() {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                color: '#fff'
                             },
                             grace: '10%'
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
                         }
                     }
                 },
@@ -531,10 +537,16 @@ $(document).ready(function() {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                color: '#fff'
                             },
                             grace: '10%'
                         },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
+                        }
                     }
                 },
                 plugins: [
@@ -817,9 +829,15 @@ $(document).ready(function() {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                color: '#fff'
                             },
                             grace: '10%'
+                        }, 
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
                         }
                     }
                 },
@@ -861,9 +879,15 @@ $(document).ready(function() {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                color: '#fff'
                             },
                             grace: '10%'
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            }
                         }
                     }
                 },

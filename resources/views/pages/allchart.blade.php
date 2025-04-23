@@ -22,7 +22,7 @@
         }
 
         table.dataTable td {
-            font-size: 0.7em;
+            font-size: 0.9em;
         }
 
         table.dataTable tfoot th {
@@ -89,6 +89,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-4 content-custom">
                 <p>Casual Weekly Quantity</p>
                 <table id="weeklyQuantity" class="table table-striped">
@@ -463,8 +464,9 @@
         const dailyEpaymentURL = "{{ route('dailyEpayment') }}";
         const weeklyEpaymentURL = "{{ route('weeklyEpayment') }}";
         const monthlyEpaymentURL = "{{ route('monthlyEpayment') }}";
+        const dailyEpaymentChart = "{{ route('dailyEpaymentChart') }}";
     </script>
     <script src="js/testasync.js"></script>
-    {{-- <script src="js/income.js"></script>
-    <script src="js/epayment.js"></script> --}}
+    <script src="js/income.js"></script>
+    <script src="js/epayment.js"></script>
 @endsection

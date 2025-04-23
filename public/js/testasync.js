@@ -259,9 +259,15 @@ async function dailyData() {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -329,9 +335,13 @@ async function dailyData() {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,color: '#fff'
                                 },
                                 grace: '10%'
+                            },x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -452,7 +462,7 @@ async function weeklyData(){
                 this_week: item.thisWeek,
                 last_week: item.lastWeek
             }));
-
+                weeklyPassTable.clear().draw();
             weeklyPassTable.rows.add(formattedWeeklyRowsPass).draw();
 
                 $('#weeklyQuantity tfoot').html(`
@@ -582,9 +592,15 @@ async function weeklyData(){
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -681,9 +697,15 @@ async function weeklyData(){
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: "#fff",
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -785,9 +807,15 @@ async function weeklyData(){
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -890,9 +918,15 @@ async function weeklyData(){
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -1022,6 +1056,7 @@ async function monthlyData(){
             this_month: item.thisMonth,
             last_month: item.lastMonth
         }));
+                monthlyPassTable.clear().draw();
             monthlyPassTable.rows.add(formattedMonthlyRowsPass).draw();
 
                 $('#monthlyQuantity tfoot').html(`
@@ -1148,9 +1183,15 @@ async function monthlyData(){
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -1248,9 +1289,15 @@ async function monthlyData(){
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -1353,9 +1400,15 @@ async function monthlyData(){
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -1457,9 +1510,15 @@ async function monthlyData(){
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },

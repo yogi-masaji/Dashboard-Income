@@ -159,5 +159,6 @@
     const dailyEpaymentURL = "{{ route('dailyEpayment') }}";
     const weeklyEpaymentURL = "{{ route('weeklyEpayment') }}";
     const monthlyEpaymentURL = "{{ route('monthlyEpayment') }}";
+    const dailyEpaymentChart = "{{ route('dailyEpaymentChart') }}";
 </script>
 <script src="js/epayment.js"></script>

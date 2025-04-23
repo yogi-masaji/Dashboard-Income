@@ -58,9 +58,12 @@ Route::get('/daily-income', [IncomeController::class, 'getDailyIncome'])->name('
 Route::get('/weekly-income', [IncomeController::class, 'weeklyIncome'])->name('weeklyIncome');
 Route::get('/monthly-income', [IncomeController::class, 'monthlyIncome'])->name('monthlyIncome');
 Route::get('/daily-epayment', [EpaymentController::class, 'dailyEpayment'])->name('dailyEpayment');
+Route::get('/daily-epayment-chart', [EpaymentController::class, 'weeklyEpaymentThisWeekOnly'])->name('dailyEpaymentChart');
 Route::get('/weekly-epayment', [EpaymentController::class, 'weeklyEpayment'])->name('weeklyEpayment');
 Route::get('/monthly-epayment', [EpaymentController::class, 'monthlyEpayment'])->name('monthlyEpayment');
 Route::get('/daily-traffic', [TrafficController::class, 'dailyTraffic'])->name('dailyTraffic');
+Route::get('/weekly-traffic', [TrafficController::class, 'weeklyTraffic'])->name('weeklyTraffic');
+Route::get('/monthly-traffic', [TrafficController::class, 'monthlyTraffic'])->name('monthlyTraffic');
 Route::get('/dailyincomefetch', [TransactionController::class, 'dailyFetch'])->name('dailyFetch');
 Route::get('/testable', function () {
     return view('pages.test');
