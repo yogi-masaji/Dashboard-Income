@@ -1,7 +1,9 @@
 <div class="tab-pane fade show active" id="pills-pintumasuk" role="tabpanel" aria-labelledby="pills-pintumasuk-tab">
     <div class="row">
         <div class="col-6">
-            <canvas id="DailyPintuMasukToday" height="300px"></canvas>
+            <div class="content-custom mb-2">
+                <canvas id="DailyPintuMasukToday" height="300px"></canvas>
+            </div>
             <table id="DailyPintuMasukTodayTable" class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -14,7 +16,9 @@
             </table>
         </div>
         <div class="col-6">
-            <canvas id="DailyPintuMasukYesterday" height="300px"></canvas>
+            <div class="content-custom mb-2">
+                <canvas id="DailyPintuMasukYesterday" height="300px"></canvas>
+            </div>
             <table id="DailyPintuMasukYesterdayTable" class="table table-striped table-bordered">
                 <thead>
                     <tr>

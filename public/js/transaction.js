@@ -224,6 +224,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top'
                             },
+                            
 
                             datalabels: {
                                 backgroundColor: (context) => context.dataset
@@ -245,7 +246,7 @@ $(document).ready(function() {
                                     precision: 0, 
                                     color: '#fff'
                                 },
-                                grace: '10%'
+                                grace: '10%',
                             },
                             x: {
                                 ticks: {

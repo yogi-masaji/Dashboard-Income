@@ -1,4 +1,4 @@
-{{-- <div class="nav nav-tabs custom-nav" id="inner-tab" role="tablist">
+<div class="nav nav-tabs custom-nav" id="inner-tab" role="tablist">
     <button class="nav-link active" id="inner-daily-traffic-tab" data-bs-toggle="tab" data-bs-target="#inner-daily-traffic"
         type="button" role="tab">daily-traffic</button>
     <button class="nav-link" id="inner-weekly-traffic-tab" data-bs-toggle="tab" data-bs-target="#inner-weekly-traffic"
@@ -889,4 +889,4 @@
         })
 
     });
-</script> --}}
+</script>

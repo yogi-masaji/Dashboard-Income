@@ -27,7 +27,7 @@
                     <div class="col-md-6">
                         <div class="content-custom">
 
-                            <table id="dailyQuantity" class="table table-striped table-bordered">
+                            <table id="dailyQuantity" class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -103,43 +103,49 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <table id="weeklyQuantity" class="table ">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Vehicle</th>
-                                    <th>Last Week</th>
-                                    <th>This Week</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="2" style="text-align:left">All Vehicle</th>
-                                    <th id="totalLastWeek"></th>
-                                    <th id="totalThisWeek"></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <div class="content-custom">
+                            <table id="weeklyQuantity" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Vehicle</th>
+                                        <th>Last Week</th>
+                                        <th>This Week</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2" style="text-align:left">All Vehicle</th>
+                                        <th id="totalLastWeek"></th>
+                                        <th id="totalThisWeek"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <nav>
-                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <button class="nav-link active" id="nav-weekly-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-weekly" type="button" role="tab"
-                                    aria-controls="nav-weekly" aria-selected="true">Bar</button>
-                                <button class="nav-link" id="nav-weekly-line-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-weekly-line" type="button" role="tab"
-                                    aria-controls="nav-weekly-line" aria-selected="false">Line</button>
-                            </div>
-                        </nav>
-                        <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-weekly" role="tabpanel"
-                                aria-labelledby="nav-weekly-tab" tabindex="0">
-                                <canvas id="weeklyQuantityBar" height="200" width="auto"></canvas>
-                            </div>
-                            <div class="tab-pane fade" id="nav-weekly-line" role="tabpanel"
-                                aria-labelledby="nav-weekly-line-tab" tabindex="0">
-                                <canvas id="weeklyQuantityLine" height="200" width="auto"></canvas>
+                        <div class="content-custom">
+
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button class="nav-link active" id="nav-weekly-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-weekly" type="button" role="tab"
+                                        aria-controls="nav-weekly" aria-selected="true">Bar</button>
+                                    <button class="nav-link" id="nav-weekly-line-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-weekly-line" type="button" role="tab"
+                                        aria-controls="nav-weekly-line" aria-selected="false">Line</button>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-weekly" role="tabpanel"
+                                    aria-labelledby="nav-weekly-tab" tabindex="0">
+                                    <canvas id="weeklyQuantityBar" height="200" width="auto"></canvas>
+                                </div>
+                                <div class="tab-pane fade" id="nav-weekly-line" role="tabpanel"
+                                    aria-labelledby="nav-weekly-line-tab" tabindex="0">
+                                    <canvas id="weeklyQuantityLine" height="200" width="auto"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -158,44 +164,49 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <table id="monthlyQuantity" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Vehicle</th>
-                                    <th>Last Month</th>
-                                    <th>This Month</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="2" style="text-align:left">All Vehicle</th>
-                                    <th id="totalLastMonth"></th>
-                                    <th id="totalThisMonth"></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <div class="content-custom">
+
+                            <table id="monthlyQuantity" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Vehicle</th>
+                                        <th>Last Month</th>
+                                        <th>This Month</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2" style="text-align:left">All Vehicle</th>
+                                        <th id="totalLastMonth"></th>
+                                        <th id="totalThisMonth"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <nav>
-                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <button class="nav-link active" id="nav-monthly-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-monthly" type="button" role="tab"
-                                    aria-controls="nav-monthly" aria-selected="true">Bar</button>
-                                <button class="nav-link" id="nav-monthly-line-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-monthly-line" type="button" role="tab"
-                                    aria-controls="nav-monthly-line" aria-selected="false">Line</button>
-                            </div>
-                        </nav>
-                        <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-monthly" role="tabpanel"
-                                aria-labelledby="nav-monthly-tab" tabindex="0">
-                                <canvas id="monthlyQuantityBar" height="200" width="auto"></canvas>
+                        <div class="content-custom">
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button class="nav-link active" id="nav-monthly-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-monthly" type="button" role="tab"
+                                        aria-controls="nav-monthly" aria-selected="true">Bar</button>
+                                    <button class="nav-link" id="nav-monthly-line-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-monthly-line" type="button" role="tab"
+                                        aria-controls="nav-monthly-line" aria-selected="false">Line</button>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-monthly" role="tabpanel"
+                                    aria-labelledby="nav-monthly-tab" tabindex="0">
+                                    <canvas id="monthlyQuantityBar" height="200" width="auto"></canvas>
 
-                            </div>
-                            <div class="tab-pane fade" id="nav-monthly-line" role="tabpanel"
-                                aria-labelledby="nav-monthly-line-tab" tabindex="0">
-                                <canvas id="monthlyQuantityLine" height="200" width="auto"></canvas>
+                                </div>
+                                <div class="tab-pane fade" id="nav-monthly-line" role="tabpanel"
+                                    aria-labelledby="nav-monthly-line-tab" tabindex="0">
+                                    <canvas id="monthlyQuantityLine" height="200" width="auto"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -213,7 +224,7 @@
 <script src="js/transaction.js"></script>
 
 {{-- 
-<script>
+<script>    
     $(document).ready(function() {
         const kodeLokasi = @json($kodeLokasi);
         const table = $('#dailyQuantity').DataTable({

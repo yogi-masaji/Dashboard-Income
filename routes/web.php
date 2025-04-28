@@ -8,6 +8,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\EpaymentControllerController;
 use App\Http\Controllers\TrafficController;
+use App\Http\Controllers\SearchController;
 use App\Models\lokasi;
 use App\Models\grupMenu;
 use App\Models\grupLokasi;
@@ -43,6 +44,7 @@ Route::post('/set-location', function (Illuminate\Http\Request $request) {
             'selected_location_name' => $lokasi->nama_Lokasi,
             'selected_location_ip_lokasi' => $lokasi->ip_Lokasi,
             'selected_location_kode_lokasi' => $lokasi->kode_Lokasi,
+            'selected_location_chisel_Version' => $lokasi->chisel_Version,
         ]);
     }
 
@@ -68,6 +70,12 @@ Route::get('/dailyincomefetch', [TransactionController::class, 'dailyFetch'])->n
 Route::get('/testable', function () {
     return view('pages.test');
 });
+
+Route::get('/peak-search', [SearchController::class, 'peakSearchView'])->name('peakSearchView');
+Route::post('/peak-search-api', [SearchController::class, 'peakSearch'])->name('peakSearch');
+Route::get('/bca-membership', [SearchController::class, 'membershipSearchView'])->name('membershipSearchView');
+Route::post('/membership-api', [SearchController::class, 'membershipSearch'])->name('membershipApi');
+Route::get('/detail-parkir', [SearchController::class, 'parkingDetailView'])->name('parkingDetailView');
 
 
 Route::get('/tab-content/transaction', fn() => view('tab-content.transaction'))->name('tab.transaction');

@@ -1,6 +1,9 @@
 <div class="row">
     <div class="col-6">
-        <canvas id="DailyPintuKeluarToday" height="300px"></canvas>
+        <div class="content-custom mb-2">
+
+            <canvas id="DailyPintuKeluarToday" height="300px"></canvas>
+        </div>
         <table id="DailyPintuKeluarTodayTable" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -13,7 +16,10 @@
         </table>
     </div>
     <div class="col-6">
-        <canvas id="DailyPintuKeluarYesterday" height="300px"></canvas>
+        <div class="content-custom mb-2">
+
+            <canvas id="DailyPintuKeluarYesterday" height="300px"></canvas>
+        </div>
         <table id="DailyPintuKeluarYesterdayTable" class="table table-striped table-bordered">
             <thead>
                 <tr>

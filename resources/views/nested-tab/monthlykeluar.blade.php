@@ -1,6 +1,8 @@
 <div class="row">
     <div class="col-md-6">
-        <canvas id="MonthlyPintuKeluarToday" height="300px"></canvas>
+        <div class="content-custom mb-2">
+            <canvas id="MonthlyPintuKeluarToday" height="300px"></canvas>
+        </div>
         <table id="monthlyPintuKeluarTable" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -13,7 +15,9 @@
         </table>
     </div>
     <div class="col-md-6">
-        <canvas id="MonthlyPintuKeluarYesterday" height="300px"></canvas>
+        <div class="content-custom mb-2">
+            <canvas id="MonthlyPintuKeluarYesterday" height="300px"></canvas>
+        </div>
         <table id="LastmonthlyPintuKeluarTable" class="table table-striped table-bordered">
             <thead>
                 <tr>

@@ -11,13 +11,8 @@
 
 
 
-    <link rel="stylesheet" href="css/main.css">
-    <!-- Toastr CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
-    <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script src="https://code.highcharts.com/stock/highstock.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+
+
     <script>
         const kodeLokasi = @json($kodeLokasi);
     </script>
@@ -50,9 +45,15 @@
         .dashboard-card {
             background-color: #2A3A5A;
             border-radius: 10px;
-            border: 2px solid #D9D9D9;
+            border: 2px solid #7e7e7e;
             padding: 13px;
             margin-bottom: 15px;
+        }
+
+        .dashboard-card span {
+
+            font-weight: 800;
+
         }
 
         .card-title {

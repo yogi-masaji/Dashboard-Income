@@ -71,7 +71,7 @@ h6 {
 }
 
 .dark-mode * {
-    border-color: #9198a1 !important;
+    /* border-color: #9198a1 !important; */
 }
 
 .dark-mode .navbar.bg-navbar-theme .navbar-nav .nav-link:hover,
@@ -135,7 +135,7 @@ option {
 .dark-mode .table {
     --bs-table-color: #ffffff; /* Light text color for the table */
     --bs-table-bg: #121212; /* Dark background for the table */
-    --bs-table-border-color: #444; /* Darker border color */
+    --bs-table-border-color: #464867; /* Darker border color */
     --bs-table-accent-bg: #0F1A2E; /* Accent background for table */
     --bs-table-striped-color: #ffffff; /* Light text color for striped rows */
     --bs-table-striped-bg: #121E32; /* Darker striped rows */
@@ -237,7 +237,8 @@ option {
 }
 
 .dark-mode input {
-    color: #ffffff;
+    color: #000000;
+    background-color: #fff;
 }
 
 .custom-toggle {
@@ -268,7 +269,7 @@ option {
 }
 
 .dark-mode .daterangepicker {
-    background-color: #151b23 !important;
+    /* background-color: #151b23 !important; */
     color: #000000 !important;
 }
 

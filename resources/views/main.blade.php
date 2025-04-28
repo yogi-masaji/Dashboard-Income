@@ -5,6 +5,8 @@
         $ipLokasi = session('selected_location_ip_lokasi', 'IP Tidak Diketahui');
         $lokasiId = session('selected_location_id', 0);
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
+        $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
+        $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 
@@ -19,5 +21,5 @@
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
 
 
-    <h3>{{ $navbarTitle }} - {{ $ipLokasi }} - {{ $lokasiId }} - {{ $lokasiGrup }}</h3>
+    <h3>{{ $navbarTitle }} - {{ $ipLokasi }} - {{ $lokasiId }} - {{ $lokasiGrup }} - {{ $chiselVersion }}</h3>
 @endsection

@@ -1,6 +1,8 @@
 <div class="row">
     <div class="col-md-6">
-        <canvas id="WeeklyPintuMasukToday" height="300px"></canvas>
+        <div class="content-custom mb-2">
+            <canvas id="WeeklyPintuMasukToday" height="300px"></canvas>
+        </div>
         <table id="weeklyPintuMasukTable" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -13,7 +15,9 @@
         </table>
     </div>
     <div class="col-md-6">
-        <canvas id="WeeklyPintuMasukYesterday" height="300px"></canvas>
+        <div class="content-custom mb-2">
+            <canvas id="WeeklyPintuMasukYesterday" height="300px"></canvas>
+        </div>
         <table id="LastweeklyPintuMasukTable" class="table table-striped table-bordered">
             <thead>
                 <tr>
