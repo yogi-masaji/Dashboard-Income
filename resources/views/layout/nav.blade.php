@@ -11,6 +11,8 @@
 
     <title>Dashboard Income</title>
     <link rel="stylesheet" href="css/main.css">
+    {{-- @vite('resources/css/main.css') --}}
+
     <meta name="description" content="" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Favicon -->
@@ -42,7 +44,7 @@
     <!-- DataTables HTML5 export and print buttons -->
     <script src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link rel="stylesheet" href="vendor/fonts/boxicons.css" />
@@ -188,7 +190,8 @@
                     </div>
                 </form>
 
-                <div style="max-height: calc(100vh - 100px); overflow-y: auto;overflow-x: hidden;">
+                <div class="scrollbar-container"
+                    style="max-height: calc(100vh - 100px); overflow-y: auto;overflow-x: hidden;" id="scrollbar">
                     <ul class="menu-inner py-1">
                         <!-- Dashboards -->
 

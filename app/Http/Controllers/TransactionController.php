@@ -98,14 +98,18 @@ class TransactionController extends Controller
             $thisWeekStart = $today->copy()->subDays(6)->format('Y-m-d');
             $thisWeekEnd = $today->format('Y-m-d');
 
-            // Last week: 7 hari sebelumnya
+            // Last week: 7 hari sebelum this week
             $lastWeekStart = $today->copy()->subDays(13)->format('Y-m-d');
             $lastWeekEnd = $today->copy()->subDays(7)->format('Y-m-d');
+
+            // Two weeks ago: 7 hari sebelum last week
+            $twoWeeksAgoStart = $today->copy()->subDays(20)->format('Y-m-d');
+            $twoWeeksAgoEnd = $today->copy()->subDays(14)->format('Y-m-d');
 
             $locationCode = session('selected_location_kode_lokasi');
 
             $response = Http::post('http://110.0.100.70:8080/v3/api/getquantity', [
-                'effective_start_date' => $lastWeekStart,
+                'effective_start_date' => $twoWeeksAgoStart,
                 'effective_end_date' => $thisWeekEnd,
                 'location_code' => $locationCode,
             ]);
@@ -116,6 +120,7 @@ class TransactionController extends Controller
                 $casualData = $data['casual'];
                 $passData = $data['pass'];
 
+                // Filter data by week ranges
                 $thisWeekCasual = array_values(collect($casualData)->filter(
                     fn($item) => Carbon::parse($item['tanggal'])->between($thisWeekStart, $thisWeekEnd)
                 )->toArray());
@@ -132,32 +137,38 @@ class TransactionController extends Controller
                     fn($item) => Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd)
                 )->toArray());
 
-                // Calculate totals (only casual)
+                $twoWeeksAgoCasual = array_values(collect($casualData)->filter(
+                    fn($item) => Carbon::parse($item['tanggal'])->between($twoWeeksAgoStart, $twoWeeksAgoEnd)
+                )->toArray());
+
+                // Calculate totals
                 $thisWeekCasualTotals = $this->calculateTotals($thisWeekCasual, 'casual');
                 $lastWeekCasualTotals = $this->calculateTotals($lastWeekCasual, 'casual');
+                $twoWeeksAgoCasualTotals = $this->calculateTotals($twoWeeksAgoCasual, 'casual');
 
                 $thisWeekPassTotals = $this->calculateTotals($thisWeekPass, 'pass');
                 $lastWeekPassTotals = $this->calculateTotals($lastWeekPass, 'pass');
-                // Vehicle comparison (only casual)
+
+                // Vehicle comparison (only casual), comparing this week vs two weeks ago
                 $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
                 $vehicleData = [];
-                $totalLastWeek = 0;
+                $totalTwoWeeksAgo = 0;
                 $totalThisWeek = 0;
 
                 foreach ($vehicleTypes as $type) {
-                    $lastWeekValue = $lastWeekCasualTotals['total_' . $type];
+                    $twoWeeksAgoValue = $twoWeeksAgoCasualTotals['total_' . $type];
                     $thisWeekValue = $thisWeekCasualTotals['total_' . $type];
 
-                    $totalLastWeek += $lastWeekValue;
+                    $totalTwoWeeksAgo += $twoWeeksAgoValue;
                     $totalThisWeek += $thisWeekValue;
 
-                    $percentChange = $lastWeekValue != 0 ? (($thisWeekValue - $lastWeekValue) / $lastWeekValue) * 100 : 0;
+                    $percentChange = $twoWeeksAgoValue != 0 ? (($thisWeekValue - $twoWeeksAgoValue) / $twoWeeksAgoValue) * 100 : 0;
                     $direction = $percentChange >= 0 ? '↑' : '↓';
                     $color = $percentChange >= 0 ? 'green' : 'red';
 
                     $vehicleData[] = [
                         'vehicle' => ucfirst($type),
-                        'last_week' => $lastWeekValue,
+                        'two_weeks_ago' => $twoWeeksAgoValue,
                         'this_week' => $thisWeekValue,
                         'percent_change' => number_format($percentChange, 1) . '%',
                         'direction' => $direction,
@@ -166,13 +177,13 @@ class TransactionController extends Controller
                 }
 
                 // All Vehicle Total
-                $percentChangeTotal = $totalLastWeek != 0 ? (($totalThisWeek - $totalLastWeek) / $totalLastWeek) * 100 : 0;
+                $percentChangeTotal = $totalTwoWeeksAgo != 0 ? (($totalThisWeek - $totalTwoWeeksAgo) / $totalTwoWeeksAgo) * 100 : 0;
                 $directionTotal = $percentChangeTotal >= 0 ? '↑' : '↓';
                 $colorTotal = $percentChangeTotal >= 0 ? 'green' : 'red';
 
                 $vehicleData[] = [
                     'vehicle' => 'All Vehicle',
-                    'last_week' => $totalLastWeek,
+                    'two_weeks_ago' => $totalTwoWeeksAgo,
                     'this_week' => $totalThisWeek,
                     'percent_change' => number_format($percentChangeTotal, 1) . '%',
                     'direction' => $directionTotal,
@@ -181,7 +192,7 @@ class TransactionController extends Controller
 
                 return response()->json([
                     'response' => 'Success Get Data',
-                    'message' => 'Get Quantity Data for Period ' . $locationCode . ' - ' . $thisWeekEnd . ' (This Week) and ' . $lastWeekStart . ' - ' . $lastWeekEnd . ' (Last Week)',
+                    'message' => 'Get Quantity Data for Period ' . $locationCode . ' - ' . $thisWeekEnd . ' (This Week)',
                     'status_code' => 200,
                     'location_code' => $locationCode,
                     'this_week' => [
@@ -216,18 +227,22 @@ class TransactionController extends Controller
         try {
             $today = Carbon::now()->timezone('Asia/Jakarta');
 
-            // Bulan ini: dari tanggal 1 sampai hari ini
+            // Tanggal untuk bulan ini
             $thisMonthStart = $today->copy()->startOfMonth()->format('Y-m-d');
             $thisMonthEnd = $today->format('Y-m-d');
 
-            // Bulan lalu: dari tanggal 1 sampai akhir bulan lalu
+            // Tanggal untuk bulan lalu
             $lastMonthStart = $today->copy()->subMonth()->startOfMonth()->format('Y-m-d');
             $lastMonthEnd = $today->copy()->subMonth()->endOfMonth()->format('Y-m-d');
+
+            // Tanggal untuk dua bulan lalu (khusus untuk vehicle_comparison)
+            $twoMonthsAgoStart = $today->copy()->subMonths(2)->startOfMonth()->format('Y-m-d');
+            $twoMonthsAgoEnd = $today->copy()->subMonths(2)->endOfMonth()->format('Y-m-d');
 
             $locationCode = session('selected_location_kode_lokasi');
 
             $response = Http::post('http://110.0.100.70:8080/v3/api/getquantity', [
-                'effective_start_date' => $lastMonthStart,
+                'effective_start_date' => $twoMonthsAgoStart,
                 'effective_end_date' => $thisMonthEnd,
                 'location_code' => $locationCode,
             ]);
@@ -238,6 +253,7 @@ class TransactionController extends Controller
                 $casualData = $data['casual'];
                 $passData = $data['pass'];
 
+                // Filter data sesuai bulan
                 $thisMonthCasual = array_values(collect($casualData)->filter(
                     fn($item) => Carbon::parse($item['tanggal'])->between($thisMonthStart, $thisMonthEnd)
                 )->toArray());
@@ -254,32 +270,37 @@ class TransactionController extends Controller
                     fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd)
                 )->toArray());
 
+                $twoMonthsAgoCasual = array_values(collect($casualData)->filter(
+                    fn($item) => Carbon::parse($item['tanggal'])->between($twoMonthsAgoStart, $twoMonthsAgoEnd)
+                )->toArray());
+
+                // Hitung total
                 $thisMonthCasualTotals = $this->calculateTotals($thisMonthCasual, 'casual');
                 $thisMonthPassTotals = $this->calculateTotals($thisMonthPass, 'pass');
-
                 $lastMonthCasualTotals = $this->calculateTotals($lastMonthCasual, 'casual');
                 $lastMonthPassTotals = $this->calculateTotals($lastMonthPass, 'pass');
+                $twoMonthsAgoCasualTotals = $this->calculateTotals($twoMonthsAgoCasual, 'casual');
 
-                // VEHICLE COMPARISON (like weekly)
+                // Vehicle comparison: 2 bulan lalu vs bulan ini
                 $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
                 $vehicleData = [];
-                $totalLastMonth = 0;
+                $totalTwoMonthsAgo = 0;
                 $totalThisMonth = 0;
 
                 foreach ($vehicleTypes as $type) {
-                    $lastMonthValue = $lastMonthCasualTotals['total_' . $type];
+                    $twoMonthsAgoValue = $twoMonthsAgoCasualTotals['total_' . $type];
                     $thisMonthValue = $thisMonthCasualTotals['total_' . $type];
 
-                    $totalLastMonth += $lastMonthValue;
+                    $totalTwoMonthsAgo += $twoMonthsAgoValue;
                     $totalThisMonth += $thisMonthValue;
 
-                    $percentChange = $lastMonthValue != 0 ? (($thisMonthValue - $lastMonthValue) / $lastMonthValue) * 100 : 0;
+                    $percentChange = $twoMonthsAgoValue != 0 ? (($thisMonthValue - $twoMonthsAgoValue) / $twoMonthsAgoValue) * 100 : 0;
                     $direction = $percentChange >= 0 ? '↑' : '↓';
                     $color = $percentChange >= 0 ? 'green' : 'red';
 
                     $vehicleData[] = [
                         'vehicle' => ucfirst($type),
-                        'last_month' => $lastMonthValue,
+                        'two_months_ago' => $twoMonthsAgoValue,
                         'this_month' => $thisMonthValue,
                         'percent_change' => number_format($percentChange, 1) . '%',
                         'direction' => $direction,
@@ -287,13 +308,13 @@ class TransactionController extends Controller
                     ];
                 }
 
-                $percentChangeTotal = $totalLastMonth != 0 ? (($totalThisMonth - $totalLastMonth) / $totalLastMonth) * 100 : 0;
+                $percentChangeTotal = $totalTwoMonthsAgo != 0 ? (($totalThisMonth - $totalTwoMonthsAgo) / $totalTwoMonthsAgo) * 100 : 0;
                 $directionTotal = $percentChangeTotal >= 0 ? '↑' : '↓';
                 $colorTotal = $percentChangeTotal >= 0 ? 'green' : 'red';
 
                 $vehicleData[] = [
                     'vehicle' => 'All Vehicle',
-                    'last_month' => $totalLastMonth,
+                    'two_months_ago' => $totalTwoMonthsAgo,
                     'this_month' => $totalThisMonth,
                     'percent_change' => number_format($percentChangeTotal, 1) . '%',
                     'direction' => $directionTotal,
@@ -304,21 +325,13 @@ class TransactionController extends Controller
                 $thisMonthCasualByWeek = $this->groupByWeek($thisMonthCasual);
                 $thisMonthPassByWeek = $this->groupByWeek($thisMonthPass);
 
-                $thisMonthCasualWeekTotals = [
-                    'week 1' => $this->calculateTotals($thisMonthCasualByWeek['week 1'], 'casual'),
-                    'week 2' => $this->calculateTotals($thisMonthCasualByWeek['week 2'], 'casual'),
-                    'week 3' => $this->calculateTotals($thisMonthCasualByWeek['week 3'], 'casual'),
-                    'week 4' => $this->calculateTotals($thisMonthCasualByWeek['week 4'], 'casual'),
-                    'week 5' => $this->calculateTotals($thisMonthCasualByWeek['week 5'], 'casual'),
-                ];
+                $thisMonthCasualWeekTotals = [];
+                $thisMonthPassWeekTotals = [];
 
-                $thisMonthPassWeekTotals = [
-                    'week 1' => $this->calculateTotals($thisMonthPassByWeek['week 1'], 'pass'),
-                    'week 2' => $this->calculateTotals($thisMonthPassByWeek['week 2'], 'pass'),
-                    'week 3' => $this->calculateTotals($thisMonthPassByWeek['week 3'], 'pass'),
-                    'week 4' => $this->calculateTotals($thisMonthPassByWeek['week 4'], 'pass'),
-                    'week 5' => $this->calculateTotals($thisMonthPassByWeek['week 5'], 'pass'),
-                ];
+                for ($i = 1; $i <= 5; $i++) {
+                    $thisMonthCasualWeekTotals["week $i"] = $this->calculateTotals($thisMonthCasualByWeek["week $i"] ?? [], 'casual');
+                    $thisMonthPassWeekTotals["week $i"] = $this->calculateTotals($thisMonthPassByWeek["week $i"] ?? [], 'pass');
+                }
 
                 return response()->json([
                     'response' => 'Success Get Monthly Data',

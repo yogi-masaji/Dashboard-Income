@@ -140,29 +140,39 @@ class EpaymentController extends Controller
             $lastWeekStart = $today->copy()->subDays(13)->format('Y-m-d');
             $lastWeekEnd = $today->copy()->subDays(7)->format('Y-m-d');
 
+            $twoWeeksAgoStart = $today->copy()->subDays(20)->format('Y-m-d');
+            $twoWeeksAgoEnd = $today->copy()->subDays(14)->format('Y-m-d');
+
             $locationCode = session('selected_location_kode_lokasi');
 
-            $thisWeekResponse = Http::post('http://110.0.100.70:8080/v3/api/getepayment', [
-                'effective_start_date' => $thisWeekStart,
+            $response = Http::post('http://110.0.100.70:8080/v3/api/getepayment', [
+                'effective_start_date' => $twoWeeksAgoStart,
                 'effective_end_date' => $thisWeekEnd,
                 'location_code' => $locationCode,
             ]);
 
-            $lastWeekResponse = Http::post('http://110.0.100.70:8080/v3/api/getepayment', [
-                'effective_start_date' => $lastWeekStart,
-                'effective_end_date' => $lastWeekEnd,
-                'location_code' => $locationCode,
-            ]);
+            if ($response->successful()) {
+                $epaymentData = collect($response->json()['data']);
 
-            if ($thisWeekResponse->successful() && $lastWeekResponse->successful()) {
-                $thisWeekData = collect($thisWeekResponse->json()['data']);
-                $lastWeekData = collect($lastWeekResponse->json()['data']);
+                $thisWeekData = $epaymentData->filter(function ($item) use ($thisWeekStart, $thisWeekEnd) {
+                    return isset($item['tanggal']) && Carbon::parse($item['tanggal'])->between($thisWeekStart, $thisWeekEnd);
+                })->values();
+
+                $lastWeekData = $epaymentData->filter(function ($item) use ($lastWeekStart, $lastWeekEnd) {
+                    return isset($item['tanggal']) && Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd);
+                })->values();
+
+                $twoWeeksAgoData = $epaymentData->filter(function ($item) use ($twoWeeksAgoStart, $twoWeeksAgoEnd) {
+                    return isset($item['tanggal']) && Carbon::parse($item['tanggal'])->between($twoWeeksAgoStart, $twoWeeksAgoEnd);
+                })->values();
 
                 $thisWeekTotals = $this->calculateEpaymentTotals($thisWeekData);
                 $lastWeekTotals = $this->calculateEpaymentTotals($lastWeekData);
+                $twoWeeksAgoTotals = $this->calculateEpaymentTotals($twoWeeksAgoData);
 
                 return response()->json([
                     'response' => 'Success Get Epayment Data',
+                    'message' => 'Epayment Weekly Data',
                     'status_code' => 200,
                     'location_code' => $locationCode,
                     'this_week' => [
@@ -173,8 +183,11 @@ class EpaymentController extends Controller
                         'data' => $lastWeekData->toArray(),
                         'totals' => $lastWeekTotals,
                     ],
-                    'table_data' => $this->formatEpaymentTable($thisWeekTotals, $lastWeekTotals),
-
+                    // 'two_weeks_ago' => [
+                    //     // 'data' => $twoWeeksAgoData->toArray(),
+                    //     'totals' => $twoWeeksAgoTotals,
+                    // ],
+                    'table_data' => $this->formatEpaymentTable($thisWeekTotals,  $twoWeeksAgoTotals),
                 ]);
             }
 
@@ -183,6 +196,7 @@ class EpaymentController extends Controller
             return response()->json(['message' => 'Internal Server Error: ' . $e->getMessage()], 500);
         }
     }
+
 
     public function weeklyEpaymentThisWeekOnly()
     {
@@ -235,10 +249,12 @@ class EpaymentController extends Controller
             $lastMonthStart = $today->copy()->subMonth()->startOfMonth()->format('Y-m-d');
             $lastMonthEnd = $today->copy()->subMonth()->endOfMonth()->format('Y-m-d');
 
+            $twoMonthsAgoStart = $today->copy()->subMonths(2)->startOfMonth()->format('Y-m-d');
+            $twoMonthsAgoEnd = $today->copy()->subMonths(2)->endOfMonth()->format('Y-m-d');
             $locationCode = session('selected_location_kode_lokasi');
 
             $response = Http::post('http://110.0.100.70:8080/v3/api/getepayment', [
-                'effective_start_date' => $lastMonthStart,
+                'effective_start_date' => $twoMonthsAgoStart,
                 'effective_end_date' => $thisMonthEnd,
                 'location_code' => $locationCode,
             ]);
@@ -254,9 +270,13 @@ class EpaymentController extends Controller
                     return Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd);
                 })->values();
 
+                $twoMonthsAgoData = $epaymentData->filter(function ($item) use ($twoMonthsAgoStart, $twoMonthsAgoEnd) {
+                    return Carbon::parse($item['tanggal'])->between($twoMonthsAgoStart, $twoMonthsAgoEnd);
+                })->values();
+
                 $thisMonthWeekly = $this->groupByWeek($thisMonthData);
                 $lastMonthWeekly = $this->groupByWeek($lastMonthData);
-
+                $twoMonthsAgoWeekly = $this->groupByWeek($twoMonthsAgoData);
                 $thisMonthWeeklyTotals = collect($thisMonthWeekly)->map(function ($weekData) {
                     return $this->calculateEpaymentTotals(collect($weekData));
                 });
@@ -265,9 +285,13 @@ class EpaymentController extends Controller
                     return $this->calculateEpaymentTotals(collect($weekData));
                 });
 
+                $twoMonthsAgoWeeklyTotals = collect($twoMonthsAgoWeekly)->map(function ($weekData) {
+                    return $this->calculateEpaymentTotals(collect($weekData));
+                });
+
                 $thisMonthTotals = $this->calculateEpaymentTotals($thisMonthData);
                 $lastMonthTotals = $this->calculateEpaymentTotals($lastMonthData);
-
+                $twoMonthsAgoTotals = $this->calculateEpaymentTotals($twoMonthsAgoData);
                 return response()->json([
                     'response' => 'Success Get Epayment Data',
                     'message' => 'Epayment Data Period: Last Month ' . $lastMonthStart . ' - ' . $lastMonthEnd . ' | This Month ' . $thisMonthStart . ' - ' . $thisMonthEnd,
@@ -283,7 +307,7 @@ class EpaymentController extends Controller
                         'totals' => $lastMonthTotals,
                         'weekly_totals' => $lastMonthWeeklyTotals,
                     ],
-                    'table_data' => $this->formatMonthlyEpaymentTable($thisMonthTotals, $lastMonthTotals),
+                    'table_data' => $this->formatMonthlyEpaymentTable($thisMonthTotals, $twoMonthsAgoTotals),
 
                 ]);
             }

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-      
+    
         const table = $('#dailyQuantity').DataTable({
             searching: false,
             paging: false,
@@ -65,12 +65,84 @@ $(document).ready(function() {
             ]
         });
 
+
+        const weeklyPassTable = $('#weeklyQuantityPass').DataTable({
+            searching: false,
+            paging: false,
+            autoWidth: false,
+            ordering: false,
+            info: false,
+            data: [],
+            columns: [{
+                    data: 'no'
+                },
+                {
+                    data: 'vehicle'
+                },
+                {
+                    data: 'last_week'
+                },
+                {
+                    data: 'this_week'
+                }
+            ]
+        });
+
+        const monthlyPassTable = $('#monthlyQuantityPass').DataTable({
+            searching: false,
+            paging: false,
+            autoWidth: false,
+            ordering: false,
+            info: false,
+            data: [],
+            columns: [{
+                    data: 'no'
+                },
+                {
+                    data: 'vehicle'
+                },
+                {
+                    data: 'last_month'
+                },
+                {
+                    data: 'this_month'
+                }
+            ]
+        });
+
         $.ajax({
-            url: `http://110.0.100.70:8080/v3/api/daily-quantity?location_code=${kodeLokasi}`,
+            url: dailyTransactionURL,
             method: 'GET',
             success: function(response) {
                 const today = response.data[0].today[0];
                 const yesterday = response.data[0].yesterday[0];
+
+                const compare = response.vehicle_comparison;
+
+                // console.log(compare);
+            
+                const container = $('#daily-transaction-comparison');
+
+        container.empty(); // Biar gak dobel kalau dipanggil ulang
+
+        compare.forEach(vehicle => {
+            const html = `
+                <div class="col-md-3">
+                    <div class="dashboard-card">
+                        <div class="card-title">${vehicle.type}</div>
+                        <div class="d-flex align-items-baseline">
+                            <h2 class="card-value">${vehicle.today}</h2>
+                            <span class="ms-2" style="color: ${vehicle.color}">
+                                ${vehicle.percent_change}
+                                ${vehicle.direction}
+                            </span>
+                        </div>
+                        <div class="yesterday">Yesterday: ${vehicle.yesterday}</div>
+                    </div>
+                </div>
+            `;
+            container.append(html);
+        });
 
                 const rows = [{
                         type: 'Total Casual',
@@ -150,8 +222,13 @@ $(document).ready(function() {
                         maintainAspectRatio: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
+                            
 
                             datalabels: {
                                 backgroundColor: (context) => context.dataset
@@ -170,9 +247,15 @@ $(document).ready(function() {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0, 
+                                    color: '#fff'
                                 },
-                                grace: '10%'
+                                grace: '10%',
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -220,7 +303,12 @@ $(document).ready(function() {
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
+                                
                             },
 
                             datalabels: {
@@ -240,9 +328,15 @@ $(document).ready(function() {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            }, 
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -263,13 +357,40 @@ $(document).ready(function() {
         });
 
         $.ajax({
-            url: "{{ route('weeklyTransaction') }}",
+            url: weeklyTransactionURL,
             method: 'GET',
             success: function(response) {
                 const thisWeek = response.this_week.totals.casual;
                 const lastWeek = response.last_week.totals.casual;
+                const thisWeekPass = response.this_week.totals.pass;
+                const lastWeekPass = response.last_week.totals.pass;
                 const thisWeekChart = response.this_week.casual;
+                const thisWeekPassChart = response.this_week.pass;
+                const compare = response.vehicle_comparison;
 
+            
+                const container = $('#weekly-transaction-comparison');
+
+        container.empty(); // Biar gak dobel kalau dipanggil ulang
+
+        compare.forEach(vehicle => {
+            const html = `
+                <div class="col-md-4">
+                    <div class="dashboard-card">
+                        <div class="card-title">${vehicle.vehicle}</div>
+                        <div class="d-flex align-items-baseline">
+                            <h2 class="card-value">${vehicle.this_week}</h2>
+                            <span class="ms-2" style="color: ${vehicle.color}">
+                                ${vehicle.percent_change}
+                                ${vehicle.direction}
+                            </span>
+                        </div>
+                        <div class="yesterday">Last Week: ${vehicle.two_weeks_ago}</div>
+                    </div>
+                </div>
+            `;
+            container.append(html);
+        });
                 const rows = [{
                         type: 'Car',
                         thisWeek: thisWeek.total_car,
@@ -301,6 +422,37 @@ $(document).ready(function() {
 
                 weeklyTable.rows.add(formattedWeeklyRows).draw();
 
+                const rowsPass = [{
+                    type: 'Car',
+                    thisWeek: thisWeekPass.total_car,
+                    lastWeek: lastWeek.total_car
+                },
+                {
+                    type: 'Motorbike',
+                    thisWeek: thisWeekPass.total_motorbike,
+                    lastWeek: lastWeekPass.total_motorbike
+                },
+                {
+                    type: 'Truck',
+                    thisWeek: thisWeekPass.total_truck,
+                    lastWeek: lastWeekPass.total_truck
+                },
+                {
+                    type: 'Taxi',
+                    thisWeek: thisWeekPass.total_taxi,
+                    lastWeek: lastWeekPass.total_taxi
+                }
+            ];
+
+            const formattedWeeklyRowsPass = rowsPass.map((item, index) => ({
+                no: index + 1,
+                vehicle: item.type,
+                this_week: item.thisWeek,
+                last_week: item.lastWeek
+            }));
+
+            weeklyPassTable.rows.add(formattedWeeklyRowsPass).draw();
+
                 $('#weeklyQuantity tfoot').html(`
                         <tr>
                             <th colspan="2" style="text-align:left">All Vehicle</th>
@@ -327,6 +479,16 @@ $(document).ready(function() {
                     thisWeekChart.map(item => item.lostticketcasual),
                 ];
 
+                
+                const passData = [
+                    thisWeekPassChart.map(item => item.carpass),
+                    thisWeekPassChart.map(item => item.motorbikepass),
+                    thisWeekPassChart.map(item => item.taxipass),
+                    thisWeekPassChart.map(item => item.truckpass),
+                    thisWeekPassChart.map(item => item.otherpass),
+                    thisWeekPassChart.map(item => item.vehiclepass),
+                    thisWeekPassChart.map(item => item.lostticketcasual),
+                ];
 
 
                 const barData = {
@@ -398,7 +560,11 @@ $(document).ready(function() {
                         maintainAspectRatio: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -418,9 +584,15 @@ $(document).ready(function() {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -428,7 +600,115 @@ $(document).ready(function() {
                         ChartDataLabels
                     ] // make sure to include this if you're using CDN
                 };
+                const barPassData = {
+                    labels: labels,
+                    datasets: [{
+                            label: 'Car',
+                            data: passData[0],
+                            backgroundColor: '#0D61E2',
+                            borderColor: '#0D61E2',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            }
+                        }, {
+                            label: 'Motorbike',
+                            data: passData[1],
+                            backgroundColor: '#E60045',
+                            borderColor: '#E60045',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }, {
+                            label: 'Truck',
+                            data: passData[2],
+                            backgroundColor: '#FFCD56',
+                            borderColor: '#FFCD56',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }, {
+                            label: 'Taxi',
+                            data: passData[3],
+                            backgroundColor: '#32CD7D',
+                            borderColor: '#32CD7D',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }, {
+                            label: 'Vehicle',
+                            data: passData[5],
+                            backgroundColor: '#E69500',
+                            borderColor: '#E69500',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }
 
+                    ]
+                };
+
+                const barPassConfig = {
+                    type: 'bar',
+                    data: barPassData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
+                            },
+
+                            datalabels: {
+                                backgroundColor: (context) => context.dataset
+                                    .backgroundColor,
+                                borderRadius: 4,
+                                color: 'white',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: Math.round,
+                                padding: 6,
+                                offset: 8
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0,
+                                    color: '#fff'
+                                },
+                                grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
+                            }
+                        }
+                    },
+                    plugins: [
+                        ChartDataLabels
+                    ] // make sure to include this if you're using CDN
+                };
                 const lineData = {
                     labels: labels,
                     datasets: [{
@@ -503,7 +783,11 @@ $(document).ready(function() {
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -523,9 +807,130 @@ $(document).ready(function() {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
+                            }
+                        }
+                    },
+                    plugins: [
+                        ChartDataLabels
+                    ] // make sure to include this if you're using CDN
+                }
+
+                const linePassData = {
+                    labels: labels,
+                    datasets: [{
+                            label: 'Car',
+                            data: passData[0],
+                            backgroundColor: '#0D61E2',
+                            borderColor: '#0D61E2',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+
+                        }, {
+                            label: 'Motorbike',
+                            data: passData[1],
+                            backgroundColor: '#E60045',
+                            borderColor: '#E60045',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
+                        }, {
+                            label: 'Truck',
+                            data: passData[2],
+                            backgroundColor: '#FFCD56',
+                            borderColor: '#FFCD56',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
+                        }, {
+                            label: 'Taxi',
+                            data: passData[3],
+                            backgroundColor: '#32CD7D',
+                            borderColor: '#32CD7D',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
+                        }, {
+                            label: 'Vehicle',
+                            data: passData[5],
+                            backgroundColor: '#E69500',
+                            borderColor: '#E69500',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
+                        }
+
+                    ]
+                };
+
+                const linePassConfig = {
+                    type: 'line',
+                    data: linePassData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
+                            },
+
+                            datalabels: {
+                                backgroundColor: (context) => context.dataset
+                                    .backgroundColor,
+                                borderRadius: 4,
+                                color: 'white',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: Math.round,
+                                padding: 3,
+                                offset: 4
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0,
+                                    color: '#fff'
+                                },
+                                grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -543,16 +948,51 @@ $(document).ready(function() {
                 if (ctx) {
                     new Chart(ctx, barConfig);
                 }
+                const ctxPass = document.getElementById('weeklyPassQuantityBar')?.getContext('2d');
+                if (ctxPass) {
+                    new Chart(ctxPass, barPassConfig);
+                }
+                const ctxPassLine = document.getElementById('weeklyPassQuantityLine')?.getContext('2d');
+                if (ctxPassLine) {
+                    new Chart(ctxPassLine, linePassConfig);
+                }
             }
         });
 
         $.ajax({
-            url: "{{ route('monthlyTransaction') }}",
+            url: monthlyTransactionURL,
             method: 'GET',
             success: function(response) {
                 const thisMonth = response.this_month.totals.casual;
                 const lastMonth = response.last_month.totals.casual;
+                const thisMonthPass = response.this_month.totals.pass;
+                const lastMonthPass = response.last_month.totals.pass;
+                const compare = response.vehicle_comparison;
 
+                
+                const container = $('#monthly-transaction-comparison');
+
+        container.empty(); // Biar gak dobel kalau dipanggil ulang
+
+        compare.forEach(vehicle => {
+            const html = `
+                <div class="col-md-4">
+                    <div class="dashboard-card">
+                        <div class="card-title">${vehicle.vehicle}</div>
+                        <div class="d-flex align-items-baseline">
+                            <h2 class="card-value">${vehicle.this_month}</h2>
+                            <span class="ms-2" style="color: ${vehicle.color}">
+                                ${vehicle.percent_change}
+                                ${vehicle.direction}
+                            </span>
+                        </div>
+                        <div class="yesterday">Last Month: ${vehicle.two_months_ago}</div>
+                    </div>
+                </div>
+            `;
+            container.append(html);
+        });
+                
                 const rows = [{
                         type: 'Car',
                         thisMonth: thisMonth.total_car,
@@ -582,7 +1022,38 @@ $(document).ready(function() {
                     last_month: item.lastMonth
                 }));
 
-                monthlyTable.rows.add(formattedMonthlyRows).draw();
+                
+            monthlyTable.rows.add(formattedMonthlyRows).draw();
+
+            const rowsPass = [{
+                type: 'Car',
+                thisMonth: thisMonthPass.total_car,
+                lastMonth: lastMonthPass.total_car
+            },
+            {
+                type: 'Motorbike',
+                thisMonth: thisMonthPass.total_motorbike,
+                lastMonth: lastMonthPass.total_motorbike
+            },
+            {
+                type: 'Truck',
+                thisMonth: thisMonthPass.total_truck,
+                lastMonth: lastMonthPass.total_truck
+            },
+            {
+                type: 'Taxi',
+                thisMonth: thisMonthPass.total_taxi,
+                lastMonth: lastMonthPass.total_taxi
+            }
+        ];
+
+        const formattedMonthlyRowsPass = rowsPass.map((item, index) => ({
+            no: index + 1,
+            vehicle: item.type,
+            this_month: item.thisMonth,
+            last_month: item.lastMonth
+        }));
+            monthlyPassTable.rows.add(formattedMonthlyRowsPass).draw();
 
                 $('#monthlyQuantity tfoot').html(`
                         <tr>
@@ -593,7 +1064,7 @@ $(document).ready(function() {
                     `);
 
                 const thisMonthChart = response.this_month.weekly_totals.casual;
-
+                const thisMonthPassChart = response.this_month.weekly_totals.pass;
                 const labels = Object.keys(thisMonthChart);
 
                 const totalCars = Object.values(thisMonthChart).map(week => week
@@ -607,6 +1078,17 @@ $(document).ready(function() {
                 const totalVehicles = Object.values(thisMonthChart).map(week => week
                     .total_vehicle);
 
+                    const totalPassCars = Object.values(thisMonthPassChart).map(week => week
+                        .total_car);
+                    const totalPassMotorbikes = Object.values(thisMonthPassChart).map(week => week
+                        .total_motorbike);
+                    const totalPassTrucks = Object.values(thisMonthPassChart).map(week => week
+                        .total_truck);
+                    const totalPassTaxis = Object.values(thisMonthPassChart).map(week => week
+                        .total_taxi);
+                    const totalPassVehicles = Object.values(thisMonthPassChart).map(week => week
+                        .total_vehicle);
+    
 
                 const barData = {
                     labels: labels,
@@ -677,7 +1159,11 @@ $(document).ready(function() {
                         maintainAspectRatio: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -697,9 +1183,125 @@ $(document).ready(function() {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
+                            }
+                        }
+                    },
+                    plugins: [
+                        ChartDataLabels
+                    ] // make sure to include this if you're using CDN
+                };
+
+                const barPassData = {
+                    labels: labels,
+                    datasets: [{
+                            label: 'Car',
+                            data: totalPassCars,
+                            backgroundColor: '#51AA20',
+                            borderColor: '#51AA20',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            }
+                        }, {
+                            label: 'Motorbike',
+                            data: totalPassMotorbikes,
+                            backgroundColor: '#DB6715',
+                            borderColor: '#DB6715',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }, {
+                            label: 'Truck',
+                            data: totalPassTrucks,
+                            backgroundColor: '#8D60ED',
+                            borderColor: '#8D60ED',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }, {
+                            label: 'Taxi',
+                            data: totalPassTaxis,
+                            backgroundColor: '#C46EA6',
+                            borderColor: '#C46EA6',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }, {
+                            label: 'Vehicle',
+                            data: totalPassVehicles,
+                            backgroundColor: '#D3D6DD',
+                            borderColor: '#D3D6DD',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
+                        }
+
+                    ]
+                };
+
+                const barPassConfig = {
+                    type: 'bar',
+                    data: barPassData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
+                            },
+
+                            datalabels: {
+                                backgroundColor: (context) => context.dataset
+                                    .backgroundColor,
+                                borderRadius: 4,
+                                color: 'white',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: Math.round,
+                                padding: 6,
+                                offset: 8
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0,
+                                    color: '#fff'
+                                },
+                                grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -782,7 +1384,11 @@ $(document).ready(function() {
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -802,9 +1408,15 @@ $(document).ready(function() {
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    precision: 0
+                                    precision: 0,
+                                    color: '#fff'
                                 },
                                 grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
                             }
                         }
                     },
@@ -813,6 +1425,119 @@ $(document).ready(function() {
                     ] // make sure to include this if you're using CDN
                 }
 
+                const linePassData = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Car',
+                        data: totalPassCars,
+                        backgroundColor: '#51AA20',
+                        borderColor: '#51AA20',
+                        borderWidth: 3,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        },
+                        tension: 0.5,
+
+                    }, {
+                        label: 'Motorbike',
+                        data: totalPassMotorbikes,
+                        backgroundColor: '#DB6715',
+                        borderColor: '#DB6715',
+                        borderWidth: 3,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        },
+                        tension: 0.5,
+                        hidden: true,
+                    }, {
+                        label: 'Truck',
+                        data: totalPassTrucks,
+                        backgroundColor: '#8D60ED',
+                        borderColor: '#8D60ED',
+                        borderWidth: 3,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        },
+                        tension: 0.5,
+                        hidden: true,
+                    }, {
+                        label: 'Taxi',
+                        data: totalPassTaxis,
+                        backgroundColor: '#C46EA6',
+                        borderColor: '#C46EA6',
+                        borderWidth: 3,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        },
+                        tension: 0.5,
+                        hidden: true,
+
+                    }, {
+                        label: 'Vehicle',
+                        data: totalPassVehicles,
+                        backgroundColor: '#D3D6DD',
+                        borderColor: '#D3D6DD',
+                        borderWidth: 3,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        },
+                        tension: 0.5,
+                        hidden: true,
+                    }]
+                };
+
+                const linePassConfig = {
+                    type: 'line',
+                    data: linePassData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
+                            },
+
+                            datalabels: {
+                                backgroundColor: (context) => context.dataset
+                                    .backgroundColor,
+                                borderRadius: 4,
+                                color: 'white',
+                                font: {
+                                    weight: 'bold'
+                                },
+                                formatter: Math.round,
+                                padding: 3,
+                                offset: 4
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0,
+                                    color: '#fff'
+                                },
+                                grace: '10%'
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                }
+                            }
+                        }
+                    },
+                    plugins: [
+                        ChartDataLabels
+                    ] // make sure to include this if you're using CDN
+                }
 
                 const ctxLine = document.getElementById('monthlyQuantityLine')?.getContext(
                     '2d');
@@ -823,7 +1548,15 @@ $(document).ready(function() {
                 if (ctx) {
                     new Chart(ctx, barConfig);
                 }
-
+                const ctxPassLine = document.getElementById('monthlyPassQuantityLine')?.getContext(
+                    '2d');
+                if (ctxPassLine) {
+                    new Chart(ctxPassLine, linePassConfig);
+                }
+                const ctxPass = document.getElementById('monthlyPassQuantityBar')?.getContext('2d');
+                if (ctxPass) {
+                    new Chart(ctxPass, barPassConfig);
+                }
             }
         });
     });

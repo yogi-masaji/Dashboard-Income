@@ -41,6 +41,16 @@
             width: 100%;
         }
 
+        .table thead tr th {
+            padding-block: 5px;
+        }
+
+        table.dataTable thead th,
+        table.dataTable thead td {
+            padding: 10px 5px;
+            border-bottom: 1px solid #111;
+        }
+
         #monthlyE-Payment th,
         #monthlyE-Payment td {
             word-break: break-all;
@@ -50,9 +60,9 @@
     </style>
     <div class="container">
         <div class="row">
-            <div class="col-md-4 content-custom">
+            <div class="col-md-4 content-custom ">
                 <p>Daily Quantity</p>
-                <table id="dailyQuantity" class="table table-striped">
+                <table id="dailyQuantity" class="table table-striped" style="height: 23vh;">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -194,9 +204,8 @@
                     </tfoot>
                 </table>
 
-                <div class="" style="height: 170px;">
-
-                    <canvas id="dailyIncomedonut" height="150px"></canvas>
+                <div class="" style="height: 220px;">
+                    <canvas id="dailyIncomedonut"></canvas>
                 </div>
             </div>
             <div class="col-md-4 content-custom">
@@ -466,7 +475,10 @@
         const monthlyEpaymentURL = "{{ route('monthlyEpayment') }}";
         const dailyEpaymentChart = "{{ route('dailyEpaymentChart') }}";
     </script>
-    <script src="js/testasync.js"></script>
+    {{-- <script src="js/testasync.js"></script>
     <script src="js/income.js"></script>
-    <script src="js/epayment.js"></script>
+    <script src="js/epayment.js"></script> --}}
+    @vite('resources/js/testasync.js')
+    @vite('resources/js/income.js')
+    @vite('resources/js/epayment.js')
 @endsection

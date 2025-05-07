@@ -222,7 +222,11 @@ $(document).ready(function() {
                         maintainAspectRatio: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
                             
 
@@ -299,7 +303,12 @@ $(document).ready(function() {
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
+                                
                             },
 
                             datalabels: {
@@ -376,7 +385,7 @@ $(document).ready(function() {
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Last Week: ${vehicle.last_week}</div>
+                        <div class="yesterday">Last Week: ${vehicle.two_weeks_ago}</div>
                     </div>
                 </div>
             `;
@@ -551,7 +560,11 @@ $(document).ready(function() {
                         maintainAspectRatio: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -656,7 +669,11 @@ $(document).ready(function() {
                         maintainAspectRatio: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -766,7 +783,11 @@ $(document).ready(function() {
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -877,7 +898,11 @@ $(document).ready(function() {
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -961,7 +986,7 @@ $(document).ready(function() {
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Last Month: ${vehicle.last_month}</div>
+                        <div class="yesterday">Last Month: ${vehicle.two_months_ago}</div>
                     </div>
                 </div>
             `;
@@ -1134,7 +1159,11 @@ $(document).ready(function() {
                         maintainAspectRatio: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -1240,7 +1269,11 @@ $(document).ready(function() {
                         maintainAspectRatio: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -1351,7 +1384,11 @@ $(document).ready(function() {
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {
@@ -1461,7 +1498,11 @@ $(document).ready(function() {
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                labels: {
+                                    color: '#fff',
+
+                                }
                             },
 
                             datalabels: {

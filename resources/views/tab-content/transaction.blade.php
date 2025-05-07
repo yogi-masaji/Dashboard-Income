@@ -216,12 +216,12 @@
     </div>
 </div>
 
-<script>
+{{-- <script>
     const dailyTransactionURL = "{{ route('getDailyTransaction') }}";
     const weeklyTransactionURL = "{{ route('weeklyTransaction') }}";
     const monthlyTransactionURL = "{{ route('monthlyTransaction') }}";
 </script>
-<script src="js/transaction.js"></script>
+<script src="js/transaction.js"></script> --}}
 
 {{-- 
 <script>    

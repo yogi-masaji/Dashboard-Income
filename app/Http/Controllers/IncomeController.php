@@ -69,10 +69,13 @@ class IncomeController extends Controller
             $lastWeekStart = $today->copy()->subDays(13)->format('Y-m-d');
             $lastWeekEnd = $today->copy()->subDays(7)->format('Y-m-d');
 
+            $twoWeeksAgoStart = $today->copy()->subDays(20)->format('Y-m-d');
+            $twoWeeksAgoEnd = $today->copy()->subDays(14)->format('Y-m-d');
+
             $locationCode = session('selected_location_kode_lokasi');
 
             $response = Http::post('http://110.0.100.70:8080/v3/api/getincome', [
-                'effective_start_date' => $lastWeekStart,
+                'effective_start_date' => $twoWeeksAgoStart,
                 'effective_end_date' => $thisWeekEnd,
                 'location_code' => $locationCode,
             ]);
@@ -87,11 +90,13 @@ class IncomeController extends Controller
                 $lastWeekData = collect($incomeData)->filter(function ($item) use ($lastWeekStart, $lastWeekEnd) {
                     return Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd);
                 })->values();
-
+                $twoWeeksAgoData = collect($incomeData)->filter(function ($item) use ($twoWeeksAgoStart, $twoWeeksAgoEnd) {
+                    return Carbon::parse($item['tanggal'])->between($twoWeeksAgoStart, $twoWeeksAgoEnd);
+                })->values();
                 // Hitung total income mingguan
                 $thisWeekTotals = $this->calculateIncomeTotals($thisWeekData);
                 $lastWeekTotals = $this->calculateIncomeTotals($lastWeekData);
-
+                $twoWeeksAgoTotals = $this->calculateIncomeTotals($twoWeeksAgoData);
                 return response()->json([
                     'response' => 'Success Get Data',
                     'message' => 'Get Income Data Period ' . $lastWeekStart . ' - ' . $lastWeekEnd . ' (Last Week) and ' . $thisWeekStart . ' - ' . $thisWeekEnd . ' (This Week)',
@@ -105,7 +110,7 @@ class IncomeController extends Controller
                         'data' => $lastWeekData,
                         'totals' => $lastWeekTotals,
                     ],
-                    'table_data' => $this->formatIncomeTable($thisWeekTotals, $lastWeekTotals),
+                    'table_data' => $this->formatIncomeTable($thisWeekTotals, $twoWeeksAgoTotals),
                 ]);
             }
 
@@ -126,10 +131,15 @@ class IncomeController extends Controller
             $lastMonthStart = $today->copy()->subMonth()->startOfMonth()->format('Y-m-d');
             $lastMonthEnd = $today->copy()->subMonth()->endOfMonth()->format('Y-m-d');
 
+
+            $twoMonthsAgoStart = $today->copy()->subMonths(2)->startOfMonth()->format('Y-m-d');
+            $twoMonthsAgoEnd = $today->copy()->subMonths(2)->endOfMonth()->format('Y-m-d');
+
+
             $locationCode = session('selected_location_kode_lokasi');
 
             $response = Http::post('http://110.0.100.70:8080/v3/api/getincome', [
-                'effective_start_date' => $lastMonthStart,
+                'effective_start_date' => $twoMonthsAgoStart,
                 'effective_end_date' => $thisMonthEnd,
                 'location_code' => $locationCode,
             ]);
@@ -145,18 +155,31 @@ class IncomeController extends Controller
                     return Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd);
                 })->values();
 
+                $twoMonthsAgoData = collect($incomeData)->filter(function ($item) use ($twoMonthsAgoStart, $twoMonthsAgoEnd) {
+                    return Carbon::parse($item['tanggal'])->between($twoMonthsAgoStart, $twoMonthsAgoEnd);
+                })->values();
+
+                // Hitung total income bulanan
                 $thisMonthWeekly = $this->groupByWeek($thisMonthData);
                 $lastMonthWeekly = $this->groupByWeek($lastMonthData);
+                $twoMonthsAgoWeekly = $this->groupByWeek($twoMonthsAgoData);
                 $thisMonthWeeklyTotals = collect($thisMonthWeekly)->map(function ($weekData) {
                     return $this->calculateIncomeTotals(collect($weekData));
                 });
+
 
                 $lastMonthWeeklyTotals = collect($lastMonthWeekly)->map(function ($weekData) {
                     return $this->calculateIncomeTotals(collect($weekData));
                 });
 
+                $twoMonthsAgoWeeklyTotals = collect($twoMonthsAgoWeekly)->map(function ($weekData) {
+                    return $this->calculateIncomeTotals(collect($weekData));
+                });
+
+
                 $thisMonthTotals = $this->calculateIncomeTotals($thisMonthData);
                 $lastMonthTotals = $this->calculateIncomeTotals($lastMonthData);
+                $twoMonthsAgoTotals = $this->calculateIncomeTotals($twoMonthsAgoData);
 
                 return response()->json([
                     'response' => 'Success Get Data',
@@ -173,7 +196,7 @@ class IncomeController extends Controller
                         'totals' => $lastMonthTotals,
                         'weekly_totals' => $lastMonthWeeklyTotals,
                     ],
-                    'table_data' => $this->formatMonthlyIncomeTable($thisMonthTotals, $lastMonthTotals),
+                    'table_data' => $this->formatMonthlyIncomeTable($thisMonthTotals, $twoMonthsAgoTotals),
 
                 ]);
             }

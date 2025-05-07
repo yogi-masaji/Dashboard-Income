@@ -71,13 +71,24 @@ Route::get('/testable', function () {
     return view('pages.test');
 });
 
+Route::post('/parking-member-api', [SearchController::class, 'parkingMemberSearchApi'])->name('parkingMemberSearch');
+Route::get('/parking-member', [SearchController::class, 'parkingMemberView'])->name('parkingMemberView');
+Route::get('/custom-search', [SearchController::class, 'customSearchView'])->name('customSearchView');
+Route::post('/custom-search-api', [SearchController::class, 'customSearch'])->name('customSearch');
 Route::get('/peak-search', [SearchController::class, 'peakSearchView'])->name('peakSearchView');
 Route::post('/peak-search-api', [SearchController::class, 'peakSearch'])->name('peakSearch');
 Route::get('/bca-membership', [SearchController::class, 'membershipSearchView'])->name('membershipSearchView');
 Route::post('/membership-api', [SearchController::class, 'membershipSearch'])->name('membershipApi');
 Route::get('/detail-parkir', [SearchController::class, 'parkingDetailView'])->name('parkingDetailView');
-
-
+Route::post('/detail-parkir-api', [SearchController::class, 'parkingDetailSearch'])->name('parkingDetailSearch');
+Route::get('/custom-report', [SearchController::class, 'SummaryReportView'])->name('summaryReportView');
+Route::post('/custom-report-api', [SearchController::class, 'SummaryReportSearch'])->name('summaryReportSearch');
+Route::get('/income-gate', [SearchController::class, 'incomeGateSearchView'])->name('incomeGateSearchView');
+Route::post('/income-gate-api', [SearchController::class, 'incomeGateSearchApi'])->name('incomeGateSearchApi');
+Route::get('/ritase-search', [SearchController::class, 'ritaseSearchView'])->name('ritaseSearchView');
+Route::post('/ritase-search-api', [SearchController::class, 'ritaseSerachAPI'])->name('ritaseSearchApi');
+Route::get('/occupancy', [SearchController::class, 'occupancySearchView'])->name('occupancySearchView');
+Route::post('/occupancy-api', [SearchController::class, 'occupancySearchAPI'])->name('occupancySearchAPI');
 Route::get('/tab-content/transaction', fn() => view('tab-content.transaction'))->name('tab.transaction');
 Route::get('/tab-content/income', fn() => view('tab-content.income'))->name('tab.income');
 Route::get('/tab-content/epayment', fn() => view('tab-content.epayment'))->name('tab.epayment');

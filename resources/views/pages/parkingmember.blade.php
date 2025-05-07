@@ -86,7 +86,7 @@
         }
     </style>
 
-    <p>detail parkir search</p>
+    <p>Parking Member Search</p>
     <div class="search-wrapper">
         <div class="d-flex align-items-end gap-3 mb-3">
             <div>
@@ -111,24 +111,62 @@
             Please fill in all the date fields before submitting.
         </div>
     </div>
+    <div class="row gap-5 mt-5">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-dark mb-1">Total Motorbike</h6>
+                            <h4 class="fw-bold mb-0 totalMotorbike"></h4>
+                            <small class="text-dark countMotorbike"></small>
+                        </div>
+                        <div class="text-success fs-4"><i class="bi bi-scooter"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-dark mb-1">Total Car</h6>
+                            <h4 class="fw-bold mb-0 totalCar"></h4>
+                            <small class="text-dark countCar"></small>
+                        </div>
+                        <div class="text-success fs-4"><i class="bi bi-car-front-fill"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-dark mb-1">Total Box</h6>
+                            <h4 class="fw-bold mb-0 totalBox"></h4>
+                            <small class="text-dark countBox"></small>
+                        </div>
+                        <div class="text-success fs-4"><i class="bi bi-truck"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="result mt-5">
-
-        <table id="detailParkirTable" class="table table-striped table-bordered">
+        <table id="ParkirMemberTable" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal Masuk</th>
-                    <th>Tanggal Keluar</th>
-                    <th>Nopol</th>
-                    <th>Barcode</th>
-                    <th>Kendaraan</th>
-                    <th>Tarif Parkir</th>
-                    <th>Dendalt</th>
-                    <th>Post Masuk</th>
-                    <th>Post Keluar</th>
-                    <th>Bank</th>
-                    <th>Shift</th>
-                    <th>Status</th>
+                    <th>Periode</th>
+                    <th>Vehicle Type</th>
+                    <th>Tenant Name</th>
+                    <th>Plat Number</th>
+                    <th>Total Amount</th>
+                    <th>Start Date</th>
+                    <th>Finish Date</th>
+                    <th>Description</th>
                 </tr>
             </thead>
         </table>
@@ -181,60 +219,57 @@
 
             // Disable button and show loading text
             $cariButton.prop('disabled', true).html('Loading...');
-            const detailParkirTable = $('#detailParkirTable').DataTable({
+            const table = $('#ParkirMemberTable').DataTable({
                 dom: "Bfltip",
                 pageLength: 100,
                 ordering: true,
                 lengthChange: false,
-                paging: true,
+                bDestroy: true,
                 layout: {
                     topEnd: {
                         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
                     },
                 },
                 columns: [{
-                        data: 'no'
+                        data: 'periode'
                     },
                     {
-                        data: 'tanggal_masuk'
+                        data: 'vehicleType'
                     },
                     {
-                        data: 'tanggal_keluar'
+                        data: 'nameTenant'
                     },
                     {
-                        data: 'nopol'
+                        data: 'vehiclePlateNumber'
                     },
                     {
-                        data: 'barcode'
+                        data: 'grandTotalAmount'
                     },
                     {
-                        data: 'kendaraan'
+                        data: 'startDate'
                     },
                     {
-                        data: 'tarif_parkir'
+                        data: 'endDate'
                     },
                     {
-                        data: 'dendalt'
-                    },
-                    {
-                        data: 'post_masuk'
-                    },
-                    {
-                        data: 'post_keluar'
-                    },
-                    {
-                        data: 'bank'
-                    },
-                    {
-                        data: 'shift'
-                    },
-                    {
-                        data: 'status'
+                        data: 'description'
                     }
-                ]
+                ],
             });
+
+            function formatQuantity(quantity) {
+                return new Intl.NumberFormat().format(quantity);
+            }
+
+            const formatRupiah = (number) => {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(number);
+            };
             $.ajax({
-                url: '{{ route('parkingDetailSearch') }}',
+                url: '{{ route('parkingMemberSearch') }}',
                 method: 'POST',
                 data: {
                     start1: startDate,
@@ -244,28 +279,32 @@
                 success: function(response) {
                     if (response.success) {
                         // Here you can also call a function to render the table
-
-                        const detailParkirData = response.data.data;
-
-                        const formattedDetailParkir = detailParkirData.map((item, index) => ({
-                            no: index + 1,
-                            tanggal_masuk: item.tglmasuk,
-                            tanggal_keluar: item.tglkeluar,
-                            nopol: item.noplat,
-                            barcode: item.nobarcode,
-                            kendaraan: item.namavehicle,
-                            tarif_parkir: item.tarif,
-                            dendalt: item.dendalt,
-                            post_masuk: item.kodeposin,
-                            post_keluar: item.kodeposout,
-                            bank: item.bank,
-                            shift: item.kodeshiftin,
-                            status: item.statustransaction
+                        console.log(response);
+                        const totalMotorbike = formatRupiah(response.summary.motor.total_income);
+                        const totalCar = formatRupiah(response.summary.mobil.total_income);
+                        const totalBox = formatRupiah(response.summary.box.total_income);
+                        const countMotorbike = formatQuantity(response.summary.motor.count);
+                        const countCar = formatQuantity(response.summary.mobil.count);
+                        const countBox = formatQuantity(response.summary.box.count);
+                        $('.countMotorbike').text(countMotorbike + ' Motorbike');
+                        $('.totalMotorbike').text(totalMotorbike);
+                        $('.totalCar').text(totalCar);
+                        $('.countCar').text(countCar + ' Car');
+                        $('.totalBox').text(totalBox);
+                        $('.countBox').text(countBox + ' Box');
+                        const parkingMemberData = response.data;
+                        console.log(parkingMemberData);
+                        const formattedData = parkingMemberData.map((item, index) => ({
+                            periode: item.transactionDate,
+                            vehicleType: item.vehicleType,
+                            nameTenant: item.nameTenant,
+                            vehiclePlateNumber: item.vehiclePlateNumber,
+                            grandTotalAmount: item.grandTotalAmount,
+                            startDate: item.startDate,
+                            endDate: item.endDate,
+                            description: item.description
                         }));
-
-
-                        detailParkirTable.clear().rows.add(formattedDetailParkir).draw();
-
+                        table.clear().rows.add(formattedData).draw();
 
 
                     } else {

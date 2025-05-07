@@ -6,6 +6,7 @@
         $lokasiId = session('selected_location_id', 0);
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
+        $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 

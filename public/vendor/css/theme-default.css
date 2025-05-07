@@ -960,7 +960,7 @@ html:not(.layout-menu-collapsed)
 }
 .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
     color: #fff;
-    background-color: rgb(10 21 37) !important;
+    background-color: rgba(10, 21, 37, 0) !important;
 }
 .bg-menu-theme .menu-inner > .menu-item.active:before {
     background: #fcb900;
@@ -1019,3 +1019,33 @@ html:not(.layout-menu-collapsed)
     --bs-nav-link-hover-color: #a8a8a8 !important;
     --bs-nav-link-disabled-color: #a7acb2;
   }
+
+  /* width */
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 7.5px;
+    
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+    background: none;
+    background: #092953;
+    border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-track-piece {
+    background: #092953;
+    border-radius: 5px;
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    background:#FCB900;
+    border-radius: 5px;
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    background: #252525;
+    }

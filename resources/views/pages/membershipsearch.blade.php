@@ -6,13 +6,14 @@
         $lokasiId = session('selected_location_id', 0);
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
+        $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
-    <div id="membershipTable_wrapper" class="dt-container dt-empty-footer">
+    <div id="membershipTable_wrapper" class="dt-container">
         <div class="dt-buttons"></div>
         <div class="dt-search"></div>
     </div>
@@ -135,8 +136,7 @@
             let nonaktifData = [];
             let lastPeriod = '';
             const TableMembership = $('#membershipTable').DataTable({
-                dom: "Bft",
-                data: [],
+                dom: "Bfltip",
                 pageLength: 100,
                 ordering: true,
                 lengthChange: false,
