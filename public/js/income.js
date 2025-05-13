@@ -246,7 +246,7 @@ $(document).ready(function() {
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Last Week: ${formatRupiah(vehicle.last_week)}</div>
+                        <div class="yesterday">Two Weeks Ago: ${formatRupiah(vehicle.last_week)}</div>
                     </div>
                 </div>
             `;
@@ -603,7 +603,7 @@ $(document).ready(function() {
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Yesterday: ${formatRupiah(vehicle.last_month)}</div>
+                        <div class="yesterday">Two Months Ago: ${formatRupiah(vehicle.last_month)}</div>
                     </div>
                 </div>
             `;

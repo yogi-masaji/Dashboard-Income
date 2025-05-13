@@ -71,6 +71,12 @@ Route::get('/testable', function () {
     return view('pages.test');
 });
 
+Route::get('/ritase-traffic-gate', [SearchController::class, 'ritaseTrafficGateView'])->name('ritaseTrafficGateView');
+Route::post('/ritase-traffic-gate-api', [SearchController::class, 'ritaseTrafficGateSearchAPI'])->name('ritaseTrafficGateSearchAPI');
+Route::post('/ritase-duration-api', [SearchController::class, 'ritaseDurationSearchAPI'])->name('ritaseDurationSearchAPI');
+Route::get('/ritase-duration', [SearchController::class, 'ritaseDurationSearchView'])->name('ritaseDurationSearchView');
+Route::post('/occupancy-rate-api', [SearchController::class, 'occupancyRateSearchAPI'])->name('occupancyRateSearchAPI');
+Route::get('/occupancy-rate-search', [SearchController::class, 'occupancyRateSearchView'])->name('occupancyRateSearchView');
 Route::post('/parking-member-api', [SearchController::class, 'parkingMemberSearchApi'])->name('parkingMemberSearch');
 Route::get('/parking-member', [SearchController::class, 'parkingMemberView'])->name('parkingMemberView');
 Route::get('/custom-search', [SearchController::class, 'customSearchView'])->name('customSearchView');

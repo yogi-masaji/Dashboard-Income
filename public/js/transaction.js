@@ -1,5 +1,7 @@
 $(document).ready(function() {
-    
+    function formatQuantity(quantity) {
+        return new Intl.NumberFormat().format(quantity);
+    }
         const table = $('#dailyQuantity').DataTable({
             searching: false,
             paging: false,
@@ -131,13 +133,13 @@ $(document).ready(function() {
                     <div class="dashboard-card">
                         <div class="card-title">${vehicle.type}</div>
                         <div class="d-flex align-items-baseline">
-                            <h2 class="card-value">${vehicle.today}</h2>
+                            <h2 class="card-value">${formatQuantity(vehicle.today)}</h2>
                             <span class="ms-2" style="color: ${vehicle.color}">
                                 ${vehicle.percent_change}
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Yesterday: ${vehicle.yesterday}</div>
+                        <div class="yesterday">Yesterday: ${formatQuantity(vehicle.yesterday)}</div>
                     </div>
                 </div>
             `;
@@ -146,13 +148,13 @@ $(document).ready(function() {
 
                 const rows = [{
                         type: 'Total Casual',
-                        yesterday: yesterday.grandcasual,
-                        today: today.grandcasual
+                        yesterday: formatQuantity(yesterday.grandcasual),
+                        today: formatQuantity(today.grandcasual)
                     },
                     {
                         type: 'Total Pass',
-                        yesterday: yesterday.grandpass,
-                        today: today.grandpass
+                        yesterday: formatQuantity(yesterday.grandpass),
+                        today: formatQuantity(today.grandpass)
                     }
                 ];
 
@@ -168,8 +170,8 @@ $(document).ready(function() {
                 $('#dailyQuantity tfoot').html(`
                         <tr>
                             <th colspan="2" style="text-align:left">All Vehicle</th>
-                            <th id="totalYesterday">${yesterday.grandtotal}</th>
-                            <th id="totalToday">${today.grandtotal}</th>
+                            <th id="totalYesterday">${formatQuantity(yesterday.grandtotal)}</th>
+                            <th id="totalToday">${formatQuantity(today.grandtotal)}</th>
                         </tr>
                     `);
 
@@ -379,13 +381,13 @@ $(document).ready(function() {
                     <div class="dashboard-card">
                         <div class="card-title">${vehicle.vehicle}</div>
                         <div class="d-flex align-items-baseline">
-                            <h2 class="card-value">${vehicle.this_week}</h2>
+                            <h2 class="card-value">${formatQuantity(vehicle.this_week)}</h2>
                             <span class="ms-2" style="color: ${vehicle.color}">
                                 ${vehicle.percent_change}
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Last Week: ${vehicle.two_weeks_ago}</div>
+                        <div class="yesterday">Two Weeks Ago: ${formatQuantity(vehicle.two_weeks_ago)}</div>
                     </div>
                 </div>
             `;
@@ -416,8 +418,8 @@ $(document).ready(function() {
                 const formattedWeeklyRows = rows.map((item, index) => ({
                     no: index + 1,
                     vehicle: item.type,
-                    this_week: item.thisWeek,
-                    last_week: item.lastWeek
+                    this_week: formatQuantity(item.thisWeek),
+                    last_week: formatQuantity(item.lastWeek)
                 }));
 
                 weeklyTable.rows.add(formattedWeeklyRows).draw();
@@ -456,8 +458,8 @@ $(document).ready(function() {
                 $('#weeklyQuantity tfoot').html(`
                         <tr>
                             <th colspan="2" style="text-align:left">All Vehicle</th>
-                            <th id="totalLastWeek">${lastWeek.total_vehicle}</th>
-                            <th id="totalThisWeek">${thisWeek.total_vehicle}</th>
+                            <th id="totalLastWeek">${formatQuantity(lastWeek.total_vehicle)}</th>
+                            <th id="totalThisWeek">${formatQuantity(thisWeek.total_vehicle)}</th>
                         </tr>
                     `);
 
@@ -980,13 +982,13 @@ $(document).ready(function() {
                     <div class="dashboard-card">
                         <div class="card-title">${vehicle.vehicle}</div>
                         <div class="d-flex align-items-baseline">
-                            <h2 class="card-value">${vehicle.this_month}</h2>
+                            <h2 class="card-value">${formatQuantity(vehicle.this_month)}</h2>
                             <span class="ms-2" style="color: ${vehicle.color}">
                                 ${vehicle.percent_change}
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Last Month: ${vehicle.two_months_ago}</div>
+                        <div class="yesterday">Two Months Ago: ${formatQuantity(vehicle.two_months_ago)}</div>
                     </div>
                 </div>
             `;
@@ -1018,8 +1020,8 @@ $(document).ready(function() {
                 const formattedMonthlyRows = rows.map((item, index) => ({
                     no: index + 1,
                     vehicle: item.type,
-                    this_month: item.thisMonth,
-                    last_month: item.lastMonth
+                    this_month: formatQuantity(item.thisMonth),
+                    last_month: formatQuantity(item.lastMonth)
                 }));
 
                 
@@ -1058,8 +1060,8 @@ $(document).ready(function() {
                 $('#monthlyQuantity tfoot').html(`
                         <tr>
                             <th colspan="2" style="text-align:left">All Vehicle</th>
-                            <th id="totalLastMonth">${lastMonth.total_vehicle}</th>
-                            <th id="totalThisMonth">${thisMonth.total_vehicle}</th>
+                            <th id="totalLastMonth">${formatQuantity(lastMonth.total_vehicle)}</th>
+                            <th id="totalThisMonth">${formatQuantity(thisMonth.total_vehicle)}</th>
                         </tr>
                     `);
 

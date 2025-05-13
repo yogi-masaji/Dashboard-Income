@@ -171,6 +171,33 @@
             flex: 0 0 auto;
             width: 24.25%;
         }
+
+        th.text-center.dt-orderable-none {
+            padding: 7px;
+        }
+    </style>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 2px solid #fff;
+            table-layout: fixed;
+            font-size: 11px;
+        }
+
+        .table> :not(caption)>*>* {
+            padding: 0.782rem 0.5rem;
+        }
+
+        .col-md-4 {
+            flex: 0 0 auto;
+            width: 33%;
+        }
+
+        .col-md-6 {
+            flex: 0 0 auto;
+            width: 49%;
+        }
     </style>
     <div class="search-wrapper content-custom">
         <h5>Custom Search</h5>
@@ -208,99 +235,6 @@
             Please fill in all the date fields before submitting.
         </div>
     </div>
-    <div class="row gap-3">
-        <div class="col-md-2">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="text-muted mb-1">Total Revenue</h6>
-                            <h4 class="fw-bold mb-0">Rp 388.532.000</h4>
-                            <small class="text-muted tgl_row1"></small>
-                        </div>
-                        <div class="text-success fs-4"><i class="bi bi-currency-dollar"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="text-muted mb-1">Total Vehicle</h6>
-                            <h4 class="fw-bold mb-0">Rp 388.532.000</h4>
-                            <small class="text-muted tgl_row1"></small>
-                        </div>
-                        <div class="text-success fs-4"><i class="bi bi-car-front-fill"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="text-muted mb-1">Total Revenue</h6>
-                            <h4 class="fw-bold mb-0">Rp 388.532.000</h4>
-                            <small class="text-muted tgl_row1"></small>
-                        </div>
-                        <div class="text-success fs-4">$</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="text-muted mb-1">Top Payment Method</h6>
-                            <h4 class="fw-bold mb-0">Flazz</h4>
-                            <small class="text-muted tgl_row1"></small>
-                        </div>
-                        <div class="text-success fs-4">$</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row gap-3">
-        <div class="col-md-6">
-            <div class="content-custom">
-                Daily Revenue
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="content-custom">
-                Vehicle Distribution
-            </div>
-        </div>
-    </div>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            border: 2px solid #fff;
-            table-layout: fixed;
-            font-size: 11px;
-        }
-
-        .table> :not(caption)>*>* {
-            padding: 0.782rem 0.5rem;
-        }
-
-        .col-md-4 {
-            flex: 0 0 auto;
-            width: 33%;
-        }
-
-        .col-md-6 {
-            flex: 0 0 auto;
-            width: 49%;
-        }
-    </style>
 
 
 
@@ -317,21 +251,185 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
                             data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
-                            aria-selected="true"><span id="date-firstperiod"></span></button>
+                            aria-selected="true"><span class="date-firstperiod"></span></button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
                             data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
-                            aria-selected="false"><span id="date-secondperiod"></span></button>
+                            aria-selected="false"><span class="date-secondperiod"></span></button>
                     </li>
                 </ul>
             </div>
         </div>
+
+
+
+        <div class="isi-custom-search mt-3">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div class="row gap-3 mt-5 mb-5">
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Total Revenue</h6>
+                                            <h4 class="fw-bold mb-0 total-revenue"></h4>
+                                            <small class="text-muted tgl_row1"></small>
+                                        </div>
+                                        <div class="text-success fs-4"><i class="bi bi-currency-dollar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Total Pass</h6>
+                                            <h4 class="fw-bold mb-0 total-pass"></h4>
+                                            <small class="text-muted tgl_row1"></small>
+                                        </div>
+                                        <div class="text-success fs-4"><i class="bi bi-car-front-fill"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Total Casual</h6>
+                                            <h4 class="fw-bold mb-0 total-casual">Rp 388.532.000</h4>
+                                            <small class="text-muted tgl_row1"></small>
+                                        </div>
+                                        <div class="text-success fs-4">$</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Top Payment Method</h6>
+                                            <h4 class="fw-bold mb-0 top-payment"></h4>
+                                            <small class="text-muted top-payment-income"></small>
+                                        </div>
+                                        <div class="text-success fs-4"><i class="bi bi-credit-card"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gap-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="content-custom">
+                                <h5>Daily Revenue</h5>
+                                <div class="" style="height: 300px;">
+                                    <canvas id="dailyRevenueFirstBar" height="300px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="content-custom">
+                                <h5>Vehicle Distribution</h5>
+                                <div class="" style="height: 300px;">
+                                    <canvas id="firstVehicleDistribution" height="300px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <div class="row gap-3 mt-5 mb-5">
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Total Revenue</h6>
+                                            <h4 class="fw-bold mb-0 total-revenue-second"></h4>
+                                            <small class="text-muted tgl_row2"></small>
+                                        </div>
+                                        <div class="text-success fs-4"><i class="bi bi-currency-dollar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Total Pass</h6>
+                                            <h4 class="fw-bold mb-0 total-pass-second"></h4>
+                                            <small class="text-muted tgl_row2"></small>
+                                        </div>
+                                        <div class="text-success fs-4"><i class="bi bi-car-front-fill"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Total Casual</h6>
+                                            <h4 class="fw-bold mb-0 total-casual-second">Rp 388.532.000</h4>
+                                            <small class="text-muted tgl_row2"></small>
+                                        </div>
+                                        <div class="text-success fs-4">$</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Top Payment Method</h6>
+                                            <h4 class="fw-bold mb-0 top-payment-second"></h4>
+                                            <small class="text-muted top-payment-income-second"></small>
+                                        </div>
+                                        <div class="text-success fs-4"><i class="bi bi-credit-card"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gap-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="content-custom">
+                                <h5>Daily Revenue</h5>
+                                <div class="" style="height: 300px;">
+                                    <canvas id="dailyRevenueSecondBar" height="300px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="content-custom">
+                                <h5>Vehicle Distribution</h5>
+                                <div class="" style="height: 300px;">
+                                    <canvas id="SecondVehicleDistribution" height="300px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="content-custom mt-5 mb-5">
             <div class="d-flex justify-content-between">
-                <div class="">
+                {{-- <div class="">
                     <h3>Period Comparison</h3>
-                </div>
+                </div> --}}
                 <div class="">
                     <ul class="nav nav-pills mb-3 gap-2" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -359,8 +457,25 @@
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-incomepayment" role="tabpanel"
                     aria-labelledby="pills-incomepayment-tab" tabindex="0">
-                    <div class="" style="height: 300px;">
+                    <div class="mb-3" style="height: 300px;">
                         <canvas id="incomePayment" height="300"></canvas>
+
+                    </div>
+                    <div class="row gap-3 mt-5 mb-5" id="compare-result">
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Total Revenue</h6>
+                                            <h4 class="fw-bold mb-0">Rp 388.532.000</h4>
+                                            <small class="text-muted tgl_row1"></small>
+                                        </div>
+                                        <div class="text-success fs-4">9%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pills-quantity" role="tabpanel" aria-labelledby="pills-quantity-tab"
@@ -368,19 +483,29 @@
                     <div class="" style="height: 300px;">
                         <canvas id="quantityVehicle" height="300"></canvas>
                     </div>
+                    <div class="row gap-3 mt-5 mb-5" id="compare-quantity">
+                        <div class="col-md-2">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="text-muted mb-1">Total Revenue</h6>
+                                            <h4 class="fw-bold mb-0">Rp 388.532.000</h4>
+                                            <small class="text-muted tgl_row1"></small>
+                                        </div>
+                                        <div class="text-success fs-4">9%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="pills-incomevehicle" role="tabpanel"
                     aria-labelledby="pills-incomevehicle-tab" tabindex="0">
                     <div class="" style="height: 300px;">
                         <canvas id="incomeVehicle" height="300"></canvas>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="isi-custom-search">
-            <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                    <div class="row gap-3">
+                    <div class="row gap-3 mt-5 mb-5" id="compare-income-vehicle">
                         <div class="col-md-2">
                             <div class="card shadow-sm border-0">
                                 <div class="card-body">
@@ -390,60 +515,16 @@
                                             <h4 class="fw-bold mb-0">Rp 388.532.000</h4>
                                             <small class="text-muted tgl_row1"></small>
                                         </div>
-                                        <div class="text-success fs-4"><i class="bi bi-currency-dollar"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="card shadow-sm border-0">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h6 class="text-muted mb-1">Total Vehicle</h6>
-                                            <h4 class="fw-bold mb-0">Rp 388.532.000</h4>
-                                            <small class="text-muted tgl_row1"></small>
-                                        </div>
-                                        <div class="text-success fs-4"><i class="bi bi-car-front-fill"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="card shadow-sm border-0">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h6 class="text-muted mb-1">Total Revenue</h6>
-                                            <h4 class="fw-bold mb-0">Rp 388.532.000</h4>
-                                            <small class="text-muted tgl_row1"></small>
-                                        </div>
-                                        <div class="text-success fs-4">$</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="card shadow-sm border-0">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h6 class="text-muted mb-1">Top Payment Method</h6>
-                                            <h4 class="fw-bold mb-0">Flazz</h4>
-                                            <small class="text-muted tgl_row1"></small>
-                                        </div>
-                                        <div class="text-success fs-4">$</div>
+                                        <div class="text-success fs-4">9%</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    <h5>2</h5>
-                </div>
             </div>
         </div>
+
         <div class="content-custom">
             <div class="table-responsive">
                 <table class="table table-striped" id="table-custom">
@@ -502,152 +583,244 @@
                 </table>
             </div>
         </div>
-        <div class="content-custom mt-3 mb-3">
-            <div class="row gap-3">
-                <h5>Income By Payment</h5>
-                <div class="col-md-6">
-                    <table id="IncomePaymentFirst" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-center">No</th>
-                                <th scope="col" class="text-center">Date</th>
-                                <th scope="col" class="text-center">Cash</th>
-                                <th scope="col" class="text-center">Parkee</th>
-                                <th scope="col" class="text-center">Emoney</th>
-                                <th scope="col" class="text-center">Flazz</th>
-                                <th scope="col" class="text-center">Brizzi</th>
-                                <th scope="col" class="text-center">Tapcash</th>
-                                <th scope="col" class="text-center">Qris</th>
-                                <th scope="col" class="text-center">Dki jackcard</th>
-                                <th scope="col" class="text-center">Total</th>
-                            </tr>
-                        </thead>
-                    </table>
+        <div class="content-custom mt-5 mb-5">
+            <div class="content-picker d-flex align-items-center gap-5 ">
+                <div class="align-self-center">
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                        <i class="bi bi-calendar"></i>
+                        <h5 style="margin: 0;">Income by Payment</h5>
+                    </span>
                 </div>
-                <div class="col-md-6">
-                    <table id="IncomePaymentSecond" class="table table-striped table-bordered" style="width: 100%">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-center">No</th>
-                                <th scope="col" class="text-center">Date</th>
-                                <th scope="col" class="text-center">Cash</th>
-                                <th scope="col" class="text-center">Parkee</th>
-                                <th scope="col" class="text-center">Emoney</th>
-                                <th scope="col" class="text-center">Flazz</th>
-                                <th scope="col" class="text-center">Brizzi</th>
-                                <th scope="col" class="text-center">Tapcash</th>
-                                <th scope="col" class="text-center">Qris</th>
-                                <th scope="col" class="text-center">Dki jackcard</th>
-                                <th scope="col" class="text-center">Total</th>
-                            </tr>
-                        </thead>
-                    </table>
+                <div class="align-self-center">
+                    <ul class="nav nav-pills mb-3 gap-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-table-1-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-table-1" type="button" role="tab"
+                                aria-controls="pills-table-1" aria-selected="true"><span
+                                    class="date-firstperiod"></span></button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-table-1-secondPeriod-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-table-1-secondPeriod" type="button" role="tab"
+                                aria-controls="pills-table-1-secondPeriod" aria-selected="false"><span
+                                    class="date-secondperiod"></span></button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-table-1" role="tabpanel"
+                    aria-labelledby="pills-table-1-tab">
+                    <div class="row gap-3 mt-5 mb-5">
+                        <table id="IncomePaymentFirst" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center">Date</th>
+                                    <th scope="col" class="text-center">Cash</th>
+                                    <th scope="col" class="text-center">Parkee</th>
+                                    <th scope="col" class="text-center">Emoney</th>
+                                    <th scope="col" class="text-center">Flazz</th>
+                                    <th scope="col" class="text-center">Brizzi</th>
+                                    <th scope="col" class="text-center">Tapcash</th>
+                                    <th scope="col" class="text-center">Qris</th>
+                                    <th scope="col" class="text-center">Dki jackcard</th>
+                                    <th scope="col" class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-table-1-secondPeriod" role="tabpanel"
+                    aria-labelledby="pills-table-1-secondPeriod-tab">
+                    <div class="row gap-3 mt-5 mb-5">
+                        <table id="IncomePaymentSecond" class="table table-striped table-bordered" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center">Date</th>
+                                    <th scope="col" class="text-center">Cash</th>
+                                    <th scope="col" class="text-center">Parkee</th>
+                                    <th scope="col" class="text-center">Emoney</th>
+                                    <th scope="col" class="text-center">Flazz</th>
+                                    <th scope="col" class="text-center">Brizzi</th>
+                                    <th scope="col" class="text-center">Tapcash</th>
+                                    <th scope="col" class="text-center">Qris</th>
+                                    <th scope="col" class="text-center">Dki jackcard</th>
+                                    <th scope="col" class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="content-custom mb-5">
-            <div class="row gap-3mb-5">
-                <h5>Quantity by Vehicle</h5>
-                <div class="col-md-6">
-                    <table id="QuantityVehicleFirst" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-center">No</th>
-                                <th scope="col" class="text-center">Date</th>
-                                <th scope="col" class="text-center">Mobil</th>
-                                <th scope="col" class="text-center">Motor</th>
-                                <th scope="col" class="text-center">Loading</th>
-                                <th scope="col" class="text-center">Taxi</th>
-                                <th scope="col" class="text-center">Lost Ticket</th>
-                                <th scope="col" class="text-center">Other</th>
-                                <th scope="col" class="text-center">Valet Lobby</th>
-                                <th scope="col" class="text-center">Valet Non-Lobby</th>
-                                <th scope="col" class="text-center">VIP</th>
-                                <th scope="col" class="text-center">Preferred Car</th>
-                                <th scope="col" class="text-center">Preferred motorbike</th>
-                                <th scope="col" class="text-center">E-Vip</th>
-                                <th scope="col" class="text-center">Extend Charging</th>
-                                <th scope="col" class="text-center">Total</th>
-                            </tr>
-                        </thead>
-                    </table>
+
+        <div class="content-custom mt-5 mb-5">
+            <div class="content-picker d-flex align-items-center gap-5 ">
+                <div class="align-self-center">
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                        <i class="bi bi-calendar"></i>
+                        <h5 style="margin: 0;">Quantity by Vehicle</h5>
+                    </span>
                 </div>
-                <div class="col-md-6">
-                    <table id="QuantityVehicleSecond" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-center">No</th>
-                                <th scope="col" class="text-center">Date</th>
-                                <th scope="col" class="text-center">Mobil</th>
-                                <th scope="col" class="text-center">Motor</th>
-                                <th scope="col" class="text-center">Loading</th>
-                                <th scope="col" class="text-center">Taxi</th>
-                                <th scope="col" class="text-center">Lost Ticket</th>
-                                <th scope="col" class="text-center">Other</th>
-                                <th scope="col" class="text-center">Valet Lobby</th>
-                                <th scope="col" class="text-center">Valet Non-Lobby</th>
-                                <th scope="col" class="text-center">VIP</th>
-                                <th scope="col" class="text-center">Preferred Car</th>
-                                <th scope="col" class="text-center">Preferred motorbike</th>
-                                <th scope="col" class="text-center">E-Vip</th>
-                                <th scope="col" class="text-center">Extend Charging</th>
-                                <th scope="col" class="text-center">Total</th>
-                            </tr>
-                        </thead>
-                    </table>
+                <div class="align-self-center">
+                    <ul class="nav nav-pills mb-3 gap-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-table-2-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-table-2" type="button" role="tab"
+                                aria-controls="pills-table-2" aria-selected="true"><span
+                                    class="date-firstperiod"></span></button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-table-2-secondPeriod-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-table-2-secondPeriod" type="button" role="tab"
+                                aria-controls="pills-table-2-secondPeriod" aria-selected="false"><span
+                                    class="date-secondperiod"></span></button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content " id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-table-2" role="tabpanel"
+                    aria-labelledby="pills-table-2-tab">
+                    <div class="row gap-3 mt-5 mb-5">
+                        <table id="QuantityVehicleFirst" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center">Date</th>
+                                    <th scope="col" class="text-center">Mobil</th>
+                                    <th scope="col" class="text-center">Motor</th>
+                                    <th scope="col" class="text-center">Loading</th>
+                                    <th scope="col" class="text-center">Taxi</th>
+                                    <th scope="col" class="text-center">Lost Ticket</th>
+                                    <th scope="col" class="text-center">Other</th>
+                                    <th scope="col" class="text-center">Valet Lobby</th>
+                                    <th scope="col" class="text-center">Valet Non-Lobby</th>
+                                    <th scope="col" class="text-center">VIP</th>
+                                    <th scope="col" class="text-center">Preferred Car</th>
+                                    <th scope="col" class="text-center">Preferred motorbike</th>
+                                    <th scope="col" class="text-center">E-Vip</th>
+                                    <th scope="col" class="text-center">Extend Charging</th>
+                                    <th scope="col" class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-table-2-secondPeriod" role="tabpanel"
+                    aria-labelledby="pills-table-2-secondPeriod-tab">
+                    <div class="row gap-3 mt-5 mb-5">
+                        <table id="QuantityVehicleSecond" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center">Date</th>
+                                    <th scope="col" class="text-center">Mobil</th>
+                                    <th scope="col" class="text-center">Motor</th>
+                                    <th scope="col" class="text-center">Loading</th>
+                                    <th scope="col" class="text-center">Taxi</th>
+                                    <th scope="col" class="text-center">Lost Ticket</th>
+                                    <th scope="col" class="text-center">Other</th>
+                                    <th scope="col" class="text-center">Valet Lobby</th>
+                                    <th scope="col" class="text-center">Valet Non-Lobby</th>
+                                    <th scope="col" class="text-center">VIP</th>
+                                    <th scope="col" class="text-center">Preferred Car</th>
+                                    <th scope="col" class="text-center">Preferred motorbike</th>
+                                    <th scope="col" class="text-center">E-Vip</th>
+                                    <th scope="col" class="text-center">Extend Charging</th>
+                                    <th scope="col" class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="content-custom mb-5">
-            <div class="row gap-3mb-5">
-                <h5>Income by Vehicle</h5>
-                <div class="col-md-6">
-                    <table id="IncomeVehicleFirst" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-center">No</th>
-                                <th scope="col" class="text-center">Date</th>
-                                <th scope="col" class="text-center">Mobil</th>
-                                <th scope="col" class="text-center">Motor</th>
-                                <th scope="col" class="text-center">Loading</th>
-                                <th scope="col" class="text-center">Taxi</th>
-                                <th scope="col" class="text-center">Lost Ticket</th>
-                                <th scope="col" class="text-center">Other</th>
-                                <th scope="col" class="text-center">Valet Lobby</th>
-                                <th scope="col" class="text-center">Valet Non-Lobby</th>
-                                <th scope="col" class="text-center">VIP</th>
-                                <th scope="col" class="text-center">Preferred Car</th>
-                                <th scope="col" class="text-center">Preferred motorbike</th>
-                                <th scope="col" class="text-center">E-Vip</th>
-                                <th scope="col" class="text-center">Extend Charging</th>
-                                <th scope="col" class="text-center">Total</th>
-                            </tr>
-                        </thead>
-                    </table>
+
+        <div class="content-custom mt-5 mb-5">
+            <div class="content-picker d-flex align-items-center gap-5 ">
+                <div class="align-self-center">
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                        <i class="bi bi-calendar"></i>
+                        <h5 style="margin: 0;">Income by Vehicle</h5>
+                    </span>
                 </div>
-                <div class="col-md-6">
-                    <table id="IncomeVehicleSecond" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="text-center">No</th>
-                                <th scope="col" class="text-center">Date</th>
-                                <th scope="col" class="text-center">Mobil</th>
-                                <th scope="col" class="text-center">Motor</th>
-                                <th scope="col" class="text-center">Loading</th>
-                                <th scope="col" class="text-center">Taxi</th>
-                                <th scope="col" class="text-center">Lost Ticket</th>
-                                <th scope="col" class="text-center">Other</th>
-                                <th scope="col" class="text-center">Valet Lobby</th>
-                                <th scope="col" class="text-center">Valet Non-Lobby</th>
-                                <th scope="col" class="text-center">VIP</th>
-                                <th scope="col" class="text-center">Preferred Car</th>
-                                <th scope="col" class="text-center">Preferred motorbike</th>
-                                <th scope="col" class="text-center">E-Vip</th>
-                                <th scope="col" class="text-center">Extend Charging</th>
-                                <th scope="col" class="text-center">Total</th>
-                            </tr>
-                        </thead>
-                    </table>
+                <div class="align-self-center">
+                    <ul class="nav nav-pills mb-3 gap-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-table-3-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-table-3" type="button" role="tab"
+                                aria-controls="pills-table-3" aria-selected="true"><span
+                                    class="date-firstperiod"></span></button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-table-3-secondPeriod-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-table-3-secondPeriod" type="button" role="tab"
+                                aria-controls="pills-table-3-secondPeriod" aria-selected="false"><span
+                                    class="date-secondperiod"></span></button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-table-3" role="tabpanel"
+                    aria-labelledby="pills-table-3-tab">
+                    <div class="row gap-3 mt-5 mb-5">
+                        <table id="IncomeVehicleFirst" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center">Date</th>
+                                    <th scope="col" class="text-center">Mobil</th>
+                                    <th scope="col" class="text-center">Motor</th>
+                                    <th scope="col" class="text-center">Loading</th>
+                                    <th scope="col" class="text-center">Taxi</th>
+                                    <th scope="col" class="text-center">Lost Ticket</th>
+                                    <th scope="col" class="text-center">Other</th>
+                                    <th scope="col" class="text-center">Valet Lobby</th>
+                                    <th scope="col" class="text-center">Valet Non-Lobby</th>
+                                    <th scope="col" class="text-center">VIP</th>
+                                    <th scope="col" class="text-center">Preferred Car</th>
+                                    <th scope="col" class="text-center">Preferred motorbike</th>
+                                    <th scope="col" class="text-center">E-Vip</th>
+                                    <th scope="col" class="text-center">Extend Charging</th>
+                                    <th scope="col" class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-table-3-secondPeriod" role="tabpanel"
+                    aria-labelledby="pills-table-3-secondPeriod-tab">
+                    <div class="row gap-3 mt-5 mb-5">
+                        <table id="IncomeVehicleSecond" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center">Date</th>
+                                    <th scope="col" class="text-center">Mobil</th>
+                                    <th scope="col" class="text-center">Motor</th>
+                                    <th scope="col" class="text-center">Loading</th>
+                                    <th scope="col" class="text-center">Taxi</th>
+                                    <th scope="col" class="text-center">Lost Ticket</th>
+                                    <th scope="col" class="text-center">Other</th>
+                                    <th scope="col" class="text-center">Valet Lobby</th>
+                                    <th scope="col" class="text-center">Valet Non-Lobby</th>
+                                    <th scope="col" class="text-center">VIP</th>
+                                    <th scope="col" class="text-center">Preferred Car</th>
+                                    <th scope="col" class="text-center">Preferred motorbike</th>
+                                    <th scope="col" class="text-center">E-Vip</th>
+                                    <th scope="col" class="text-center">Extend Charging</th>
+                                    <th scope="col" class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1094,8 +1267,9 @@
                 const tgl_row1 = formattedStartDate1 + ' - ' +
                     formattedEndDate1;
                 const tgl_row2 = formattedStartDate2 + ' - ' + formattedEndDate2;
-                $('#date-firstperiod').text(formattedStartDate1 + ' - ' + formattedEndDate1);
-                $('#date-secondperiod').text(formattedStartDate2 + ' - ' + formattedEndDate2);
+
+                $('.date-firstperiod').text(formattedStartDate1 + ' - ' + formattedEndDate1);
+                $('.date-secondperiod').text(formattedStartDate2 + ' - ' + formattedEndDate2);
                 $('.tgl_row1').text(formattedStartDate1 + ' - ' + formattedEndDate1);
                 $('.tgl_row2').text(formattedStartDate2 + ' - ' + formattedEndDate2);
                 $.ajax({
@@ -1116,7 +1290,7 @@
                         const firstPeriodTotals = response
                             .totals.first_period;
                         const secondPeriodTotals = response.totals.second_period;
-                        console.log('Result:', firstPeriodTotals);
+                        // console.log('Result:', firstPeriodTotals);
                         const GrandTotals = response.grand_totals;
 
 
@@ -1336,21 +1510,21 @@
                                     data: [quantityVehicleDataFirstPeriod[0],
                                         quantityVehicleDataSecondPeriod[0]
                                     ],
-                                    backgroundColor: 'rgba(255, 99, 132, 10)',
+                                    backgroundColor: 'rgba(231, 76, 60, 1)',
                                 },
                                 {
                                     label: 'Motorbike',
                                     data: [quantityVehicleDataFirstPeriod[1],
                                         quantityVehicleDataSecondPeriod[1]
                                     ],
-                                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                                    backgroundColor: 'rgba(52, 152, 219, 1)',
                                 },
                                 {
                                     label: 'Truck',
                                     data: [quantityVehicleDataFirstPeriod[2],
                                         quantityVehicleDataSecondPeriod[2]
                                     ],
-                                    backgroundColor: 'rgba(255, 206, 86, 1)',
+                                    backgroundColor: 'rgba(241, 196, 15, 1)',
 
                                 },
                                 {
@@ -1358,49 +1532,50 @@
                                     data: [quantityVehicleDataFirstPeriod[3],
                                         quantityVehicleDataSecondPeriod[3]
                                     ],
-                                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                                    backgroundColor: 'rgba(46, 204, 113, 1)',
                                 },
                                 {
                                     label: 'Valet',
                                     data: [quantityVehicleDataFirstPeriod[4],
                                         quantityVehicleDataSecondPeriod[4]
                                     ],
-                                    backgroundColor: 'rgba(153, 102, 255, 1)',
+                                    backgroundColor: 'rgba(155, 89, 182, 1)',
                                 },
                                 {
                                     label: 'Car Preferred',
                                     data: [quantityVehicleDataFirstPeriod[5],
                                         quantityVehicleDataSecondPeriod[5]
                                     ],
-                                    backgroundColor: 'rgba(255, 159, 64, 1)',
+                                    backgroundColor: 'rgba(230, 126, 34, 1)',
                                 },
                                 {
                                     label: 'Motorbike Preferred',
                                     data: [quantityVehicleDataFirstPeriod[6],
                                         quantityVehicleDataSecondPeriod[6]
                                     ],
-                                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                                    backgroundColor: 'rgba(26, 188, 156, 1)',
                                 },
                                 {
                                     label: 'EVIP',
                                     data: [quantityVehicleDataFirstPeriod[7],
                                         quantityVehicleDataSecondPeriod[7]
                                     ],
-                                    backgroundColor: 'rgba(12, 99, 132, 1)',
+                                    backgroundColor: 'rgba(149, 165, 166, 1)',
+
                                 },
                                 {
                                     label: 'Extend Charging',
                                     data: [quantityVehicleDataFirstPeriod[8],
                                         quantityVehicleDataSecondPeriod[8]
                                     ],
-                                    backgroundColor: 'rgba(12, 99, 132, 1)',
+                                    backgroundColor: 'rgba(234, 345, 10, 1)',
                                 },
                                 {
                                     label: 'Lost Ticket',
                                     data: [quantityVehicleDataFirstPeriod[9],
                                         quantityVehicleDataSecondPeriod[9]
                                     ],
-                                    backgroundColor: 'rgba(12, 99, 132, 1)',
+                                    backgroundColor: 'rgba(52, 73, 94, 1)',
                                 }
                             ]
                         };
@@ -1462,6 +1637,168 @@
                         });
 
 
+                        const firstVehicleDistributionData = {
+                            labels: ['Car', 'Motorbike', 'Truck', 'Taxi', 'Valet',
+                                'Car Preferred',
+                                'Motorbike Preferred', 'EVIP', 'Extend Charging',
+                                'Lost Ticket'
+                            ],
+                            datasets: [{
+                                label: 'First Period',
+                                data: quantityVehicleDataFirstPeriod,
+                                backgroundColor: [
+                                    'rgba(231, 76, 60, 1)',
+                                    'rgba(52, 152, 219, 1)',
+                                    'rgba(241, 196, 15, 1)',
+                                    'rgba(46, 204, 113, 1)',
+                                    'rgba(155, 89, 182, 1)',
+                                    'rgba(230, 126, 34, 1)',
+                                    'rgba(26, 188, 156, 1)',
+                                    'rgba(149, 165, 166, 1)',
+                                    'rgba(234, 345, 10, 1)',
+                                    'rgba(52, 73, 94, 1)'
+                                ]
+
+                            }]
+
+                        }
+
+                        // pie chart 
+                        const firstVehicleDistributionOptions = {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        color: '#fff',
+
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'First Period Vehicle Distribution',
+                                    color: '#fff',
+                                },
+                                datalabels: {
+                                    color: '#fff',
+                                    formatter: (value, context) => {
+                                        const label = context.chart.data.labels[context
+                                            .dataIndex];
+                                        return `${label}: ${formatQuantity(value)}`;
+                                    },
+                                    anchor: 'center',
+                                    align: 'center',
+                                    font: {
+                                        size: 10,
+                                        weight: 'bold',
+                                    }
+                                }
+                            },
+
+                        };
+
+                        // Destroy dulu kalau chart sebelumnya sudah ada
+                        if (window.firstVehicleDistributionChart) {
+                            window.firstVehicleDistributionChart.destroy();
+                        }
+
+                        // Bikin ulang chart dengan data terbaru
+                        const firstVehicleDistributionCtx = document.getElementById(
+                                'firstVehicleDistribution')
+                            .getContext('2d');
+
+                        window.firstVehicleDistributionChart = new Chart(
+                            firstVehicleDistributionCtx, {
+                                type: 'doughnut',
+                                data: firstVehicleDistributionData,
+                                options: firstVehicleDistributionOptions,
+                                plugins: [
+                                    ChartDataLabels
+                                ]
+                            });
+
+
+                        const secondVehicleDistributionData = {
+                            labels: ['Car', 'Motorbike', 'Truck', 'Taxi', 'Valet',
+                                'Car Preferred',
+                                'Motorbike Preferred', 'EVIP', 'Extend Charging',
+                                'Lost Ticket'
+                            ],
+                            datasets: [{
+                                label: 'Second Period',
+                                data: quantityVehicleDataSecondPeriod,
+                                backgroundColor: [
+                                    'rgba(231, 76, 60, 1)',
+                                    'rgba(52, 152, 219, 1)',
+                                    'rgba(241, 196, 15, 1)',
+                                    'rgba(46, 204, 113, 1)',
+                                    'rgba(155, 89, 182, 1)',
+                                    'rgba(230, 126, 34, 1)',
+                                    'rgba(26, 188, 156, 1)',
+                                    'rgba(149, 165, 166, 1)',
+                                    'rgba(234, 345, 10, 1)',
+                                    'rgba(52, 73, 94, 1)'
+                                ]
+
+                            }]
+
+                        }
+                        // pie chart
+                        const secondVehicleDistributionOptions = {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        color: '#fff',
+
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Second Period Vehicle Distribution',
+                                    color: '#fff',
+                                },
+                                datalabels: {
+                                    color: '#fff',
+                                    formatter: (value, context) => {
+                                        const label = context.chart.data.labels[context
+                                            .dataIndex];
+                                        return `${label}: ${formatQuantity(value)}`;
+                                    },
+                                    anchor: 'center',
+                                    align: 'center',
+                                    font: {
+                                        size: 10,
+                                        weight: 'bold',
+                                    }
+                                }
+                            },
+
+                        };
+
+                        // Destroy dulu kalau chart sebelumnya sudah ada
+                        if (window.secondVehicleDistributionChart) {
+                            window.secondVehicleDistributionChart.destroy();
+                        }
+                        // Bikin ulang chart dengan data terbaru
+                        const secondVehicleDistributionCtx = document.getElementById(
+                                'SecondVehicleDistribution')
+                            .getContext('2d');
+                        window.secondVehicleDistributionChart = new Chart(
+                            secondVehicleDistributionCtx, {
+                                type: 'doughnut',
+                                data: secondVehicleDistributionData,
+                                options: secondVehicleDistributionOptions,
+                                plugins: [
+                                    ChartDataLabels
+                                ]
+                            });
+
+
+
 
                         const incomeVehicleBarData = {
                             labels: labels,
@@ -1470,21 +1807,21 @@
                                     data: [incomeVehicleDataFirstPeriod[0],
                                         incomeVehicleDataSecondPeriod[0]
                                     ],
-                                    backgroundColor: 'rgba(255, 99, 132, 10)',
+                                    backgroundColor: 'rgba(231, 76, 60, 1)',
                                 },
                                 {
                                     label: 'Motorbike',
                                     data: [incomeVehicleDataFirstPeriod[1],
                                         incomeVehicleDataSecondPeriod[1]
                                     ],
-                                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                                    backgroundColor: 'rgba(52, 152, 219, 1)',
                                 },
                                 {
                                     label: 'Truck',
                                     data: [incomeVehicleDataFirstPeriod[2],
                                         incomeVehicleDataSecondPeriod[2]
                                     ],
-                                    backgroundColor: 'rgba(255, 206, 86, 1)',
+                                    backgroundColor: 'rgba(241, 196, 15, 1)',
 
                                 },
                                 {
@@ -1492,49 +1829,49 @@
                                     data: [incomeVehicleDataFirstPeriod[3],
                                         incomeVehicleDataSecondPeriod[3]
                                     ],
-                                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                                    backgroundColor: 'rgba(46, 204, 113, 1)',
                                 },
                                 {
                                     label: 'Valet',
                                     data: [incomeVehicleDataFirstPeriod[4],
                                         incomeVehicleDataSecondPeriod[4]
                                     ],
-                                    backgroundColor: 'rgba(153, 102, 255, 1)',
+                                    backgroundColor: 'rgba(155, 89, 182, 1)',
                                 },
                                 {
                                     label: 'Car Preferred',
                                     data: [incomeVehicleDataFirstPeriod[5],
                                         incomeVehicleDataSecondPeriod[5]
                                     ],
-                                    backgroundColor: 'rgba(255, 159, 64, 1)',
+                                    backgroundColor: 'rgba(230, 126, 34, 1)',
                                 },
                                 {
                                     label: 'Motorbike Preferred',
                                     data: [incomeVehicleDataFirstPeriod[6],
                                         incomeVehicleDataSecondPeriod[6]
                                     ],
-                                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                                    backgroundColor: 'rgba(26, 188, 156, 1)',
                                 },
                                 {
                                     label: 'EVIP',
                                     data: [incomeVehicleDataFirstPeriod[7],
                                         incomeVehicleDataSecondPeriod[7]
                                     ],
-                                    backgroundColor: 'rgba(12, 99, 132, 1)',
+                                    backgroundColor: 'rgba(149, 165, 166, 1)',
                                 },
                                 {
                                     label: 'Extend Charging',
                                     data: [incomeVehicleDataFirstPeriod[8],
                                         incomeVehicleDataSecondPeriod[8]
                                     ],
-                                    backgroundColor: 'rgba(12, 99, 132, 1)',
+                                    backgroundColor: 'rgba(234, 345, 10, 1)',
                                 },
                                 {
                                     label: 'Lost Ticket',
                                     data: [incomeVehicleDataFirstPeriod[9],
                                         incomeVehicleDataSecondPeriod[9]
                                     ],
-                                    backgroundColor: 'rgba(12, 99, 132, 1)',
+                                    backgroundColor: 'rgba(52, 73, 94, 1)',
                                 }
                             ]
                         };
@@ -1830,8 +2167,201 @@
                         tableIncomeVehicleFirst.clear().rows.add(rowIncomeVehicleFirst).draw();
                         tableIncomeVehicleSecond.clear().rows.add(rowIncomeVehicleSecond)
                             .draw();
+
+                        const topPaymentFirst = response.top_payment.first_period;
+                        const topPaymentSecond = response.top_payment.second_period;
+                        console.log(topPaymentFirst)
+
+                        function formatDate(dateString) {
+                            const date = new Date(dateString);
+                            const options = {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                            };
+                            return date.toLocaleDateString('en-GB', options);
+                        }
+
+
+                        const DailyRevenueFirst = response.data.first_period.map(
+                            item => item.allpayment
+                        );
+                        const dailyRevenueFirstLabel = response.data.first_period.map(
+                            item => formatDate(item.periode));
+
+
+                        const DailyRevenueSecond = response.data.second_period.map(
+                            item => item.allpayment
+                        );
+
+                        const dailyRevenueSecondLabel = response.data.second_period.map(
+                            item => formatDate(item.periode));
+
+                        const dailyRevenueFirstData = {
+                            labels: dailyRevenueFirstLabel,
+                            datasets: [{
+                                label: 'Daily Revenue First Period',
+                                data: DailyRevenueFirst,
+                                backgroundColor: 'rgba(255, 99, 132, 1)',
+                            }]
+                        };
+
+                        const dailyRevenueFirstOptions = {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return formatRupiah(value);
+                                        },
+                                        color: '#fff',
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        autoSkip: false,
+                                        maxRotation: 90,
+                                        minRotation: 0,
+                                        color: '#fff',
+                                        font: {
+                                            size: 10,
+                                        }
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        color: '#fff',
+
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Daily Revenue First Period',
+                                    color: '#fff',
+                                }
+                            }
+                        };
+
+                        // Destroy dulu kalau chart sebelumnya sudah ada
+                        if (window.dailyRevenueFirstChart) {
+                            window.dailyRevenueFirstChart.destroy();
+                        }
+
+                        // Buat ulang chart dengan data terbaru
+                        const dailyRevenueFirstCtx = document.getElementById(
+                                'dailyRevenueFirstBar')
+                            .getContext('2d');
+
+                        window.dailyRevenueFirstChart = new Chart(dailyRevenueFirstCtx, {
+                            type: 'bar',
+                            data: dailyRevenueFirstData,
+                            options: dailyRevenueFirstOptions
+                        });
+
+                        const dailyRevenueSecondData = {
+                            labels: dailyRevenueSecondLabel,
+                            datasets: [{
+                                label: 'Daily Revenue Second Period',
+                                data: DailyRevenueSecond,
+                                backgroundColor: 'rgba(255, 99, 132, 1)',
+                            }]
+                        };
+
+                        const dailyRevenueSecondOptions = {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return formatRupiah(value);
+                                        },
+                                        color: '#fff',
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        autoSkip: false,
+                                        maxRotation: 90,
+                                        minRotation: 0,
+                                        color: '#fff',
+                                        font: {
+                                            size: 10,
+                                        }
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        color: '#fff',
+
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Daily Revenue Second Period',
+                                    color: '#fff',
+                                }
+                            }
+                        };
+
+                        // Destroy dulu kalau chart sebelumnya sudah ada
+                        if (window.dailyRevenueSecondChart) {
+                            window.dailyRevenueSecondChart.destroy();
+                        }
+                        // Buat ulang chart dengan data terbaru
+                        const dailyRevenueSecondCtx = document.getElementById(
+                                'dailyRevenueSecondBar')
+                            .getContext('2d');
+                        window.dailyRevenueSecondChart = new Chart(
+                            dailyRevenueSecondCtx, {
+                                type: 'bar',
+                                data: dailyRevenueSecondData,
+                                options: dailyRevenueSecondOptions
+                            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         $('#hasil-test').text(formatRupiah(GrandTotals.income_payment
                             .first_period))
+                        $('.top-payment').text(topPaymentFirst.source)
+                        $('.top-payment-income').text(formatRupiah(topPaymentFirst.value))
+                        $('.total-pass').text(formatQuantity(GrandTotals.quantity_pass
+                            .first_period))
+                        $('.total-casual').text(formatQuantity(GrandTotals.quantity_casual
+                            .first_period))
+                        $('.total-revenue').text(formatRupiah(GrandTotals.income_payment
+                            .first_period))
+                        $('.top-payment-second').text(topPaymentSecond.source)
+                        $('.top-payment-income-second').text(formatRupiah(
+                            topPaymentSecond.value))
+                        $('.total-pass-second').text(formatQuantity(GrandTotals
+                            .quantity_pass.second_period))
+                        $('.total-casual-second').text(formatQuantity(GrandTotals
+                            .quantity_casual.second_period))
+                        $('.total-revenue-second').text(formatRupiah(GrandTotals
+                            .income_payment.second_period))
                         $('.result').show();
                         $('#tbody-custom').empty();
                         $('#tbody-custom').append(`
@@ -2026,8 +2556,8 @@
             <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatQuantity(GrandTotals.quantity_pass.second_period)}</td>
             <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatQuantity(GrandTotals.quantity_casual.second_period)}</td>
             <td class="text-center" style="border-left: 1px solid white; border-top: 1px solid white;border-right: 1px solid white;">Grand Total</td>
-            <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatRupiah(GrandTotals.income_vehicle.first_period)}</td>
-            <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatRupiah(GrandTotals.income_vehicle.second_period)}</td>
+            <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatRupiah(GrandTotals.income_payment.first_period)}</td>
+            <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatRupiah(GrandTotals.income_payment.second_period)}</td>
         </tr>
 
         <tr>
@@ -2045,6 +2575,292 @@
             <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatRupiah(firstPeriodTotals.stickerincome)}</td>
         </tr>
     `);
+
+                        const comparePaymentLabel = [{
+                                label: 'Cash',
+                                firstPeriod: firstPeriodTotals.cash,
+                                secondPeriod: secondPeriodTotals.cash
+                            },
+                            {
+                                label: 'Parkee',
+                                firstPeriod: firstPeriodTotals.parkeepayment,
+                                secondPeriod: secondPeriodTotals.parkeepayment
+                            },
+                            {
+                                label: 'Emoney',
+                                firstPeriod: firstPeriodTotals.emoney,
+                                secondPeriod: secondPeriodTotals.emoney
+                            },
+                            {
+                                label: 'Flazz',
+                                firstPeriod: firstPeriodTotals.flazz,
+                                secondPeriod: secondPeriodTotals.flazz
+                            },
+                            {
+                                label: 'Brizzi',
+                                firstPeriod: firstPeriodTotals.brizzi,
+                                secondPeriod: secondPeriodTotals.brizzi
+                            },
+                            {
+                                label: 'Tapcash',
+                                firstPeriod: firstPeriodTotals.tapcash,
+                                secondPeriod: secondPeriodTotals.tapcash
+                            },
+                            {
+                                label: 'Qris',
+                                firstPeriod: firstPeriodTotals.qrisepayment,
+                                secondPeriod: secondPeriodTotals.qrisepayment
+                            },
+                            {
+                                label: 'DKI Jakcard',
+                                firstPeriod: firstPeriodTotals.dkijackpayment,
+                                secondPeriod: secondPeriodTotals.dkijackpayment
+                            },
+                        ]
+
+                        const paymentComparisonResult = comparePaymentLabel.map(item => {
+                            const {
+                                label,
+                                firstPeriod,
+                                secondPeriod
+                            } = item;
+
+                            // Menghitung persentase perubahan
+                            const change = firstPeriod === 0 ?
+                                0 :
+                                ((secondPeriod - firstPeriod) / firstPeriod) * 100;
+
+                            // Menentukan arah perubahan
+                            const arrow = secondPeriod > firstPeriod ? '↓' :
+                                secondPeriod < firstPeriod ? '↑' : '→';
+
+                            // Menghitung teks persentase dan menambahkan simbol perubahan
+                            const percentageText =
+                                `${arrow} ${Math.abs(change).toFixed(1)}%`;
+
+                            // Menentukan kelas warna (merah untuk penurunan, hijau untuk kenaikan, abu-abu untuk tidak ada perubahan)
+                            const colorClass = secondPeriod > firstPeriod ?
+                                'text-danger' : secondPeriod < firstPeriod ?
+                                'text-success' : 'text-muted';
+
+
+                            // Membuat HTML string untuk setiap perbandingan
+                            return `
+        <div class="col-md-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-1">${label}</h6>
+                            <h4 class="fw-bold mb-0">${formatRupiah(firstPeriod)}</h4>
+                            <small class="text-muted tgl_row1">Total second period :</small>
+                            <p class="text-muted tgl_row1">${formatRupiah(secondPeriod)}</p>
+                        </div>
+                        <div class="${colorClass}">${percentageText}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+                        });
+
+                        console.log(paymentComparisonResult);
+
+                        const compareVehicleLabel = [{
+                            label: 'Car',
+                            firstPeriod: firstPeriodTotals.carqty,
+                            secondPeriod: secondPeriodTotals.carqty,
+                        }, {
+                            label: 'Motorbike',
+                            firstPeriod: firstPeriodTotals.motorbikeqty,
+                            secondPeriod: secondPeriodTotals.motorbikeqty,
+                        }, {
+                            label: 'Truck',
+                            firstPeriod: firstPeriodTotals.truckqty,
+                            secondPeriod: secondPeriodTotals.truckqty,
+                        }, {
+                            label: 'Taxi',
+                            firstPeriod: firstPeriodTotals.taxiqty,
+                            secondPeriod: secondPeriodTotals.taxiqty,
+                        }, {
+                            label: 'VIP',
+                            firstPeriod: vipsum1,
+                            secondPeriod: vipsum2,
+                        }, {
+                            label: 'Preferred Car',
+                            firstPeriod: firstPeriodTotals.carpreferredqty,
+                            secondPeriod: secondPeriodTotals.carpreferredqty,
+                        }, {
+                            label: 'Preferred Motorbike',
+                            firstPeriod: firstPeriodTotals.motorbikepreferredqty,
+                            secondPeriod: secondPeriodTotals.motorbikepreferredqty,
+                        }, {
+                            label: 'E-VIP',
+                            firstPeriod: firstPeriodTotals.evipqty,
+                            secondPeriod: secondPeriodTotals.evipqty,
+                        }, {
+                            label: 'Extend Charging',
+                            firstPeriod: firstPeriodTotals.extendchargingqty,
+                            secondPeriod: secondPeriodTotals.extendchargingqty,
+                        }, {
+                            label: 'Lost Ticket',
+                            firstPeriod: firstPeriodTotals.lostticketqty,
+                            secondPeriod: secondPeriodTotals.lostticketqty,
+                        }]
+
+                        const vehicleComparisonResult = compareVehicleLabel.map(item => {
+                            const {
+                                label,
+                                firstPeriod,
+                                secondPeriod
+                            } = item;
+
+                            // Menghitung persentase perubahan
+                            const change = firstPeriod === 0 ?
+                                0 :
+                                ((secondPeriod - firstPeriod) / firstPeriod) * 100;
+
+                            // Menentukan arah perubahan
+                            const arrow = secondPeriod > firstPeriod ? '↓' :
+                                secondPeriod < firstPeriod ? '↑' : '→';
+
+                            // Menghitung teks persentase dan menambahkan simbol perubahan
+                            const percentageText =
+                                `${arrow} ${Math.abs(change).toFixed(1)}%`;
+
+                            // Menentukan kelas warna (merah untuk penurunan, hijau untuk kenaikan, abu-abu untuk tidak ada perubahan)
+                            const colorClass = secondPeriod > firstPeriod ?
+                                'text-danger' : secondPeriod < firstPeriod ?
+                                'text-success' : 'text-muted';
+
+
+                            // Membuat HTML string untuk setiap perbandingan
+                            return `
+        <div class="col-md-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-1">${label}</h6>
+                            <h4 class="fw-bold mb-0">${formatQuantity(firstPeriod)}</h4>
+                            <small class="text-muted tgl_row1">Total second period :</small>
+                            <p class="text-muted tgl_row1">${formatQuantity(secondPeriod)}</p>
+                        </div>
+                        <div class="${colorClass}">${percentageText}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+                        });
+
+
+                        const labelIncomeVehicle = [{
+                                label: 'Car',
+                                firstPeriod: firstPeriodTotals.carincome,
+                                secondPeriod: secondPeriodTotals.carincome,
+                            },
+                            {
+                                label: 'Motorbike',
+                                firstPeriod: firstPeriodTotals.motorbikeincome,
+                                secondPeriod: secondPeriodTotals.motorbikeincome,
+                            },
+                            {
+                                label: 'Truck',
+                                firstPeriod: firstPeriodTotals.truckincome,
+                                secondPeriod: secondPeriodTotals.truckincome,
+                            },
+                            {
+                                label: 'Taxi',
+                                firstPeriod: firstPeriodTotals.taxiincome,
+                                secondPeriod: secondPeriodTotals.taxiincome,
+                            },
+                            {
+                                label: 'VIP',
+                                firstPeriod: vipincome1,
+                                secondPeriod: vipincome2,
+                            },
+                            {
+                                label: 'Preferred Car',
+                                firstPeriod: firstPeriodTotals.carpreferredincome,
+                                secondPeriod: secondPeriodTotals.carpreferredincome,
+                            },
+                            {
+                                label: 'Preferred Motorbike',
+                                firstPeriod: firstPeriodTotals.motorbikepreferredincome,
+                                secondPeriod: secondPeriodTotals.motorbikepreferredincome,
+                            },
+                            {
+                                label: 'E-VIP',
+                                firstPeriod: firstPeriodTotals.evipincome,
+                                secondPeriod: secondPeriodTotals.evipincome,
+                            },
+                            {
+                                label: 'Extend Charging',
+                                firstPeriod: firstPeriodTotals.extendchargingincome,
+                                secondPeriod: secondPeriodTotals.extendchargingincome,
+                            },
+                            {
+                                label: 'Lost Ticket',
+                                firstPeriod: firstPeriodTotals.lostticket,
+                                secondPeriod: secondPeriodTotals.lostticket,
+                            }
+                        ]
+
+                        const incomeVehicleComparisonResult = labelIncomeVehicle.map(item => {
+                            const {
+                                label,
+                                firstPeriod,
+                                secondPeriod
+                            } = item;
+
+                            // Menghitung persentase perubahan
+                            const change = firstPeriod === 0 ?
+                                0 :
+                                ((secondPeriod - firstPeriod) / firstPeriod) * 100;
+
+                            // Menentukan arah perubahan
+                            const arrow = secondPeriod > firstPeriod ? '↓' :
+                                secondPeriod < firstPeriod ? '↑' : '→';
+
+                            // Menghitung teks persentase dan menambahkan simbol perubahan
+                            const percentageText =
+                                `${arrow} ${Math.abs(change).toFixed(1)}%`;
+
+                            // Menentukan kelas warna (merah untuk penurunan, hijau untuk kenaikan, abu-abu untuk tidak ada perubahan)
+                            const colorClass = secondPeriod > firstPeriod ?
+                                'text-danger' : secondPeriod < firstPeriod ?
+                                'text-success' : 'text-muted';
+
+
+                            // Membuat HTML string untuk setiap perbandingan
+                            return `
+        <div class="col-md-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-1">${label}</h6>
+                            <h4 class="fw-bold mb-0">${formatRupiah(firstPeriod)}</h4>
+                            <small class="text-muted tgl_row1">Total second period :</small>
+                            <p class="text-muted tgl_row1">${formatRupiah(secondPeriod)}</p>
+                        </div>
+                        <div class="${colorClass}">${percentageText}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+                        });
+
+                        console.log(vehicleComparisonResult);
+                        document.getElementById('compare-result').innerHTML =
+                            paymentComparisonResult.join('');
+                        document.getElementById('compare-quantity').innerHTML =
+                            vehicleComparisonResult.join('');
+                        document.getElementById('compare-income-vehicle').innerHTML =
+                            incomeVehicleComparisonResult.join('');
+
                     },
                     error: function(xhr) {
                         console.error('Error:', xhr.responseJSON);

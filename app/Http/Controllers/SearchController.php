@@ -575,6 +575,171 @@ class SearchController extends Controller
     }
 
 
+
+    public function occupancyRateSearchAPI(Request $request)
+    {
+        $startDate = $request->input('start1');
+        $locationCode = session('selected_location_kode_lokasi');
+
+        $payload = [
+            'start_date' => $startDate,
+            'location_code' => $locationCode,
+        ];
+
+        try {
+            // Kirim POST request tanpa timeout
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->post('http://110.0.100.70:8080/api/unpaid-quantity-dps', $payload);
+
+            $body = $response->json();
+
+            $data_unpaid = $body['data'][0]['percentage_lot'] ?? null;
+            $data_realtime = $body['data'][0]['datarealtime'] ?? [];
+
+            return response()->json([
+                'data_unpaid' => $data_unpaid,
+                'data_realtime' => $data_realtime,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+    public function ritaseDurationSearchAPI(Request $request)
+    {
+        $request->validate([
+            'start1' => 'required|date',
+            'end1' => 'required|date',
+        ]);
+
+        $startDate = $request->start1;
+        $endDate = $request->end1;
+        $vehicleType = $request->vehicle_type ?? 'ALL';
+        $parkingslipType = $request->status_vehicle ?? 'ALL';
+
+        // Ambil kode lokasi dari session
+        $locationCode = session('selected_location_kode_lokasi');
+
+        // Payload
+        $payload = [
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'vehicle_type' => $vehicleType,
+            'parkingslip_type' => $parkingslipType,
+            'location_code' => $locationCode,
+        ];
+
+        try {
+            // Kirim POST request ke API
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])->post('http://110.0.100.70:8080/v3/api/retase-traffic-duration', $payload);
+
+            if ($response->successful()) {
+                $data = $response->json()['data'] ?? [];
+
+                // Hitung summary
+                $summary = $this->calculateSummary($data);
+
+                return response()->json([
+                    'success' => true,
+                    'data' => $data,
+                    'summary' => $summary,
+                ]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'API request failed'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function ritaseTrafficGateSearchAPI(Request $request)
+    {
+        $request->validate([
+            'start1' => 'required|date',
+            'end1' => 'required|date',
+        ]);
+
+        $startDate = $request->start1;
+        $endDate = $request->end1;
+        $vehicleType = $request->vehicle_type ?? 'ALL';
+        $parkingslipType = $request->status_vehicle ?? 'ALL';
+        $gateType = $request->gate_type ?? 'IN';
+
+        // Ambil kode lokasi dari session
+        $locationCode = session('selected_location_kode_lokasi');
+
+        // Payload
+        $payload = [
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'vehicle_type' => $vehicleType,
+            'parkingslip_type' => $parkingslipType,
+            'gate_type' => $gateType,
+            'location_code' => $locationCode,
+        ];
+
+        try {
+            // Kirim POST request ke API
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])->post('http://110.0.100.70:8080/v3/api/retase-traffic-out', $payload);
+
+            if ($response->successful()) {
+                $data = $response->json()['data'] ?? [];
+
+                // Hitung summary
+                $summary = $this->calculateSummary($data);
+
+                return response()->json([
+                    'success' => true,
+                    'data' => $data,
+                    'summary' => $summary,
+                ]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'API request failed'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    private function calculateSummary($data)
+    {
+        $summary = [];
+        for ($i = 1; $i <= 24; $i++) {
+            $key = "jam{$i}";
+            $summary["jam{$i}_sum"] = array_sum(array_column($data, $key));
+        }
+
+        $summary['jam24over_sum'] = array_sum(array_column($data, 'over24jam'));
+        $summary['total_sum'] = array_sum(array_column($data, 'total'));
+
+        return $summary;
+    }
+
+
+
+    public function ritaseTrafficGateView()
+    {
+        return view('pages.ritasegatesearch');
+    }
+
+    public function ritaseDurationSearchView()
+    {
+        return view('pages.ritasedurationsearch');
+    }
+
+    public function occupancyRateSearchView()
+    {
+        return view('pages.occupancyratesearch');
+    }
+
     public function parkingMemberView()
     {
         return view('pages.parkingmember');

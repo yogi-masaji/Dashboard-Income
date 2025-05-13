@@ -57,28 +57,35 @@
             /* IE supports this */
             word-break: break-word;
         }
+
+        #dailyQuantity {
+            height: 23vh !important;
+        }
     </style>
     <div class="container">
         <div class="row">
             <div class="col-md-4 content-custom ">
                 <p>Daily Quantity</p>
-                <table id="dailyQuantity" class="table table-striped" style="height: 23vh;">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Type</th>
-                            <th>Yesterday</th>
-                            <th>Today</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th colspan="2" style="text-align:left">All Vehicle</th>
-                            <th id="totalYesterday"></th>
-                            <th id="totalToday"></th>
-                        </tr>
-                    </tfoot>
-                </table>
+                <div class="" style="height: 25vh">
+                    <table id="dailyQuantity" class="table table-striped" style="flex: 1; height: 100%;">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Type</th>
+                                <th>Yesterday</th>
+                                <th>Today</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2" style="text-align:left">All Vehicle</th>
+                                <th id="totalYesterday"></th>
+                                <th id="totalToday"></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"

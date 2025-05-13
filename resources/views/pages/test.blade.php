@@ -315,9 +315,9 @@
             });
         });
     </script>
-    {{-- <script src="js/transaction.js"></script>
+    <script src="js/transaction.js"></script>
     <script src="js/income.js"></script>
     <script src="js/epayment.js"></script>
-    <script src="js/traffic.js"></script> --}}
-    @vite(['resources/js/transaction.js', 'resources/js/income.js', 'resources/js/epayment.js', 'resources/js/traffic.js'])
+    <script src="js/traffic.js"></script>
+    {{-- @vite(['resources/js/transaction.js', 'resources/js/income.js', 'resources/js/epayment.js', 'resources/js/traffic.js']) --}}
 @endsection

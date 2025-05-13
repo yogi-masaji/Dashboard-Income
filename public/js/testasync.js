@@ -403,7 +403,7 @@ async function weeklyData(){
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Last Week: ${vehicle.last_week}</div>
+                        <div class="yesterday">Two Weeks Ago: ${vehicle.last_week}</div>
                     </div>
                 </div>
             `;
@@ -1007,7 +1007,7 @@ async function monthlyData(){
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Last Month: ${vehicle.last_month}</div>
+                        <div class="yesterday">Two Months Ago: ${vehicle.last_month}</div>
                     </div>
                 </div>
             `;

@@ -7,6 +7,10 @@ $(document).ready(function() {
             minimumFractionDigits: 0
         }).format(number);
     };
+
+    function formatQuantity(quantity) {
+        return new Intl.NumberFormat().format(quantity);
+    }
     const table = $('#dailyE-Payment').DataTable({
         searching: false,
         paging: false,
@@ -467,7 +471,7 @@ $(document).ready(function() {
                                     ${payment.direction}
                                 </span>
                             </div>
-                            <div class="yesterday">Last Week: ${formatRupiah(payment.last_week)}</div>
+                            <div class="yesterday">Two Weeks Ago: ${formatRupiah(payment.last_week)}</div>
                         </div>
                     </div>
                 `;
@@ -873,7 +877,7 @@ $(document).ready(function() {
                                     ${payment.direction}
                                 </span>
                             </div>
-                            <div class="yesterday">Yesterday: ${formatRupiah(payment.last_month)}</div>
+                            <div class="yesterday">Two Months Ago: ${formatRupiah(payment.last_month)}</div>
                         </div>
                     </div>
                 `;

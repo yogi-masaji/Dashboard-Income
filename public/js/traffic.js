@@ -315,19 +315,20 @@ $(document).ready(function() {
 
             function getRandomColor() {
                 const vibrantColors = [
-                    '#D3A6A1', 
-                    '#A8D5BA',
-                    '#A9C6E8', 
-                    '#F5E9A6', 
-                    '#C1A3C5', 
-                    '#F4C38D', // Soft Orange
-                    '#B0E0E6', // Pale Cyan
-                    '#F7C6D9', // Light Pink
-                    '#A0D6B4', // Soft Spring Green
-                    '#F7A1C4', // Light Deep Pink
-                    '#A3CFF9', // Light Dodger Blue
-                    '#F2B2A0'  // Light Tomato
+                    '#E6194B', // Strong Red
+                    '#3CB44B', // Vivid Green
+                    '#0082C8', // Bright Blue
+                    '#FFD700', // Vivid Yellow (Gold)
+                    '#911EB4', // Rich Purple
+                    '#F58231', // Bright Orange
+                    '#46F0F0', // Neon Cyan
+                    '#F032E6', // Electric Pink
+                    '#008080', // Teal
+                    '#FFE119', // Bright Yellow
+                    '#4363D8', // Deep Blue
+                    '#DC143C'  // Crimson
                 ];
+                
                 
                 const randomIndex = Math.floor(Math.random() * vibrantColors.length);
                 return vibrantColors[randomIndex];
@@ -644,18 +645,18 @@ $(document).ready(function() {
 
             function getRandomColor() {
                 const vibrantColors = [
-                    '#FF0000', // Red
-                    '#00FF00', // Green
-                    '#0000FF', // Blue
-                    '#FFFF00', // Yellow
-                    '#800080', // Purple
-                    '#FFA500', // Orange
-                    '#00FFFF', // Cyan
-                    '#FFC0CB', // Pink
-                    '#00FF7F', // Spring Green
-                    '#FF1493', // Deep Pink
-                    '#1E90FF', // Dodger Blue
-                    '#FF6347' // Tomato
+                    '#E6194B', // Strong Red
+                    '#3CB44B', // Vivid Green
+                    '#0082C8', // Bright Blue
+                    '#FFD700', // Vivid Yellow (Gold)
+                    '#911EB4', // Rich Purple
+                    '#F58231', // Bright Orange
+                    '#46F0F0', // Neon Cyan
+                    '#F032E6', // Electric Pink
+                    '#008080', // Teal
+                    '#FFE119', // Bright Yellow
+                    '#4363D8', // Deep Blue
+                    '#DC143C'  // Crimson
                 ];
                 const randomIndex = Math.floor(Math.random() * vibrantColors.length);
                 return vibrantColors[randomIndex];
@@ -975,19 +976,20 @@ $(document).ready(function() {
             // console.log(pintukeluarLastMap);
             function getRandomColor() {
                 const vibrantColors = [
-                    '#FF0000', // Red
-                    '#00FF00', // Green
-                    '#0000FF', // Blue
-                    '#FFFF00', // Yellow
-                    '#800080', // Purple
-                    '#FFA500', // Orange
-                    '#00FFFF', // Cyan
-                    '#FFC0CB', // Pink
-                    '#00FF7F', // Spring Green
-                    '#FF1493', // Deep Pink
-                    '#1E90FF', // Dodger Blue
-                    '#FF6347' // Tomato
+                    '#E6194B', // Strong Red
+                    '#3CB44B', // Vivid Green
+                    '#0082C8', // Bright Blue
+                    '#FFD700', // Vivid Yellow (Gold)
+                    '#911EB4', // Rich Purple
+                    '#F58231', // Bright Orange
+                    '#46F0F0', // Neon Cyan
+                    '#F032E6', // Electric Pink
+                    '#008080', // Teal
+                    '#FFE119', // Bright Yellow
+                    '#4363D8', // Deep Blue
+                    '#DC143C'  // Crimson
                 ];
+                
                 const randomIndex = Math.floor(Math.random() * vibrantColors.length);
                 return vibrantColors[randomIndex];
             }
