@@ -141,9 +141,51 @@
                 ordering: true,
                 lengthChange: false,
                 layout: {
-                    topEnd: {
-                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
-                    },
+                    topStart: {
+                        buttons: [{
+                                extend: 'copyHtml5',
+                                titleAttr: 'Copy to Clipboard',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'BCA membership data',
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'BCA membership data',
+                            },
+
+
+                            {
+                                extend: 'print',
+                                titleAttr: 'Print',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'BCA membership data',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'BCA membership data',
+                                customize: function(doc) {
+                                    doc.pageMargins = [20, 30, 20,
+                                        30
+                                    ]; // [left, top, right, bottom]
+                                    doc.defaultStyle.fontSize = 8; // Adjust font size if too large
+                                    doc.styles.tableHeader.alignment = 'center';
+                                    doc.styles.tableHeader.fillColor = '#eeeeee';
+                                },
+                            },
+                        ]
+                    }
                 },
                 columns: [{
                         data: 'no'

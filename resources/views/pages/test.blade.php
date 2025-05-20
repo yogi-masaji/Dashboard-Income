@@ -17,7 +17,146 @@
     <script>
         const kodeLokasi = @json($kodeLokasi);
     </script>
+    <style>
+        body {
+            background-color: #0a1929;
+            color: white;
+        }
 
+        .nav-tabs {
+            border-bottom: none;
+            background-color: #0d2d5a;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .nav-tabs .nav-link {
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin: 0 5px;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #ffc107;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .nav-tabs .nav-link:not(.active):hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-menu {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .dropdown-item {
+            padding: 10px 20px;
+        }
+
+        .dropdown-item.active {
+            background-color: #e9ecef;
+            color: #6c7ae0;
+        }
+
+        .stat-card {
+            background-color: #1a365d;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .big-number {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .negative-change {
+            color: #ff4d4f;
+        }
+
+        .data-table {
+            background-color: #0d2d5a;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background-color: #0a1929;
+            color: white;
+            border: none;
+            padding: 15px;
+        }
+
+        .data-table td {
+            border-color: #1a365d;
+            padding: 15px;
+        }
+
+        .chart-toggle {
+            background-color: #0d2d5a;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .chart-toggle .btn {
+            border-radius: 0;
+            padding: 10px 30px;
+        }
+
+        .chart-toggle .btn.active {
+            background-color: #ffc107;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            background-color: #0d2d5a;
+            border-radius: 10px;
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-bar {
+            position: absolute;
+            bottom: 40px;
+            width: 40px;
+            background-color: #1890ff;
+            border-radius: 5px 5px 0 0;
+            text-align: center;
+        }
+
+        .chart-bar.casual {
+            background-color: #ff4d4f;
+        }
+
+        .chart-bar.pass {
+            background-color: #1890ff;
+        }
+
+        .chart-label {
+            position: absolute;
+            top: -25px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            background-color: #1890ff;
+            border-radius: 5px;
+            padding: 2px 0;
+        }
+
+        .chart-bar.casual .chart-label {
+            background-color: #ff4d4f;
+        }
+
+        .dropdown-menu {
+            margin-top: 0;
+        }
+    </style>
     <style>
         .nav-custom-tab {
             background-color: #185BB4;
@@ -100,192 +239,191 @@
         }
     </style>
 
+    <div class="">
+        <!-- Main Tabs Navigation -->
+        <style>
+            /* Mobile optimizations */
+            @media (max-width: 767.98px) {
+                .nav-tabs-responsive {
+                    flex-direction: column;
+                    gap: 6px;
+                }
 
-    <ul class="nav nav-custom-tab nav-pills mb-3 w-100" id="pills-tab" role="tablist">
+                .nav-tabs-responsive .nav-item {
+                    width: 100%;
+                }
 
-        @if (isset($tabMenus['Transaction']))
-            <li class="nav-item dropdown flex-fill text-center" role="presentation">
-                <button class="nav-link dropdown-toggle active w-100" id="transactionDropdown" data-bs-toggle="dropdown"
-                    type="button" aria-expanded="false">
-                    Transaction
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li>
-                        <button class="dropdown-item" id="pills-transaction-item1-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-transaction-item1" type="button" role="tab">
-                            Transaction Daily
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item" id="pills-transaction-item2-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-transaction-item2" type="button" role="tab">
-                            Transaction Weekly
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item" id="pills-transaction-item3-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-transaction-item3" type="button" role="tab">
-                            Transaction Monthly
-                        </button>
-                    </li>
-                </ul>
-            </li>
-        @endif
+                .nav-tabs-responsive .nav-link {
+                    justify-content: space-between;
+                    padding: 14px 16px;
+                }
+            }
 
-        @if (isset($tabMenus['Income']))
-            <li class="nav-item dropdown flex-fill text-center" role="presentation">
-                <button class="nav-link dropdown-toggle w-100" id="incomeDropdown" data-bs-toggle="dropdown" type="button"
-                    aria-expanded="false">
-                    Income
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li>
-                        <button class="dropdown-item" id="pills-income-item1-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-income-item1" type="button" role="tab">
-                            Income Daily
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item" id="pills-income-item2-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-income-item2" type="button" role="tab">
-                            Income Weekly
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item" id="pills-income-item3-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-income-item3" type="button" role="tab">
-                            Income Monthly
-                        </button>
-                    </li>
-                </ul>
-            </li>
-        @endif
+            /* Medium screens */
+            @media (min-width: 768px) and (max-width: 991.98px) {
+                .nav-tabs-responsive .nav-link {
+                    padding: 10px 12px;
+                    font-size: 0.9rem;
+                }
+            }
+        </style>
 
-        @if (isset($tabMenus['E-Payment']))
-            <li class="nav-item dropdown flex-fill text-center" role="presentation">
-                <button class="nav-link dropdown-toggle w-100" id="epaymentDropdown" data-bs-toggle="dropdown"
-                    type="button" aria-expanded="false">
-                    E-Payment
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li>
-                        <button class="dropdown-item" id="pills-epayment-item1-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-epayment-item1" type="button" role="tab">
-                            E-Payment Daily
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item" id="pills-epayment-item2-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-epayment-item2" type="button" role="tab">
-                            E-Payment Weekly
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item" id="pills-epayment-item3-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-epayment-item3" type="button" role="tab">
-                            E-Payment Monthly
-                        </button>
-                    </li>
-                </ul>
-            </li>
-        @endif
+        <ul class="nav nav-tabs mb-4 d-flex w-100" id="mainTabs" role="tablist" style="gap: 1px;">
+            @if (isset($tabMenus['Transaction']))
+                <li class="nav-item dropdown flex-fill text-center" role="presentation">
+                    <a class="nav-link active dropdown-toggle w-100" data-bs-toggle="dropdown" href="#" role="button"
+                        aria-expanded="false">
+                        Transaction Daily
+                    </a>
+                    <ul class="dropdown-menu w-100">
+                        <li><a class="dropdown-item active" href="#transactionDaily" data-bs-toggle="tab">Transaction
+                                Daily</a></li>
+                        <li><a class="dropdown-item" href="#transactionWeekly" data-bs-toggle="tab">Transaction Weekly</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#transactionMonthly" data-bs-toggle="tab">Transaction Monthly</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
 
-        @if (isset($tabMenus['Traffic Management']))
-            <li class="nav-item dropdown flex-fill text-center" role="presentation">
-                <button class="nav-link dropdown-toggle w-100" id="trafficDropdown" data-bs-toggle="dropdown" type="button"
-                    aria-expanded="false">
-                    Traffic Management
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li>
-                        <button class="dropdown-item" id="pills-traffic-item1-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-traffic-item1" type="button" role="tab">
-                            Traffic Daily
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item" id="pills-traffic-item2-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-traffic-item2" type="button" role="tab">
-                            Traffic Weekly
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item" id="pills-traffic-item3-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-traffic-item3" type="button" role="tab">
-                            Traffic Monthly
-                        </button>
-                    </li>
-                </ul>
-            </li>
-        @endif
+            @if (isset($tabMenus['Income']))
+                <li class="nav-item dropdown flex-fill text-center" role="presentation">
+                    <a class="nav-link dropdown-toggle w-100" data-bs-toggle="dropdown" href="#" role="button"
+                        aria-expanded="false">
+                        Income
+                    </a>
+                    <ul class="dropdown-menu w-100">
+                        <li><a class="dropdown-item" href="#incomeDaily" data-bs-toggle="tab">Income Daily</a></li>
+                        <li><a class="dropdown-item" href="#incomeWeekly" data-bs-toggle="tab">Income Weekly</a></li>
+                        <li><a class="dropdown-item" href="#incomeMonthly" data-bs-toggle="tab">Income Monthly</a></li>
+                    </ul>
+                </li>
+            @endif
 
-    </ul>
+            @if (isset($tabMenus['E-Payment']))
+                <li class="nav-item dropdown flex-fill text-center" role="presentation">
+                    <a class="nav-link dropdown-toggle w-100" data-bs-toggle="dropdown" href="#" role="button"
+                        aria-expanded="false">
+                        E-Payment
+                    </a>
+                    <ul class="dropdown-menu w-100">
+                        <li><a class="dropdown-item" href="#ePaymentDaily" data-bs-toggle="tab">E-Payment Daily</a></li>
+                        <li><a class="dropdown-item" href="#ePaymentWeekly" data-bs-toggle="tab">E-Payment Weekly</a></li>
+                        <li><a class="dropdown-item" href="#ePaymentMonthly" data-bs-toggle="tab">E-Payment Monthly</a></li>
+                    </ul>
+                </li>
+            @endif
 
-    <div class="tab-content" id="pills-tabContent">
-        {{-- Transaction Items --}}
-        <div class="tab-pane fade show active" id="pills-transaction-item1" role="tabpanel"
-            aria-labelledby="pills-transaction-item1-tab">
-            @include('tab-content.transactiondaily')
-        </div>
-        <div class="tab-pane fade" id="pills-transaction-item2" role="tabpanel"
-            aria-labelledby="pills-transaction-item2-tab">
-            @include('tab-content.transactionweekly')
-        </div>
-        <div class="tab-pane fade" id="pills-transaction-item3" role="tabpanel"
-            aria-labelledby="pills-transaction-item3-tab">
-            @include('tab-content.transactionmonthly')
-        </div>
+            @if (isset($tabMenus['Traffic Management']))
+                <li class="nav-item dropdown flex-fill text-center" role="presentation">
+                    <a class="nav-link dropdown-toggle w-100" data-bs-toggle="dropdown" href="#" role="button"
+                        aria-expanded="false">
+                        Traffic Management
+                    </a>
+                    <ul class="dropdown-menu w-100">
+                        <li><a class="dropdown-item" href="#trafficDaily" data-bs-toggle="tab">Traffic Daily</a></li>
+                        <li><a class="dropdown-item" href="#trafficWeekly" data-bs-toggle="tab">Traffic Weekly</a></li>
+                        <li><a class="dropdown-item" href="#trafficMonthly" data-bs-toggle="tab">Traffic Monthly</a></li>
+                    </ul>
+                </li>
+            @endif
+        </ul>
 
-        {{-- Income Items --}}
-        <div class="tab-pane fade" id="pills-income-item1" role="tabpanel" aria-labelledby="pills-income-item1-tab">
-            @include('tab-content.incomedaily')
-        </div>
-        <div class="tab-pane fade" id="pills-income-item2" role="tabpanel" aria-labelledby="pills-income-item2-tab">
-            @include('tab-content.incomeweekly')
-        </div>
-        <div class="tab-pane fade" id="pills-income-item3" role="tabpanel" aria-labelledby="pills-income-item3-tab">
-            @include('tab-content.incomemonthly')
-        </div>
 
-        {{-- E-Payment Items --}}
-        <div class="tab-pane fade" id="pills-epayment-item1" role="tabpanel" aria-labelledby="pills-epayment-item1-tab">
-            @include('tab-content.epaymentdaily')
-        </div>
-        <div class="tab-pane fade" id="pills-epayment-item2" role="tabpanel" aria-labelledby="pills-epayment-item2-tab">
-            @include('tab-content.epaymentweekly')
-        </div>
-        <div class="tab-pane fade" id="pills-epayment-item3" role="tabpanel" aria-labelledby="pills-epayment-item3-tab">
-            @include('tab-content.epaymentmonthly')
-        </div>
 
-        {{-- Traffic Items --}}
-        <div class="tab-pane fade" id="pills-traffic-item1" role="tabpanel" aria-labelledby="pills-traffic-item1-tab">
-            @include('tab-content.trafficdaily')
-        </div>
-        <div class="tab-pane fade" id="pills-traffic-item2" role="tabpanel" aria-labelledby="pills-traffic-item2-tab">
-            @include('tab-content.trafficweekly')
-        </div>
-        <div class="tab-pane fade" id="pills-traffic-item3" role="tabpanel" aria-labelledby="pills-traffic-item3-tab">
-            @include('tab-content.trafficmonthly')
+        <!-- Tab Content -->
+        <div class="tab-content" id="mainTabsContent">
+            <!-- Transaction Daily Tab -->
+            <div class="tab-pane fade show active" id="transactionDaily" role="tabpanel">
+                @include('tab-content.transactiondaily')
+            </div>
+
+            <!-- Other Tabs (Just placeholders) -->
+            <div class="tab-pane fade" id="transactionWeekly" role="tabpanel">
+                @include('tab-content.transactionweekly')
+            </div>
+
+            <div class="tab-pane fade" id="transactionMonthly" role="tabpanel">
+                @include('tab-content.transactionmonthly')
+            </div>
+
+            <!-- Placeholder for other tabs -->
+            <div class="tab-pane fade" id="incomeDaily" role="tabpanel">
+                @include('tab-content.incomedaily')
+            </div>
+
+            <div class="tab-pane fade" id="incomeWeekly" role="tabpanel">
+                @include('tab-content.incomeweekly')
+            </div>
+
+            <div class="tab-pane fade" id="incomeMonthly" role="tabpanel">
+                @include('tab-content.incomemonthly')
+            </div>
+
+            <div class="tab-pane fade" id="ePaymentDaily" role="tabpanel">
+                @include('tab-content.epaymentdaily')
+            </div>
+
+            <div class="tab-pane fade" id="ePaymentWeekly" role="tabpanel">
+                @include('tab-content.epaymentweekly')
+            </div>
+
+            <div class="tab-pane fade" id="ePaymentMonthly" role="tabpanel">
+                @include('tab-content.epaymentmonthly')
+            </div>
+
+            <div class="tab-pane fade" id="trafficDaily" role="tabpanel">
+                @include('tab-content.trafficdaily')
+            </div>
+
+            <div class="tab-pane fade" id="trafficWeekly" role="tabpanel">
+                @include('tab-content.trafficweekly')
+            </div>
+
+            <div class="tab-pane fade" id="trafficMonthly" role="tabpanel">
+                @include('tab-content.trafficmonthly')
+            </div>
         </div>
     </div>
+
+
+
+    <!-- Custom JavaScript -->
     <script>
+        // Initialize dropdown functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const dropdowns = document.querySelectorAll('.dropdown-menu .dropdown-item');
+            // Handle tab switching from dropdown items
+            document.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
 
-            dropdowns.forEach(item => {
-                item.addEventListener('click', function() {
-                    const parentButton = this.closest('.dropdown').querySelector(
-                        '.dropdown-toggle');
-                    parentButton.textContent = this.textContent;
+                    // Get the target tab
+                    const targetTab = this.getAttribute('href');
 
-                    // Menutup dropdown setelah item dipilih
-                    const dropdown = this.closest('.dropdown');
-                    const dropdownMenu = dropdown.querySelector('.dropdown-menu');
-                    dropdownMenu.classList.remove('show'); // Menutup dropdown secara manual
+                    // Update dropdown button text
+                    const dropdownButton = this.closest('.dropdown').querySelector('.nav-link');
+                    dropdownButton.textContent = this.textContent + ' ';
 
-                    // Memastikan tombol mendapatkan class 'active' pada item yang dipilih
-                    parentButton.classList.add('active');
+                    // Add dropdown icon back
+
+
+                    // Activate the tab
+                    const tab = new bootstrap.Tab(document.querySelector(`a[href="${targetTab}"]`));
+                    tab.show();
+
+                    // Update active states in nav
+                    // Hanya hapus .active dari nav-link dalam nav-tabs
+                    document.querySelectorAll('#mainTabs .nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    dropdownButton.classList.add('active');
+
+
+                    // Update active states in dropdown
+                    document.querySelectorAll('.dropdown-item').forEach(dropItem => {
+                        dropItem.classList.remove('active');
+                    });
+                    this.classList.add('active');
                 });
             });
         });
@@ -319,5 +457,4 @@
     <script src="js/income.js"></script>
     <script src="js/epayment.js"></script>
     <script src="js/traffic.js"></script>
-    {{-- @vite(['resources/js/transaction.js', 'resources/js/income.js', 'resources/js/epayment.js', 'resources/js/traffic.js']) --}}
 @endsection

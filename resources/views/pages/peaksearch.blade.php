@@ -21,7 +21,85 @@
             width: 40%;
         }
     </style>
+    <style>
+        /* Apply flextruck to the wrapper that contains the search and buttons */
+        #membershipTable_wrapper .dt-top {
+            display: flex;
+            justify-content: flex-start;
+            /* Align buttons and search to the left */
+            gap: 20px;
+            /* Add space between the buttons and search */
+            align-items: center;
+        }
 
+        table.dataTable thead th,
+        table.dataTable thead td {
+            padding: 16px;
+            border-bottom: 1px solid #111
+        }
+
+        tbody {
+            white-space: normal;
+            word-break: break-all;
+        }
+
+        /* Ensure the buttons are inline and spaced correctly */
+        .dt-buttons {
+            display: inline-flex;
+            gap: 10px;
+            /* Space between individual buttons */
+        }
+
+        /* Make sure the search input aligns properly */
+        .dt-search input {
+            display: inline-block;
+            margin-right: 10px;
+            /* Space between the search input and buttons */
+        }
+
+        .dt-search {
+            float: right !important;
+            margin-bottom: 5px;
+        }
+
+        button.dt-paging-button {
+            background-color: #ffffff !important;
+            padding: 10px;
+            width: 30px;
+            border-radius: 10px;
+            border: none !important;
+            margin-right: 2px;
+            margin-left: 2px;
+        }
+
+        .dt-button {
+            background-color: #FCB900 !important;
+            padding: 10px;
+            border-radius: 10px;
+            border: none !important;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        #dt-search-0 {
+            height: 40px;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+
+        span.dt-column-title {
+            font-size: 11px;
+        }
+
+        .col-md-2 {
+            flex: 0 0 auto;
+            width: 24.25%;
+        }
+
+        th.text-center.dt-orderable-none {
+            padding: 7px;
+        }
+    </style>
     <p> peak search</p>
     <div class="search-wrapper">
         <div class="d-flex align-items-end gap-3 mb-3">
@@ -80,7 +158,7 @@
                     <tr>
                         <th>No</th>
                         <th>kondisi</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Kendaraan</th>
                     </tr>
                 </thead>
             </table>
@@ -94,7 +172,7 @@
                     <tr>
                         <th>No</th>
                         <th>kondisi</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Kendaraan</th>
                     </tr>
                 </thead>
             </table>
@@ -115,7 +193,7 @@
                     <tr>
                         <th>No</th>
                         <th>kondisi</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Kendaraan</th>
                     </tr>
                 </thead>
             </table>
@@ -129,7 +207,7 @@
                     <tr>
                         <th>No</th>
                         <th>kondisi</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Kendaraan</th>
                     </tr>
                 </thead>
             </table>
@@ -149,7 +227,7 @@
                     <tr>
                         <th>No</th>
                         <th>kondisi</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Kendaraan</th>
                     </tr>
                 </thead>
             </table>
@@ -163,7 +241,7 @@
                     <tr>
                         <th>No</th>
                         <th>kondisi</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Kendaraan</th>
                     </tr>
                 </thead>
             </table>
@@ -184,7 +262,7 @@
                     <tr>
                         <th>No</th>
                         <th>kondisi</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Kendaraan</th>
                     </tr>
                 </thead>
             </table>
@@ -198,7 +276,7 @@
                     <tr>
                         <th>No</th>
                         <th>kondisi</th>
-                        <th>Jumlah</th>
+                        <th>Jumlah Kendaraan</th>
                     </tr>
                 </thead>
             </table>
@@ -269,17 +347,29 @@
                 autoWidth: false,
                 ordering: false,
                 info: false,
-                // layout: {
-                //     topStart: {
-                //         buttons: [{
-                //             'copy',
-                //             'csv',
-                //             'excel',
-                //             'pdf',
-                //             'print',
-                //         }],
-                //     },
-                // },
+                layout: {
+                    topStart: {
+                        buttons: [
+
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Car Data',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Car Data',
+                            },
+                        ]
+                    }
+                },
                 data: [],
                 columns: [{
                         data: 'no'
@@ -299,6 +389,27 @@
                 autoWidth: false,
                 ordering: false,
                 info: false,
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Car Data',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Car Data',
+                            },
+                        ]
+                    }
+                },
                 data: [],
                 columns: [{
                         data: 'no'
@@ -316,6 +427,29 @@
                 paging: false,
                 autoWidth: false,
                 ordering: false,
+                layout: {
+                    topStart: {
+                        buttons: [
+
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Motorbike Data',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Motorbike Data',
+                            },
+                        ]
+                    }
+                },
                 info: false,
                 data: [],
                 columns: [{
@@ -334,6 +468,29 @@
                 paging: false,
                 autoWidth: false,
                 ordering: false,
+                layout: {
+                    topStart: {
+                        buttons: [
+
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Motorbike Data',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Motorbike Data',
+                            },
+                        ]
+                    }
+                },
                 info: false,
                 data: [],
                 columns: [{
@@ -353,6 +510,29 @@
                 paging: false,
                 autoWidth: false,
                 ordering: false,
+                layout: {
+                    topStart: {
+                        buttons: [
+
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Truck Data',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Truck Data',
+                            },
+                        ]
+                    }
+                },
                 info: false,
                 data: [],
                 columns: [{
@@ -372,6 +552,29 @@
                 paging: false,
                 autoWidth: false,
                 ordering: false,
+                layout: {
+                    topStart: {
+                        buttons: [
+
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Truck Data',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Truck Data',
+                            },
+                        ]
+                    }
+                },
                 info: false,
                 data: [],
                 columns: [{
@@ -391,6 +594,29 @@
                 paging: false,
                 autoWidth: false,
                 ordering: false,
+                layout: {
+                    topStart: {
+                        buttons: [
+
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Taxi Data',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Taxi Data',
+                            },
+                        ]
+                    }
+                },
                 info: false,
                 data: [],
                 columns: [{
@@ -411,6 +637,29 @@
                 autoWidth: false,
                 ordering: false,
                 info: false,
+                layout: {
+                    topStart: {
+                        buttons: [
+
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Taxi Data',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Peak Search | Taxi Data',
+                            },
+                        ]
+                    }
+                },
                 data: [],
                 columns: [{
                         data: 'no'

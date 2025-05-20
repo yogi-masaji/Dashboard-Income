@@ -723,6 +723,252 @@ class SearchController extends Controller
         return $summary;
     }
 
+    public function incomePelindoSearchAPI(Request $request)
+    {
+        $request->validate([
+            'start1' => 'required|date',
+            'end1'   => 'required|date',
+        ]);
+
+        $startDate = date('Y-m-d', strtotime($request->input('start1')));
+        $endDate   = date('Y-m-d', strtotime($request->input('end1')));
+
+        // Misalnya session kode lokasi sudah diset sebelumnya
+        $locationCode = session('selected_location_kode_lokasi');
+
+        if (!$locationCode) {
+            return response()->json(['success' => false, 'message' => 'Lokasi tidak ditemukan dalam sesi.']);
+        }
+
+        $payload = [
+            'start_date'    => $startDate,
+            'end_date'      => $endDate,
+            'location_code' => $locationCode,
+        ];
+
+        try {
+            $response = Http::post('http://110.0.100.70:8080/v3/api/income-posline-pitj', $payload);
+
+            if (!$response->successful()) {
+                return response()->json(['success' => false, 'message' => 'Gagal ambil data dari API.']);
+            }
+
+            $data = $response->json();
+
+            if (!isset($data['data'][0])) {
+                return response()->json(['success' => false, 'message' => 'Data kosong.']);
+            }
+
+            $item = $data['data'][0];
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'buffer' => $item['buffer'][0] ?? null,
+                    'pos1'   => $item['pos1'][0] ?? null,
+                    'pos8'   => $item['pos8'][0] ?? null,
+                    'pos9'   => $item['pos9'][0] ?? null,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+    }
+
+
+    public function prodpendapatansearchAPI(Request $request)
+    {
+        ini_set('max_execution_time', 300); // Biar PHP script nggak timeout
+
+        $year = $request->input('year');
+        $locationCode = session('selected_location_kode_lokasi');
+
+        $payload = [
+            'start_date' => (string) $year,
+            'location_code' => $locationCode
+        ];
+
+        $response = Http::timeout(300)->post('http://110.0.100.70:8080/api/monthly-income-juanda', $payload);
+
+        $responseData = $response->json();  // Assuming the response is in the same format as described.
+
+        // Prepare the final arranged data
+        $arrangedData = [];
+        $months = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+        ];
+
+        foreach ($months as $month) {
+            $cargoData = [];
+            $terminalData = [];
+            $grandtotalData = [];
+
+            foreach ($responseData['data'][0]['cargo'] as $cargo) {
+                if ($cargo['bulan'] == $month) {
+                    $cargoData[] = $cargo;
+                }
+            }
+
+            foreach ($responseData['data'][0]['terminal'] as $terminal) {
+                if ($terminal['bulan'] == $month) {
+                    $terminalData[] = $terminal;
+                }
+            }
+
+            foreach ($responseData['data'][0]['grandtotal'] as $grandtotal) {
+                if ($grandtotal['bulan'] == $month) {
+                    $grandtotalData[] = $grandtotal;
+                }
+            }
+
+            if (!empty($cargoData) || !empty($terminalData) || !empty($grandtotalData)) {
+                $arrangedData[] = [
+                    'bulan' => $month,
+                    'cargo' => $cargoData,
+                    'terminal' => $terminalData,
+                    'grandtotal' => $grandtotalData
+                ];
+            }
+        }
+
+        return response()->json([
+            'status_name' => 'Success Get Data',
+            'status_code' => 200,
+            'data' => $arrangedData
+        ]);
+    }
+
+
+    public function quantitypergateAPI(Request $request)
+    {
+        ini_set('max_execution_time', 300);
+        // Validate
+        $request->validate([
+            'start1' => 'required|date',
+            'end1' => 'required|date',
+        ]);
+
+        // Format dates
+        $startDate = \Carbon\Carbon::parse($request->start1)->format('d-m-Y');
+        $endDate = \Carbon\Carbon::parse($request->end1)->format('d-m-Y');
+
+        // Get location code from session
+        $locationCode = session('selected_location_kode_lokasi');
+
+        // Prepare payload
+        $payload = [
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'location_code' => $locationCode,
+        ];
+
+        // Call external API
+        try {
+            $response = Http::timeout(300)->post('http://110.0.100.70:8080/v3/api/traffic-golongan-pitj', $payload);
+
+            if (!$response->ok()) {
+                return response()->json(['success' => false, 'message' => 'API error'], 500);
+            }
+
+            $data = $response->json();
+
+            if (empty($data['data'][0])) {
+                return response()->json(['success' => false, 'message' => 'No data found'], 200);
+            }
+
+            $trafik = $data['data'][0];
+
+            // Extract per_pos
+            $perPos = [
+                'buffer_area' => $trafik['per_pos'][0]['buffer_area'] ?? 0,
+                'pos1'        => $trafik['per_pos'][1]['pos_1'] ?? 0,
+                'pos8'        => $trafik['per_pos'][2]['pos_8'] ?? 0,
+                'pos9'        => $trafik['per_pos'][3]['pos_9'] ?? 0,
+                'totalPos'    => $trafik['per_pos'][4]['total'] ?? 0,
+            ];
+
+            // Extract per_golongan
+            $perGolongan = [
+                'motor'         => $trafik['per_golongan'][0]['motor'] ?? 0,
+                'mobil'         => $trafik['per_golongan'][1]['mobil'] ?? 0,
+                'truk'          => $trafik['per_golongan'][2]['truck'] ?? 0,
+                'totalGolongan' => $trafik['per_golongan'][3]['total'] ?? 0,
+            ];
+
+            return response()->json([
+                'success' => true,
+                'per_pos' => $perPos,
+                'per_golongan' => $perGolongan
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+
+    public function dataCompareAPI(Request $request)
+    {
+        // Ambil tanggal dari request POST
+        $start_date = $request->input('startdate');
+        $end_date = $request->input('enddate');
+
+        // Ambil location_code dari session
+        $locationCode = session('selected_location_kode_lokasi');
+
+        // Persiapkan data untuk dikirim ke API
+        $payload = [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'location_code' => $locationCode
+        ];
+
+        // Kirim data ke API eksternal menggunakan HTTP client Laravel
+        $response = Http::post('http://110.0.100.70:8080/v3/api/compare-data', $payload);
+
+        // Decode responsenya
+        $result = $response->json();
+
+        // Ambil data first_period dari data[0]
+        $data = $result['data'][0]['first_period'] ?? null;
+
+        // Kembalikan hasil sebagai JSON
+        return response()->json([$data]);
+    }
+
+    public function dataCompareView()
+    {
+        return view('pages.datacomparesearch');
+    }
+
+
+
+
+    public function quantitypergateView()
+    {
+        return view('pages.quantitypergatesearch');
+    }
+
+
+    public function prodpendapatansearchView()
+    {
+        return view('pages.prodpendapatansearch');
+    }
+
+    public function incomePelindoSearchView()
+    {
+        return view('pages.incomesearchpelindo');
+    }
 
 
     public function ritaseTrafficGateView()

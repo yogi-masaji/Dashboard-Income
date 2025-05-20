@@ -155,6 +155,7 @@
             padding: 10px;
             border-radius: 10px;
             border: none !important;
+            margin-bottom: 10px;
         }
 
         #dt-search-0 {
@@ -287,7 +288,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
-                                            <h6 class="text-muted mb-1">Total Pass</h6>
+                                            <h6 class="text-muted mb-1">Total Quantity Pass</h6>
                                             <h4 class="fw-bold mb-0 total-pass"></h4>
                                             <small class="text-muted tgl_row1"></small>
                                         </div>
@@ -301,7 +302,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
-                                            <h6 class="text-muted mb-1">Total Casual</h6>
+                                            <h6 class="text-muted mb-1">Total Quantity Casual</h6>
                                             <h4 class="fw-bold mb-0 total-casual">Rp 388.532.000</h4>
                                             <small class="text-muted tgl_row1"></small>
                                         </div>
@@ -526,12 +527,12 @@
         </div>
 
         <div class="content-custom">
-            <div class="table-responsive">
+            <div class="-">
                 <table class="table table-striped" id="table-custom">
                     <thead>
                         <tr>
                             <th scope="col" rowspan="3" class="text-center"
-                                style="border-left: 1px solid white; border-top: 1px solid white; border-right: 1px solid white;">
+                                style="width:40px;border-left: 1px solid white; border-top: 1px solid white; border-right: 1px solid white;">
                                 No
                             </th>
                             <th scope="col" colspan="3" rowspan="1" class="text-center"
@@ -616,7 +617,7 @@
                         <table id="IncomePaymentFirst" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
                                     <th scope="col" class="text-center">Date</th>
                                     <th scope="col" class="text-center">Cash</th>
                                     <th scope="col" class="text-center">Parkee</th>
@@ -625,7 +626,7 @@
                                     <th scope="col" class="text-center">Brizzi</th>
                                     <th scope="col" class="text-center">Tapcash</th>
                                     <th scope="col" class="text-center">Qris</th>
-                                    <th scope="col" class="text-center">Dki jackcard</th>
+                                    <th scope="col" class="text-center">Dki Jakcard</th>
                                     <th scope="col" class="text-center">Total</th>
                                 </tr>
                             </thead>
@@ -638,7 +639,7 @@
                         <table id="IncomePaymentSecond" class="table table-striped table-bordered" style="width: 100%">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
                                     <th scope="col" class="text-center">Date</th>
                                     <th scope="col" class="text-center">Cash</th>
                                     <th scope="col" class="text-center">Parkee</th>
@@ -647,7 +648,7 @@
                                     <th scope="col" class="text-center">Brizzi</th>
                                     <th scope="col" class="text-center">Tapcash</th>
                                     <th scope="col" class="text-center">Qris</th>
-                                    <th scope="col" class="text-center">Dki jackcard</th>
+                                    <th scope="col" class="text-center">Dki Jakcard</th>
                                     <th scope="col" class="text-center">Total</th>
                                 </tr>
                             </thead>
@@ -690,7 +691,7 @@
                         <table id="QuantityVehicleFirst" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
                                     <th scope="col" class="text-center">Date</th>
                                     <th scope="col" class="text-center">Mobil</th>
                                     <th scope="col" class="text-center">Motor</th>
@@ -717,7 +718,7 @@
                         <table id="QuantityVehicleSecond" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
                                     <th scope="col" class="text-center">Date</th>
                                     <th scope="col" class="text-center">Mobil</th>
                                     <th scope="col" class="text-center">Motor</th>
@@ -774,7 +775,7 @@
                         <table id="IncomeVehicleFirst" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
                                     <th scope="col" class="text-center">Date</th>
                                     <th scope="col" class="text-center">Mobil</th>
                                     <th scope="col" class="text-center">Motor</th>
@@ -801,7 +802,7 @@
                         <table id="IncomeVehicleSecond" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">No</th>
+                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
                                     <th scope="col" class="text-center">Date</th>
                                     <th scope="col" class="text-center">Mobil</th>
                                     <th scope="col" class="text-center">Motor</th>
@@ -885,6 +886,53 @@
 
             const tableIncomePayment = $('#IncomePaymentFirst').DataTable({
                 searching: false,
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'copyHtml5',
+                                titleAttr: 'Copy to Clipboard',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Payment',
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Payment',
+                            },
+
+
+                            {
+                                extend: 'print',
+                                titleAttr: 'Print',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Payment',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Payment',
+                                customize: function(doc) {
+                                    doc.pageMargins = [20, 30, 20,
+                                        30
+                                    ]; // [left, top, right, bottom]
+                                    doc.defaultStyle.fontSize = 8; // Adjust font size if too large
+                                    doc.styles.tableHeader.alignment = 'center';
+                                    doc.styles.tableHeader.fillColor = '#eeeeee';
+                                },
+                            },
+                        ]
+                    }
+                },
                 paging: true,
                 autoWidth: false,
                 ordering: false,
@@ -931,6 +979,45 @@
             const tableIncomePaymentSecond = $('#IncomePaymentSecond').DataTable({
                 searching: false,
                 paging: true,
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'copyHtml5',
+                                titleAttr: 'Copy to Clipboard',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Payment',
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Payment',
+                            },
+
+
+                            {
+                                extend: 'print',
+                                titleAttr: 'Print',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Payment',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Payment',
+                            },
+                        ]
+                    }
+                },
                 autoWidth: false,
                 ordering: false,
                 pageLength: 5,
@@ -976,6 +1063,64 @@
             const tableQuantityVehicleFirst = $('#QuantityVehicleFirst').DataTable({
                 searching: false,
                 paging: true,
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'copyHtml5',
+                                titleAttr: 'Copy to Clipboard',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Quantity by Vehicle',
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Quantity by Vehicle',
+                            },
+
+
+                            {
+                                extend: 'print',
+                                titleAttr: 'Print',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Quantity by Vehicle',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                title: 'Custom Search | Quantity by Vehicle',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                customize: function(doc) {
+                                    // Ukuran halaman dan orientasi
+                                    doc.pageSize = 'A4';
+                                    doc.pageOrientation = 'landscape';
+
+                                    // Margin halaman [left, top, right, bottom]
+                                    doc.pageMargins = [10, 10, 10, 10];
+
+                                    // Ukuran font konten dan header
+                                    doc.defaultStyle.fontSize = 6;
+                                    doc.styles.tableHeader.fontSize = 7;
+                                    doc.styles.tableHeader.alignment = 'center';
+
+                                    // Atur semua kolom agar lebar fleksibel
+                                    const table = doc.content[1].table;
+                                    const colCount = table.body[0].length;
+                                    table.widths = Array(colCount).fill('*');
+                                }
+                            },
+
+                        ]
+                    }
+                },
                 autoWidth: false,
                 ordering: false,
                 pageLength: 5,
@@ -1036,6 +1181,63 @@
             const tableQuantityVehicleSecond = $('#QuantityVehicleSecond').DataTable({
                 searching: false,
                 paging: true,
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'copyHtml5',
+                                titleAttr: 'Copy to Clipboard',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Quantity by Vehicle',
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Quantity by Vehicle',
+                            },
+
+
+                            {
+                                extend: 'print',
+                                titleAttr: 'Print',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Quantity by Vehicle',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                title: 'Custom Search | Quantity by Vehicle',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                customize: function(doc) {
+                                    // Ukuran halaman dan orientasi
+                                    doc.pageSize = 'A4';
+                                    doc.pageOrientation = 'landscape';
+
+                                    // Margin halaman [left, top, right, bottom]
+                                    doc.pageMargins = [10, 10, 10, 10];
+
+                                    // Ukuran font konten dan header
+                                    doc.defaultStyle.fontSize = 6;
+                                    doc.styles.tableHeader.fontSize = 7;
+                                    doc.styles.tableHeader.alignment = 'center';
+
+                                    // Atur semua kolom agar lebar fleksibel
+                                    const table = doc.content[1].table;
+                                    const colCount = table.body[0].length;
+                                    table.widths = Array(colCount).fill('*');
+                                }
+                            },
+                        ]
+                    }
+                },
                 autoWidth: false,
                 ordering: false,
                 pageLength: 5,
@@ -1097,6 +1299,63 @@
                 searching: false,
                 paging: true,
                 autoWidth: false,
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'copyHtml5',
+                                titleAttr: 'Copy to Clipboard',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Vehicle',
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Vehicle',
+                            },
+
+
+                            {
+                                extend: 'print',
+                                titleAttr: 'Print',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Vehicle',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                title: 'Custom Search | Income by Vehicle',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                customize: function(doc) {
+                                    // Ukuran halaman dan orientasi
+                                    doc.pageSize = 'A4';
+                                    doc.pageOrientation = 'landscape';
+
+                                    // Margin halaman [left, top, right, bottom]
+                                    doc.pageMargins = [10, 10, 10, 10];
+
+                                    // Ukuran font konten dan header
+                                    doc.defaultStyle.fontSize = 6;
+                                    doc.styles.tableHeader.fontSize = 7;
+                                    doc.styles.tableHeader.alignment = 'center';
+
+                                    // Atur semua kolom agar lebar fleksibel
+                                    const table = doc.content[1].table;
+                                    const colCount = table.body[0].length;
+                                    table.widths = Array(colCount).fill('*');
+                                }
+                            },
+                        ]
+                    }
+                },
                 ordering: false,
                 pageLength: 5,
                 lengthChange: false,
@@ -1156,6 +1415,63 @@
             const tableIncomeVehicleSecond = $('#IncomeVehicleSecond').DataTable({
                 searching: false,
                 paging: true,
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                extend: 'copyHtml5',
+                                titleAttr: 'Copy to Clipboard',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Vehicle',
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                titleAttr: 'Export to Excel',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Vehicle',
+                            },
+
+
+                            {
+                                extend: 'print',
+                                titleAttr: 'Print',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: 'Custom Search | Income by Vehicle',
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                titleAttr: 'Export to PDF',
+                                title: 'Custom Search | Income by Vehicle',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                customize: function(doc) {
+                                    // Ukuran halaman dan orientasi
+                                    doc.pageSize = 'A4';
+                                    doc.pageOrientation = 'landscape';
+
+                                    // Margin halaman [left, top, right, bottom]
+                                    doc.pageMargins = [10, 10, 10, 10];
+
+                                    // Ukuran font konten dan header
+                                    doc.defaultStyle.fontSize = 6;
+                                    doc.styles.tableHeader.fontSize = 7;
+                                    doc.styles.tableHeader.alignment = 'center';
+
+                                    // Atur semua kolom agar lebar fleksibel
+                                    const table = doc.content[1].table;
+                                    const colCount = table.body[0].length;
+                                    table.widths = Array(colCount).fill('*');
+                                }
+                            },
+                        ]
+                    }
+                },
                 autoWidth: false,
                 ordering: false,
                 pageLength: 5,
@@ -1637,6 +1953,86 @@
                         });
 
 
+                        const doughnutLabelsLine = {
+                            id: 'doughnutLabelsLine',
+                            afterDraw(chart, args, options) {
+                                const {
+                                    ctx,
+                                    chartArea: {
+                                        top,
+                                        bottom,
+                                        left,
+                                        right,
+                                        width,
+                                        height
+                                    }
+                                } = chart;
+                                chart.data.datasets.forEach((dataset, i) => {
+                                    // if (chart.getDatasetMeta(i).hidden) return;
+                                    chart.getDatasetMeta(i).data.forEach((datapoint,
+                                        index) => {
+                                        const {
+                                            x,
+                                            y
+                                        } = datapoint.tooltipPosition();
+
+                                        ctx.fillStyle = dataset
+                                            .backgroundColor[index];
+
+                                        const halfwidth = width / 2;
+                                        const halfheight = height / 2;
+
+                                        const xLine = x >= halfwidth ? x +
+                                            40 : x - 40;
+                                        const yLine = y >= halfheight ? y +
+                                            40 : y - 40;
+                                        const extraLine = x >= halfwidth ?
+                                            25 : -25;
+
+                                        // Line
+                                        ctx.beginPath();
+                                        ctx.moveTo(x, y);
+                                        ctx.lineTo(xLine, yLine);
+                                        ctx.lineTo(xLine + extraLine,
+                                            yLine);
+                                        ctx.strokeStyle = dataset
+                                            .backgroundColor[index];
+                                        ctx.stroke();
+
+                                        // Text
+                                        const total = dataset.data.reduce((
+                                                acc, val) => acc + val,
+                                            0);
+                                        const percentage = ((dataset.data[
+                                                index] / total) * 100)
+                                            .toFixed(1) + '%';
+                                        ctx.font = 'bold 17px Arial';
+
+                                        const textXPosition = x >=
+                                            halfwidth ? 'left' : 'right';
+                                        const newPx = x >= halfwidth ? 5 : -
+                                            5;
+                                        ctx.textAlign = textXPosition;
+                                        ctx.textBaseline = 'middle';
+                                        ctx.fillStyle = dataset
+                                            .backgroundColor[index];
+                                        ctx.fillText(percentage, xLine +
+                                            extraLine + newPx, yLine);
+                                    })
+                                })
+                            }
+                        }
+
+                        const distanceLegend = {
+                            beforeInit(chart) {
+                                const originalFit = chart.legend.fit;
+                                chart.legend.fit = function fit() {
+                                    originalFit.bind(chart.legend)();
+                                    this.height += 20;
+                                }
+                            }
+                        }
+
                         const firstVehicleDistributionData = {
                             labels: ['Car', 'Motorbike', 'Truck', 'Taxi', 'Valet',
                                 'Car Preferred',
@@ -1663,13 +2059,16 @@
 
                         }
 
+
+
+
                         // pie chart 
                         const firstVehicleDistributionOptions = {
                             responsive: true,
                             maintainAspectRatio: false,
                             plugins: {
                                 legend: {
-                                    position: 'top',
+                                    position: 'right',
                                     labels: {
                                         color: '#fff',
 
@@ -1679,20 +2078,29 @@
                                     display: true,
                                     text: 'First Period Vehicle Distribution',
                                     color: '#fff',
+                                    padding: {
+                                        top: 10,
+                                        bottom: 30
+                                    }
                                 },
                                 datalabels: {
                                     color: '#fff',
-                                    formatter: (value, context) => {
-                                        const label = context.chart.data.labels[context
-                                            .dataIndex];
-                                        return `${label}: ${formatQuantity(value)}`;
-                                    },
-                                    anchor: 'center',
-                                    align: 'center',
-                                    font: {
-                                        size: 10,
-                                        weight: 'bold',
-                                    }
+                                    // formatter: (value, context) => {
+                                    //     const total = context.chart.data.datasets[0]
+                                    //         .data.reduce((sum, val) => sum + val, 0);
+                                    //     const percentage = ((value / total) * 100)
+                                    //         .toFixed(1); // 1 decimal
+                                    //     const label = context.chart.data.labels[context
+                                    //         .dataIndex];
+                                    //     // return `${label}: (${formatQuantity(value)})`;
+                                    // },
+
+                                    // anchor: 'center',
+                                    // align: 'center',
+                                    // font: {
+                                    //     size: 10,
+                                    //     weight: 'bold',
+                                    // }
                                 }
                             },
 
@@ -1714,7 +2122,7 @@
                                 data: firstVehicleDistributionData,
                                 options: firstVehicleDistributionOptions,
                                 plugins: [
-                                    ChartDataLabels
+                                    ChartDataLabels, doughnutLabelsLine, distanceLegend
                                 ]
                             });
 
@@ -1763,17 +2171,21 @@
                                 },
                                 datalabels: {
                                     color: '#fff',
-                                    formatter: (value, context) => {
-                                        const label = context.chart.data.labels[context
-                                            .dataIndex];
-                                        return `${label}: ${formatQuantity(value)}`;
-                                    },
-                                    anchor: 'center',
-                                    align: 'center',
-                                    font: {
-                                        size: 10,
-                                        weight: 'bold',
-                                    }
+                                    // formatter: (value, context) => {
+                                    //     const total = context.chart.data.datasets[0]
+                                    //         .data.reduce((sum, val) => sum + val, 0);
+                                    //     const percentage = ((value / total) * 100)
+                                    //         .toFixed(1); // 1 decimal
+                                    //     const label = context.chart.data.labels[context
+                                    //         .dataIndex];
+                                    //     return `${label}: ${percentage}% (${formatQuantity(value)})`;
+                                    // },
+                                    // anchor: 'center',
+                                    // align: 'center',
+                                    // font: {
+                                    //     size: 10,
+                                    //     weight: 'bold',
+                                    // }
                                 }
                             },
 
@@ -1793,7 +2205,7 @@
                                 data: secondVehicleDistributionData,
                                 options: secondVehicleDistributionOptions,
                                 plugins: [
-                                    ChartDataLabels
+                                    ChartDataLabels, doughnutLabelsLine, distanceLegend
                                 ]
                             });
 
@@ -2202,7 +2614,15 @@
                             datasets: [{
                                 label: 'Daily Revenue First Period',
                                 data: DailyRevenueFirst,
-                                backgroundColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: dailyRevenueFirstLabel.map(
+                                    label => {
+                                        const day = new Date(label).getDay();
+                                        if (day === 6 || day === 0) {
+                                            return 'green'; // Sabtu atau Minggu
+                                        }
+                                        return 'rgba(255, 99, 132, 1)';
+                                    }),
+
                             }]
                         };
 
@@ -2241,7 +2661,7 @@
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Daily Revenue First Period',
+                                    text: 'Daily Revenue First Period title',
                                     color: '#fff',
                                 }
                             }
@@ -2251,12 +2671,17 @@
                         if (window.dailyRevenueFirstChart) {
                             window.dailyRevenueFirstChart.destroy();
                         }
-
+                        console.log('ini label', dailyRevenueFirstLabel)
                         // Buat ulang chart dengan data terbaru
                         const dailyRevenueFirstCtx = document.getElementById(
                                 'dailyRevenueFirstBar')
                             .getContext('2d');
 
+                        function highlightDay() {
+                            console.log('ini label', dailyRevenueFirstLabel)
+                        }
+
+                        highlightDay();
                         window.dailyRevenueFirstChart = new Chart(dailyRevenueFirstCtx, {
                             type: 'bar',
                             data: dailyRevenueFirstData,
@@ -2268,7 +2693,14 @@
                             datasets: [{
                                 label: 'Daily Revenue Second Period',
                                 data: DailyRevenueSecond,
-                                backgroundColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: dailyRevenueSecondLabel.map(
+                                    label => {
+                                        const day = new Date(label).getDay();
+                                        if (day === 6 || day === 0) {
+                                            return 'green'; // Sabtu atau Minggu
+                                        }
+                                        return 'rgba(255, 99, 132, 1)';
+                                    }),
                             }]
                         };
 
@@ -2546,7 +2978,7 @@
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid white; border-top: 1px solid white; border-right: 1px solid white;"></td>
+            <td class="text-center" style="border-left: 1px solid white; border-top: 1px solid white; border-right: 1px solid white;">13</td>
             <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">Grand Total</td>
             <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatRupiah(GrandTotals.income_payment.first_period)}</td>
             <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatRupiah(GrandTotals.income_payment.second_period)}</td>
@@ -2575,6 +3007,71 @@
             <td class="text-center" style="border-top: 1px solid white; border-right: 1px solid white;">${formatRupiah(firstPeriodTotals.stickerincome)}</td>
         </tr>
     `);
+
+                        if ($.fn.DataTable.isDataTable('#table-custom')) {
+                            $('#table-custom').DataTable().clear().destroy();
+                        }
+
+
+                        $('#table-custom').DataTable({
+                            searching: false,
+                            paging: false,
+                            ordering: false,
+                            lengthChange: false,
+                            info: false,
+                            autoWidth: false,
+                            layout: {
+                                topStart: {
+                                    buttons: [{
+                                            extend: 'copyHtml5',
+                                            titleAttr: 'Copy to Clipboard',
+                                            exportOptions: {
+                                                columns: ':visible'
+                                            },
+                                            title: 'Custom Search | Income by Payment',
+                                        },
+                                        {
+                                            extend: 'excelHtml5',
+                                            titleAttr: 'Export to Excel',
+                                            exportOptions: {
+                                                columns: ':visible'
+                                            },
+                                            title: 'Custom Search | Income by Payment',
+                                        },
+
+
+                                        {
+                                            extend: 'print',
+                                            titleAttr: 'Print',
+                                            exportOptions: {
+                                                columns: ':visible'
+                                            },
+                                            title: 'Custom Search | Income by Payment',
+                                        },
+                                        {
+                                            extend: 'pdfHtml5',
+                                            titleAttr: 'Export to PDF',
+                                            exportOptions: {
+                                                columns: ':visible'
+                                            },
+                                            title: 'Custom Search | Income by Payment',
+                                            customize: function(doc) {
+                                                doc.pageMargins = [20, 30, 20,
+                                                    30
+                                                ]; // [left, top, right, bottom]
+                                                doc.defaultStyle.fontSize =
+                                                    8; // Adjust font size if too large
+                                                doc.styles.tableHeader
+                                                    .alignment = 'center';
+                                                doc.styles.tableHeader
+                                                    .fillColor = '#eeeeee';
+                                            },
+                                        },
+                                    ]
+                                }
+                            },
+                        });
+
 
                         const comparePaymentLabel = [{
                                 label: 'Cash',

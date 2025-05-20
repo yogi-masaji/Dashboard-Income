@@ -46,6 +46,8 @@
     <script src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.print.min.js"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link rel="stylesheet" href="vendor/fonts/boxicons.css" />
 
@@ -76,7 +78,7 @@
             font-weight: 600;
             padding: 8px 20px;
             transition: all 0.3s ease;
-            color: #fff;
+            color: #000000;
         }
 
         .btn-submit:hover {
@@ -147,6 +149,70 @@
             /* Remove any margin */
         }
     </style>
+    <style>
+        /* Sidebar animation and transition styles */
+        .layout-menu {
+            transition: width 0.3s ease, transform 0.3s ease, opacity 0.2s ease;
+            will-change: width, transform, opacity;
+        }
+
+        .menu-animation {
+            animation: sidebarPulse 0.3s ease;
+        }
+
+        @keyframes sidebarPulse {
+            0% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 0.95;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Improved overlay styles */
+        .layout-overlay {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .layout-wrapper:not(.layout-menu-collapsed) .layout-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Toggle button animation */
+        .layout-menu-toggle i {
+            transition: transform 0.3s ease;
+        }
+
+        .layout-menu-collapsed .layout-menu-toggle i.bx-chevron-right {
+            transform: rotate(0deg);
+        }
+
+        .layout-wrapper:not(.layout-menu-collapsed) .layout-menu-toggle i.bx-chevron-left {
+            transform: rotate(0deg);
+        }
+
+        /* Improved mobile experience */
+        @media (max-width: 1199.98px) {
+            .layout-menu {
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+                transform: translateX(-100%);
+            }
+
+            .layout-wrapper:not(.layout-menu-collapsed) .layout-menu {
+                transform: translateX(0);
+            }
+        }
+    </style>
 
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
@@ -186,7 +252,7 @@
                             @endforeach
                         </select>
 
-                        <button type="submit" class="btn btn-submit mt-2" style="color:#fff">Submit</button>
+                        <button type="submit" class="btn btn-submit mt-2">Submit</button>
                     </div>
                 </form>
 
@@ -395,14 +461,132 @@
 
 
 
-    <!-- Place this tag before closing body tag for github widget button. -->
+
 </body>
 <script>
-    document.getElementById("desktop-toggle").addEventListener("click", function() {
-        document.querySelector(".layout-wrapper").classList.toggle("layout-menu-collapsed");
-    });
-    document.getElementById("mobile-toggle").addEventListener("click", function() {
-        document.querySelector(".layout-wrapper").classList.toggle("layout-menu-collapsed");
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elements
+        const layoutWrapper = document.querySelector(".layout-wrapper");
+        const desktopToggle = document.getElementById("desktop-toggle");
+        const mobileToggle = document.getElementById("mobile-toggle");
+        const layoutMenu = document.getElementById("layout-menu");
+        const layoutPage = document.querySelector(".layout-page");
+        const overlay = document.querySelector(".layout-overlay");
+
+        // Track if toggle was just clicked to prevent immediate closing
+        let toggleJustClicked = false;
+
+        // Function to toggle sidebar
+        function toggleSidebar() {
+            layoutWrapper.classList.toggle("layout-menu-collapsed");
+
+            // Add animation class
+            layoutMenu.classList.add("menu-animation");
+
+            // Remove animation class after transition completes
+            setTimeout(() => {
+                layoutMenu.classList.remove("menu-animation");
+            }, 300);
+
+            // Save state to localStorage
+            const isCollapsed = layoutWrapper.classList.contains("layout-menu-collapsed");
+            localStorage.setItem("sidebarState", isCollapsed ? "collapsed" : "expanded");
+
+            // Set flag to prevent immediate closing on mobile
+            toggleJustClicked = true;
+            setTimeout(() => {
+                toggleJustClicked = false;
+            }, 100);
+        }
+
+        // Desktop toggle
+        desktopToggle.addEventListener("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent event from bubbling up
+            toggleSidebar();
+
+            // Rotate icon based on sidebar state
+            const icon = this.querySelector("i");
+            if (layoutWrapper.classList.contains("layout-menu-collapsed")) {
+                icon.classList.remove("bx-chevron-left");
+                icon.classList.add("bx-chevron-right");
+            } else {
+                icon.classList.remove("bx-chevron-right");
+                icon.classList.add("bx-chevron-left");
+            }
+        });
+
+        // Mobile toggle
+        mobileToggle.addEventListener("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent event from bubbling up
+            toggleSidebar();
+        });
+
+        // Close sidebar when clicking on overlay
+        if (overlay) {
+            overlay.addEventListener("click", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!layoutWrapper.classList.contains("layout-menu-collapsed")) {
+                    toggleSidebar();
+                }
+            });
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener("click", function(e) {
+            const isMobile = window.innerWidth < 1200; // xl breakpoint
+
+            // Don't close if toggle was just clicked or if clicking inside the menu
+            if (toggleJustClicked || e.target.closest("#layout-menu") || e.target.closest(
+                    "#mobile-toggle")) {
+                return;
+            }
+
+            if (isMobile &&
+                !layoutWrapper.classList.contains("layout-menu-collapsed")) {
+                toggleSidebar();
+            }
+        });
+
+        // Prevent clicks inside the sidebar from closing it
+        if (layoutMenu) {
+            layoutMenu.addEventListener("click", function(e) {
+                e.stopPropagation(); // Stop propagation to prevent document click handler
+            });
+        }
+
+        // Handle window resize - but don't auto-collapse on resize
+        let resizeTimer;
+        window.addEventListener("resize", function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                // Only adjust for dramatic size changes like orientation change
+                const isMobile = window.innerWidth < 1200;
+                const wasDesktop = window.innerWidth >= 1200;
+
+                // We don't auto-collapse anymore on resize to prevent disrupting the user
+            }, 250);
+        });
+
+        // Restore sidebar state from localStorage on page load
+        const savedState = localStorage.getItem("sidebarState");
+        const isMobile = window.innerWidth < 1200;
+
+        // On mobile, always start collapsed regardless of saved state
+        if (isMobile && !layoutWrapper.classList.contains("layout-menu-collapsed")) {
+            layoutWrapper.classList.add("layout-menu-collapsed");
+        }
+        // On desktop, respect the saved state
+        else if (!isMobile && savedState === "collapsed" && !layoutWrapper.classList.contains(
+                "layout-menu-collapsed")) {
+            toggleSidebar();
+            // Update desktop toggle icon
+            const icon = desktopToggle.querySelector("i");
+            icon.classList.remove("bx-chevron-left");
+            icon.classList.add("bx-chevron-right");
+        }
     });
 </script>
 

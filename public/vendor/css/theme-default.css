@@ -370,7 +370,7 @@ button.list-group-item-primary.active {
 .nav-pills .nav-link.active:hover,
 .nav-pills .nav-link.active:focus {
     background-color: #FCB900;
-    color: #175390;
+    color: #000000;
     border-radius: 10px;
 }
 

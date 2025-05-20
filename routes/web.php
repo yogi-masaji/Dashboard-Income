@@ -71,6 +71,15 @@ Route::get('/testable', function () {
     return view('pages.test');
 });
 
+
+Route::get('/data-compare', [SearchController::class, 'dataCompareView'])->name('dataCompareView');
+Route::post('/data-compare-api', [SearchController::class, 'dataCompareAPI'])->name('dataCompareAPI');
+Route::post('/quantity-pergate-api', [SearchController::class, 'quantitypergateAPI'])->name('quantitypergateAPI');
+Route::get('/quantity-pergate', [SearchController::class, 'quantitypergateView'])->name('quantitypergateView');
+Route::post('/income-reguler-search-api', [SearchController::class, 'prodpendapatansearchAPI'])->name('prodpendapatansearchAPI');
+Route::get('/income-reguler-search', [SearchController::class, 'prodpendapatansearchView'])->name('prodpendapatansearchView');
+Route::post('/income-produksi-pelindo-api', [SearchController::class, 'incomePelindoSearchAPI'])->name('incomePelindoSearchAPI');
+Route::get('/income-produksi-pelindo', [SearchController::class, 'incomePelindoSearchView'])->name('incomePelindoSearchView');
 Route::get('/ritase-traffic-gate', [SearchController::class, 'ritaseTrafficGateView'])->name('ritaseTrafficGateView');
 Route::post('/ritase-traffic-gate-api', [SearchController::class, 'ritaseTrafficGateSearchAPI'])->name('ritaseTrafficGateSearchAPI');
 Route::post('/ritase-duration-api', [SearchController::class, 'ritaseDurationSearchAPI'])->name('ritaseDurationSearchAPI');
