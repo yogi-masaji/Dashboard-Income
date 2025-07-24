@@ -42,7 +42,7 @@ h6 {
 }
 
 .dark-mode {
-    background-color:  #0A1525;
+    background-color:  #F3F4F6;
     /* Dark background for the whole page */
     color: #ffffff !important;
     /* Light text color */
@@ -50,8 +50,8 @@ h6 {
 
 /* Navbar - Dark mode */
 .dark-mode .navbar.bg-navbar-theme {
-    background-color: #092953 !important;
-    color: #ffffff;
+    background-color: #ffffff !important;
+    color: #000000;
 }
 
 .dark-mode .navbar.bg-navbar-theme .navbar-brand,
@@ -81,7 +81,7 @@ h6 {
 .dark-mode h3,
 .dark-mode h5,
 .dark-mode h6 {
-    color: #ffffff; /* White text for dark mode */
+    color: #000000; /* White text for dark mode */
 }
 h3,
 h5,
@@ -90,7 +90,7 @@ h6 {
 }
 /* Menu - Dark mode */
 .dark-mode .bg-menu-theme {
-    background-color: #092953 !important;
+    background-color: #061933 !important;
     color: #ffffff;
 }
 
@@ -117,7 +117,7 @@ h6 {
 
 /* Footer - Dark mode */
 .dark-mode .bg-footer-theme {
-    background-color: #092953;
+    background-color: #061933;
     color: #ffffff !important;
 }
 
@@ -133,10 +133,10 @@ option {
 }
 /* Dark Mode for Tables */
 .dark-mode .table {
-    --bs-table-color: #ffffff; /* Light text color for the table */
+    --bs-table-color: #000000; /* Light text color for the table */
     --bs-table-bg: #121212; /* Dark background for the table */
-    --bs-table-border-color: #464867; /* Darker border color */
-    --bs-table-accent-bg: #0F1A2E; /* Accent background for table */
+    --bs-table-border-color: #d9d9d9; /* Darker border color */
+    --bs-table-accent-bg: #ffffff; /* Accent background for table */
     --bs-table-striped-color: #ffffff; /* Light text color for striped rows */
     --bs-table-striped-bg: #121E32; /* Darker striped rows */
     --bs-table-active-color: #ffffff; /* Light text color for active rows */
@@ -205,8 +205,8 @@ option {
 }
 
 .dark-mode .table-striped > tbody > tr:nth-of-type(odd) > * {
-    --bs-table-color-type: var(--bs-table-striped-color);
-    --bs-table-bg-type: #153259;
+    --bs-table-color-type: #212529;
+    --bs-table-bg-type: #F2F2F2;
 }
 
 .dark-mode .table-striped-columns > :not(caption) > tr > :nth-child(even) {

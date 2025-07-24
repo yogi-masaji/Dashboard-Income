@@ -2,29 +2,14 @@
     <div class="col-12">
         <h5>Weekly Quantity</h5>
 
-        <div class="row" id="dashboardRow">
-            {{-- @foreach ($processedData as $data)
-                <!-- Total Casual Card -->
-                <div class="col-md-4">
-                    <div class="dashboard-card">
-                        <div class="card-title">{{ $data['label'] }}</div>
-                        <div class="d-flex align-items-baseline">
-                            <h2 class="card-value">{{ $data['today'] }}</h2>
-                            <span class=" ms-2" style="color: {{ $data['color'] }}">
-                                {{ $data['percent_change'] }}%
-                                {{ $data['direction'] }}</span>
-                        </div>
-                        <div class="yesterday">Yesterday: {{ $data['yesterday'] }}</div>
-                    </div>
+        <div class="row d-flex align-items-stretch" id="dashboardRow">
+            <div class="col-md-6 d-flex">
+                <div class="content-custom flex-fill">
+                    <div class="row" id="weekly-transaction-comparison"></div>
                 </div>
-            @endforeach --}}
-            <div class="row" id="weekly-transaction-comparison"></div>
-
-
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="content-custom">
+            </div>
+            <div class="col-md-6 d-flex">
+                <div class="content-custom flex-fill" style="min-height: 373px;">
                     <table id="weeklyQuantity" class="table table-striped">
                         <thead>
                             <tr>
@@ -45,8 +30,11 @@
 
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="content-custom">
+
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <div class="content-custom" style="min-height: 350px;">
 
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -61,15 +49,17 @@
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-weekly" role="tabpanel"
                             aria-labelledby="nav-weekly-tab" tabindex="0">
-                            <canvas id="weeklyQuantityBar" height="200" width="auto"></canvas>
+                            <canvas id="weeklyQuantityBar" height="100" width="auto"></canvas>
                         </div>
                         <div class="tab-pane fade" id="nav-weekly-line" role="tabpanel"
                             aria-labelledby="nav-weekly-line-tab" tabindex="0">
-                            <canvas id="weeklyQuantityLine" height="200" width="auto"></canvas>
+                            <canvas id="weeklyQuantityLine" height="100" width="auto"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 </div>

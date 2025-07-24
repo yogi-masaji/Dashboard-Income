@@ -349,18 +349,18 @@ button.list-group-item-primary.active {
 
 .dropdown-item:not(.disabled).active,
 .dropdown-item:not(.disabled):active {
-    background-color: rgba(105, 108, 255, 0.16);
-    color: #696cff !important;
+    background-color: rgb(6 25 51 / 28%);
+    color: #000000 !important;
 }
 
 .dropdown-menu > li:not(.disabled) > a:not(.dropdown-item):active,
 .dropdown-menu > li.active:not(.disabled) > a:not(.dropdown-item) {
-    background-color: rgba(105, 108, 255, 0.16);
-    color: #696cff !important;
+   background-color: rgb(6 25 51 / 28%);
+    color: #000000 !important;
 }
 
 .dt-button-collection .dropdown-item:not(.disabled):active {
-    background-color: rgba(105, 108, 255, 0.16);
+    background-color: rgb(6 25 51 / 28%);
 }
 
 .nav-pills .nav-link.active {

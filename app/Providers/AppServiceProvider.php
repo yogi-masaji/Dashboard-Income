@@ -27,8 +27,6 @@ class AppServiceProvider extends ServiceProvider
             }); ?>";
         });
 
-
-
         View::composer('*', function ($view) {
             // Ambil semua lokasi
             $locations = lokasi::orderBy('nama_lokasi', 'asc')->get();
@@ -40,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
             if (session()->has('selected_location_id_grup')) {
                 $idGroup = session('selected_location_id_grup');
 
-                // Ambil semua menu hanya sekali
+                // Ambil semua menu hanya sekali dari database
                 $menus = DB::table('ms_menu')
                     ->join('group_menu', 'ms_menu.id_Menu', '=', 'group_menu.id_Menu')
                     ->where('group_menu.id_Group', $idGroup)
@@ -48,52 +46,73 @@ class AppServiceProvider extends ServiceProvider
                     ->select('ms_menu.*')
                     ->get();
 
-                // Menu untuk navbar (sidebar)
+                // --- Logika Menu Navbar Terpusat dengan Bootstrap Icons ---
+
+                // All
                 if ($menus->whereIn('id_Menu', [10, 4])->isNotEmpty()) {
-                    $navbarMenus['All'] = '/all';
+                    $navbarMenus[] = [
+                        'name' => 'All',
+                        'url' => '/all',
+                        'icon' => 'bi bi-house-door', // Bootstrap Icon
+                        'children' => collect()
+                    ];
                 }
+
+                // Transaction
                 if ($menus->whereIn('id_Menu', [1, 2, 3, 4, 5, 6, 7, 10, 8, 9, 11])->isNotEmpty()) {
-                    $navbarMenus['Transaction'] = '/transaction';
+                    $navbarMenus[] = [
+                        'name' => 'Transaction',
+                        'url' => '/transaction',
+                        'icon' => 'bi bi-receipt', // Bootstrap Icon
+                        'children' => collect()
+                    ];
                 }
 
-                $searchMenus = $menus->whereIn('id_Menu', [
-                    12,
-                    13,
-                    15,
-                    16,
-                    // 17,
-                    // 18,
-                    19,
-                    20,
-                    // 21,
-                    26,
-                    30,
-                    136,
-                    137,
-                    138,
-                    139,
-                    140,
-                    141,
-                    142,
-                    143,
-                    144,
-                    145,
-                    147,
-                    148,
-                    149,
-                    150,
-                    151,
-                    152,
-                    153
-                ]);
+                // Search
+                $searchMenus = $menus->whereIn('id_Menu', [12, 13, 15, 16, 19, 20, 26, 30, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 147, 148, 149, 150, 151, 152, 153]);
                 if ($searchMenus->isNotEmpty()) {
-                    $navbarMenus['Search'] = $searchMenus;
+                    $navbarMenus[] = [
+                        'name' => 'Search',
+                        'url' => 'javascript:void(0);',
+                        'icon' => 'bi bi-search', // Bootstrap Icon
+                        'children' => $searchMenus
+                    ];
                 }
 
+                $reportOperational = $menus->whereIn('id_Menu', [14]);
+                if ($reportOperational->isNotEmpty()) {
+                    $navbarMenus[] = [
+                        'name' => 'Report Operational',
+                        'url' => 'javascript:void(0);',
+                        'icon' => 'bi bi-bar-chart', // Bootstrap Icon
+                        'children' => $reportOperational
+                    ];
+                }
+
+                // Configuration
+                $configMenus = $menus->whereIn('id_Menu', [133, 134, 135, 146]);
+                if ($configMenus->isNotEmpty()) {
+                    $navbarMenus[] = [
+                        'name' => 'Configuration',
+                        'url' => 'javascript:void(0);',
+                        'icon' => 'bi bi-gear', // Bootstrap Icon
+                        'children' => $configMenus
+                    ];
+                }
+
+                // My Account
                 $myAccount = $menus->whereIn('id_Menu', [27]);
                 if ($myAccount->isNotEmpty()) {
-                    $navbarMenus['My Account'] = $myAccount;
+                    $navbarMenus[] = [
+                        'name' => 'My Account',
+                        'url' => 'javascript:void(0);',
+                        'icon' => 'bi bi-person-circle', // Bootstrap Icon
+                        'children' => $myAccount
+                    ];
                 }
+
+                // --- Akhir Logika Menu Navbar ---
+
 
                 // Menu untuk nav pills (tab horizontal)
                 $singleLinks = [

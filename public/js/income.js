@@ -83,20 +83,20 @@ $(document).ready(function() {
         const container = $('#daily-income-comparison');
 
         container.empty(); // Biar gak dobel kalau dipanggil ulang
-
-        compare.forEach(vehicle => {
+            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6'];
+        compare.forEach((vehicle, index) => {
             const html = `
-                <div class="col-md-4">
+                <div class="${colClasses[index]}">
                     <div class="dashboard-card">
-                        <div class="card-title">${vehicle.vehicle}</div>
+                        <div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div>
                         <div class="d-flex align-items-baseline">
-                            <h5 class="card-value">${formatRupiah(vehicle.today)}</h5>
-                            <span class="ms-2" style="color: ${vehicle.color}">
+                            <h6 class="card-value" style="color: #000 !important;">${formatRupiah(vehicle.today)}</h6>
+                            <span class="ms-2" style="color: ${vehicle.color}; font-size:12px;">
                                 ${vehicle.percent_change}
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Yesterday: ${formatRupiah(vehicle.yesterday)}</div>
+                        <div class="yesterday" style="color: #000 !important;">Yesterday: ${formatRupiah(vehicle.yesterday)}</div>
                     </div>
                 </div>
             `;
@@ -184,7 +184,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -233,20 +233,20 @@ $(document).ready(function() {
             const container = $('#weekly-income-comparison');
 
         container.empty(); // Biar gak dobel kalau dipanggil ulang
-
-        compare.forEach(vehicle => {
+        const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6'];
+        compare.forEach((vehicle, index) => {
             const html = `
-                <div class="col-md-4">
+                <div class="${colClasses[index]}">
                     <div class="dashboard-card">
-                        <div class="card-title">${vehicle.vehicle}</div>
+                        <div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div>
                         <div class="d-flex align-items-baseline">
-                            <h5 class="card-value">${formatRupiah(vehicle.this_week)}</h5>
-                            <span class="ms-2" style="color: ${vehicle.color}">
+                            <h6 class="card-value" style="color: #000 !important;">${formatRupiah(vehicle.this_week)}</h6>
+                            <span class="ms-2" style="color: ${vehicle.color}; font-size:12px;">
                                 ${vehicle.percent_change}
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Two Weeks Ago: ${formatRupiah(vehicle.last_week)}</div>
+                        <div class="yesterday" style="color: #000 !important;">Two Weeks Ago: ${formatRupiah(vehicle.last_week)}</div>
                     </div>
                 </div>
             `;
@@ -399,7 +399,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -428,13 +428,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                               color: '#000',
                             },
                             grace: '10%'
                         },
                         x: {
                             ticks: {
-                                color: '#fff'
+                               color: '#000',
                             }
                         }
                     }
@@ -521,7 +521,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -550,13 +550,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                               color: '#000',
                             },
                             grace: '10%'
                         },
                         x: {
                             ticks: {
-                                color: '#fff'
+                               color: '#000',
                             }
                         }
                     }
@@ -590,20 +590,20 @@ $(document).ready(function() {
             const container = $('#monthly-income-comparison');
 
         container.empty(); // Biar gak dobel kalau dipanggil ulang
-
-        compare.forEach(vehicle => {
+        const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6'];
+        compare.forEach((vehicle, index) => {
             const html = `
-                <div class="col-md-4">
+                <div class="${colClasses[index]}">
                     <div class="dashboard-card">
-                        <div class="card-title">${vehicle.vehicle}</div>
+                        <div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div>
                         <div class="d-flex align-items-baseline">
-                            <h5 class="card-value">${formatRupiah(vehicle.last_month)}</h5>
-                            <span class="ms-2" style="color: ${vehicle.color}">
+                            <h6 class="card-value" style="color: #000 !important;">${formatRupiah(vehicle.last_month)}</h6>
+                            <span class="ms-2" style="color: ${vehicle.color}; font-size:12px;">
                                 ${vehicle.percent_change}
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Two Months Ago: ${formatRupiah(vehicle.last_month)}</div>
+                        <div class="yesterday" style="color: #000 !important;">Two Months Ago: ${formatRupiah(vehicle.last_month)}</div>
                     </div>
                 </div>
             `;
@@ -817,7 +817,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -846,13 +846,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                               color: '#000',
                             },
                             grace: '10%'
                         }, 
                         x: {
                             ticks: {
-                                color: '#fff'
+                               color: '#000',
                             }
                         }
                     }
@@ -871,7 +871,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -900,13 +900,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                               color: '#000',
                             },
                             grace: '10%'
                         },
                         x: {
                             ticks: {
-                                color: '#fff'
+                               color: '#000',
                             }
                         }
                     }

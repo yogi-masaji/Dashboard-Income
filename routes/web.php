@@ -9,6 +9,8 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\EpaymentControllerController;
 use App\Http\Controllers\TrafficController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\IncomePaymentController;
 use App\Models\lokasi;
 use App\Models\grupMenu;
 use App\Models\grupLokasi;
@@ -26,7 +28,17 @@ Route::get('/all', function () {
     return view('pages.allchart');
 });
 Route::get('/login', [Login::class, 'LoginView'])->name('login');
+// Rute untuk memproses data login dari form
+Route::post('/login', [Login::class, 'authenticate']);
 
+// Rute untuk proses logout
+Route::post('/logout', [Login::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('main');
+    })->name('mainpage');
+});
 Route::get('/dailytransaction', function () {
     return view('pages.dailytransaction');
 });
@@ -108,3 +120,74 @@ Route::get('/tab-content/transaction', fn() => view('tab-content.transaction'))-
 Route::get('/tab-content/income', fn() => view('tab-content.income'))->name('tab.income');
 Route::get('/tab-content/epayment', fn() => view('tab-content.epayment'))->name('tab.epayment');
 Route::get('/tab-content/traffic', fn() => view('tab-content.traffic'))->name('tab.traffic');
+
+// Route Configuration
+Route::get('/form-location-tools', [ConfigController::class, 'locationView'])->name('config.locationView');
+Route::get('/group-location', [ConfigController::class, 'grupLokasiView'])->name('config.grupLokasiView');
+Route::get('/form-user', [Login::class, 'formUserView'])->name('config.formUserView');
+
+Route::prefix('config')->name('config.')->group(function () {
+
+    Route::get('/form-location-tools', [ConfigController::class, 'locationView'])->name('locationView');
+
+    Route::get('/locations/data', [ConfigController::class, 'getLocations'])->name('locations.data');
+
+    Route::post('/locations', [ConfigController::class, 'storeLocation'])->name('locations.store');
+
+    Route::get('/locations/{lokasi}', [ConfigController::class, 'showLocation'])->name('locations.show');
+
+    Route::put('/locations/{lokasi}', [ConfigController::class, 'updateLocation'])->name('locations.update');
+
+    Route::delete('/locations/{lokasi}', [ConfigController::class, 'destroyLocation'])->name('locations.destroy');
+    // --- API Routes untuk AJAX ---
+    // Mengambil daftar grup untuk dropdown
+    Route::get('/get-groups', [ConfigController::class, 'getGroups'])->name('getGroups');
+
+    // Mengambil lokasi yang ada di dalam grup
+    Route::post('/get-group-locations', [ConfigController::class, 'getGroupLocations'])->name('getGroupLocations');
+
+    // Menghapus relasi lokasi dari grup
+    Route::delete('/group-locations/{id}', [ConfigController::class, 'deleteGroupLocation'])->name('deleteGroupLocation');
+
+    // Mengambil lokasi yang tersedia untuk ditambahkan
+    Route::post('/get-available-locations', [ConfigController::class, 'getAvailableLocations'])->name('getAvailableLocations');
+
+    // Menyimpan banyak lokasi ke grup
+    Route::post('/store-multiple-locations', [ConfigController::class, 'storeMultipleLocations'])->name('storeMultipleLocations');
+
+    // Route untuk Manajemen Grup (CRUD)
+    Route::get('/get-all-groups', [ConfigController::class, 'getAllGroups'])->name('getAllGroups');
+    Route::get('/get-all-menus', [ConfigController::class, 'getAllMenus'])->name('getAllMenus');
+    Route::post('/groups', [ConfigController::class, 'storeGroup'])->name('storeGroup');
+    Route::get('/groups/{group}/edit', [ConfigController::class, 'editGroup'])->name('editGroup');
+    Route::put('/groups/{group}', [ConfigController::class, 'updateGroup'])->name('updateGroup');
+    Route::delete('/groups/{group}', [ConfigController::class, 'destroyGroup'])->name('destroyGroup');
+});
+
+
+Route::prefix('form-user-api')->group(function () {
+    Route::get('/data', [Login::class, 'showDataUser'])->name('form.user.data');
+    Route::post('/id', [Login::class, 'showId'])->name('form.user.id');
+    Route::post('/insert', [Login::class, 'insertUser'])->name('form.user.insert');
+    Route::post('/show', [Login::class, 'showUser'])->name('form.user.show');
+    Route::post('/default', [Login::class, 'showDefault'])->name('form.user.default');
+    Route::post('/change', [Login::class, 'changeUser'])->name('form.user.change');
+    Route::post('/edit', [Login::class, 'editDefault'])->name('form.user.edit');
+    Route::post('/delete', [Login::class, 'deleteUser'])->name('form.user.delete');
+    Route::post('/group', [Login::class, 'showGroup'])->name('form.user.group');
+    Route::post('/role-user', [Login::class, 'roleUser'])->name('form.user.role');
+    Route::post('/find-ip', [Login::class, 'findIp'])->name('form.user.ip');
+});
+
+
+Route::get('/user-login.php', [Login::class, 'userLoginHistoryView'])->name('user.login');
+// Rute untuk menangani pembaruan grup pengguna dari modal
+Route::post('/user-login-history/update-group', [Login::class, 'updateUserGroup'])->name('user.login.updateGroup');
+
+// Rute BARU untuk mengambil riwayat login bulanan via AJAX
+Route::get('/user-login-history/get-history/{id}', [Login::class, 'getUserMonthlyLogins'])->name('user.login.getHistory');
+
+Route::get('/rekap-report', [IncomePaymentController::class, 'index'])->name('income.index');
+Route::post('/get-income-payment', [IncomePaymentController::class, 'getIncomePayment'])->name('income.get');
+Route::post('/get-lost-income', [IncomePaymentController::class, 'getLostIncomePayment'])->name('income.lost.get');
+Route::post('/get-rekap-income', [IncomePaymentController::class, 'getRekapIncome'])->name('income.recap.get');

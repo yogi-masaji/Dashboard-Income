@@ -8,7 +8,7 @@ class Menu extends Model
 {
     protected $table = 'ms_menu';
 
-    protected $primaryKey = 'id_menu';
+    protected $primaryKey = 'id_Menu';
 
     public $timestamps = false;
 

@@ -1,15 +1,15 @@
 <div class="row">
     <div class="col-12">
         <h5>Monthly Quantity</h5>
-        <div class="row" id="dashboardRow">
-            <div class="row" id="monthly-transaction-comparison"></div>
+        <div class="row d-flex align-items-stretch" id="dashboardRow">
+            <div class="col-md-6 d-flex">
+                <div class="content-custom flex-fill">
+                    <div class="row" id="monthly-transaction-comparison"></div>
+                </div>
+            </div>
 
-
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="content-custom">
-
+            <div class="col-md-6 d-flex">
+                <div class="content-custom flex-fill" style="min-height: 373px;">
                     <table id="monthlyQuantity" class="table table-striped">
                         <thead>
                             <tr>
@@ -27,9 +27,15 @@
                             </tr>
                         </tfoot>
                     </table>
+
                 </div>
             </div>
-            <div class="col-md-6">
+
+
+        </div>
+        <div class="row mt-5">
+
+            <div class="col-md-12">
                 <div class="content-custom">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -44,12 +50,12 @@
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-monthly" role="tabpanel"
                             aria-labelledby="nav-monthly-tab" tabindex="0">
-                            <canvas id="monthlyQuantityBar" height="200" width="auto"></canvas>
+                            <canvas id="monthlyQuantityBar" height="100" width="auto"></canvas>
 
                         </div>
                         <div class="tab-pane fade" id="nav-monthly-line" role="tabpanel"
                             aria-labelledby="nav-monthly-line-tab" tabindex="0">
-                            <canvas id="monthlyQuantityLine" height="200" width="auto"></canvas>
+                            <canvas id="monthlyQuantityLine" height="100" width="auto"></canvas>
                         </div>
                     </div>
                 </div>

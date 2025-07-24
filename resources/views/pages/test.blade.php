@@ -25,14 +25,15 @@
 
         .nav-tabs {
             border-bottom: none;
-            background-color: #0d2d5a;
+            /* background-color: #0d2d5a; */
             border-radius: 10px;
             padding: 10px;
         }
 
         .nav-tabs .nav-link {
-            color: white;
-            border: none;
+            color: #000000;
+            border: 1px solid;
+            background-color: #FFF;
             border-radius: 10px;
             padding: 10px 20px;
             margin: 0 5px;
@@ -159,7 +160,7 @@
     </style>
     <style>
         .nav-custom-tab {
-            background-color: #185BB4;
+            background-color: #061933;
             padding: 10px;
             border-radius: 10px;
         }
@@ -183,9 +184,9 @@
         }
 
         .dashboard-card {
-            background-color: #2A3A5A;
+            background-color: #ffffff;
             border-radius: 10px;
-            border: 2px solid #7e7e7e;
+            border: 2px solid #7e7e7e24;
             padding: 13px;
             margin-bottom: 15px;
         }
@@ -228,14 +229,15 @@
 
         .nav-tabs {
             padding: 10px;
-            background-color: #003b86;
+            /* background-color: #003b86; */
             border-radius: 10px;
         }
 
         .content-custom {
             padding: 10px !important;
-            background-color: #092953 !important;
+            background-color: #ffffff !important;
             border-radius: 10px !important;
+            box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
         }
     </style>
 
@@ -268,7 +270,7 @@
             }
         </style>
 
-        <ul class="nav nav-tabs mb-4 d-flex w-100" id="mainTabs" role="tablist" style="gap: 1px;">
+        <ul class="nav nav-tabs mb-4 d-flex w-100" id="mainTabs" role="tablist" style="gap: 10px;">
             @if (isset($tabMenus['Transaction']))
                 <li class="nav-item dropdown flex-fill text-center" role="presentation">
                     <a class="nav-link active dropdown-toggle w-100" data-bs-toggle="dropdown" href="#" role="button"

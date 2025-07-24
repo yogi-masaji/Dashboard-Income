@@ -240,7 +240,8 @@
                 <form method="POST" action="{{ route('set.location') }}">
                     @csrf
                     <div class="p-5">
-                        <h5 class="brand-title">{{ session('selected_location_name', 'GRAND INDONESIA') }}</h5>
+                        <h5 class="brand-title" style="color: #fff !important">
+                            {{ session('selected_location_name', 'GRAND INDONESIA') }}</h5>
 
                         <label for="locationSelect" class="select-label">Select Location</label>
                         <select class="form-select" name="location_id" id="locationSelect">
@@ -261,33 +262,29 @@
                     <ul class="menu-inner py-1">
                         <!-- Dashboards -->
 
-                        @foreach ($navbarMenus as $group => $menus)
-                            @if (is_string($menus))
-                                {{-- Untuk link tanpa submenu --}}
-                                <li class="menu-item active">
-                                    <a href="{{ url($menus) }}" class="menu-link">
-                                        <i class="menu-icon tf-icons bx bx-folder"></i>
-                                        <div class="text-truncate">{{ $group }}</div>
-                                    </a>
-                                </li>
-                            @elseif ($menus->isNotEmpty())
-                                {{-- Untuk menu dengan submenu --}}
-                                <li class="menu-item active">
+                        @foreach ($navbarMenus as $menuItem)
+                            <li class="menu-item active">
+                                @if ($menuItem['children']->isNotEmpty())
                                     <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                        <i class="menu-icon tf-icons bx bx-folder"></i>
-                                        <div class="text-truncate">{{ $group }}</div>
+                                        <i class="menu-icon {{ $menuItem['icon'] }}"></i>
+                                        <div class="text-truncate">{{ $menuItem['name'] }}</div>
                                     </a>
                                     <ul class="menu-sub">
-                                        @foreach ($menus as $menu)
+                                        @foreach ($menuItem['children'] as $submenu)
                                             <li class="menu-item active">
-                                                <a href="{{ url($menu->nama_File ?? '#') }}" class="menu-link">
-                                                    <i class="bi bi-person me-2"></i>{{ $menu->nama_Menu }}
+                                                <a href="{{ url($submenu->nama_File ?? '#') }}" class="menu-link">
+                                                    {{ $submenu->nama_Menu }}
                                                 </a>
                                             </li>
                                         @endforeach
                                     </ul>
-                                </li>
-                            @endif
+                                @else
+                                    <a href="{{ url($menuItem['url']) }}" class="menu-link">
+                                        <i class="menu-icon {{ $menuItem['icon'] }}"></i>
+                                        <div class="text-truncate">{{ $menuItem['name'] }}</div>
+                                    </a>
+                                @endif
+                            </li>
                         @endforeach
                     </ul>
                 </div>
@@ -311,12 +308,13 @@
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
                     id="layout-navbar">
                     <div class="layout-menu-toggle navbar-nav align-items-center me-3 d-none d-xl-block">
-                        <a class="nav-item nav-link px-0" href="javascript:void(0);" id="desktop-toggle">
+                        <a class="nav-item nav-link px-0 text-dark" href="javascript:void(0);" id="desktop-toggle">
                             <i class="bx bx-chevron-left bx-md"></i>
                         </a>
                     </div>
                     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
-                        <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)" id="mobile-toggle">
+                        <a class="nav-item nav-link px-0 me-xl-6 text-dark" href="javascript:void(0)"
+                            id="mobile-toggle">
                             <i class="bx bx-menu bx-md"></i>
                         </a>
                     </div>
@@ -335,7 +333,7 @@
                                     <!-- User's name -->
 
                                     <span class="mt-5">
-                                        <h3>{{ $navbarTitle ?? 'Default Title' }}</h3>
+                                        <h3 class="text-dark">{{ $navbarTitle ?? 'Default Title' }}</h3>
                                     </span>
                                 </div>
 
@@ -345,54 +343,40 @@
                         <!-- /Search -->
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
-                            <!-- Place this tag where you want the button to render. -->
-                            {{ \Carbon\Carbon::now()->translatedFormat('l, j F Y') }}
 
+                            <li class="nav-item me-3">
+                                {{ \Carbon\Carbon::now()->translatedFormat('l, j F Y') }}
+                            </li>
 
-                            <!-- User -->
-                            <!-- User -->
-                            {{-- <li class="nav-item me-4">
-                                <button id="dark-mode-toggle" class="custom-toggle">
-                                    <i class="bi bi-moon-fill bulan " id="moon-icon"></i>
-                                    <i class="bi bi-brightness-high-fill  matahari" id="sun-icon"
-                                        style="display: none;"></i>
-                                    <!-- Initially hide sun icon -->
-                                </button>
-                            </li> --}}
-
-                            <li class="nav-item navbar-dropdown dropdown-user dropdown ">
+                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
                                     data-bs-toggle="dropdown">
-                                    <!-- Flex container to align name and avatar in the same row -->
                                     <div class="d-flex align-items-center">
-                                        <!-- User's name -->
-                                        {{-- <span class="me-2">test</span> --}}
-                                        <div class="avatar-icon avatar avatar-online"> t
-                                        </div>
-                                        <!-- Avatar image -->
+                                        <div class="avatar-icon avatar avatar-online">
 
+                                            @if (Session::has('nama_Staff') && !empty(session('nama_Staff')))
+                                                {{ strtoupper(substr(session('nama_Staff'), 0, 1)) }}
+                                            @else
+                                                U
+                                            @endif
+                                        </div>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-
                                     <li>
                                         <a class="dropdown-item" href="javascript:void(0);"
                                             onclick="document.getElementById('logout-form').submit();">
                                             <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
                                         </a>
                                     </li>
-
-                                    <!-- Hidden logout form -->
-                                    <form id="logout-form" method="POST" style="display: none;">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        style="display: none;">
                                         @csrf
-                                        @method('POST')
                                     </form>
                                 </ul>
                             </li>
-                            <!--/ User -->
-
-                            <!--/ User -->
                         </ul>
+
                     </div>
                 </nav>
 

@@ -292,7 +292,7 @@
                                             <h4 class="fw-bold mb-0 total-pass"></h4>
                                             <small class="text-muted tgl_row1"></small>
                                         </div>
-                                        <div class="text-success fs-4"><i class="bi bi-car-front-fill"></i></div>
+                                        {{-- <div class="text-success fs-4"><i class="bi bi-car-front-fill"></i></div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -306,7 +306,7 @@
                                             <h4 class="fw-bold mb-0 total-casual">Rp 388.532.000</h4>
                                             <small class="text-muted tgl_row1"></small>
                                         </div>
-                                        <div class="text-success fs-4">$</div>
+                                        {{-- <div class="text-success fs-4">$</div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -320,7 +320,7 @@
                                             <h4 class="fw-bold mb-0 top-payment"></h4>
                                             <small class="text-muted top-payment-income"></small>
                                         </div>
-                                        <div class="text-success fs-4"><i class="bi bi-credit-card"></i></div>
+                                        <div class="text-primary fs-4"><i class="bi bi-credit-card"></i></div>
                                     </div>
                                 </div>
                             </div>
@@ -1750,7 +1750,7 @@
                                     data: [incomePaymentDataFirstPeriod[6],
                                         incomePaymentDataSecondPeriod[6]
                                     ],
-                                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                                    backgroundColor: 'rgba(188, 4, 4, 1)',
                                 },
                                 {
                                     label: 'qrisepayment',
@@ -1987,7 +1987,7 @@
                                         const yLine = y >= halfheight ? y +
                                             40 : y - 40;
                                         const extraLine = x >= halfwidth ?
-                                            25 : -25;
+                                            10 : -10;
 
                                         // Line
                                         ctx.beginPath();
@@ -2158,7 +2158,7 @@
                             maintainAspectRatio: false,
                             plugins: {
                                 legend: {
-                                    position: 'top',
+                                    position: 'right',
                                     labels: {
                                         color: '#fff',
 
@@ -2598,9 +2598,10 @@
                         const DailyRevenueFirst = response.data.first_period.map(
                             item => item.allpayment
                         );
+                        console.log('ini daily revenue first', DailyRevenueFirst)
                         const dailyRevenueFirstLabel = response.data.first_period.map(
                             item => formatDate(item.periode));
-
+                        console.log('ini daily revenue first label', dailyRevenueFirstLabel)
 
                         const DailyRevenueSecond = response.data.second_period.map(
                             item => item.allpayment
@@ -2609,157 +2610,122 @@
                         const dailyRevenueSecondLabel = response.data.second_period.map(
                             item => formatDate(item.periode));
 
-                        const dailyRevenueFirstData = {
-                            labels: dailyRevenueFirstLabel,
-                            datasets: [{
-                                label: 'Daily Revenue First Period',
-                                data: DailyRevenueFirst,
-                                backgroundColor: dailyRevenueFirstLabel.map(
-                                    label => {
-                                        const day = new Date(label).getDay();
-                                        if (day === 6 || day === 0) {
-                                            return 'green'; // Sabtu atau Minggu
-                                        }
-                                        return 'rgba(255, 99, 132, 1)';
-                                    }),
 
-                            }]
-                        };
 
-                        const dailyRevenueFirstOptions = {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        callback: function(value) {
-                                            return formatRupiah(value);
-                                        },
-                                        color: '#fff',
-                                    }
-                                },
-                                x: {
-                                    ticks: {
-                                        autoSkip: false,
-                                        maxRotation: 90,
-                                        minRotation: 0,
-                                        color: '#fff',
-                                        font: {
-                                            size: 10,
-                                        }
-                                    }
+                        function createOrUpdateDailyRevenueChart(canvasId, periodData,
+                            chartTitle, chartInstanceName) {
+                            const labels = [];
+                            const weekdayData = [];
+                            const weekendData = [];
+
+                            // Process data to separate weekday and weekend revenue
+                            periodData.forEach(item => {
+                                const formattedDate = new Date(item.periode)
+                                    .toLocaleDateString('en-GB', {
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric'
+                                    });
+                                labels.push(formattedDate);
+
+                                const dayOfWeek = new Date(item.periode)
+                                    .getDay(); // 0=Sun, 6=Sat
+                                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                                    weekendData.push(item.allpayment);
+                                    weekdayData.push(null);
+                                } else {
+                                    weekdayData.push(item.allpayment);
+                                    weekendData.push(null);
                                 }
-                            },
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                    labels: {
-                                        color: '#fff',
-
-                                    }
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Daily Revenue First Period title',
-                                    color: '#fff',
-                                }
-                            }
-                        };
-
-                        // Destroy dulu kalau chart sebelumnya sudah ada
-                        if (window.dailyRevenueFirstChart) {
-                            window.dailyRevenueFirstChart.destroy();
-                        }
-                        console.log('ini label', dailyRevenueFirstLabel)
-                        // Buat ulang chart dengan data terbaru
-                        const dailyRevenueFirstCtx = document.getElementById(
-                                'dailyRevenueFirstBar')
-                            .getContext('2d');
-
-                        function highlightDay() {
-                            console.log('ini label', dailyRevenueFirstLabel)
-                        }
-
-                        highlightDay();
-                        window.dailyRevenueFirstChart = new Chart(dailyRevenueFirstCtx, {
-                            type: 'bar',
-                            data: dailyRevenueFirstData,
-                            options: dailyRevenueFirstOptions
-                        });
-
-                        const dailyRevenueSecondData = {
-                            labels: dailyRevenueSecondLabel,
-                            datasets: [{
-                                label: 'Daily Revenue Second Period',
-                                data: DailyRevenueSecond,
-                                backgroundColor: dailyRevenueSecondLabel.map(
-                                    label => {
-                                        const day = new Date(label).getDay();
-                                        if (day === 6 || day === 0) {
-                                            return 'green'; // Sabtu atau Minggu
-                                        }
-                                        return 'rgba(255, 99, 132, 1)';
-                                    }),
-                            }]
-                        };
-
-                        const dailyRevenueSecondOptions = {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        callback: function(value) {
-                                            return formatRupiah(value);
-                                        },
-                                        color: '#fff',
-                                    }
-                                },
-                                x: {
-                                    ticks: {
-                                        autoSkip: false,
-                                        maxRotation: 90,
-                                        minRotation: 0,
-                                        color: '#fff',
-                                        font: {
-                                            size: 10,
-                                        }
-                                    }
-                                }
-                            },
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                    labels: {
-                                        color: '#fff',
-
-                                    }
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Daily Revenue Second Period',
-                                    color: '#fff',
-                                }
-                            }
-                        };
-
-                        // Destroy dulu kalau chart sebelumnya sudah ada
-                        if (window.dailyRevenueSecondChart) {
-                            window.dailyRevenueSecondChart.destroy();
-                        }
-                        // Buat ulang chart dengan data terbaru
-                        const dailyRevenueSecondCtx = document.getElementById(
-                                'dailyRevenueSecondBar')
-                            .getContext('2d');
-                        window.dailyRevenueSecondChart = new Chart(
-                            dailyRevenueSecondCtx, {
-                                type: 'bar',
-                                data: dailyRevenueSecondData,
-                                options: dailyRevenueSecondOptions
                             });
 
+                            // Chart.js data configuration
+                            const chartDataConfig = {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Weekday',
+                                    data: weekdayData,
+                                    backgroundColor: 'green',
+                                }, {
+                                    label: 'Weekend',
+                                    data: weekendData,
+                                    backgroundColor: 'rgba(188, 4, 4, 1)',
+                                }]
+                            };
+
+                            // Chart.js options configuration
+                            const chartOptionsConfig = {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        stacked: true,
+                                        beginAtZero: true,
+                                        ticks: {
+                                            callback: value => formatRupiah(value),
+                                            color: '#fff',
+                                        }
+                                    },
+                                    x: {
+                                        stacked: true,
+                                        ticks: {
+                                            autoSkip: false,
+                                            maxRotation: 90,
+                                            minRotation: 0,
+                                            color: '#fff',
+                                            font: {
+                                                size: 10
+                                            }
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                        labels: {
+                                            color: '#fff'
+                                        }
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: chartTitle,
+                                        color: '#fff',
+                                    }
+                                }
+                            };
+
+                            // Destroy existing chart instance if it exists
+                            if (window[chartInstanceName]) {
+                                window[chartInstanceName].destroy();
+                            }
+
+                            // Create and render the new chart
+                            const ctx = document.getElementById(canvasId).getContext('2d');
+                            window[chartInstanceName] = new Chart(ctx, {
+                                type: 'bar',
+                                data: chartDataConfig,
+                                options: chartOptionsConfig
+                            });
+                        }
+
+                        // --- END OF REUSABLE FUNCTION ---
+
+                        // --- UPDATE YOUR CHARTS USING THE NEW FUNCTION ---
+                        // Chart for the First Period
+                        createOrUpdateDailyRevenueChart(
+                            'dailyRevenueFirstBar',
+                            response.data.first_period,
+                            'Daily Revenue First Period',
+                            'dailyRevenueFirstChart'
+                        );
+
+                        // Chart for the Second Period
+                        createOrUpdateDailyRevenueChart(
+                            'dailyRevenueSecondBar',
+                            response.data.second_period,
+                            'Daily Revenue Second Period',
+                            'dailyRevenueSecondChart'
+                        );
 
 
 
@@ -3028,7 +2994,7 @@
                                             exportOptions: {
                                                 columns: ':visible'
                                             },
-                                            title: 'Custom Search | Income by Payment',
+                                            title: 'Custom Search ',
                                         },
                                         {
                                             extend: 'excelHtml5',
@@ -3036,7 +3002,7 @@
                                             exportOptions: {
                                                 columns: ':visible'
                                             },
-                                            title: 'Custom Search | Income by Payment',
+                                            title: 'Custom Search ',
                                         },
 
 
@@ -3046,7 +3012,7 @@
                                             exportOptions: {
                                                 columns: ':visible'
                                             },
-                                            title: 'Custom Search | Income by Payment',
+                                            title: 'Custom Search ',
                                         },
                                         {
                                             extend: 'pdfHtml5',
@@ -3054,7 +3020,7 @@
                                             exportOptions: {
                                                 columns: ':visible'
                                             },
-                                            title: 'Custom Search | Income by Payment',
+                                            title: 'Custom Search ',
                                             customize: function(doc) {
                                                 doc.pageMargins = [20, 30, 20,
                                                     30
@@ -3064,7 +3030,16 @@
                                                 doc.styles.tableHeader
                                                     .alignment = 'center';
                                                 doc.styles.tableHeader
-                                                    .fillColor = '#eeeeee';
+                                                    .fillColor =
+                                                    '#007BFF'; // Biru
+                                                doc.styles.tableHeader.color =
+                                                    '#FFFFFF'; // Putih
+                                                doc.styles.tableHeader
+                                                    .lineWidth =
+                                                    1; // Tambahkan stroke
+                                                doc.styles.tableHeader
+                                                    .lineColor =
+                                                    '#000000'; // Warna garis (hitam)
                                             },
                                         },
                                     ]

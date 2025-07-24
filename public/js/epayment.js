@@ -169,7 +169,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -200,13 +200,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                                color: '#000'
                             },
                             grace: '10%'
                         },
                         x: {
                             ticks: {
-                                color: '#fff'
+                                color: '#000'
                             }
                         }
                     }
@@ -252,13 +252,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                                color: '#000'
                             },
                             grace: '10%'
                         },
                         x: {
                             ticks: {
-                                color: '#fff'
+                                color: '#000'
                             }
                         }
                     }
@@ -294,20 +294,20 @@ $(document).ready(function() {
             const container = $('#daily-epayment-comparison');
 
             container.empty(); // Biar gak dobel kalau dipanggil ulang
-    
-            compare.forEach(payment => {
+            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6','col-md-12'];
+            compare.forEach((payment, index) => {
                 const html = `
-                    <div class="col-md-3">
+                    <div class="${colClasses[index]}">
                         <div class="dashboard-card">
-                            <div class="card-title">${payment.method}</div>
+                            <div class="card-title" style="color: #000 !important">${payment.method}</div>
                             <div class="d-flex align-items-baseline">
-                                <h2 class="card-value">${formatRupiah(payment.today)}</h2>
+                                <h6 class="card-value" style="color: #000 !important">${formatRupiah(payment.today)}</h6>
                                 <span class="ms-2" style="color: ${payment.color}">
                                     ${payment.percent_change}
                                     ${payment.direction}
                                 </span>
                             </div>
-                            <div class="yesterday">Yesterday: ${formatRupiah(payment.yesterday)}</div>
+                            <div class="yesterday" style="color: #000 !important">Yesterday: ${formatRupiah(payment.yesterday)}</div>
                         </div>
                     </div>
                 `;
@@ -458,20 +458,20 @@ $(document).ready(function() {
             const container = $('#weekly-epayment-comparison');
 
             container.empty(); // Biar gak dobel kalau dipanggil ulang
-    
-            compare.forEach(payment => {
+            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6','col-md-12'];
+            compare.forEach((payment, index) => {
                 const html = `
-                    <div class="col-md-3">
+                    <div class="${colClasses[index]}">
                         <div class="dashboard-card">
-                            <div class="card-title">${payment.method}</div>
+                            <div class="card-title" style="color: #000 !important">${payment.method}</div>
                             <div class="d-flex align-items-baseline">
-                                <h2 class="card-value">${formatRupiah(payment.this_week)}</h2>
+                                <h6 class="card-value" style="color: #000 !important">${formatRupiah(payment.this_week)}</h6>
                                 <span class="ms-2" style="color: ${payment.color}">
                                     ${payment.percent_change}
                                     ${payment.direction}
                                 </span>
                             </div>
-                            <div class="yesterday">Two Weeks Ago: ${formatRupiah(payment.last_week)}</div>
+                            <div class="yesterday"  style="color: #000 !important">Two Weeks Ago: ${formatRupiah(payment.last_week)}</div>
                         </div>
                     </div>
                 `;
@@ -639,7 +639,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -670,13 +670,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                                color: '#000'
                             },
                             grace: '10%'
                         },
                         x: {
                             ticks: {
-                                color: '#fff'
+                                color: '#000'
                             }
                         }
                     }
@@ -790,7 +790,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -821,13 +821,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                                color: '#000'
                             },
                             grace: '10%'
                         },
                         x: {
                             ticks: {
-                                color: '#fff'
+                                color: '#000'
                             }
                         }
                     }
@@ -864,20 +864,20 @@ $(document).ready(function() {
             const container = $('#monthly-epayment-comparison');
 
             container.empty(); // Biar gak dobel kalau dipanggil ulang
-    
-            compare.forEach(payment => {
+            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6','col-md-12'];
+            compare.forEach((payment, index) => {
                 const html = `
-                    <div class="col-md-4">
+                    <div class="${colClasses[index]}">
                         <div class="dashboard-card">
-                            <div class="card-title">${payment.method}</div>
+                            <div class="card-title" style="color: #000 !important">${payment.method}</div>
                             <div class="d-flex align-items-baseline">
-                                <h2 class="card-value">${formatRupiah(payment.this_month)}</h2>
+                                <h6 class="card-value" style="color: #000 !important">${formatRupiah(payment.this_month)}</h6>
                                 <span class="ms-2" style="color: ${payment.color}">
                                     ${payment.percent_change}
                                     ${payment.direction}
                                 </span>
                             </div>
-                            <div class="yesterday">Two Months Ago: ${formatRupiah(payment.last_month)}</div>
+                            <div class="yesterday" style="color: #000 !important">Two Months Ago: ${formatRupiah(payment.last_month)}</div>
                         </div>
                     </div>
                 `;
@@ -1036,7 +1036,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -1067,13 +1067,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                                color: '#000'
                             },
                             grace: '10%'
                         },
                         x: {
                             ticks: {
-                                color: '#fff'
+                                color: '#000'
                             }
                         }
                     }
@@ -1187,7 +1187,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -1218,13 +1218,13 @@ $(document).ready(function() {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
-                                color: '#fff'
+                                color: '#000'
                             },
                             grace: '10%'
                         },
                         x: {
                             ticks: {
-                                color: '#fff'
+                                color: '#000'
                             }
                         }
                     }

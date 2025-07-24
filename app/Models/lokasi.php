@@ -27,4 +27,8 @@ class lokasi extends Model
         'update_status',
         'cutoff_date',
     ];
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_lokasi', 'id_Lokasi', 'id_Group');
+    }
 }

@@ -127,24 +127,27 @@ $(document).ready(function() {
 
         container.empty(); // Biar gak dobel kalau dipanggil ulang
 
-        compare.forEach(vehicle => {
-            const html = `
-                <div class="col-md-3">
-                    <div class="dashboard-card">
-                        <div class="card-title">${vehicle.type}</div>
-                        <div class="d-flex align-items-baseline">
-                            <h2 class="card-value">${formatQuantity(vehicle.today)}</h2>
-                            <span class="ms-2" style="color: ${vehicle.color}">
-                                ${vehicle.percent_change}
-                                ${vehicle.direction}
-                            </span>
-                        </div>
-                        <div class="yesterday">Yesterday: ${formatQuantity(vehicle.yesterday)}</div>
-                    </div>
+        const colClasses = ['col-md-6', 'col-md-6', 'col-md-12']; // atau sesuai jumlah compare
+
+compare.forEach((vehicle, index) => {
+    const col = colClasses[index] || 'col-md-4'; // fallback ke col-md-4
+    const html = `
+        <div class="${col}">
+            <div class="dashboard-card">
+                <div class="card-title" style="color: #000 !important;">${vehicle.type}</div>
+                <div class="d-flex align-items-baseline">
+                    <h2 class="card-value" style="color: #000 !important;">${formatQuantity(vehicle.today)}</h2>
+                    <span class="ms-2" style="color: ${vehicle.color}">
+                        ${vehicle.percent_change} ${vehicle.direction}
+                    </span>
                 </div>
-            `;
-            container.append(html);
-        });
+                <div class="yesterday" style="color: #000 !important;">Yesterday: ${formatQuantity(vehicle.yesterday)}</div>
+            </div>
+        </div>
+    `;
+    container.append(html);
+});
+
 
                 const rows = [{
                         type: 'Total Casual',
@@ -226,7 +229,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                             },
@@ -250,13 +253,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0, 
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%',
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -307,7 +310,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                                 
@@ -331,13 +334,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             }, 
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -372,27 +375,27 @@ $(document).ready(function() {
 
             
                 const container = $('#weekly-transaction-comparison');
+const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-12']; // bebas sesuai kebutuhan
+container.empty();
 
-        container.empty(); // Biar gak dobel kalau dipanggil ulang
-
-        compare.forEach(vehicle => {
-            const html = `
-                <div class="col-md-4">
-                    <div class="dashboard-card">
-                        <div class="card-title">${vehicle.vehicle}</div>
-                        <div class="d-flex align-items-baseline">
-                            <h2 class="card-value">${formatQuantity(vehicle.this_week)}</h2>
-                            <span class="ms-2" style="color: ${vehicle.color}">
-                                ${vehicle.percent_change}
-                                ${vehicle.direction}
-                            </span>
-                        </div>
-                        <div class="yesterday">Two Weeks Ago: ${formatQuantity(vehicle.two_weeks_ago)}</div>
-                    </div>
+compare.forEach((vehicle, index) => {
+    const colClass = colClasses[index] || 'col-md-4'; // fallback
+    const html = `
+        <div class="${colClass} d-flex">
+            <div class="dashboard-card flex-fill">
+                <div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div>
+                <div class="d-flex align-items-baseline">
+                    <h2 class="card-value" style="color: #000 !important;">${formatQuantity(vehicle.this_week)}</h2>
+                    <span class="ms-2" style="color: ${vehicle.color}">
+                        ${vehicle.percent_change} ${vehicle.direction}
+                    </span>
                 </div>
-            `;
-            container.append(html);
-        });
+                <div class="yesterday" style="color: #000 !important;">Two Weeks Ago: ${formatQuantity(vehicle.two_weeks_ago)}</div>
+            </div>
+        </div>
+    `;
+    container.append(html);
+});
                 const rows = [{
                         type: 'Car',
                         thisWeek: thisWeek.total_car,
@@ -564,7 +567,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                             },
@@ -587,13 +590,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -673,7 +676,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                             },
@@ -696,13 +699,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -787,7 +790,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                             },
@@ -810,13 +813,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -902,7 +905,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                             },
@@ -925,13 +928,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -973,22 +976,22 @@ $(document).ready(function() {
 
                 
                 const container = $('#monthly-transaction-comparison');
+                const colClasses = ['col-md-6', 'col-md-6','col-md-6', 'col-md-6', 'col-md-12'];
+                container.empty(); // Biar gak dobel kalau dipanggil ulang
 
-        container.empty(); // Biar gak dobel kalau dipanggil ulang
-
-        compare.forEach(vehicle => {
+        compare.forEach((vehicle, index) => {
             const html = `
-                <div class="col-md-4">
+                <div class="${colClasses[index]}">
                     <div class="dashboard-card">
-                        <div class="card-title">${vehicle.vehicle}</div>
+                        <div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div>
                         <div class="d-flex align-items-baseline">
-                            <h2 class="card-value">${formatQuantity(vehicle.this_month)}</h2>
+                            <h2 class="card-value" style="color: #000 !important;">${formatQuantity(vehicle.this_month)}</h2>
                             <span class="ms-2" style="color: ${vehicle.color}">
                                 ${vehicle.percent_change}
                                 ${vehicle.direction}
                             </span>
                         </div>
-                        <div class="yesterday">Two Months Ago: ${formatQuantity(vehicle.two_months_ago)}</div>
+                        <div class="yesterday" style="color: #000 !important;">Two Months Ago: ${formatQuantity(vehicle.two_months_ago)}</div>
                     </div>
                 </div>
             `;
@@ -1163,7 +1166,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                             },
@@ -1186,13 +1189,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -1273,7 +1276,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                             },
@@ -1296,13 +1299,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -1388,7 +1391,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                             },
@@ -1411,13 +1414,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -1502,7 +1505,7 @@ $(document).ready(function() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff',
+                                    color: '#000',
 
                                 }
                             },
@@ -1525,13 +1528,13 @@ $(document).ready(function() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }

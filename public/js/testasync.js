@@ -241,7 +241,7 @@ async function dailyData() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -263,13 +263,13 @@ async function dailyData() {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -320,7 +320,7 @@ async function dailyData() {
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -346,7 +346,7 @@ async function dailyData() {
                                 grace: '10%'
                             },x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -580,7 +580,7 @@ async function weeklyData(){
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -602,13 +602,13 @@ async function weeklyData(){
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -688,7 +688,7 @@ async function weeklyData(){
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -716,7 +716,7 @@ async function weeklyData(){
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -801,7 +801,7 @@ async function weeklyData(){
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -823,13 +823,13 @@ async function weeklyData(){
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -915,7 +915,7 @@ async function weeklyData(){
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -937,13 +937,13 @@ async function weeklyData(){
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -1183,7 +1183,7 @@ async function monthlyData(){
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -1205,13 +1205,13 @@ async function monthlyData(){
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -1292,7 +1292,7 @@ async function monthlyData(){
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -1314,13 +1314,13 @@ async function monthlyData(){
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -1406,7 +1406,7 @@ async function monthlyData(){
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -1428,13 +1428,13 @@ async function monthlyData(){
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }
@@ -1519,7 +1519,7 @@ async function monthlyData(){
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             },
 
@@ -1541,13 +1541,13 @@ async function monthlyData(){
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: '#fff'
+                                    color: '#000'
                                 },
                                 grace: '10%'
                             },
                             x: {
                                 ticks: {
-                                    color: '#fff'
+                                    color: '#000'
                                 }
                             }
                         }

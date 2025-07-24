@@ -11,8 +11,8 @@
     <style>
         .content-custom {
             padding: 10px !important;
-            background-color: #092953 !important;
-            border: #001a4e 1px solid !important;
+            background-color: #ffffff !important;
+            border: #d9d9d9 1px solid !important;
             height: auto;
         }
 
@@ -60,6 +60,25 @@
 
         #dailyQuantity {
             height: 23vh !important;
+        }
+
+        p {
+            color: #000;
+        }
+
+        .nav-tabs .nav-link {
+            color: #000000;
+            border: 1px solid;
+            background-color: #FFF;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin: 0 5px;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #ffc107;
+            color: #000;
+            font-weight: bold;
         }
     </style>
     <div class="container">
@@ -482,10 +501,10 @@
         const monthlyEpaymentURL = "{{ route('monthlyEpayment') }}";
         const dailyEpaymentChart = "{{ route('dailyEpaymentChart') }}";
     </script>
-    {{-- <script src="js/testasync.js"></script>
+    <script src="js/testasync.js"></script>
     <script src="js/income.js"></script>
-    <script src="js/epayment.js"></script> --}}
-    @vite('resources/js/testasync.js')
+    <script src="js/epayment.js"></script>
+    {{-- @vite('resources/js/testasync.js')
     @vite('resources/js/income.js')
-    @vite('resources/js/epayment.js')
+    @vite('resources/js/epayment.js') --}}
 @endsection

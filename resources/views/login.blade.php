@@ -54,20 +54,20 @@
                     <div class="card-body">
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
-                            <img src="/storage/logo.png" alt="logo" height="70">
+                            <img src="/storage/logo-real.png" alt="logo" height="70">
                         </div>
+                        <h4 class="mb-4 mt-2">CentrePark Monitoring Services</h4>
                         <!-- /Logo -->
-
                         <form id="formAuthentication" class="mb-6" action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="mb-6">
-                                <label for="email" class="form-label">Email</label>
+                                <label for="email" class="form-label text-dark fw-bold">Email</label>
                                 <input type="text" class="form-control @error('email') is-invalid @enderror"
                                     id="email" name="email" placeholder="Enter your email"
                                     value="{{ old('email') }}" required autofocus />
                             </div>
                             <div class="mb-6 form-password-toggle">
-                                <label class="form-label" for="password">Password</label>
+                                <label class="form-label text-dark fw-bold" for="password">Password</label>
                                 <div class="input-group input-group-merge">
                                     <input type="password" id="password"
                                         class="form-control @error('password') is-invalid @enderror" name="password"
@@ -84,21 +84,13 @@
 
                         <p class="text-center">
 
-                            <a href="/register">
-                                <span>Reset Session</span>
-                            </a>
                         </p>
                     </div>
                 </div>
-                <!-- /Register -->
+
             </div>
         </div>
     </div>
-
-    <!-- / Content -->
-
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
 
     <script src="vendor/libs/jquery/jquery.js"></script>
     <script src="vendor/libs/popper/popper.js"></script>
@@ -106,16 +98,10 @@
     <script src="vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vendor/js/menu.js"></script>
 
-    <!-- endbuild -->
 
-    <!-- Vendors JS -->
-
-    <!-- Main JS -->
     <script src="vendor/js/main.js"></script>
 
-    <!-- Page JS -->
 
-    <!-- Place this tag before closing body tag for github widget button. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 
