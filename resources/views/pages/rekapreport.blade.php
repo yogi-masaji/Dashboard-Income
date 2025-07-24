@@ -55,6 +55,46 @@
                 animation: spin 1s linear infinite;
             }
 
+            .btn {
+                padding: 0.375rem 0.75rem !important;
+                font-size: 1rem !important;
+                border-radius: 0.25rem !important;
+                border: none !important;
+                cursor: pointer !important;
+                transition: background-color 0.2s ease !important;
+            }
+
+            /* Tombol Cari */
+            .btn-cari {
+                background-color: #0066cc !important;
+                /* Biru tua */
+                color: #ffffff !important;
+            }
+
+            .btn-cari:hover {
+                background-color: #004c99 !important;
+            }
+
+            /* Tombol Export */
+            .btn-export {
+                background-color: #28a745 !important;
+                /* Hijau */
+                color: #ffffff !important;
+            }
+
+            .btn-export:hover {
+                background-color: #1e7e34 !important;
+            }
+
+            /* Disabled state */
+            .btn:disabled,
+            .btn[disabled] {
+                opacity: 0.6 !important;
+                cursor: not-allowed !important;
+                pointer-events: none !important;
+            }
+
+
             @keyframes spin {
                 to {
                     transform: rotate(360deg);
@@ -125,11 +165,12 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="col-sm-6">
-                                    <button type="submit" id="btn_submit" class="btn btn-info">Cari</button>
-                                    <button type="button" id="btn_export" class="btn btn-success" disabled>Export to
+                                    <button type="submit" id="btn_submit" class="btn btn-cari">Cari</button>
+                                    <button type="button" id="btn_export" class="btn btn-export" disabled>Export to
                                         Excel</button>
+
                                 </div>
                             </div>
                         </form>
