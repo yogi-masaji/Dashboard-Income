@@ -39,11 +39,11 @@ class AppServiceProvider extends ServiceProvider
                 $idGroup = session('selected_location_id_grup');
 
                 // Ambil semua menu hanya sekali dari database
-                $menus = DB::table('ms_menu')
-                    ->join('group_menu', 'ms_menu.id_Menu', '=', 'group_menu.id_Menu')
+                $menus = DB::table('ms_new_menu')
+                    ->join('group_menu', 'ms_new_menu.id_Menu', '=', 'group_menu.id_Menu')
                     ->where('group_menu.id_Group', $idGroup)
-                    ->orderBy('ms_menu.id_Menu')
-                    ->select('ms_menu.*')
+                    ->orderBy('ms_new_menu.id_Menu')
+                    ->select('ms_new_menu.*')
                     ->get();
 
                 // --- Logika Menu Navbar Terpusat dengan Bootstrap Icons ---

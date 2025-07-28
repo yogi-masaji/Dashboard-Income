@@ -223,7 +223,7 @@
                 <div class="app-brand demo mt-3">
                     <a href="/" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="/storage/logo.png" alt="logo" height="60">
+                            <img src="{{ asset('/storage/logo.png') }}" alt="logo" height="60">
                         </span>
 
                     </a>
@@ -253,7 +253,7 @@
                             @endforeach
                         </select>
 
-                        <button type="submit" class="btn btn-submit mt-2">Submit</button>
+                        <button type="submit" class="btn btn-submit mt-2 w-100">Submit</button>
                     </div>
                 </form>
 

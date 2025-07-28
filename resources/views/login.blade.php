@@ -54,7 +54,7 @@
                     <div class="card-body">
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
-                            <img src="/storage/logo-real.png" alt="logo" height="70">
+                            <img src="{{ asset('/storage/logo-real.png') }}" alt="logo" height="70">
                         </div>
                         <h4 class="mb-4 mt-2">CentrePark Monitoring Services</h4>
                         <!-- /Logo -->

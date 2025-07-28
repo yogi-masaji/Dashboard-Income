@@ -21,11 +21,11 @@
             <div class="tab-content" id="pills-tabContent-daily">
                 <div class="tab-pane fade show active" id="pills-pintumasuk-daily" role="tabpanel"
                     aria-labelledby="pills-pintumasuk-tab-daily">
-                    @include('nested-tab.dailyMasuk')
+                    @include('nested-tab.dailymasuk')
                 </div>
                 <div class="tab-pane fade" id="pills-pintukeluar-daily" role="tabpanel"
                     aria-labelledby="pills-pintukeluar-tab-daily">
-                    @include('nested-tab.dailyKeluar')
+                    @include('nested-tab.dailykeluar')
                 </div>
             </div>
         </div>

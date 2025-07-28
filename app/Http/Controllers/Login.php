@@ -129,7 +129,7 @@ class Login extends Controller
 
             $request->session()->regenerate();
 
-            $redirectTarget = 'quantitypergateView';
+            $redirectTarget = 'dailyTransaction';
             Log::info('Login berhasil. Mengalihkan ke route: ' . $redirectTarget);
             return redirect()->route($redirectTarget);
         } catch (\Exception $e) {

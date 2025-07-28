@@ -128,7 +128,7 @@ Route::get('/form-user', [Login::class, 'formUserView'])->name('config.formUserV
 
 Route::prefix('config')->name('config.')->group(function () {
 
-    Route::get('/form-location-tools', [ConfigController::class, 'locationView'])->name('locationView');
+    // Route::get('/form-location-tools', [ConfigController::class, 'locationView'])->name('locationView');
 
     Route::get('/locations/data', [ConfigController::class, 'getLocations'])->name('locations.data');
 
