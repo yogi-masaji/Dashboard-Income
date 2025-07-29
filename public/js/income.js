@@ -572,7 +572,7 @@ setInterval(loadDailyIncome, 5000);
                         <div class="dashboard-card">
                             <div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div>
                             <div class="d-flex align-items-baseline">
-                                <h6 class="card-value" style="color: #000 !important;">${formatRupiah(vehicle.last_month)}</h6>
+                                <h6 class="card-value" style="color: #000 !important;">${formatRupiah(vehicle.this_month)}</h6>
                                 <span class="ms-2" style="color: ${vehicle.color}; font-size:12px;">
                                     ${vehicle.percent_change}
                                     ${vehicle.direction}
