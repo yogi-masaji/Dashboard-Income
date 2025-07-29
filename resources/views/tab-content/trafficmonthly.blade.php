@@ -21,11 +21,11 @@
             <div class="tab-content" id="pills-tabContent-monthly">
                 <div class="tab-pane fade show active" id="pills-pintumasuk-monthly" role="tabpanel"
                     aria-labelledby="pills-pintumasuk-tab-monthly">
-                    @include('nested-tab.monthlyMasuk')
+                    @include('nested-tab.monthlymasuk')
                 </div>
                 <div class="tab-pane fade" id="pills-pintukeluar-monthly" role="tabpanel"
                     aria-labelledby="pills-pintukeluar-tab-monthly">
-                    @include('nested-tab.monthlyKeluar')
+                    @include('nested-tab.monthlykeluar')
                 </div>
             </div>
         </div>
