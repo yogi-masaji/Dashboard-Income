@@ -21,9 +21,10 @@ class IncomeController extends Controller
         try {
             $locationCode = session('selected_location_kode_lokasi');
 
-            $response = Http::get("http://110.0.100.135:8081/v3/api/daily-income", [
+            $response = Http::timeout(0)->get("http://110.0.100.70:8080/v3/api/daily-income", [
                 'location_code' => $locationCode
             ]);
+
 
             if ($response->successful()) {
                 $responseData = $response->json();

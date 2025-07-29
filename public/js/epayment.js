@@ -77,27 +77,28 @@ $(document).ready(function() {
         ]
     });
 
+    function fetchDailyEPayment() {
     $.ajax({
         url: dailyEpaymentChart,
         method: 'GET',
         success: function(response) {
             const today = response.this_week.data;
+
             const labels = today.map(item => {
                 const date = new Date(item.tanggal);
                 return date.toLocaleDateString("id-ID", { day: "numeric", month: "short" });
-              });
+            });
+
             const dataChart = {
                 labels: labels,
-                datasets: [{
+                datasets: [
+                    {
                         label: 'E Money',
                         data: today.map(item => item.emoneypayment),
                         backgroundColor: '#0D61E2',
                         borderColor: '#0D61E2',
                         borderWidth: 1,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
+                        datalabels: { anchor: 'end', align: 'end' }
                     },
                     {
                         label: 'Flazz',
@@ -106,10 +107,7 @@ $(document).ready(function() {
                         borderColor: '#FFB800',
                         borderWidth: 1,
                         hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
+                        datalabels: { anchor: 'end', align: 'end' }
                     },
                     {
                         label: 'Brizzi',
@@ -118,10 +116,7 @@ $(document).ready(function() {
                         borderColor: '#FF4D4D',
                         borderWidth: 1,
                         hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
+                        datalabels: { anchor: 'end', align: 'end' }
                     },
                     {
                         label: 'Tap Cash',
@@ -130,10 +125,7 @@ $(document).ready(function() {
                         borderColor: '#00C9A7',
                         borderWidth: 1,
                         hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
+                        datalabels: { anchor: 'end', align: 'end' }
                     },
                     {
                         label: 'Parkee',
@@ -142,10 +134,7 @@ $(document).ready(function() {
                         borderColor: '#9C27B0',
                         borderWidth: 1,
                         hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
+                        datalabels: { anchor: 'end', align: 'end' }
                     },
                     {
                         label: 'Cash',
@@ -153,9 +142,8 @@ $(document).ready(function() {
                         backgroundColor: '#795548',
                         borderColor: '#795548',
                         borderWidth: 1,
-                        hidden:true,
-                        
-                    },
+                        hidden: true
+                    }
                 ]
             };
 
@@ -168,29 +156,18 @@ $(document).ready(function() {
                     plugins: {
                         legend: {
                             position: 'top',
-                            labels: {
-                                color: '#000',
-
-                            }
+                            labels: { color: '#000' }
                         },
-
                         datalabels: {
-                            backgroundColor: (context) => context.dataset
-                                .backgroundColor,
+                            backgroundColor: ctx => ctx.dataset.backgroundColor,
                             borderRadius: 4,
                             color: 'white',
-                            font: {
-                                weight: 'bold',
-                                size: 9
-
-                            },
-                            formatter: function(value, context) {
-                                return new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR',
-                                    minimumFractionDigits: 0
-                                }).format(value);
-                            },
+                            font: { weight: 'bold', size: 9 },
+                            formatter: value => new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR',
+                                minimumFractionDigits: 0
+                            }).format(value),
                             padding: 6,
                             offset: 8
                         }
@@ -198,90 +175,48 @@ $(document).ready(function() {
                     scales: {
                         y: {
                             beginAtZero: true,
-                            ticks: {
-                                precision: 0,
-                                color: '#000'
-                            },
+                            ticks: { precision: 0, color: '#000' },
                             grace: '10%'
                         },
                         x: {
-                            ticks: {
-                                color: '#000'
-                            }
+                            ticks: { color: '#000' }
                         }
                     }
                 },
-                plugins: [
-                    ChartDataLabels
-                ]
+                plugins: [ChartDataLabels]
             };
+
             const lineConfig = {
                 type: 'line',
                 data: dataChart,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        },
-
-                        datalabels: {
-                            backgroundColor: (context) => context.dataset
-                                .backgroundColor,
-                            borderRadius: 4,
-                            color: 'white',
-                            font: {
-                                weight: 'bold',
-                                size: 9
-
-                            },
-                            formatter: function(value, context) {
-                                return new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR',
-                                    minimumFractionDigits: 0
-                                }).format(value);
-                            },
-                            padding: 6,
-                            offset: 8
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0,
-                                color: '#000'
-                            },
-                            grace: '10%'
-                        },
-                        x: {
-                            ticks: {
-                                color: '#000'
-                            }
-                        }
-                    }
-                },
-                plugins: [
-                    ChartDataLabels
-                ]
+                options: barConfig.options,
+                plugins: [ChartDataLabels]
             };
 
-
-
-
-            const ctxLine = document.getElementById('dailyE-PaymentLine')?.getContext('2d');
-            if (ctxLine) {
-                new Chart(ctxLine, lineConfig);
+            // Hancurkan chart lama jika ada
+            if (window.dailyEPaymentBarChart) {
+                window.dailyEPaymentBarChart.destroy();
             }
+            if (window.dailyEPaymentLineChart) {
+                window.dailyEPaymentLineChart.destroy();
+            }
+
             const ctx = document.getElementById('dailyE-PaymentBar')?.getContext('2d');
+            const ctxLine = document.getElementById('dailyE-PaymentLine')?.getContext('2d');
+
             if (ctx) {
-                new Chart(ctx, barConfig);
+                window.dailyEPaymentBarChart = new Chart(ctx, barConfig);
+            }
+            if (ctxLine) {
+                window.dailyEPaymentLineChart = new Chart(ctxLine, lineConfig);
             }
         }
     });
+}
+    fetchDailyEPayment();
+    setInterval(fetchDailyEPayment, 5000);
 
+    function fetchDailyEPaymentSummary() {
     $.ajax({
         url: dailyEpaymentURL,
         method: 'GET',
@@ -289,12 +224,12 @@ $(document).ready(function() {
             const today = response.data[0].today[0];
             const yesterday = response.data[0].yesterday[0];
             const compare = response.table_data;
-            // console.log(compare);
 
             const container = $('#daily-epayment-comparison');
+            container.empty();
 
-            container.empty(); // Biar gak dobel kalau dipanggil ulang
-            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6','col-md-12'];
+            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-12'];
+
             compare.forEach((payment, index) => {
                 const html = `
                     <div class="${colClasses[index]}">
@@ -313,32 +248,16 @@ $(document).ready(function() {
                 `;
                 container.append(html);
             });
-    
-            const rows = [{
-                type: 'Emoney',
-                yesterday: yesterday.emoneypayment,
-                today: today.emoneypayment
-            }, {
-                type: 'Flazz',
-                yesterday: yesterday.flazzpayment,
-                today: today.flazzpayment,
-            }, {
-                type: 'Brizzi',
-                yesterday: yesterday.brizzipayment,
-                today: today.brizzipayment
-            }, {
-                type: 'Tap Cash',
-                yesterday: yesterday.tapcashpayment,
-                today: today.tapcashpayment
-            }, {
-                type: 'Parkee',
-                yesterday: yesterday.parkeepayment,
-                today: today.parkeepayment
-            }, {
-                type: 'Cash',
-                yesterday: yesterday.cashpayment,
-                today: today.cashpayment
-            }]
+
+            const rows = [
+                { type: 'Emoney', yesterday: yesterday.emoneypayment, today: today.emoneypayment },
+                { type: 'Flazz', yesterday: yesterday.flazzpayment, today: today.flazzpayment },
+                { type: 'Brizzi', yesterday: yesterday.brizzipayment, today: today.brizzipayment },
+                { type: 'Tap Cash', yesterday: yesterday.tapcashpayment, today: today.tapcashpayment },
+                { type: 'Parkee', yesterday: yesterday.parkeepayment, today: today.parkeepayment },
+                { type: 'Cash', yesterday: yesterday.cashpayment, today: today.cashpayment }
+            ];
+
             const formattedRows = rows.map((item, index) => ({
                 no: index + 1,
                 payment: item.type,
@@ -346,107 +265,22 @@ $(document).ready(function() {
                 today: formatRupiah(item.today)
             }));
 
-            table.rows.add(formattedRows).draw();
+            table.clear().rows.add(formattedRows).draw();
 
             $('#dailyE-Payment tfoot').html(`
-                    <tr>
-                        <th colspan="2" style="text-align:left">All E-Payment</th>
-                        <th id="totalEpaymentYesterday">${formatRupiah(today.grandtotal)}</th>
-                        <th id="totalEpaymentToday">${formatRupiah(today.grandtotal)}</th>
-                    </tr>
-                `);
-
-            // const labels = ['Emoney', 'Flazz', 'Brizzi', 'Tap Cash', 'Parkee', 'Cash', 'All'];
-            // const dataChart = response.data[0].today[0];
-
-            // // const casualData = [
-            // //     dataChart.emoneypayment,
-            // //     dataChart.flazzpayment,
-            // //     dataChart.brizzipayment,
-            // //     dataChart.tapcashpayment,
-            // //     dataChart.parkeepayment,
-            // //     dataChart.cashpayment,
-            // //     dataChart.grandtotal
-            // // ];
-
-            // // const barColors = [
-            // //     '#0D61E2', // Emoney
-            // //     '#FFB800', // Flazz
-            // //     '#FF4D4D', // Brizzi
-            // //     '#00C9A7', // Tap Cash
-            // //     '#9C27B0', // Parkee
-            // //     '#795548', // Cash
-            // //     '#CCCCCC' // All (abu-abu muda)
-            // // ];
-
-            // // const barPaymentData = {
-            // //     labels: labels,
-            // //     datasets: [{
-            // //         label: 'Today',
-            // //         data: casualData,
-            // //         backgroundColor: barColors,
-            // //         borderColor: barColors,
-            // //         borderWidth: 1,
-            // //         datalabels: {
-            // //             anchor: 'end',
-            // //             align: 'end'
-            // //         }
-            // //     }]
-            // // };
-
-
-            // // const barConfig = {
-            // //     type: 'bar',
-            // //     data: barPaymentData,
-            // //     options: {
-            // //         responsive: true,
-            // //         maintainAspectRatio: true,
-            // //         plugins: {
-            // //             legend: {
-            // //                 position: 'top'
-            // //             },
-
-            // //             datalabels: {
-            // //                 backgroundColor: (context) => context.dataset
-            // //                     .backgroundColor,
-            // //                 borderRadius: 4,
-            // //                 color: 'white',
-            // //                 font: {
-            // //                     weight: 'bold'
-            // //                 },
-            // //                 formatter: function(value, context) {
-            // //                     return new Intl.NumberFormat('id-ID', {
-            // //                         style: 'currency',
-            // //                         currency: 'IDR',
-            // //                         minimumFractionDigits: 0
-            // //                     }).format(value);
-            // //                 },
-            // //                 padding: 6,
-            // //                 offset: 8
-            // //             }
-            // //         },
-            // //         scales: {
-            // //             y: {
-            // //                 beginAtZero: true,
-            // //                 ticks: {
-            // //                     precision: 0
-            // //                 },
-            // //                 grace: '10%'
-            // //             }
-            // //         }
-            // //     },
-            // //     plugins: [
-            // //         ChartDataLabels
-            // //     ] // make sure to include this if you're using CDN
-            // // };
-            // // const ctx = document.getElementById('dailyE-PaymentBar')?.getContext('2d');
-            // // if (ctx) {
-            // //     new Chart(ctx, barConfig);
-            // // }
-
+                <tr>
+                    <th colspan="2" style="text-align:left">All E-Payment</th>
+                    <th id="totalEpaymentYesterday">${formatRupiah(yesterday.grandtotal)}</th>
+                    <th id="totalEpaymentToday">${formatRupiah(today.grandtotal)}</th>
+                </tr>
+            `);
         }
-    })
+    });
+}
+    fetchDailyEPaymentSummary();
+    setInterval(fetchDailyEPaymentSummary, 5000);
 
+    function fetchWeeklyEpayment() {
     $.ajax({
         url: weeklyEpaymentURL,
         method: 'GET',
@@ -454,11 +288,11 @@ $(document).ready(function() {
             const thisWeekEpayment = response.this_week.totals;
             const lastWeekEpayment = response.last_week.totals;
 
-            const compare= response.table_data;
+            const compare = response.table_data;
             const container = $('#weekly-epayment-comparison');
+            container.empty();
+            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-12'];
 
-            container.empty(); // Biar gak dobel kalau dipanggil ulang
-            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6','col-md-12'];
             compare.forEach((payment, index) => {
                 const html = `
                     <div class="${colClasses[index]}">
@@ -467,8 +301,7 @@ $(document).ready(function() {
                             <div class="d-flex align-items-baseline">
                                 <h6 class="card-value" style="color: #000 !important">${formatRupiah(payment.this_week)}</h6>
                                 <span class="ms-2" style="color: ${payment.color}">
-                                    ${payment.percent_change}
-                                    ${payment.direction}
+                                    ${payment.percent_change}${payment.direction}
                                 </span>
                             </div>
                             <div class="yesterday"  style="color: #000 !important">Two Weeks Ago: ${formatRupiah(payment.last_week)}</div>
@@ -477,32 +310,15 @@ $(document).ready(function() {
                 `;
                 container.append(html);
             });
-    
-            const rows = [{
-                type: 'E Money',
-                last_week: lastWeekEpayment.emoneypayment,
-                this_week: thisWeekEpayment.emoneypayment
-            }, {
-                type: 'Flazz',
-                last_week: lastWeekEpayment.flazzpayment,
-                this_week: thisWeekEpayment.flazzpayment
-            }, {
-                type: 'Brizzi',
-                last_week: lastWeekEpayment.brizzipayment,
-                this_week: thisWeekEpayment.brizzipayment
-            }, {
-                type: 'Tap Cash',
-                last_week: lastWeekEpayment.tapcashpayment,
-                this_week: thisWeekEpayment.tapcashpayment
-            }, {
-                type: 'Parkee',
-                last_week: lastWeekEpayment.parkeepayment,
-                this_week: thisWeekEpayment.parkeepayment
-            }, {
-                type: 'Cash',
-                last_week: lastWeekEpayment.cashpayment,
-                this_week: thisWeekEpayment.cashpayment
-            }]
+
+            const rows = [
+                { type: 'E Money', last_week: lastWeekEpayment.emoneypayment, this_week: thisWeekEpayment.emoneypayment },
+                { type: 'Flazz', last_week: lastWeekEpayment.flazzpayment, this_week: thisWeekEpayment.flazzpayment },
+                { type: 'Brizzi', last_week: lastWeekEpayment.brizzipayment, this_week: thisWeekEpayment.brizzipayment },
+                { type: 'Tap Cash', last_week: lastWeekEpayment.tapcashpayment, this_week: thisWeekEpayment.tapcashpayment },
+                { type: 'Parkee', last_week: lastWeekEpayment.parkeepayment, this_week: thisWeekEpayment.parkeepayment },
+                { type: 'Cash', last_week: lastWeekEpayment.cashpayment, this_week: thisWeekEpayment.cashpayment }
+            ];
 
             const formattedRows = rows.map((item, index) => ({
                 no: index + 1,
@@ -511,25 +327,21 @@ $(document).ready(function() {
                 this_week: formatRupiah(item.this_week)
             }));
 
-            weeklyTable.rows.add(formattedRows).draw();
+            weeklyTable.clear().rows.add(formattedRows).draw();
 
             $('#weeklyE-Payment tfoot').html(`
-                    <tr>
-                        <th colspan="2" style="text-align:left">All E-Payment</th>
-                        <th id="totalEpaymentLastWeek">${formatRupiah(lastWeekEpayment.allpayment)}</th>
-                        <th id="totalEpaymentThisWeek">${formatRupiah(thisWeekEpayment.allpayment)}</th>
-                    </tr>
-                `);
+                <tr>
+                    <th colspan="2" style="text-align:left">All E-Payment</th>
+                    <th id="totalEpaymentLastWeek">${formatRupiah(lastWeekEpayment.allpayment)}</th>
+                    <th id="totalEpaymentThisWeek">${formatRupiah(thisWeekEpayment.allpayment)}</th>
+                </tr>
+            `);
 
             const thisWeekEpaymentChart = response.this_week.data;
             const labels = thisWeekEpaymentChart.map(item => {
                 const date = new Date(item.tanggal);
-                return date.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short'
-                }); // hasilnya: 14 Apr, 15 Apr, dst.
+                return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
             });
-
 
             const weeklyData = [
                 thisWeekEpaymentChart.map(item => item.emoneypayment),
@@ -541,318 +353,78 @@ $(document).ready(function() {
                 thisWeekEpaymentChart.map(item => item.allpayment)
             ];
 
+            const chartLabels = ['E Money', 'Flazz', 'Brizzi', 'Tap Cash', 'Parkee', 'Cash', 'All'];
+            const chartColors = ['#0D61E2', '#FFB800', '#FF4D4D', '#00C9A7', '#9C27B0', '#795548', '#CCCCCC'];
 
-            const barData = {
-                labels: labels,
-                datasets: [{
-                        label: 'E Money',
-                        data: weeklyData[0],
-                        backgroundColor: '#0D61E2',
-                        borderColor: '#0D61E2',
-                        borderWidth: 1,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Flazz',
-                        data: weeklyData[1],
-                        backgroundColor: '#FFB800',
-                        borderColor: '#FFB800',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Brizzi',
-                        data: weeklyData[2],
-                        backgroundColor: '#FF4D4D',
-                        borderColor: '#FF4D4D',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Tap Cash',
-                        data: weeklyData[3],
-                        backgroundColor: '#00C9A7',
-                        borderColor: '#00C9A7',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Parkee',
-                        data: weeklyData[4],
-                        backgroundColor: '#9C27B0',
-                        borderColor: '#9C27B0',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Cash',
-                        data: weeklyData[5],
-                        backgroundColor: '#795548',
-                        borderColor: '#795548',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'All',
-                        data: weeklyData[6],
-                        backgroundColor: '#CCCCCC', // warna abu-abu muda untuk All Payment
-                        borderColor: '#CCCCCC', // warna abu-abu muda untuk All Payment
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    }
-                ]
-            };
-            const barConfig = {
-                type: 'bar',
-                data: barData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                color: '#000',
+            const createDatasets = (fill = true) => chartLabels.map((label, i) => ({
+                label: label,
+                data: weeklyData[i],
+                backgroundColor: chartColors[i],
+                borderColor: chartColors[i],
+                borderWidth: 1,
+                fill: fill,
+                hidden: i !== 0,
+                datalabels: { anchor: 'end', align: 'end' }
+            }));
 
-                            }
-                        },
+            // Destroy previous charts if needed
+            if (window.weeklyBarChart) window.weeklyBarChart.destroy();
+            if (window.weeklyLineChart) window.weeklyLineChart.destroy();
 
-                        datalabels: {
-                            backgroundColor: (context) => context.dataset
-                                .backgroundColor,
-                            borderRadius: 4,
-                            color: 'white',
-                            font: {
-                                weight: 'bold',
-                                size: 9
-
-                            },
-                            formatter: function(value, context) {
-                                return new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR',
-                                    minimumFractionDigits: 0
-                                }).format(value);
-                            },
-                            padding: 6,
-                            offset: 8
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0,
-                                color: '#000'
-                            },
-                            grace: '10%'
-                        },
-                        x: {
-                            ticks: {
-                                color: '#000'
-                            }
-                        }
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top', labels: { color: '#000' } },
+                    datalabels: {
+                        backgroundColor: ctx => ctx.dataset.backgroundColor,
+                        borderRadius: 4,
+                        color: 'white',
+                        font: { weight: 'bold', size: 9 },
+                        formatter: value => new Intl.NumberFormat('id-ID', {
+                            style: 'currency', currency: 'IDR', minimumFractionDigits: 0
+                        }).format(value),
+                        padding: 6,
+                        offset: 8
                     }
                 },
-                plugins: [
-                    ChartDataLabels
-                ]
+                scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0, color: '#000' }, grace: '10%' },
+                    x: { ticks: { color: '#000' } }
+                }
             };
 
-            const lineData = {
-                labels: labels,
-                datasets: [{
-                        label: 'E Money',
-                        data: weeklyData[0],
-                        backgroundColor: '#0D61E2',
-                        borderColor: '#0D61E2',
-                        borderWidth: 1,
-                        fill: false,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Flazz',
-                        data: weeklyData[1],
-                        backgroundColor: '#FFB800',
-                        borderColor: '#FFB800',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Brizzi',
-                        data: weeklyData[2],
-                        backgroundColor: '#FF4D4D',
-                        borderColor: '#FF4D4D',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Tap Cash',
-                        data: weeklyData[3],
-                        backgroundColor: '#00C9A7',
-                        borderColor: '#00C9A7',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Parkee',
-                        data: weeklyData[4],
-                        backgroundColor: '#9C27B0',
-                        borderColor: '#9C27B0',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Cash',
-                        data: weeklyData[5],
-                        backgroundColor: '#795548',
-                        borderColor: '#795548',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    }, {
-                        label: 'All',
-                        data: weeklyData[6],
-                        backgroundColor: '#CCCCCC', // warna abu-abu muda untuk All Payment
-                        borderColor: '#CCCCCC', // warna abu-abu muda untuk All Payment
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    }
-                ]
-            };
-
-            const lineConfig = {
-                type: 'line',
-                data: lineData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                color: '#000',
-
-                            }
-                        },
-
-                        datalabels: {
-                            backgroundColor: (context) => context.dataset
-                                .backgroundColor,
-                            borderRadius: 4,
-                            color: 'white',
-                            font: {
-                                weight: 'bold',
-                                size: 9
-
-                            },
-                            formatter: function(value, context) {
-                                return new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR',
-                                    minimumFractionDigits: 0
-                                }).format(value);
-                            },
-                            padding: 6,
-                            offset: 8
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0,
-                                color: '#000'
-                            },
-                            grace: '10%'
-                        },
-                        x: {
-                            ticks: {
-                                color: '#000'
-                            }
-                        }
-                    }
-                },
-                plugins: [
-                    ChartDataLabels
-                ]
-            };
+            const ctxBar = document.getElementById('weeklyE-PaymentBar')?.getContext('2d');
             const ctxLine = document.getElementById('weeklyE-PaymentLine')?.getContext('2d');
+
+            if (ctxBar) {
+                window.weeklyBarChart = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: { labels, datasets: createDatasets(true) },
+                    options: commonOptions,
+                    plugins: [ChartDataLabels]
+                });
+            }
+
             if (ctxLine) {
-                new Chart(ctxLine, lineConfig);
+                window.weeklyLineChart = new Chart(ctxLine, {
+                    type: 'line',
+                    data: { labels, datasets: createDatasets(false) },
+                    options: commonOptions,
+                    plugins: [ChartDataLabels]
+                });
             }
-
-
-            const ctx = document.getElementById('weeklyE-PaymentBar')?.getContext('2d');
-            if (ctx) {
-                new Chart(ctx, barConfig);
-            }
-
         }
+    });
+}
+
+fetchWeeklyEpayment();
+setInterval(fetchWeeklyEpayment, 5000);
 
 
+   let monthlyBarChart, monthlyLineChart;
 
-    })
-
+function fetchMonthlyEpayment() {
     $.ajax({
         url: monthlyEpaymentURL,
         method: 'GET',
@@ -860,11 +432,11 @@ $(document).ready(function() {
             const thisMonthEpayment = response.this_Month.totals;
             const lastMonthEpayment = response.last_Month.totals;
 
-            const compare= response.table_data;
+            const compare = response.table_data;
             const container = $('#monthly-epayment-comparison');
+            container.empty();
 
-            container.empty(); // Biar gak dobel kalau dipanggil ulang
-            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6','col-md-12'];
+            const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-12'];
             compare.forEach((payment, index) => {
                 const html = `
                     <div class="${colClasses[index]}">
@@ -873,8 +445,7 @@ $(document).ready(function() {
                             <div class="d-flex align-items-baseline">
                                 <h6 class="card-value" style="color: #000 !important">${formatRupiah(payment.this_month)}</h6>
                                 <span class="ms-2" style="color: ${payment.color}">
-                                    ${payment.percent_change}
-                                    ${payment.direction}
+                                    ${payment.percent_change} ${payment.direction}
                                 </span>
                             </div>
                             <div class="yesterday" style="color: #000 !important">Two Months Ago: ${formatRupiah(payment.last_month)}</div>
@@ -884,31 +455,15 @@ $(document).ready(function() {
                 container.append(html);
             });
 
-            const rows = [{
-                type: 'E Money',
-                last_month: lastMonthEpayment.emoneypayment,
-                this_month: thisMonthEpayment.emoneypayment
-            }, {
-                type: 'Flazz',
-                last_month: lastMonthEpayment.flazzpayment,
-                this_month: thisMonthEpayment.flazzpayment
-            }, {
-                type: 'Brizzi',
-                last_month: lastMonthEpayment.brizzipayment,
-                this_month: thisMonthEpayment.brizzipayment
-            }, {
-                type: 'Tap Cash',
-                last_month: lastMonthEpayment.tapcashpayment,
-                this_month: thisMonthEpayment.tapcashpayment
-            }, {
-                type: 'Parkee',
-                last_month: lastMonthEpayment.parkeepayment,
-                this_month: thisMonthEpayment.parkeepayment
-            }, {
-                type: 'Cash',
-                last_month: lastMonthEpayment.cashpayment,
-                this_month: thisMonthEpayment.cashpayment
-            }]
+            const rows = [
+                { type: 'E Money', last_month: lastMonthEpayment.emoneypayment, this_month: thisMonthEpayment.emoneypayment },
+                { type: 'Flazz', last_month: lastMonthEpayment.flazzpayment, this_month: thisMonthEpayment.flazzpayment },
+                { type: 'Brizzi', last_month: lastMonthEpayment.brizzipayment, this_month: thisMonthEpayment.brizzipayment },
+                { type: 'Tap Cash', last_month: lastMonthEpayment.tapcashpayment, this_month: thisMonthEpayment.tapcashpayment },
+                { type: 'Parkee', last_month: lastMonthEpayment.parkeepayment, this_month: thisMonthEpayment.parkeepayment },
+                { type: 'Cash', last_month: lastMonthEpayment.cashpayment, this_month: thisMonthEpayment.cashpayment }
+            ];
+
             const formattedRows = rows.map((item, index) => ({
                 no: index + 1,
                 payment: item.type,
@@ -916,18 +471,18 @@ $(document).ready(function() {
                 this_month: formatRupiah(item.this_month)
             }));
 
-            monthlyTable.rows.add(formattedRows).draw();
+            monthlyTable.clear().rows.add(formattedRows).draw();
+
             $('#monthlyE-Payment tfoot').html(`
-                    <tr>
-                        <th colspan="2" style="text-align:left">All E-Payment</th>
-                        <th id="totalEpaymentLastMonth">${formatRupiah(lastMonthEpayment.allpayment)}</th>
-                        <th id="totalEpaymentThisMonth">${formatRupiah(thisMonthEpayment.allpayment)}</th>
-                    </tr>
-                `);
+                <tr>
+                    <th colspan="2" style="text-align:left">All E-Payment</th>
+                    <th id="totalEpaymentLastMonth">${formatRupiah(lastMonthEpayment.allpayment)}</th>
+                    <th id="totalEpaymentThisMonth">${formatRupiah(thisMonthEpayment.allpayment)}</th>
+                </tr>
+            `);
 
             const thisMonthEpaymentChart = response.this_Month.weekly_totals;
-
-            const labels = Object.keys(thisMonthEpaymentChart); // week1, week2, etc.
+            const labels = Object.keys(thisMonthEpaymentChart);
 
             const monthlyData = [
                 Object.values(thisMonthEpaymentChart).map(item => item.emoneypayment),
@@ -939,314 +494,75 @@ $(document).ready(function() {
                 Object.values(thisMonthEpaymentChart).map(item => item.allpayment)
             ];
 
-            const barData = {
-                labels: labels,
-                datasets: [{
-                        label: 'E Money',
-                        data: monthlyData[0],
-                        backgroundColor: '#0D61E2',
-                        borderColor: '#0D61E2',
-                        borderWidth: 1,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Flazz',
-                        data: monthlyData[1],
-                        backgroundColor: '#FFB800',
-                        borderColor: '#FFB800',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Brizzi',
-                        data: monthlyData[2],
-                        backgroundColor: '#FF4D4D',
-                        borderColor: '#FF4D4D',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Tap Cash',
-                        data: monthlyData[3],
-                        backgroundColor: '#00C9A7',
-                        borderColor: '#00C9A7',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Parkee',
-                        data: monthlyData[4],
-                        backgroundColor: '#9C27B0',
-                        borderColor: '#9C27B0',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Cash',
-                        data: monthlyData[5],
-                        backgroundColor: '#795548',
-                        borderColor: '#795548',
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    }, {
-                        label: 'All',
-                        data: monthlyData[6],
-                        backgroundColor: '#CCCCCC', // warna abu-abu muda untuk All Payment
-                        borderColor: '#CCCCCC', // warna abu-abu muda untuk All Payment
-                        borderWidth: 1,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    }
-                ]
-            };
+            const chartLabels = ['E Money', 'Flazz', 'Brizzi', 'Tap Cash', 'Parkee', 'Cash', 'All'];
+            const chartColors = ['#0D61E2', '#FFB800', '#FF4D4D', '#00C9A7', '#9C27B0', '#795548', '#CCCCCC'];
 
-            const barConfig = {
-                type: 'bar',
-                data: barData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                color: '#000',
+            const buildDatasets = (fill = true) => chartLabels.map((label, i) => ({
+                label,
+                data: monthlyData[i],
+                backgroundColor: chartColors[i],
+                borderColor: chartColors[i],
+                borderWidth: 1,
+                hidden: i !== 0,
+                fill,
+                datalabels: { anchor: 'end', align: 'end' }
+            }));
 
-                            }
-                        },
-
-                        datalabels: {
-                            backgroundColor: (context) => context.dataset
-                                .backgroundColor,
-                            borderRadius: 4,
-                            color: 'white',
-                            font: {
-                                weight: 'bold',
-                                size: 9
-
-                            },
-                            formatter: function(value, context) {
-                                return new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR',
-                                    minimumFractionDigits: 0
-                                }).format(value);
-                            },
-                            padding: 6,
-                            offset: 8
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0,
-                                color: '#000'
-                            },
-                            grace: '10%'
-                        },
-                        x: {
-                            ticks: {
-                                color: '#000'
-                            }
-                        }
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top', labels: { color: '#000' } },
+                    datalabels: {
+                        backgroundColor: ctx => ctx.dataset.backgroundColor,
+                        borderRadius: 4,
+                        color: 'white',
+                        font: { weight: 'bold', size: 9 },
+                        formatter: value => new Intl.NumberFormat('id-ID', {
+                            style: 'currency', currency: 'IDR', minimumFractionDigits: 0
+                        }).format(value),
+                        padding: 6,
+                        offset: 8
                     }
                 },
-                plugins: [
-                    ChartDataLabels
-                ]
+                scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0, color: '#000' }, grace: '10%' },
+                    x: { ticks: { color: '#000' } }
+                }
             };
 
-            const lineData = {
-                labels: labels,
-                datasets: [{
-                        label: 'E Money',
-                        data: monthlyData[0],
-                        backgroundColor: '#0D61E2',
-                        borderColor: '#0D61E2',
-                        borderWidth: 1,
-                        fill: false,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Flazz',
-                        data: monthlyData[1],
-                        backgroundColor: '#FFB800',
-                        borderColor: '#FFB800',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Brizzi',
-                        data: monthlyData[2],
-                        backgroundColor: '#FF4D4D',
-                        borderColor: '#FF4D4D',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Tap Cash',
-                        data: monthlyData[3],
-                        backgroundColor: '#00C9A7',
-                        borderColor: '#00C9A7',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Parkee',
-                        data: monthlyData[4],
-                        backgroundColor: '#9C27B0',
-                        borderColor: '#9C27B0',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    },
-                    {
-                        label: 'Cash',
-                        data: monthlyData[5],
-                        backgroundColor: '#795548',
-                        borderColor: '#795548',
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    }, {
-                        label: 'All',
-                        data: monthlyData[6],
-                        backgroundColor: '#CCCCCC', // warna abu-abu muda untuk All Payment
-                        borderColor: '#CCCCCC', // warna abu-abu muda untuk All Payment
-                        borderWidth: 1,
-                        fill: false,
-                        hidden: true,
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'end'
-                        }
-                    }
-                ]
-            };
+            // Destroy previous chart instances if they exist
+            if (monthlyBarChart) monthlyBarChart.destroy();
+            if (monthlyLineChart) monthlyLineChart.destroy();
 
-            const lineConfig = {
-                type: 'line',
-                data: lineData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                color: '#000',
-
-                            }
-                        },
-
-                        datalabels: {
-                            backgroundColor: (context) => context.dataset
-                                .backgroundColor,
-                            borderRadius: 4,
-                            color: 'white',
-                            font: {
-                                weight: 'bold',
-                                size: 9
-
-                            },
-                            formatter: function(value, context) {
-                                return new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR',
-                                    minimumFractionDigits: 0
-                                }).format(value);
-                            },
-                            padding: 6,
-                            offset: 8
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0,
-                                color: '#000'
-                            },
-                            grace: '10%'
-                        },
-                        x: {
-                            ticks: {
-                                color: '#000'
-                            }
-                        }
-                    }
-                },
-                plugins: [
-                    ChartDataLabels
-                ]
-            };
+            const ctxBar = document.getElementById('monthlyE-PaymentBar')?.getContext('2d');
             const ctxLine = document.getElementById('monthlyE-PaymentLine')?.getContext('2d');
+
+            if (ctxBar) {
+                monthlyBarChart = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: { labels, datasets: buildDatasets(true) },
+                    options: commonOptions,
+                    plugins: [ChartDataLabels]
+                });
+            }
+
             if (ctxLine) {
-                new Chart(ctxLine, lineConfig);
+                monthlyLineChart = new Chart(ctxLine, {
+                    type: 'line',
+                    data: { labels, datasets: buildDatasets(false) },
+                    options: commonOptions,
+                    plugins: [ChartDataLabels]
+                });
             }
-
-            const ctx = document.getElementById('monthlyE-PaymentBar')?.getContext('2d');
-            if (ctx) {
-                new Chart(ctx, barConfig);
-            }
-
-
-
-
-
         }
-    })
+    });
+}
+
+// ✅ Panggilan pertama
+fetchMonthlyEpayment();
+
+// 🔁 Refresh otomatis tiap 5 detik
+setInterval(fetchMonthlyEpayment, 5000);
+
 });

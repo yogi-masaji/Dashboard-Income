@@ -111,7 +111,8 @@ $(document).ready(function() {
     });
     runAllFetch();
 
-    setInterval(runAllFetch, 10000);
+    // Set interval to run every 5 seconds
+    setInterval(runAllFetch, 5000);
 });
 
 
@@ -140,7 +141,7 @@ async function dailyData() {
             
                 const container = $('#daily-transaction-comparison');
 
-        container.empty(); // Biar gak dobel kalau dipanggil ulang
+        container.empty(); // Clear container to avoid duplication
 
         compare.forEach(vehicle => {
             const html = `
@@ -389,7 +390,7 @@ async function weeklyData(){
             
                 const container = $('#weekly-transaction-comparison');
 
-        container.empty(); // Biar gak dobel kalau dipanggil ulang
+        container.empty(); // Clear container to avoid duplication
 
         compare.forEach(vehicle => {
             const html = `
@@ -484,7 +485,7 @@ async function weeklyData(){
                     return date.toLocaleDateString('en-GB', {
                         day: '2-digit',
                         month: 'short'
-                    }); // hasilnya: 14 Apr, 15 Apr, dst.
+                    }); // e.g.: 14 Apr, 15 Apr
                 });
 
                 const casualData = [
@@ -993,7 +994,7 @@ async function monthlyData(){
                 
                 const container = $('#monthly-transaction-comparison');
 
-        container.empty(); // Biar gak dobel kalau dipanggil ulang
+        container.empty(); // Clear container to avoid duplication
 
         compare.forEach(vehicle => {
             const html = `

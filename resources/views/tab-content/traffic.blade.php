@@ -30,11 +30,11 @@
         <div class="tab-content" id="pills-tabContent-daily">
             <div class="tab-pane fade show active" id="pills-pintumasuk-daily" role="tabpanel"
                 aria-labelledby="pills-pintumasuk-tab-daily">
-                @include('nested-tab.dailyMasuk')
+                @include('nested-tab.dailymasuk')
             </div>
             <div class="tab-pane fade" id="pills-pintukeluar-daily" role="tabpanel"
                 aria-labelledby="pills-pintukeluar-tab-daily">
-                @include('nested-tab.dailyKeluar')
+                @include('nested-tab.dailykeluar')
             </div>
         </div>
     </div>
@@ -60,11 +60,11 @@
         <div class="tab-content" id="pills-tabContent-weekly">
             <div class="tab-pane fade show active" id="pills-pintumasuk-weekly" role="tabpanel"
                 aria-labelledby="pills-pintumasuk-tab-weekly">
-                @include('nested-tab.weeklyMasuk')
+                @include('nested-tab.weeklymasuk')
             </div>
             <div class="tab-pane fade" id="pills-pintukeluar-weekly" role="tabpanel"
                 aria-labelledby="pills-pintukeluar-tab-weekly">
-                @include('nested-tab.weeklyKeluar')
+                @include('nested-tab.weeklykeluar')
             </div>
         </div>
     </div>
@@ -90,11 +90,11 @@
         <div class="tab-content" id="pills-tabContent-monthly">
             <div class="tab-pane fade show active" id="pills-pintumasuk-monthly" role="tabpanel"
                 aria-labelledby="pills-pintumasuk-tab-monthly">
-                @include('nested-tab.monthlyMasuk')
+                @include('nested-tab.monthlykasuk')
             </div>
             <div class="tab-pane fade" id="pills-pintukeluar-monthly" role="tabpanel"
                 aria-labelledby="pills-pintukeluar-tab-monthly">
-                @include('nested-tab.monthlyKeluar')
+                @include('nested-tab.monthlykeluar')
             </div>
         </div>
     </div>

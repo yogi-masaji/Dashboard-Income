@@ -81,7 +81,7 @@
             font-weight: bold;
         }
     </style>
-    <div class="container">
+    <div class="">
         <div class="row">
             <div class="col-md-4 content-custom ">
                 <p>Daily Quantity</p>
