@@ -4,6 +4,7 @@
         <div class="row d-flex align-items-stretch" id="dashboardRow">
             <div class="col-md-6 d-flex">
                 <div class="content-custom flex-fill">
+                    <h6>Comparison today & yesterday</h6>
                     <div class="row" id="daily-epayment-comparison"></div>
                 </div>
             </div>

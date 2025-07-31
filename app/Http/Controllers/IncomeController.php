@@ -91,16 +91,18 @@ class IncomeController extends Controller
                 $lastWeekData = collect($incomeData)->filter(function ($item) use ($lastWeekStart, $lastWeekEnd) {
                     return Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd);
                 })->values();
+
                 $twoWeeksAgoData = collect($incomeData)->filter(function ($item) use ($twoWeeksAgoStart, $twoWeeksAgoEnd) {
                     return Carbon::parse($item['tanggal'])->between($twoWeeksAgoStart, $twoWeeksAgoEnd);
                 })->values();
-                // Hitung total income mingguan
+
                 $thisWeekTotals = $this->calculateIncomeTotals($thisWeekData);
                 $lastWeekTotals = $this->calculateIncomeTotals($lastWeekData);
                 $twoWeeksAgoTotals = $this->calculateIncomeTotals($twoWeeksAgoData);
+
                 return response()->json([
                     'response' => 'Success Get Data',
-                    'message' => 'Get Income Data Period ' . $lastWeekStart . ' - ' . $lastWeekEnd . ' (Last Week) and ' . $thisWeekStart . ' - ' . $thisWeekEnd . ' (This Week)',
+                    'message' => 'Get Income Data Period ' . $lastWeekStart . ' - ' . $lastWeekEnd . ' (Last Week)',
                     'status_code' => 200,
                     'location_code' => $locationCode,
                     'this_week' => [
@@ -111,7 +113,7 @@ class IncomeController extends Controller
                         'data' => $lastWeekData,
                         'totals' => $lastWeekTotals,
                     ],
-                    'table_data' => $this->formatIncomeTable($thisWeekTotals, $twoWeeksAgoTotals),
+                    'table_data' => $this->formatIncomeTable($lastWeekTotals, $twoWeeksAgoTotals), // perbandingan last week vs two weeks ago
                 ]);
             }
 
@@ -121,21 +123,22 @@ class IncomeController extends Controller
         }
     }
 
+
     public function MonthlyIncome()
     {
         try {
             $today = Carbon::now()->timezone('Asia/Jakarta');
 
             $thisMonthStart = $today->copy()->startOfMonth()->format('Y-m-d');
-            $thisMonthEnd = $today->format('Y-m-d');
+            $thisMonthEnd = $today->copy()->endOfMonth()->format('Y-m-d');
 
-            $lastMonthStart = $today->copy()->subMonth()->startOfMonth()->format('Y-m-d');
-            $lastMonthEnd = $today->copy()->subMonth()->endOfMonth()->format('Y-m-d');
+            // FIX: Menggunakan subMonthNoOverflow() untuk menghindari bug tanggal.
+            $lastMonthStart = $today->copy()->subMonthNoOverflow()->startOfMonth()->format('Y-m-d');
+            $lastMonthEnd = $today->copy()->subMonthNoOverflow()->endOfMonth()->format('Y-m-d');
 
-
-            $twoMonthsAgoStart = $today->copy()->subMonths(2)->startOfMonth()->format('Y-m-d');
-            $twoMonthsAgoEnd = $today->copy()->subMonths(2)->endOfMonth()->format('Y-m-d');
-
+            // FIX: Menggunakan subMonthsNoOverflow() untuk menghindari bug tanggal.
+            $twoMonthsAgoStart = $today->copy()->subMonthsNoOverflow(2)->startOfMonth()->format('Y-m-d');
+            $twoMonthsAgoEnd = $today->copy()->subMonthsNoOverflow(2)->endOfMonth()->format('Y-m-d');
 
             $locationCode = session('selected_location_kode_lokasi');
 
@@ -160,14 +163,13 @@ class IncomeController extends Controller
                     return Carbon::parse($item['tanggal'])->between($twoMonthsAgoStart, $twoMonthsAgoEnd);
                 })->values();
 
-                // Hitung total income bulanan
                 $thisMonthWeekly = $this->groupByWeek($thisMonthData);
                 $lastMonthWeekly = $this->groupByWeek($lastMonthData);
                 $twoMonthsAgoWeekly = $this->groupByWeek($twoMonthsAgoData);
+
                 $thisMonthWeeklyTotals = collect($thisMonthWeekly)->map(function ($weekData) {
                     return $this->calculateIncomeTotals(collect($weekData));
                 });
-
 
                 $lastMonthWeeklyTotals = collect($lastMonthWeekly)->map(function ($weekData) {
                     return $this->calculateIncomeTotals(collect($weekData));
@@ -177,28 +179,28 @@ class IncomeController extends Controller
                     return $this->calculateIncomeTotals(collect($weekData));
                 });
 
-
                 $thisMonthTotals = $this->calculateIncomeTotals($thisMonthData);
                 $lastMonthTotals = $this->calculateIncomeTotals($lastMonthData);
                 $twoMonthsAgoTotals = $this->calculateIncomeTotals($twoMonthsAgoData);
 
                 return response()->json([
                     'response' => 'Success Get Data',
-                    'message' => 'Get Income Data Period ' . $lastMonthStart . ' - ' . $lastMonthEnd . ' (Last Month) and ' . $thisMonthStart . ' - ' . $thisMonthEnd . ' (This Month)',
+                    'message' => 'Compare Income Data: ' . $twoMonthsAgoStart . ' - ' . $twoMonthsAgoEnd . ' (Two Months Ago) vs ' . $lastMonthStart . ' - ' . $lastMonthEnd . ' (Last Month)',
                     'status_code' => 200,
                     'location_code' => $locationCode,
                     'this_Month' => [
-
                         'totals' => $thisMonthTotals,
                         'weekly_totals' => $thisMonthWeeklyTotals,
                     ],
                     'last_Month' => [
-
                         'totals' => $lastMonthTotals,
                         'weekly_totals' => $lastMonthWeeklyTotals,
                     ],
-                    'table_data' => $this->formatMonthlyIncomeTable($thisMonthTotals, $twoMonthsAgoTotals),
-
+                    'two_Months_Ago' => [
+                        'totals' => $twoMonthsAgoTotals,
+                        'weekly_totals' => $twoMonthsAgoWeeklyTotals,
+                    ],
+                    'table_data' => $this->formatMonthlyIncomeTable($lastMonthTotals, $twoMonthsAgoTotals),
                 ]);
             }
 
@@ -207,6 +209,7 @@ class IncomeController extends Controller
             return response()->json(['message' => 'Internal Server Error: ' . $e->getMessage()], 500);
         }
     }
+
 
 
     private function calculateIncomeTotals($data)
@@ -255,7 +258,7 @@ class IncomeController extends Controller
         return $weeks;
     }
 
-    private function formatIncomeTable($thisWeekTotals, $lastWeekTotals)
+    private function formatIncomeTable($lastWeekTotals, $twoWeeksAgoTotals)
     {
         $vehicles = [
             'Car' => 'carincome',
@@ -271,20 +274,20 @@ class IncomeController extends Controller
         $result = [];
 
         foreach ($vehicles as $vehicleName => $key) {
-            $last = $lastWeekTotals[$key] ?? 0;
-            $current = $thisWeekTotals[$key] ?? 0;
+            $previous = $twoWeeksAgoTotals[$key] ?? 0;
+            $current = $lastWeekTotals[$key] ?? 0;
 
-            if ($last == 0 && $current == 0) {
+            if ($previous == 0 && $current == 0) {
                 $percentChange = '0.0%';
                 $direction = '-';
                 $color = 'gray';
-            } elseif ($last == 0) {
+            } elseif ($previous == 0) {
                 $percentChange = '+100%';
                 $direction = '↑';
                 $color = 'green';
             } else {
-                $diff = $current - $last;
-                $percent = ($diff / $last) * 100;
+                $diff = $current - $previous;
+                $percent = ($diff / $previous) * 100;
                 $percentFormatted = number_format(abs($percent), 1) . '%';
                 $direction = $percent > 0 ? '↑' : '↓';
                 $color = $percent > 0 ? 'green' : 'red';
@@ -293,7 +296,7 @@ class IncomeController extends Controller
 
             $result[] = [
                 'vehicle' => $vehicleName,
-                'last_week' => $last,
+                'last_week' => $previous,
                 'this_week' => $current,
                 'percent_change' => $percentChange,
                 'direction' => $direction,
@@ -303,6 +306,7 @@ class IncomeController extends Controller
 
         return $result;
     }
+
 
     private function formatMonthlyIncomeTable($thisMonthTotals, $lastMonthTotals)
     {

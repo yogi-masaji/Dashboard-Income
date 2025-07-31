@@ -51,8 +51,8 @@ class IncomePaymentController extends Controller
         // The API URL from your original script
         $apiUrl = "http://110.0.100.70:8080/v1/api/centralpark/paymentmethodtransaction";
 
-        // Use Laravel's HTTP Client to make the request
-        $response = Http::get($apiUrl, [
+        // Use Laravel's HTTP Client to make the request with an increased timeout
+        $response = Http::timeout(300)->get($apiUrl, [
             'start_date' => $startDate,
             'end_date' => $endDate,
             'payment_method' => $paymentMethod,
@@ -77,7 +77,8 @@ class IncomePaymentController extends Controller
         $startDate = $validated['tgl_awal'];
         $endDate = $validated['tgl_akhir'];
         $apiUrl = "http://110.0.100.70:8080/v1/api/centralpark/income-lostticket?start_date={$startDate}&end_date={$endDate}";
-        $response = Http::get($apiUrl);
+        // Increased timeout to 300 seconds (5 minutes)
+        $response = Http::timeout(300)->get($apiUrl);
         if ($response->successful()) {
             return $response->json();
         }
@@ -90,7 +91,7 @@ class IncomePaymentController extends Controller
         $validated = $request->validate([
             'tgl_awal' => 'required|date',
             'tgl_akhir' => 'required|date|after_or_equal:tgl_awal',
-            'vehicle_type' => 'required|string|in:ALL,CAR,MOTORCYCLE,BOX', // Validasi vehicle_type
+            'vehicle_type' => 'required|string|in:ALL,CAR,MOTORCYCLE,BOX',
         ]);
 
         $startDate = $validated['tgl_awal'];
@@ -100,8 +101,9 @@ class IncomePaymentController extends Controller
         // URL API untuk rekap income
         $apiUrl = "http://110.0.100.70:8080/v1/api/centralpark/recap-income";
 
-        // Menggunakan HTTP Client Laravel untuk membuat request
-        $response = Http::get($apiUrl, [
+        // Menggunakan HTTP Client Laravel untuk membuat request dengan timeout yang lebih lama
+        // Timeout diatur ke 300 detik (5 menit)
+        $response = Http::timeout(300)->get($apiUrl, [
             'start_date' => $startDate,
             'end_date' => $endDate,
             'vehicle_type' => $vehicleType,

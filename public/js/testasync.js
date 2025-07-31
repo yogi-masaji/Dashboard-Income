@@ -136,6 +136,7 @@ async function dailyData() {
                 const yesterday = response.data[0].yesterday[0];
 
                 const compare = response.vehicle_comparison;
+                const formatQuantity = val => parseInt(val).toLocaleString('id-ID');
 
                 // console.log(compare);
             
@@ -164,13 +165,13 @@ async function dailyData() {
 
                 const rows = [{
                         type: 'Total Casual',
-                        yesterday: yesterday.grandcasual,
-                        today: today.grandcasual
+                        yesterday: formatQuantity(yesterday.grandcasual),
+                        today: formatQuantity(today.grandcasual)
                     },
                     {
                         type: 'Total Pass',
-                        yesterday: yesterday.grandpass,
-                        today: today.grandpass
+                        yesterday: formatQuantity(yesterday.grandpass),
+                        today: formatQuantity(today.grandpass)
                     }
                 ];
 
@@ -186,23 +187,25 @@ async function dailyData() {
                 $('#dailyQuantity tfoot').html(`
                         <tr>
                             <th colspan="2" style="text-align:left">All Vehicle</th>
-                            <th id="totalYesterday">${yesterday.grandtotal}</th>
-                            <th id="totalToday">${today.grandtotal}</th>
+                            <th id="totalYesterday">${formatQuantity(yesterday.grandtotal)}</th>
+                            <th id="totalToday">${formatQuantity(today.grandtotal)}</th>
                         </tr>
                     `);
 
-                const labels = ['Car', 'Motorbike', 'Truck', 'Taxi'];
+                const labels = ['Car', 'Motorbike', 'Truck', 'Taxi', 'Other'];
                 const casualData = [
                     today.carcasual,
                     today.motorbikecasual,
                     today.truckcasual,
-                    today.taxicasual
+                    today.taxicasual,
+                    today.othercasual
                 ];
                 const passData = [
                     today.carpass,
                     today.motorbikepass,
                     today.truckpass,
-                    today.taxipass
+                    today.taxipass,
+                    today.otherpass
                 ];
 
                 const barData = {
@@ -254,7 +257,7 @@ async function dailyData() {
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 6,
                                 offset: 8
                             }
@@ -333,7 +336,7 @@ async function dailyData() {
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 3,
                                 offset: 4
                             }
@@ -387,7 +390,7 @@ async function weeklyData(){
                 const thisWeekPassChart = response.this_week.pass;
                 const compare = response.vehicle_comparison;
 
-            
+                const formatQuantity = val => parseInt(val).toLocaleString('id-ID');
                 const container = $('#weekly-transaction-comparison');
 
         container.empty(); // Clear container to avoid duplication
@@ -412,23 +415,28 @@ async function weeklyData(){
         });
                 const rows = [{
                         type: 'Car',
-                        thisWeek: thisWeek.total_car,
-                        lastWeek: lastWeek.total_car
+                        thisWeek: formatQuantity(thisWeek.total_car),
+                        lastWeek: formatQuantity(lastWeek.total_car)
                     },
                     {
                         type: 'Motorbike',
-                        thisWeek: thisWeek.total_motorbike,
-                        lastWeek: lastWeek.total_motorbike
+                        thisWeek: formatQuantity(thisWeek.total_motorbike),
+                        lastWeek: formatQuantity(lastWeek.total_motorbike)
                     },
                     {
                         type: 'Truck',
-                        thisWeek: thisWeek.total_truck,
-                        lastWeek: lastWeek.total_truck
+                        thisWeek: formatQuantity(thisWeek.total_truck),
+                        lastWeek: formatQuantity(lastWeek.total_truck)
                     },
                     {
                         type: 'Taxi',
-                        thisWeek: thisWeek.total_taxi,
-                        lastWeek: lastWeek.total_taxi
+                        thisWeek: formatQuantity(thisWeek.total_taxi),
+                        lastWeek: formatQuantity(lastWeek.total_taxi)
+                    },
+                    {
+                        type: 'Other',
+                        thisWeek: formatQuantity(thisWeek.total_other),
+                        lastWeek: formatQuantity(lastWeek.total_other)
                     }
                 ];
 
@@ -443,23 +451,28 @@ async function weeklyData(){
 
                 const rowsPass = [{
                     type: 'Car',
-                    thisWeek: thisWeekPass.total_car,
-                    lastWeek: lastWeek.total_car
+                    thisWeek: formatQuantity(thisWeekPass.total_car),
+                    lastWeek: formatQuantity(lastWeekPass.total_car)
                 },
                 {
                     type: 'Motorbike',
-                    thisWeek: thisWeekPass.total_motorbike,
-                    lastWeek: lastWeekPass.total_motorbike
+                    thisWeek: formatQuantity(thisWeekPass.total_motorbike),
+                    lastWeek: formatQuantity(lastWeekPass.total_motorbike)
                 },
                 {
                     type: 'Truck',
-                    thisWeek: thisWeekPass.total_truck,
-                    lastWeek: lastWeekPass.total_truck
+                    thisWeek: formatQuantity(thisWeekPass.total_truck),
+                    lastWeek: formatQuantity(lastWeekPass.total_truck)
                 },
                 {
                     type: 'Taxi',
-                    thisWeek: thisWeekPass.total_taxi,
-                    lastWeek: lastWeekPass.total_taxi
+                    thisWeek: formatQuantity(thisWeekPass.total_taxi),
+                    lastWeek: formatQuantity(lastWeekPass.total_taxi)
+                },
+                {
+                    type: 'Other',
+                    thisWeek: formatQuantity(thisWeekPass.total_other),
+                    lastWeek: formatQuantity(lastWeekPass.total_other)
                 }
             ];
 
@@ -475,8 +488,8 @@ async function weeklyData(){
                 $('#weeklyQuantity tfoot').html(`
                         <tr>
                             <th colspan="2" style="text-align:left">All Vehicle</th>
-                            <th id="totalLastWeek">${lastWeek.total_vehicle}</th>
-                            <th id="totalThisWeek">${thisWeek.total_vehicle}</th>
+                            <th id="totalLastWeek">${formatQuantity(lastWeek.total_vehicle)}</th>
+                            <th id="totalThisWeek">${formatQuantity(thisWeek.total_vehicle)}</th>
                         </tr>
                     `);
 
@@ -555,6 +568,17 @@ async function weeklyData(){
                                 align: 'end'
                             },
                             hidden: true,
+                        },{
+                            label: 'Other',
+                            data: casualData[4],
+                            backgroundColor: '#720049ff',
+                            borderColor: '#720049ff',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
                         }, {
                             label: 'Vehicle',
                             data: casualData[5],
@@ -593,7 +617,7 @@ async function weeklyData(){
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 6,
                                 offset: 8
                             }
@@ -663,6 +687,17 @@ async function weeklyData(){
                                 align: 'end'
                             },
                             hidden: true,
+                        },{
+                            label: 'Other',
+                            data: passData[4],
+                            backgroundColor: '#720049ff',
+                            borderColor: '#720049ff',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
                         }, {
                             label: 'Vehicle',
                             data: passData[5],
@@ -701,7 +736,7 @@ async function weeklyData(){
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 6,
                                 offset: 8
                             }
@@ -776,6 +811,30 @@ async function weeklyData(){
                             },
                             tension: 0.5,
                             hidden: true,
+                        },{
+                            label: 'Other',
+                            data: casualData[4],
+                            backgroundColor: '#720049ff',
+                            borderColor: '#720049ff',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
+                        }, {
+                            label: 'Vehicle',
+                            data: casualData[5],
+                            backgroundColor: '#E69500',
+                            borderColor: '#E69500',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
                         }, {
                             label: 'Vehicle',
                             data: casualData[5],
@@ -814,7 +873,7 @@ async function weeklyData(){
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 3,
                                 offset: 4
                             }
@@ -890,6 +949,18 @@ async function weeklyData(){
                             },
                             tension: 0.5,
                             hidden: true,
+                        },{
+                            label: 'Other',
+                            data: passData[4],
+                            backgroundColor: '#720049ff',
+                            borderColor: '#720049ff',
+                            borderWidth: 3,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            tension: 0.5,
+                            hidden: true,
                         }, {
                             label: 'Vehicle',
                             data: passData[5],
@@ -928,7 +999,7 @@ async function weeklyData(){
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 3,
                                 offset: 4
                             }
@@ -991,7 +1062,7 @@ async function monthlyData(){
                 const lastMonthPass = response.last_month.totals.pass;
                 const compare = response.vehicle_comparison;
 
-                
+                const formatQuantity = val => parseInt(val).toLocaleString('id-ID');
                 const container = $('#monthly-transaction-comparison');
 
         container.empty(); // Clear container to avoid duplication
@@ -1017,23 +1088,28 @@ async function monthlyData(){
                 
                 const rows = [{
                         type: 'Car',
-                        thisMonth: thisMonth.total_car,
-                        lastMonth: lastMonth.total_car
+                        thisMonth: formatQuantity(thisMonth.total_car),
+                        lastMonth: formatQuantity(lastMonth.total_car)
                     },
                     {
                         type: 'Motorbike',
-                        thisMonth: thisMonth.total_motorbike,
-                        lastMonth: lastMonth.total_motorbike
+                        thisMonth: formatQuantity(thisMonth.total_motorbike),
+                        lastMonth: formatQuantity(lastMonth.total_motorbike)
                     },
                     {
                         type: 'Truck',
-                        thisMonth: thisMonth.total_truck,
-                        lastMonth: lastMonth.total_truck
+                        thisMonth: formatQuantity(thisMonth.total_truck),
+                        lastMonth: formatQuantity(lastMonth.total_truck)
                     },
                     {
                         type: 'Taxi',
-                        thisMonth: thisMonth.total_taxi,
-                        lastMonth: lastMonth.total_taxi
+                        thisMonth: formatQuantity(thisMonth.total_taxi),
+                        lastMonth: formatQuantity(lastMonth.total_taxi)
+                    },
+                    {
+                        type: 'Other',
+                        thisMonth: formatQuantity(thisMonth.total_other),
+                        lastMonth: formatQuantity(lastMonth.total_other)
                     }
                 ];
 
@@ -1049,23 +1125,28 @@ async function monthlyData(){
 
             const rowsPass = [{
                 type: 'Car',
-                thisMonth: thisMonthPass.total_car,
-                lastMonth: lastMonthPass.total_car
+                thisMonth: formatQuantity(thisMonthPass.total_car),
+                lastMonth: formatQuantity(lastMonthPass.total_car)
             },
             {
                 type: 'Motorbike',
-                thisMonth: thisMonthPass.total_motorbike,
-                lastMonth: lastMonthPass.total_motorbike
+                thisMonth: formatQuantity(thisMonthPass.total_motorbike),
+                lastMonth: formatQuantity(lastMonthPass.total_motorbike)
             },
             {
                 type: 'Truck',
-                thisMonth: thisMonthPass.total_truck,
-                lastMonth: lastMonthPass.total_truck
+                thisMonth: formatQuantity(thisMonthPass.total_truck),
+                lastMonth: formatQuantity(lastMonthPass.total_truck)
             },
             {
                 type: 'Taxi',
-                thisMonth: thisMonthPass.total_taxi,
-                lastMonth: lastMonthPass.total_taxi
+                thisMonth: formatQuantity(thisMonthPass.total_taxi),
+                lastMonth: formatQuantity(lastMonthPass.total_taxi)
+            },
+            {
+                type: 'Other',
+                thisMonth: formatQuantity(thisMonthPass.total_other),
+                lastMonth: formatQuantity(lastMonthPass.total_other)
             }
         ];
 
@@ -1081,8 +1162,8 @@ async function monthlyData(){
                 $('#monthlyQuantity tfoot').html(`
                         <tr>
                             <th colspan="2" style="text-align:left">All Vehicle</th>
-                            <th id="totalLastMonth">${lastMonth.total_vehicle}</th>
-                            <th id="totalThisMonth">${thisMonth.total_vehicle}</th>
+                            <th id="totalLastMonth">${formatQuantity(lastMonth.total_vehicle)}</th>
+                            <th id="totalThisMonth">${formatQuantity(thisMonth.total_vehicle)}</th>
                         </tr>
                     `);
 
@@ -1111,6 +1192,10 @@ async function monthlyData(){
                         .total_taxi);
                     const totalPassVehicles = Object.values(thisMonthPassChart).map(week => week
                         .total_vehicle);
+                    const totalPassOther = Object.values(thisMonthPassChart).map(week => week
+                        .total_other);
+                const totalLostTicket = Object.values(thisMonthChart).map(week => week
+                    .total_lostticket);
     
 
                 const barData = {
@@ -1158,6 +1243,17 @@ async function monthlyData(){
                                 align: 'end'
                             },
                             hidden: true,
+                        },{
+                            label: 'Other',
+                            data: totalPassOther,
+                            backgroundColor: '#720049ff',
+                            borderColor: '#720049ff',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
                         }, {
                             label: 'Vehicle',
                             data: totalVehicles,
@@ -1196,7 +1292,7 @@ async function monthlyData(){
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 6,
                                 offset: 8
                             }
@@ -1267,6 +1363,17 @@ async function monthlyData(){
                                 align: 'end'
                             },
                             hidden: true,
+                        },{
+                            label: 'Other',
+                            data: totalPassOther,
+                            backgroundColor: '#720049ff',
+                            borderColor: '#720049ff',
+                            borderWidth: 1,
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            },
+                            hidden: true,
                         }, {
                             label: 'Vehicle',
                             data: totalPassVehicles,
@@ -1305,7 +1412,7 @@ async function monthlyData(){
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 6,
                                 offset: 8
                             }
@@ -1383,6 +1490,18 @@ async function monthlyData(){
                         tension: 0.5,
                         hidden: true,
 
+                    },{
+                        label: 'Other',
+                        data: totalPassOther,
+                        backgroundColor: '#720049ff',
+                        borderColor: '#720049ff',
+                        borderWidth: 3,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        },
+                        tension: 0.5,
+                        hidden: true,
                     }, {
                         label: 'Vehicle',
                         data: totalVehicles,
@@ -1419,7 +1538,7 @@ async function monthlyData(){
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 3,
                                 offset: 4
                             }
@@ -1496,6 +1615,18 @@ async function monthlyData(){
                         tension: 0.5,
                         hidden: true,
 
+                    },{
+                        label: 'Other',
+                        data: totalPassOther,
+                        backgroundColor: '#720049ff',
+                        borderColor: '#720049ff',
+                        borderWidth: 3,
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end'
+                        },
+                        tension: 0.5,
+                        hidden: true,
                     }, {
                         label: 'Vehicle',
                         data: totalPassVehicles,
@@ -1532,7 +1663,7 @@ async function monthlyData(){
                                 font: {
                                     weight: 'bold'
                                 },
-                                formatter: Math.round,
+                                formatter: formatQuantity,
                                 padding: 3,
                                 offset: 4
                             }

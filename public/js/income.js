@@ -134,12 +134,12 @@ $(document).ready(function() {
             `);
 
             const donutData = {
-                labels: ['Car', 'Motorbike', 'Truck', 'Taxi'],
+                labels: ['Car', 'Motorbike', 'Truck', 'Taxi', 'Other'],
                 datasets: [{
                     label: 'Income by Vehicle',
-                    data: [today.carincome, today.motorbikeincome, today.truckincome, today.taxiincome],
-                    backgroundColor: ['#0D61E2', '#EF0F51', '#FFCD56', '#32CD7D'],
-                    borderColor: ['#0D61E2', '#EF0F51', '#FFCD56', '#32CD7D'],
+                    data: [today.carincome, today.motorbikeincome, today.truckincome, today.taxiincome, today.otherincome],
+                    backgroundColor: ['#0D61E2', '#EF0F51', '#FFCD56', '#32CD7D', '#5a0e0eff'],
+                    borderColor: ['#0D61E2', '#EF0F51', '#FFCD56', '#32CD7D', '#5a0e0eff'],
                     borderWidth: 1
                 }]
             };
@@ -624,7 +624,7 @@ setInterval(loadDailyIncome, 5000);
             const totalTrucks = labels.map(label => thisMonthIncomeChart[label].truckincome);
             const totalTaxis = labels.map(label => thisMonthIncomeChart[label].taxiincome);
             const totalVehicles = labels.map(label => thisMonthIncomeChart[label].vehicleincome);
-
+            const totalOthers = labels.map(label => thisMonthIncomeChart[label].otherincome);
             const barData = {
                 labels,
                 datasets: [
@@ -632,6 +632,7 @@ setInterval(loadDailyIncome, 5000);
                     { label: 'Motorbike', data: totalMotorbikes, backgroundColor: '#DB6715', borderColor: '#DB6715', borderWidth: 1, hidden: true },
                     { label: 'Truck', data: totalTrucks, backgroundColor: '#8D60ED', borderColor: '#8D60ED', borderWidth: 1, hidden: true },
                     { label: 'Taxi', data: totalTaxis, backgroundColor: '#C46EA6', borderColor: '#C46EA6', borderWidth: 1, hidden: true },
+                    { label: 'Other', data: totalOthers, backgroundColor: '#5a0e0eff', borderColor: '#5a0e0eff', borderWidth: 1, hidden: true },
                     { label: 'Vehicle', data: totalVehicles, backgroundColor: '#D3D6DD', borderColor: '#D3D6DD', borderWidth: 1, hidden: true }
                 ]
             };
@@ -643,6 +644,7 @@ setInterval(loadDailyIncome, 5000);
                     borderWidth: 3,
                     tension: 0.5,
                     fill: false
+                    
                 }))
             };
 
@@ -658,7 +660,11 @@ setInterval(loadDailyIncome, 5000);
                         font: { weight: 'bold' },
                         formatter: val => formatRupiah(val),
                         padding: 6,
-                        offset: 8
+                        offset: 8,
+                        
+                            anchor: 'end',
+                            align: 'end'
+                        
                     }
                 },
                 scales: {

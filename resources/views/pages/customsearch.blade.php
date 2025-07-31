@@ -9,7 +9,7 @@
         $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css" />
     <style>
         .content-custom {
             padding: 10px !important;
@@ -176,7 +176,7 @@
             width: 24.25%;
         }
 
-        th.text-center.dt-orderable-none {
+        th.text-start.dt-orderable-none {
             padding: 7px;
         }
     </style>
@@ -203,30 +203,23 @@
             width: 49%;
         }
     </style>
+    <!-- CSS tambahan -->
+    <style>
+        .easepick-wrapper {
+            z-index: 1060;
+        }
+    </style>
+
     <div class="search-wrapper content-custom">
         <h5>Custom Search</h5>
-        <div class="d-flex align-items-end gap-3 mb-3">
-            <div>
-                <label for="start-date-1" class="form-label">First Period</label>
-                <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="datepicker1" class="form-label" style="color:#000;">First Period</label>
+                <input id="datepicker1" class="form-control" placeholder="Select date range..." />
             </div>
-            <div class="pb-3 fw-semibold">to</div>
-            <div>
-
-                <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
-            </div>
-        </div>
-
-        <div class="d-flex align-items-end gap-3 mb-3">
-            <div>
-                <label for="start-date-2" class="form-label">Second Period</label>
-                <input type="text" name="start2" id="start-date-2" class="form-control"
-                    placeholder="Select start date" />
-            </div>
-            <div class="pb-3 fw-semibold">to</div>
-            <div>
-
-                <input type="text" name="end2" id="end-date-2" class="form-control" placeholder="Select end date" />
+            <div class="col-md-6">
+                <label for="datepicker2" class="form-label" style="color:#000;">Second Period</label>
+                <input id="datepicker2" class="form-control" placeholder="Select date range..." />
             </div>
         </div>
 
@@ -534,52 +527,52 @@
                 <table class="table table-striped" id="table-custom">
                     <thead>
                         <tr>
-                            <th scope="col" rowspan="3" class="text-center"
+                            <th scope="col" rowspan="3" class="text-start"
                                 style="width:40px;border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">
                                 No
                             </th>
-                            <th scope="col" colspan="3" rowspan="1" class="text-center"
+                            <th scope="col" colspan="3" rowspan="1" class="text-start"
                                 style="border-top: 1px solid #000; border-right: 1px solid #000;">INCOME BY PAYMENT</th>
-                            <th scope="col" colspan="5" rowspan="1" class="text-center"
+                            <th scope="col" colspan="5" rowspan="1" class="text-start"
                                 style="border-top: 1px solid #000; border-right: 1px solid #000;">QUANTITY BY VEHICLE
                             </th>
-                            <th scope="col" colspan="3" rowspan="1" class="text-center"
+                            <th scope="col" colspan="3" rowspan="1" class="text-start"
                                 style="border-top: 1px solid #000; border-right: 1px solid #000;">INCOME BY VEHICLE</th>
                         </tr>
 
                         <tr>
                             <th scope="col" rowspan="2" style="border-right: 1px solid #000;">Payment</th>
                             <th scope="col" rowspan="2" style="border-right: 1px solid #000;"
-                                class="tgl_row1 text-center">
+                                class="tgl_row1 text-start">
                             </th>
-                            <th scope="col" rowspan="2" class="tgl_row2 text-center"
+                            <th scope="col" rowspan="2" class="tgl_row2 text-start"
                                 style="border-right: 1px solid #000;">
                             </th>
                             <th scope="col" rowspan="2"
                                 style="border-left: 1px solid #000; border-right: 1px solid #000;">
                                 Vehicle</th>
                             <th scope="col" colspan="2" style="border-right: 1px solid #000;"
-                                class="tgl_row1 text-center">
+                                class="tgl_row1 text-start">
                             </th>
-                            <th scope="col" colspan="2" class="tgl_row2 text-center"
+                            <th scope="col" colspan="2" class="tgl_row2 text-start"
                                 style="border-right: 1px solid #000;">
                             </th>
                             <th scope="col" rowspan="2"
                                 style="border-right: 1px solid #000; border-left: 1px solid #000;">
                                 Vehicle</th>
                             <th scope="col" rowspan="2" style="border-right: 1px solid #000;"
-                                class="tgl_row1 text-center">
+                                class="tgl_row1 text-start">
                             </th>
-                            <th scope="col" rowspan="2" class="tgl_row2 text-center"
+                            <th scope="col" rowspan="2" class="tgl_row2 text-start"
                                 style="border-right: 1px solid #000;">
                             </th>
 
                         </tr>
                         <tr>
-                            <th scope="col" class="text-center" style="border-right: 1px solid #000;">Pass</th>
-                            <th scope="col" class="text-center" style="border-right: 1px solid #000;">Casual</th>
-                            <th scope="col" class="text-center" style="border-right: 1px solid #000;">Pass</th>
-                            <th scope="col" class="text-center" style="border-right: 1px solid #000;">Casual</th>
+                            <th scope="col" class="text-start" style="border-right: 1px solid #000;">Pass</th>
+                            <th scope="col" class="text-start" style="border-right: 1px solid #000;">Casual</th>
+                            <th scope="col" class="text-start" style="border-right: 1px solid #000;">Pass</th>
+                            <th scope="col" class="text-start" style="border-right: 1px solid #000;">Casual</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-custom">
@@ -620,17 +613,17 @@
                         <table id="IncomePaymentFirst" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
-                                    <th scope="col" class="text-center">Date</th>
-                                    <th scope="col" class="text-center">Cash</th>
-                                    <th scope="col" class="text-center">Parkee</th>
-                                    <th scope="col" class="text-center">Emoney</th>
-                                    <th scope="col" class="text-center">Flazz</th>
-                                    <th scope="col" class="text-center">Brizzi</th>
-                                    <th scope="col" class="text-center">Tapcash</th>
-                                    <th scope="col" class="text-center">Qris</th>
-                                    <th scope="col" class="text-center">Dki Jakcard</th>
-                                    <th scope="col" class="text-center">Total</th>
+                                    <th scope="col" class="text-start" style=" width: 20px;">No</th>
+                                    <th scope="col" class="text-start">Date</th>
+                                    <th scope="col" class="text-start">Cash</th>
+                                    <th scope="col" class="text-start">Parkee</th>
+                                    <th scope="col" class="text-start">Emoney</th>
+                                    <th scope="col" class="text-start">Flazz</th>
+                                    <th scope="col" class="text-start">Brizzi</th>
+                                    <th scope="col" class="text-start">Tapcash</th>
+                                    <th scope="col" class="text-start">Qris</th>
+                                    <th scope="col" class="text-start">Dki Jakcard</th>
+                                    <th scope="col" class="text-start">Total</th>
                                 </tr>
                             </thead>
                         </table>
@@ -642,17 +635,17 @@
                         <table id="IncomePaymentSecond" class="table table-striped table-bordered" style="width: 100%">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
-                                    <th scope="col" class="text-center">Date</th>
-                                    <th scope="col" class="text-center">Cash</th>
-                                    <th scope="col" class="text-center">Parkee</th>
-                                    <th scope="col" class="text-center">Emoney</th>
-                                    <th scope="col" class="text-center">Flazz</th>
-                                    <th scope="col" class="text-center">Brizzi</th>
-                                    <th scope="col" class="text-center">Tapcash</th>
-                                    <th scope="col" class="text-center">Qris</th>
-                                    <th scope="col" class="text-center">Dki Jakcard</th>
-                                    <th scope="col" class="text-center">Total</th>
+                                    <th scope="col" class="text-start" style=" width: 20px;">No</th>
+                                    <th scope="col" class="text-start">Date</th>
+                                    <th scope="col" class="text-start">Cash</th>
+                                    <th scope="col" class="text-start">Parkee</th>
+                                    <th scope="col" class="text-start">Emoney</th>
+                                    <th scope="col" class="text-start">Flazz</th>
+                                    <th scope="col" class="text-start">Brizzi</th>
+                                    <th scope="col" class="text-start">Tapcash</th>
+                                    <th scope="col" class="text-start">Qris</th>
+                                    <th scope="col" class="text-start">Dki Jakcard</th>
+                                    <th scope="col" class="text-start">Total</th>
                                 </tr>
                             </thead>
                         </table>
@@ -694,22 +687,22 @@
                         <table id="QuantityVehicleFirst" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
-                                    <th scope="col" class="text-center">Date</th>
-                                    <th scope="col" class="text-center">Mobil</th>
-                                    <th scope="col" class="text-center">Motor</th>
-                                    <th scope="col" class="text-center">Loading</th>
-                                    <th scope="col" class="text-center">Taxi</th>
-                                    <th scope="col" class="text-center">Lost Ticket</th>
-                                    <th scope="col" class="text-center">Other</th>
-                                    <th scope="col" class="text-center">Valet Lobby</th>
-                                    <th scope="col" class="text-center">Valet Non-Lobby</th>
-                                    <th scope="col" class="text-center">VIP</th>
-                                    <th scope="col" class="text-center">Preferred Car</th>
-                                    <th scope="col" class="text-center">Preferred motorbike</th>
-                                    <th scope="col" class="text-center">E-Vip</th>
-                                    <th scope="col" class="text-center">Extend Charging</th>
-                                    <th scope="col" class="text-center">Total</th>
+                                    <th scope="col" class="text-start" style=" width: 20px;">No</th>
+                                    <th scope="col" class="text-start">Date</th>
+                                    <th scope="col" class="text-start">Mobil</th>
+                                    <th scope="col" class="text-start">Motor</th>
+                                    <th scope="col" class="text-start">Loading</th>
+                                    <th scope="col" class="text-start">Taxi</th>
+                                    <th scope="col" class="text-start">Lost Ticket</th>
+                                    <th scope="col" class="text-start">Other</th>
+                                    <th scope="col" class="text-start">Valet Lobby</th>
+                                    <th scope="col" class="text-start">Valet Non-Lobby</th>
+                                    <th scope="col" class="text-start">VIP</th>
+                                    <th scope="col" class="text-start">Preferred Car</th>
+                                    <th scope="col" class="text-start">Preferred motorbike</th>
+                                    <th scope="col" class="text-start">E-Vip</th>
+                                    <th scope="col" class="text-start">Extend Charging</th>
+                                    <th scope="col" class="text-start">Total</th>
                                 </tr>
                             </thead>
                         </table>
@@ -721,22 +714,22 @@
                         <table id="QuantityVehicleSecond" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
-                                    <th scope="col" class="text-center">Date</th>
-                                    <th scope="col" class="text-center">Mobil</th>
-                                    <th scope="col" class="text-center">Motor</th>
-                                    <th scope="col" class="text-center">Loading</th>
-                                    <th scope="col" class="text-center">Taxi</th>
-                                    <th scope="col" class="text-center">Lost Ticket</th>
-                                    <th scope="col" class="text-center">Other</th>
-                                    <th scope="col" class="text-center">Valet Lobby</th>
-                                    <th scope="col" class="text-center">Valet Non-Lobby</th>
-                                    <th scope="col" class="text-center">VIP</th>
-                                    <th scope="col" class="text-center">Preferred Car</th>
-                                    <th scope="col" class="text-center">Preferred motorbike</th>
-                                    <th scope="col" class="text-center">E-Vip</th>
-                                    <th scope="col" class="text-center">Extend Charging</th>
-                                    <th scope="col" class="text-center">Total</th>
+                                    <th scope="col" class="text-start" style=" width: 20px;">No</th>
+                                    <th scope="col" class="text-start">Date</th>
+                                    <th scope="col" class="text-start">Mobil</th>
+                                    <th scope="col" class="text-start">Motor</th>
+                                    <th scope="col" class="text-start">Loading</th>
+                                    <th scope="col" class="text-start">Taxi</th>
+                                    <th scope="col" class="text-start">Lost Ticket</th>
+                                    <th scope="col" class="text-start">Other</th>
+                                    <th scope="col" class="text-start">Valet Lobby</th>
+                                    <th scope="col" class="text-start">Valet Non-Lobby</th>
+                                    <th scope="col" class="text-start">VIP</th>
+                                    <th scope="col" class="text-start">Preferred Car</th>
+                                    <th scope="col" class="text-start">Preferred motorbike</th>
+                                    <th scope="col" class="text-start">E-Vip</th>
+                                    <th scope="col" class="text-start">Extend Charging</th>
+                                    <th scope="col" class="text-start">Total</th>
                                 </tr>
                             </thead>
                         </table>
@@ -778,22 +771,22 @@
                         <table id="IncomeVehicleFirst" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
-                                    <th scope="col" class="text-center">Date</th>
-                                    <th scope="col" class="text-center">Mobil</th>
-                                    <th scope="col" class="text-center">Motor</th>
-                                    <th scope="col" class="text-center">Loading</th>
-                                    <th scope="col" class="text-center">Taxi</th>
-                                    <th scope="col" class="text-center">Lost Ticket</th>
-                                    <th scope="col" class="text-center">Other</th>
-                                    <th scope="col" class="text-center">Valet Lobby</th>
-                                    <th scope="col" class="text-center">Valet Non-Lobby</th>
-                                    <th scope="col" class="text-center">VIP</th>
-                                    <th scope="col" class="text-center">Preferred Car</th>
-                                    <th scope="col" class="text-center">Preferred motorbike</th>
-                                    <th scope="col" class="text-center">E-Vip</th>
-                                    <th scope="col" class="text-center">Extend Charging</th>
-                                    <th scope="col" class="text-center">Total</th>
+                                    <th scope="col" class="text-start" style=" width: 20px;">No</th>
+                                    <th scope="col" class="text-start">Date</th>
+                                    <th scope="col" class="text-start">Mobil</th>
+                                    <th scope="col" class="text-start">Motor</th>
+                                    <th scope="col" class="text-start">Loading</th>
+                                    <th scope="col" class="text-start">Taxi</th>
+                                    <th scope="col" class="text-start">Lost Ticket</th>
+                                    <th scope="col" class="text-start">Other</th>
+                                    <th scope="col" class="text-start">Valet Lobby</th>
+                                    <th scope="col" class="text-start">Valet Non-Lobby</th>
+                                    <th scope="col" class="text-start">VIP</th>
+                                    <th scope="col" class="text-start">Preferred Car</th>
+                                    <th scope="col" class="text-start">Preferred motorbike</th>
+                                    <th scope="col" class="text-start">E-Vip</th>
+                                    <th scope="col" class="text-start">Extend Charging</th>
+                                    <th scope="col" class="text-start">Total</th>
                                 </tr>
                             </thead>
                         </table>
@@ -805,22 +798,22 @@
                         <table id="IncomeVehicleSecond" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center" style=" width: 20px;">No</th>
-                                    <th scope="col" class="text-center">Date</th>
-                                    <th scope="col" class="text-center">Mobil</th>
-                                    <th scope="col" class="text-center">Motor</th>
-                                    <th scope="col" class="text-center">Loading</th>
-                                    <th scope="col" class="text-center">Taxi</th>
-                                    <th scope="col" class="text-center">Lost Ticket</th>
-                                    <th scope="col" class="text-center">Other</th>
-                                    <th scope="col" class="text-center">Valet Lobby</th>
-                                    <th scope="col" class="text-center">Valet Non-Lobby</th>
-                                    <th scope="col" class="text-center">VIP</th>
-                                    <th scope="col" class="text-center">Preferred Car</th>
-                                    <th scope="col" class="text-center">Preferred motorbike</th>
-                                    <th scope="col" class="text-center">E-Vip</th>
-                                    <th scope="col" class="text-center">Extend Charging</th>
-                                    <th scope="col" class="text-center">Total</th>
+                                    <th scope="col" class="text-start" style=" width: 20px;">No</th>
+                                    <th scope="col" class="text-start">Date</th>
+                                    <th scope="col" class="text-start">Mobil</th>
+                                    <th scope="col" class="text-start">Motor</th>
+                                    <th scope="col" class="text-start">Loading</th>
+                                    <th scope="col" class="text-start">Taxi</th>
+                                    <th scope="col" class="text-start">Lost Ticket</th>
+                                    <th scope="col" class="text-start">Other</th>
+                                    <th scope="col" class="text-start">Valet Lobby</th>
+                                    <th scope="col" class="text-start">Valet Non-Lobby</th>
+                                    <th scope="col" class="text-start">VIP</th>
+                                    <th scope="col" class="text-start">Preferred Car</th>
+                                    <th scope="col" class="text-start">Preferred motorbike</th>
+                                    <th scope="col" class="text-start">E-Vip</th>
+                                    <th scope="col" class="text-start">Extend Charging</th>
+                                    <th scope="col" class="text-start">Total</th>
                                 </tr>
                             </thead>
                         </table>
@@ -829,62 +822,33 @@
             </div>
         </div>
     </div>
-    <script>
-        document.getElementById('cari').addEventListener('click', function() {
-            var start1 = document.getElementById('start-date-1').value;
-            var end1 = document.getElementById('end-date-1').value;
-            var start2 = document.getElementById('start-date-2').value;
-            var end2 = document.getElementById('end-date-2').value;
-
-            // Check if all date fields are filled
-            if (!start1 || !end1 || !start2 || !end2) {
-                // Show the alert message if any field is empty
-                document.getElementById('alertMessage').style.display = 'block';
-            } else {
-                // Hide the alert message if all fields are filled
-                document.getElementById('alertMessage').style.display = 'none';
-            }
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            // Initialize date input pairs for start and end date pickers
-            const dateInputs = [{
-                    start: '#start-date-1',
-                    end: '#end-date-1'
+            // Inisialisasi easepick untuk rentang tanggal
+            const picker1 = new easepick.create({
+                element: document.getElementById('datepicker1'),
+                css: [
+                    'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                ],
+                plugins: ['RangePlugin'],
+                RangePlugin: {
+                    delimiter: ' to ',
                 },
-                {
-                    start: '#start-date-2',
-                    end: '#end-date-2'
-                }
-            ];
+                format: 'DD-MM-YYYY'
+            });
 
-            // Set up date range pickers for each pair
-            dateInputs.forEach(pair => {
-                $(pair.start).daterangepicker({
-                    singleDatePicker: true,
-                    autoApply: true,
-                    locale: {
-                        format: 'DD-MM-YYYY'
-                    }
-                }, function(start) {
-                    $(pair.start).val(start.format('DD-MM-YYYY'));
-                });
-
-                $(pair.end).daterangepicker({
-                    singleDatePicker: true,
-                    autoApply: true,
-                    locale: {
-                        format: 'DD-MM-YYYY'
-                    }
-                }, function(end) {
-                    $(pair.end).val(end.format('DD-MM-YYYY'));
-                });
-
-                // Set placeholders for the input fields
-                $(pair.start).val('').attr("placeholder", "Select Start Date");
-                $(pair.end).val('').attr("placeholder", "Select End Date");
+            const picker2 = new easepick.create({
+                element: document.getElementById('datepicker2'),
+                css: [
+                    'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                ],
+                plugins: ['RangePlugin'],
+                RangePlugin: {
+                    delimiter: ' to ',
+                },
+                format: 'DD-MM-YYYY'
             });
 
             const tableIncomePayment = $('#IncomePaymentFirst').DataTable({
@@ -1537,15 +1501,19 @@
                 e.preventDefault();
 
                 // Get values from the date pickers
-                const startDate1 = $('#start-date-1').val();
-                const endDate1 = $('#end-date-1').val();
-                const startDate2 = $('#start-date-2').val();
-                const endDate2 = $('#end-date-2').val();
+                const startDate1 = picker1.getStartDate() ? picker1.getStartDate().format('DD-MM-YYYY') :
+                    null;
+                const endDate1 = picker1.getEndDate() ? picker1.getEndDate().format('DD-MM-YYYY') : null;
+                const startDate2 = picker2.getStartDate() ? picker2.getStartDate().format('DD-MM-YYYY') :
+                    null;
+                const endDate2 = picker2.getEndDate() ? picker2.getEndDate().format('DD-MM-YYYY') : null;
 
                 // Validate the form before submitting
                 if (!startDate1 || !endDate1 || !startDate2 || !endDate2) {
-                    $('#alertMessage').show(); // Show an alert message if validation fails
+                    $('#alertMessage').text('Please select a valid date range for both periods.').show();
                     return;
+                } else {
+                    $('#alertMessage').hide();
                 }
 
                 // Log data to console before making the request
@@ -1970,15 +1938,24 @@
                                         height
                                     }
                                 } = chart;
+
                                 chart.data.datasets.forEach((dataset, i) => {
-                                    // if (chart.getDatasetMeta(i).hidden) return;
-                                    chart.getDatasetMeta(i).data.forEach((datapoint,
-                                        index) => {
+                                    const meta = chart.getDatasetMeta(i);
+
+                                    meta.data.forEach((datapoint, index) => {
+                                        const hiddenIndices = chart
+                                            ._hiddenIndices || {};
+
+                                        // Cek apakah index ini disembunyikan
+                                        if (hiddenIndices[index]) return;
+
+                                        const value = dataset.data[index];
+                                        if (!value || value === 0) return;
+
                                         const {
                                             x,
                                             y
                                         } = datapoint.tooltipPosition();
-
                                         ctx.fillStyle = dataset
                                             .backgroundColor[index];
 
@@ -1988,7 +1965,8 @@
                                         const xLine = x >= halfwidth ? x +
                                             40 : x - 40;
                                         const yLine = y >= halfheight ? y +
-                                            40 : y - 40;
+                                            40 + (index * 4) : y - 40 - (
+                                                index * 4);
                                         const extraLine = x >= halfwidth ?
                                             10 : -10;
 
@@ -2002,15 +1980,18 @@
                                             .backgroundColor[index];
                                         ctx.stroke();
 
-                                        // Text
+                                        // Total hanya dari data yang tidak hidden
                                         const total = dataset.data.reduce((
-                                                acc, val) => acc + val,
-                                            0);
-                                        const percentage = ((dataset.data[
-                                                index] / total) * 100)
-                                            .toFixed(1) + '%';
-                                        ctx.font = 'bold 17px Arial';
+                                            acc, val, i) => {
+                                            return hiddenIndices[
+                                                    i] ? acc : acc +
+                                                val;
+                                        }, 0);
+                                        const percentage = ((value /
+                                                total) * 100).toFixed(1) +
+                                            '%';
 
+                                        ctx.font = 'bold 17px Arial';
                                         const textXPosition = x >=
                                             halfwidth ? 'left' : 'right';
                                         const newPx = x >= halfwidth ? 5 : -
@@ -2021,10 +2002,12 @@
                                             .backgroundColor[index];
                                         ctx.fillText(percentage, xLine +
                                             extraLine + newPx, yLine);
-                                    })
-                                })
+                                    });
+
+                                });
                             }
                         }
+
 
                         const distanceLegend = {
                             beforeInit(chart) {
@@ -2036,26 +2019,30 @@
                             }
                         }
 
+                        const simplifiedLabels = ['Car', 'Motorbike', 'Truck', 'Taxi', 'Other'];
+
+                        // Ambil nilai untuk 4 kategori pertama + jumlah sisanya
+                        const simplifiedData = [
+                            quantityVehicleDataFirstPeriod[0], // Car
+                            quantityVehicleDataFirstPeriod[1], // Motorbike
+                            quantityVehicleDataFirstPeriod[2], // Truck
+                            quantityVehicleDataFirstPeriod[3], // Taxi
+                            // Other: jumlah dari index 4 sampai 9
+                            quantityVehicleDataFirstPeriod.slice(4).reduce((sum, val) =>
+                                sum + val, 0)
+                        ];
+
                         const firstVehicleDistributionData = {
-                            labels: ['Car', 'Motorbike', 'Truck', 'Taxi', 'Valet',
-                                'Car Preferred',
-                                'Motorbike Preferred', 'EVIP', 'Extend Charging',
-                                'Lost Ticket'
-                            ],
+                            labels: simplifiedLabels,
                             datasets: [{
                                 label: 'First Period',
-                                data: quantityVehicleDataFirstPeriod,
+                                data: simplifiedData,
                                 backgroundColor: [
                                     'rgba(231, 76, 60, 1)',
                                     'rgba(52, 152, 219, 1)',
                                     'rgba(241, 196, 15, 1)',
                                     'rgba(46, 204, 113, 1)',
                                     'rgba(155, 89, 182, 1)',
-                                    'rgba(230, 126, 34, 1)',
-                                    'rgba(26, 188, 156, 1)',
-                                    'rgba(149, 165, 166, 1)',
-                                    'rgba(234, 345, 10, 1)',
-                                    'rgba(52, 73, 94, 1)'
                                 ]
 
                             }]
@@ -2088,22 +2075,7 @@
                                 },
                                 datalabels: {
                                     color: '#000',
-                                    // formatter: (value, context) => {
-                                    //     const total = context.chart.data.datasets[0]
-                                    //         .data.reduce((sum, val) => sum + val, 0);
-                                    //     const percentage = ((value / total) * 100)
-                                    //         .toFixed(1); // 1 decimal
-                                    //     const label = context.chart.data.labels[context
-                                    //         .dataIndex];
-                                    //     // return `${label}: (${formatQuantity(value)})`;
-                                    // },
 
-                                    // anchor: 'center',
-                                    // align: 'center',
-                                    // font: {
-                                    //     size: 10,
-                                    //     weight: 'bold',
-                                    // }
                                 }
                             },
 
@@ -2129,27 +2101,27 @@
                                 ]
                             });
 
+                        const simplifiedDataSecondPeriod = [
+                            quantityVehicleDataSecondPeriod[0], // Car 
+                            quantityVehicleDataSecondPeriod[1], // Motorbike
+                            quantityVehicleDataSecondPeriod[2], // Truck
+                            quantityVehicleDataSecondPeriod[3], // Taxi
+                            // Other: jumlah dari index 
+                            quantityVehicleDataSecondPeriod.slice(4).reduce((sum, val) =>
+                                sum + val, 0)
+                        ];
 
                         const secondVehicleDistributionData = {
-                            labels: ['Car', 'Motorbike', 'Truck', 'Taxi', 'Valet',
-                                'Car Preferred',
-                                'Motorbike Preferred', 'EVIP', 'Extend Charging',
-                                'Lost Ticket'
-                            ],
+                            labels: simplifiedLabels,
                             datasets: [{
                                 label: 'Second Period',
-                                data: quantityVehicleDataSecondPeriod,
+                                data: simplifiedDataSecondPeriod,
                                 backgroundColor: [
                                     'rgba(231, 76, 60, 1)',
                                     'rgba(52, 152, 219, 1)',
                                     'rgba(241, 196, 15, 1)',
                                     'rgba(46, 204, 113, 1)',
                                     'rgba(155, 89, 182, 1)',
-                                    'rgba(230, 126, 34, 1)',
-                                    'rgba(26, 188, 156, 1)',
-                                    'rgba(149, 165, 166, 1)',
-                                    'rgba(234, 345, 10, 1)',
-                                    'rgba(52, 73, 94, 1)'
                                 ]
 
                             }]
@@ -2742,16 +2714,13 @@
 
 
 
-
-
                         $('#hasil-test').text(formatRupiah(GrandTotals.income_payment
                             .first_period))
                         $('.top-payment').text(topPaymentFirst.source)
                         $('.top-payment-income').text(formatRupiah(topPaymentFirst.value))
                         $('.total-pass').text(formatQuantity(GrandTotals.quantity_pass
                             .first_period))
-                        $('.total-casual').text(formatQuantity(GrandTotals.quantity_casual
-                            .first_period))
+                        $('.total-casual').text(formatQuantity(firstPeriodTotals.vehiclecasual))
                         $('.total-revenue').text(formatRupiah(GrandTotals.income_payment
                             .first_period))
                         $('.top-payment-second').text(topPaymentSecond.source)
@@ -2763,223 +2732,250 @@
                             .quantity_casual.second_period))
                         $('.total-revenue-second').text(formatRupiah(GrandTotals
                             .income_payment.second_period))
+                        const totalVip = firstPeriodTotals.vipqty + firstPeriodTotals
+                            .vipramayanaqty + firstPeriodTotals.vipnonramayanaqty;
+                        const totalVipSecond = secondPeriodTotals.vipqty + secondPeriodTotals
+                            .vipramayanaqty + secondPeriodTotals.vipnonramayanaqty;
+                        const totalVipIncome = firstPeriodTotals.vipincome + firstPeriodTotals
+                            .vipramayanaincome + firstPeriodTotals.vipnonramayanaincome;
+                        const totalVipIncomeSecond = secondPeriodTotals.vipincome +
+                            secondPeriodTotals
+                            .vipramayanaincome + secondPeriodTotals.vipnonramayanaincome;
+                        const valetLobby = firstPeriodTotals.valetlobbyqty + firstPeriodTotals
+                            .valetvoucherqty;
+                        const valetLobbySecond = secondPeriodTotals.valetlobbyqty +
+                            secondPeriodTotals
+                            .valetvoucherqty;
+                        const valetlobbyincome = firstPeriodTotals.valetlobbyincome +
+                            firstPeriodTotals.valetvoucherincome;
+                        const valetlobbyincomeSecond = secondPeriodTotals.valetlobbyincome +
+                            secondPeriodTotals.valetvoucherincome;
+                        const grandTotalIncome = firstPeriodTotals.allpayment +
+                            firstPeriodTotals.lostticket;
+                        const grandTotalIncomeSecond = secondPeriodTotals.allpayment +
+                            secondPeriodTotals.lostticket;
+                        const grandTotalVehicleIncome = firstPeriodTotals.vehicleincome +
+                            firstPeriodTotals.lostticket;
+                        const grandTotalVehicleIncomeSecond = secondPeriodTotals.vehicleincome +
+                            secondPeriodTotals.lostticket;
                         $('.result').show();
+                        if ($.fn.DataTable.isDataTable('#table-custom')) {
+                            $('#table-custom').DataTable().destroy();
+                        }
                         $('#tbody-custom').empty();
                         $('#tbody-custom').append(`
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">1</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">Cash</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.cash)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.cash)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Mobil</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.carpassqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.carqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.carpassqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.carqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Mobil</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.carincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.carincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">1</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">Cash</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.cash)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.cash)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Mobil</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.carpassqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.carqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.carpassqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.carqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Mobil</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.carincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.carincome)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">2</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">Parkee</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.parkeepayment)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.parkeepayment)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Motor</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.motorbikepassqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.motorbikeqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.motorbikepassqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.motorbikeqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Motor</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.motorbikeincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.motorbikeincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">2</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">Parkee</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.parkeepayment)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.parkeepayment)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Motor</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.motorbikepassqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.motorbikeqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.motorbikepassqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.motorbikeqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Motor</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.motorbikeincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.motorbikeincome)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">3</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">Emoney</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.emoney)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.emoney)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Truck/Loading</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.truckpassqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.truckqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.truckpassqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.truckqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Truck/Loading</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.truckincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.truckincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">3</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">Emoney</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.emoney)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.emoney)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Truck/Loading</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.truckpassqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.truckqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.truckpassqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.truckqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Truck/Loading</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.truckincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.truckincome)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">4</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">Flazz</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.flazz)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.flazz)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Taxi</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.taxipassqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.taxiqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.taxipassqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.taxiqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Taxi</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.taxiincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.taxiincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">4</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">Flazz</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.flazz)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.flazz)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Taxi</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.taxipassqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.taxiqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.taxipassqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.taxiqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Taxi</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.taxiincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.taxiincome)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">5</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">Brizzi</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.brizzi)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.brizzi)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Valet Lobby</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.valetlobbyqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.valetlobbyqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Valet Lobby</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.valetlobbyincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.valetlobbyincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">5</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">Brizzi</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.brizzi)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.brizzi)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Valet Lobby</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(valetLobby)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(valetLobbySecond)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Valet Lobby</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(valetlobbyincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(valetlobbyincomeSecond)}</td>
         </tr>
 
          <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">6</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">Tapcash</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.tapcash)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.tapcash)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Valet Non-Lobby</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.valetnonlobbyqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.valetnonlobbyqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Valet Non-Lobby</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.valetnonlobbyincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.valetnonlobbyincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">6</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">Tapcash</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.tapcash)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.tapcash)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Valet Non-Lobby</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.valetnonlobbyqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.valetnonlobbyqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Valet Non-Lobby</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.valetnonlobbyincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.valetnonlobbyincome)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">7</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">Qris</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.qrisepayment)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.qrisepayment)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">VIP</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.vipqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.vipqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">VIP</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.vipincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.vipincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">7</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">Qris</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.qrisepayment)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.qrisepayment)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">VIP</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(totalVip)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(totalVipSecond)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">VIP</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(totalVipIncome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(totalVipIncomeSecond)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">8</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">DKI Jakcard</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.dkijackpayment)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.dkijackpayment)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Preferred Car</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.carpreferredqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.carpreferredqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Preferred Car</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.carpreferredincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.carpreferredincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">8</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">DKI Jakcard</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.dkijackpayment)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.dkijackpayment)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Preferred Car</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.carpreferredqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.carpreferredqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Preferred Car</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.carpreferredincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.carpreferredincome)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">9</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Preferred Motorbike</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.motorbikepreferredqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.motorbikepreferredqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Preferred Motorbike</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.motorbikepreferredincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.motorbikepreferredincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">9</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Preferred Motorbike</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.motorbikepreferredqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.motorbikepreferredqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Preferred Motorbike</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.motorbikepreferredincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.motorbikepreferredincome)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">10</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">E-VIP</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.evipqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.evipqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">E-VIP</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.evipincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.evipincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">10</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">E-VIP</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.evipqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.evipqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">E-VIP</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.evipincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.evipincome)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">11</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Extend Charging</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.extendchargingqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.extendchargingqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Extend Charging</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.extendchargingincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.extendchargingincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">11</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Extend Charging</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.extendchargingqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.extendchargingqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Extend Charging</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.extendchargingincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.extendchargingincome)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">12</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Lost Ticket</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.lostticketqty)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.lostticketqty)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Lost Ticket</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.lostticket)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.lostticket)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">12</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Lost Ticket</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.lostticketqty)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.lostticketqty)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Lost Ticket</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.lostticket)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.lostticket)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">13</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">Grand Total</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(GrandTotals.income_payment.first_period)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(GrandTotals.income_payment.second_period)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Grand Total</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(GrandTotals.quantity_pass.first_period)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(GrandTotals.quantity_casual.first_period)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(GrandTotals.quantity_pass.second_period)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(GrandTotals.quantity_casual.second_period)}</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Grand Total</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(GrandTotals.income_payment.first_period)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(GrandTotals.income_payment.second_period)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">13</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">Grand Total</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(grandTotalIncome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(grandTotalIncomeSecond)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Grand Total</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(GrandTotals.quantity_pass.first_period)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.vehiclecasual)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(GrandTotals.quantity_pass.second_period)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.vehiclecasual)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Grand Total</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(grandTotalVehicleIncome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(grandTotalVehicleIncomeSecond)}</td>
         </tr>
 
         <tr>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
-            <td class="text-center" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Sticker Income</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.stickerincome)}</td>
-            <td class="text-center" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.stickerincome)}</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">-</td>
+            <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Sticker Income</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.stickerincome)}</td>
+            <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.stickerincome)}</td>
         </tr>
     `);
 
-                        if ($.fn.DataTable.isDataTable('#table-custom')) {
-                            $('#table-custom').DataTable().clear().destroy();
-                        }
+
 
 
                         $('#table-custom').DataTable({

@@ -165,18 +165,20 @@ $(document).ready(function() {
                 </tr>
             `);
 
-            const labels = ['Car', 'Motorbike', 'Truck', 'Taxi'];
+            const labels = ['Car', 'Motorbike', 'Truck', 'Taxi', 'Other'];
             const casualData = [
                 today.carcasual,
                 today.motorbikecasual,
                 today.truckcasual,
-                today.taxicasual
+                today.taxicasual,
+                today.othercasual
             ];
             const passData = [
                 today.carpass,
                 today.motorbikepass,
                 today.truckpass,
-                today.taxipass
+                today.taxipass,
+                today.otherpass
             ];
 
             // Destroy chart sebelumnya jika ada
@@ -344,7 +346,7 @@ $(document).ready(function() {
             });
 
             // === Update Weekly Table ===
-            const casualRows = ['car', 'motorbike', 'truck', 'taxi'].map((type, i) => ({
+            const casualRows = ['car', 'motorbike', 'truck', 'taxi', 'other'].map((type, i) => ({
                 no: i + 1,
                 vehicle: type.charAt(0).toUpperCase() + type.slice(1),
                 this_week: formatQuantity(thisWeek[`total_${type}`]),
@@ -352,7 +354,7 @@ $(document).ready(function() {
             }));
             weeklyTable.clear().rows.add(casualRows).draw();
 
-            const passRows = ['car', 'motorbike', 'truck', 'taxi'].map((type, i) => ({
+            const passRows = ['car', 'motorbike', 'truck', 'taxi', 'other'].map((type, i) => ({
                 no: i + 1,
                 vehicle: type.charAt(0).toUpperCase() + type.slice(1),
                 this_week: formatQuantity(thisWeekPass[`total_${type}`]),
@@ -377,8 +379,8 @@ $(document).ready(function() {
 
             // === Build Dataset Generator Function ===
             const buildDataset = (data, type = 'bar') => {
-                const colors = ['#0D61E2', '#E60045', '#FFCD56', '#32CD7D', '#E69500'];
-                const keys = ['car', 'motorbike', 'truck', 'taxi', 'vehicle'];
+                const colors = ['#0D61E2', '#E60045', '#FFCD56', '#32CD7D', '#E69500', '#09533dff'];
+                const keys = ['car', 'motorbike', 'truck', 'taxi', 'vehicle', 'other'];
                 return keys.map((key, i) => ({
                     label: key.charAt(0).toUpperCase() + key.slice(1),
                     data: data[i],
@@ -396,7 +398,8 @@ $(document).ready(function() {
                 thisWeekChart.map(item => item.motorbikecasual),
                 thisWeekChart.map(item => item.truckcasual),
                 thisWeekChart.map(item => item.taxicasual),
-                thisWeekChart.map(item => item.vehiclecasual)
+                thisWeekChart.map(item => item.vehiclecasual),
+                thisWeekChart.map(item => item.othercasual)
             ];
 
             const passData = [
@@ -404,8 +407,14 @@ $(document).ready(function() {
                 thisWeekPassChart.map(item => item.motorbikepass),
                 thisWeekPassChart.map(item => item.truckpass),
                 thisWeekPassChart.map(item => item.taxipass),
-                thisWeekPassChart.map(item => item.vehiclepass)
+                thisWeekPassChart.map(item => item.vehiclepass),
+                thisWeekPassChart.map(item => item.otherpass)
             ];
+
+            const formatNumber = (value) => {
+    return value.toLocaleString('en-US'); // 1,234
+};
+
 
             // === Chart Config Base ===
             const baseOptions = {
@@ -421,7 +430,7 @@ $(document).ready(function() {
                         borderRadius: 4,
                         color: 'white',
                         font: { weight: 'bold' },
-                        formatter: Math.round,
+                        formatter: formatNumber,
                         padding: 6,
                         offset: 8
                     }
@@ -429,7 +438,11 @@ $(document).ready(function() {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: { precision: 0, color: '#000' },
+                        ticks: {
+                precision: 0,
+                color: '#000',
+                callback: formatNumber // format Y axis
+            },
                         grace: '10%'
                     },
                     x: {
@@ -500,7 +513,7 @@ setInterval(fetchWeeklyTransactionData, 5000); // 5 seconds
             });
 
             // Table for casual
-            const casualRows = ['car', 'motorbike', 'truck', 'taxi'].map((type, index) => ({
+            const casualRows = ['car', 'motorbike', 'truck', 'taxi', 'other'].map((type, index) => ({
                 no: index + 1,
                 vehicle: type.charAt(0).toUpperCase() + type.slice(1),
                 this_month: formatQuantity(thisMonth[`total_${type}`]),
@@ -509,7 +522,7 @@ setInterval(fetchWeeklyTransactionData, 5000); // 5 seconds
             monthlyTable.clear().rows.add(casualRows).draw();
 
             // Table for pass
-            const passRows = ['car', 'motorbike', 'truck', 'taxi'].map((type, index) => ({
+            const passRows = ['car', 'motorbike', 'truck', 'taxi', 'other'].map((type, index) => ({
                 no: index + 1,
                 vehicle: type.charAt(0).toUpperCase() + type.slice(1),
                 this_month: formatQuantity(thisMonthPass[`total_${type}`]),
@@ -529,12 +542,13 @@ setInterval(fetchWeeklyTransactionData, 5000); // 5 seconds
             // Chart data prep
             const labels = Object.keys(response.this_month.weekly_totals.casual);
             const extract = (data, key) => labels.map(l => data[l][key]);
-            const chartTypes = ['car', 'motorbike', 'truck', 'taxi', 'vehicle'];
+            const chartTypes = ['car', 'motorbike', 'truck', 'taxi', 'other','vehicle'];
             const colors = {
                 car: '#51AA20',
                 motorbike: '#DB6715',
                 truck: '#8D60ED',
                 taxi: '#C46EA6',
+                other: '#5a0e0eff',
                 vehicle: '#D3D6DD'
             };
 
@@ -558,40 +572,47 @@ setInterval(fetchWeeklyTransactionData, 5000); // 5 seconds
                     hidden: type !== 'car' // show only 'Car' by default
                 }));
 
-            const chartOptions = (isLine = false) => ({
-                type: isLine ? 'line' : 'bar',
-                data: {}, // to be set below
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: { color: '#000' }
-                        },
-                        datalabels: {
-                            backgroundColor: ctx => ctx.dataset.backgroundColor,
-                            borderRadius: 4,
-                            color: 'white',
-                            font: { weight: 'bold' },
-                            formatter: Math.round,
-                            padding: isLine ? 3 : 6,
-                            offset: isLine ? 4 : 8
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { precision: 0, color: '#000' },
-                            grace: '10%'
-                        },
-                        x: {
-                            ticks: { color: '#000' }
-                        }
-                    }
+            const formatNumber = num => num.toLocaleString('en-US');
+
+const chartOptions = (isLine = false) => ({
+    type: isLine ? 'line' : 'bar',
+    data: {}, // to be set below
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: { color: '#000' }
+            },
+            datalabels: {
+                backgroundColor: ctx => ctx.dataset.backgroundColor,
+                borderRadius: 4,
+                color: 'white',
+                font: { weight: 'bold' },
+                formatter: value => formatNumber(value),
+                padding: isLine ? 3 : 6,
+                offset: isLine ? 4 : 8
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    precision: 0,
+                    color: '#000',
+                    callback: value => formatNumber(value)
                 },
-                plugins: [ChartDataLabels]
-            });
+                grace: '10%'
+            },
+            x: {
+                ticks: { color: '#000' }
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+
 
             // Create charts
             const chartMap = [

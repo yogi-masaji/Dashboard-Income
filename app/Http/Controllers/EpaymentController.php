@@ -187,7 +187,7 @@ class EpaymentController extends Controller
                     //     // 'data' => $twoWeeksAgoData->toArray(),
                     //     'totals' => $twoWeeksAgoTotals,
                     // ],
-                    'table_data' => $this->formatEpaymentTable($thisWeekTotals,  $twoWeeksAgoTotals),
+                    'table_data' => $this->formatEpaymentTable($lastWeekTotals, $twoWeeksAgoTotals),
                 ]);
             }
 
@@ -244,13 +244,14 @@ class EpaymentController extends Controller
             $today = Carbon::now()->timezone('Asia/Jakarta');
 
             $thisMonthStart = $today->copy()->startOfMonth()->format('Y-m-d');
-            $thisMonthEnd = $today->format('Y-m-d');
+            $thisMonthEnd = $today->copy()->endOfMonth()->format('Y-m-d');
 
-            $lastMonthStart = $today->copy()->subMonth()->startOfMonth()->format('Y-m-d');
-            $lastMonthEnd = $today->copy()->subMonth()->endOfMonth()->format('Y-m-d');
+            $lastMonthStart = $today->copy()->subMonthNoOverflow()->startOfMonth()->format('Y-m-d');
+            $lastMonthEnd = $today->copy()->subMonthNoOverflow()->endOfMonth()->format('Y-m-d');
 
-            $twoMonthsAgoStart = $today->copy()->subMonths(2)->startOfMonth()->format('Y-m-d');
-            $twoMonthsAgoEnd = $today->copy()->subMonths(2)->endOfMonth()->format('Y-m-d');
+            $twoMonthsAgoStart = $today->copy()->subMonthsNoOverflow(2)->startOfMonth()->format('Y-m-d');
+            $twoMonthsAgoEnd = $today->copy()->subMonthsNoOverflow(2)->endOfMonth()->format('Y-m-d');
+
             $locationCode = session('selected_location_kode_lokasi');
 
             $response = Http::post('http://110.0.100.70:8080/v3/api/getepayment', [
@@ -307,7 +308,7 @@ class EpaymentController extends Controller
                         'totals' => $lastMonthTotals,
                         'weekly_totals' => $lastMonthWeeklyTotals,
                     ],
-                    'table_data' => $this->formatMonthlyEpaymentTable($thisMonthTotals, $twoMonthsAgoTotals),
+                    'table_data' => $this->formatMonthlyEpaymentTable($lastMonthTotals, $twoMonthsAgoTotals),
 
                 ]);
             }

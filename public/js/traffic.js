@@ -337,7 +337,7 @@ $(document).ready(function() {
             const barDataPMToday = {
                 labels: labels, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Masuk Today', // You can set the label here
                     data: pintumasukTodayMap,
                     backgroundColor: pintumasukTodayMap.map(() => getRandomColor()),
                     borderWidth: 1,
@@ -357,7 +357,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -393,7 +393,7 @@ $(document).ready(function() {
             const barDataPMYesterday = {
                 labels: labels, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Masuk Yesterday', // You can set the label here
                     data: pintumasukYesterdayMap,
                     backgroundColor: pintumasukYesterdayMap.map(() =>
                         getRandomColor()),
@@ -414,7 +414,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -450,7 +450,7 @@ $(document).ready(function() {
             const barDataPKToday = {
                 labels: labelsPK, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Keluar Today', // You can set the label here
                     data: pintukeluarTodayMap,
                     backgroundColor: pintukeluarTodayMap.map(() =>
                         getRandomColor()),
@@ -471,7 +471,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -507,7 +507,7 @@ $(document).ready(function() {
             const barDataPKYesterday = {
                 labels: labelsPK, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Keluar Yesterday', // You can set the label here
                     data: pintukeluarYesterdayMap,
                     backgroundColor: pintukeluarYesterdayMap.map(() =>
                         getRandomColor()),
@@ -529,7 +529,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -665,7 +665,7 @@ $(document).ready(function() {
             const barDataPM = {
                 labels: labels, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Masuk This Week', // You can set the label here
                     data: pintumasukMap,
                     backgroundColor: pintumasukMap.map(() => getRandomColor()),
                     borderWidth: 1,
@@ -686,7 +686,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -722,7 +722,7 @@ $(document).ready(function() {
             const barDataLastPM = {
                 labels: labels, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Masuk Last Week', // You can set the label here
                     data: pintumasukLastMap,
                     backgroundColor: pintumasukLastMap.map(() => getRandomColor()),
                     borderWidth: 1,
@@ -743,7 +743,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -779,7 +779,7 @@ $(document).ready(function() {
             const barDataPK = {
                 labels: labelsPK, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Keluar This Week', // You can set the label here
                     data: pintukeluarMap,
                     backgroundColor: pintukeluarMap.map(() => getRandomColor()),
                     borderWidth: 1,
@@ -800,7 +800,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -836,7 +836,7 @@ $(document).ready(function() {
             const barDataLastPK = {
                 labels: labelsPK, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Keluar Last Week', // You can set the label here
                     data: pintukeluarLastMap,
                     backgroundColor: pintukeluarLastMap.map(() => getRandomColor()),
                     borderWidth: 1,
@@ -857,7 +857,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -997,7 +997,7 @@ $(document).ready(function() {
             const barDataPM = {
                 labels: labels, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Masuk This Month', // You can set the label here
                     data: pintumasukMap,
                     backgroundColor: pintumasukMap.map(() => getRandomColor()),
                     borderWidth: 1,
@@ -1018,7 +1018,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -1054,7 +1054,7 @@ $(document).ready(function() {
             const barDataLastPM = {
                 labels: labels, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Masuk Last Month', // You can set the label here
                     data: pintumasukLastMap,
                     backgroundColor: pintumasukLastMap.map(() => getRandomColor()),
                     borderWidth: 1,
@@ -1075,7 +1075,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -1111,7 +1111,7 @@ $(document).ready(function() {
             const barDataPK = {
                 labels: labelsPK, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Keluar This Month', // You can set the label here
                     data: pintukeluarMap,
                     backgroundColor: pintukeluarMap.map(() => getRandomColor()),
                     borderWidth: 1,
@@ -1132,7 +1132,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },
@@ -1168,7 +1168,7 @@ $(document).ready(function() {
             const barDataLastPK = {
                 labels: labelsPK, // Corrected this line to use the actual labels array
                 datasets: [{
-                    label: 'Statistik', // You can set the label here
+                    label: 'Pintu Keluar Last Month', // You can set the label here
                     data: pintukeluarLastMap,
                     backgroundColor: pintukeluarLastMap.map(() => getRandomColor()),
                     borderWidth: 1,
@@ -1189,7 +1189,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'top',
                             labels: {
-                                color: '#fff',
+                                color: '#000',
 
                             }
                         },

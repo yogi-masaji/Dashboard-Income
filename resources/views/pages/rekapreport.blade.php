@@ -1,5 +1,14 @@
 @extends('layout.nav')
 @section('content')
+    @php
+        $lokasiName = session('selected_location_name', 'Lokasi Default');
+        $ipLokasi = session('selected_location_ip_lokasi', 'IP Tidak Diketahui');
+        $lokasiId = session('selected_location_id', 0);
+        $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
+        $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
+        $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
+        $navbarTitle = $lokasiName;
+    @endphp
     <!DOCTYPE html>
     <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -25,6 +34,10 @@
             #card_header {
                 background-color: #3c4b64;
                 color: white;
+            }
+
+            .calendar>.days-grid>.day.today {
+                color: #000000 !important;
             }
 
             .card {
@@ -221,8 +234,8 @@
                                         <th colspan="10" class="text-center">Mobil</th>
                                         <th colspan="10" class="text-center">Motor</th>
                                         <th colspan="10" class="text-center">Box</th>
-                                        <th colspan="10" class="text-center">Total</th>
-                                        <th rowspan="2" colspan="2" class="text-center">Grand Total</th>
+                                        <th colspan="10" class="text-center fw-bold">Total</th>
+                                        <th rowspan="2" colspan="2" class="text-center fw-bold">Grand Total</th>
                                     </tr>
                                     <tr>
                                         <!-- Mobil -->
@@ -244,11 +257,11 @@
                                         <th colspan="2">Brizzi</th>
                                         <th colspan="2">Tapcash</th>
                                         <!-- Total -->
-                                        <th colspan="2">QRIS</th>
-                                        <th colspan="2">Flazz</th>
-                                        <th colspan="2">Emoney</th>
-                                        <th colspan="2">Brizzi</th>
-                                        <th colspan="2">Tapcash</th>
+                                        <th class="fw-bold" colspan="2">QRIS</th>
+                                        <th class="fw-bold" colspan="2">Flazz</th>
+                                        <th class="fw-bold" colspan="2">Emoney</th>
+                                        <th class="fw-bold" colspan="2">Brizzi</th>
+                                        <th class="fw-bold" colspan="2">Tapcash</th>
 
                                     </tr>
                                     <tr>
@@ -286,19 +299,19 @@
                                         <th>Qty</th>
                                         <th>Inc</th>
                                         <!-- Total -->
-                                        <th>Qty</th>
-                                        <th>Inc</th>
-                                        <th>Qty</th>
-                                        <th>Inc</th>
-                                        <th>Qty</th>
-                                        <th>Inc</th>
-                                        <th>Qty</th>
-                                        <th>Inc</th>
-                                        <th>Qty</th>
-                                        <th>Inc</th>
+                                        <th class="fw-bold">Qty</th>
+                                        <th class="fw-bold">Inc</th>
+                                        <th class="fw-bold">Qty</th>
+                                        <th class="fw-bold">Inc</th>
+                                        <th class="fw-bold">Qty</th>
+                                        <th class="fw-bold">Inc</th>
+                                        <th class="fw-bold">Qty</th>
+                                        <th class="fw-bold">Inc</th>
+                                        <th class="fw-bold">Qty</th>
+                                        <th class="fw-bold">Inc</th>
                                         <!-- Grand Total -->
-                                        <th>Qty</th>
-                                        <th>Inc</th>
+                                        <th class="fw-bold">Qty</th>
+                                        <th class="fw-bold">Inc</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-body-lost-ticket"></tbody>
@@ -845,133 +858,196 @@
 
 
                 function displayLostTicketTable(response) {
+                    // Show the correct table wrapper and hide others
                     $('#table_lost_ticket_wrapper').show();
                     $('#table_income_payment_wrapper').hide();
                     $('#json_output_wrapper').hide();
 
                     const tableBody = $('#table-body-lost-ticket');
                     const tableFoot = $('#table-foot-lost-ticket');
+                    // Clear previous table data
                     tableBody.empty();
                     tableFoot.empty();
 
-                    if (response && response.data && response.data.length > 1 && response.data[1].DetailTransaction) {
-                        const details = response.data[1].DetailTransaction;
+                    // Check if the response contains the necessary data structure.
+                    // The details are at index 2.
+                    if (response && response.data && response.data.length > 2 && response.data[2].DetailTransaction) {
+                        const details = response.data[2].DetailTransaction;
+                        // The summary for the current period is at index 0.
                         const summary = response.data[0].summaryTotal;
+                        // The summary for the last period is at index 1.
+                        const summaryLast = response.data[1].summaryTotalLast;
 
+                        // Iterate over each daily transaction detail
                         details.forEach(item => {
+                            // --- Per-Row Calculations ---
+
+                            // Calculate Grand Total Quantity for the current row (Mobil + Motor + Box)
                             const grandTotalQty = (item.QtyMobilQris || 0) + (item.QtyMobilFlazz || 0) + (item
                                     .QtyMobilEmoney || 0) + (item.QtyMobilBrizzi || 0) + (item
                                     .QtyMobilTapcash || 0) +
                                 (item.QtyMotorQris || 0) + (item.QtyMotorFlazz || 0) + (item.QtyMotorEmoney ||
-                                    0) + (item.QtyMotorBrizzi || 0) + (item.QtyMotorTapcash || 0);
+                                    0) + (item.QtyMotorBrizzi || 0) + (item.QtyMotorTapcash || 0) +
+                                (item.QtyBoxQris || 0) + (item.QtyBoxFlazz || 0) + (item.QtyBoxEmoney || 0) + (
+                                    item.QtyBoxBrizzi || 0) + (item.QtyBoxTapcash || 0);
+
+                            // Calculate Grand Total Income for the current row (Mobil + Motor + Box)
                             const grandTotalInc = (item.IncMobilQris || 0) + (item.IncMobilFlazz || 0) + (item
                                     .IncMobilEmoney || 0) + (item.IncMobilBrizzi || 0) + (item
                                     .IncMobilTapcash || 0) +
                                 (item.IncMotorQris || 0) + (item.IncMotorFlazz || 0) + (item.IncMotorEmoney ||
-                                    0) + (item.IncMotorBrizzi || 0) + (item.IncMotorTapcash || 0);
+                                    0) + (item.IncMotorBrizzi || 0) + (item.IncMotorTapcash || 0) +
+                                (item.IncBoxQris || 0) + (item.IncBoxFlazz || 0) + (item.IncBoxEmoney || 0) + (
+                                    item.IncBoxBrizzi || 0) + (item.IncBoxTapcash || 0);
 
-                            const totalQrisQty = (item.QtyMobilQris || 0) + (item.QtyMotorQris || 0);
-                            const totalQrisInc = (item.IncMobilQris || 0) + (item.IncMotorQris || 0);
-                            const totalFlazzQty = (item.QtyMobilFlazz || 0) + (item.QtyMotorFlazz || 0);
-                            const totalFlazzInc = (item.IncMobilFlazz || 0) + (item.IncMotorFlazz || 0);
-                            const totalEmoneyQty = (item.QtyMobilEmoney || 0) + (item.QtyMotorEmoney || 0);
-                            const totalEmoneyInc = (item.IncMobilEmoney || 0) + (item.IncMotorEmoney || 0);
-                            const totalBrizziQty = (item.QtyMobilBrizzi || 0) + (item.QtyMotorBrizzi || 0);
-                            const totalBrizziInc = (item.IncMobilBrizzi || 0) + (item.IncMotorBrizzi || 0);
-                            const totalTapcashQty = (item.QtyMobilTapcash || 0) + (item.QtyMotorTapcash || 0);
-                            const totalTapcashInc = (item.IncMobilTapcash || 0) + (item.IncMotorTapcash || 0);
+                            // Calculate total by payment type for the current row
+                            const totalQrisQty = (item.QtyMobilQris || 0) + (item.QtyMotorQris || 0) + (item
+                                .QtyBoxQris || 0);
+                            const totalQrisInc = (item.IncMobilQris || 0) + (item.IncMotorQris || 0) + (item
+                                .IncBoxQris || 0);
+                            const totalFlazzQty = (item.QtyMobilFlazz || 0) + (item.QtyMotorFlazz || 0) + (item
+                                .QtyBoxFlazz || 0);
+                            const totalFlazzInc = (item.IncMobilFlazz || 0) + (item.IncMotorFlazz || 0) + (item
+                                .IncBoxFlazz || 0);
+                            const totalEmoneyQty = (item.QtyMobilEmoney || 0) + (item.QtyMotorEmoney || 0) + (
+                                item.QtyBoxEmoney || 0);
+                            const totalEmoneyInc = (item.IncMobilEmoney || 0) + (item.IncMotorEmoney || 0) + (
+                                item.IncBoxEmoney || 0);
+                            const totalBrizziQty = (item.QtyMobilBrizzi || 0) + (item.QtyMotorBrizzi || 0) + (
+                                item.QtyBoxBrizzi || 0);
+                            const totalBrizziInc = (item.IncMobilBrizzi || 0) + (item.IncMotorBrizzi || 0) + (
+                                item.IncBoxBrizzi || 0);
+                            const totalTapcashQty = (item.QtyMobilTapcash || 0) + (item.QtyMotorTapcash || 0) +
+                                (item.QtyBoxTapcash || 0);
+                            const totalTapcashInc = (item.IncMobilTapcash || 0) + (item.IncMotorTapcash || 0) +
+                                (item.IncBoxTapcash || 0);
 
 
+                            // --- Create Table Row HTML ---
                             const row = `<tr>
-                                <td>${item.Tanggal ? new Date(item.Tanggal).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'2-digit'}).replace(/\./g, '') : '-'}</td>
-                                <td>${item.Hari || '-'}</td>
-                                <!-- Mobil -->
-                                <td>${formatNumber(item.QtyMobilQris)}</td><td>${formatNumber(item.IncMobilQris)}</td>
-                                <td>${formatNumber(item.QtyMobilFlazz)}</td><td>${formatNumber(item.IncMobilFlazz)}</td>
-                                <td>${formatNumber(item.QtyMobilEmoney)}</td><td>${formatNumber(item.IncMobilEmoney)}</td>
-                                <td>${formatNumber(item.QtyMobilBrizzi)}</td><td>${formatNumber(item.IncMobilBrizzi)}</td>
-                                <td>${formatNumber(item.QtyMobilTapcash)}</td><td>${formatNumber(item.IncMobilTapcash)}</td>
-                                <!-- Motor -->
-                                <td>${formatNumber(item.QtyMotorQris)}</td><td>${formatNumber(item.IncMotorQris)}</td>
-                                <td>${formatNumber(item.QtyMotorFlazz)}</td><td>${formatNumber(item.IncMotorFlazz)}</td>
-                                <td>${formatNumber(item.QtyMotorEmoney)}</td><td>${formatNumber(item.IncMotorEmoney)}</td>
-                                <td>${formatNumber(item.QtyMotorBrizzi)}</td><td>${formatNumber(item.IncMotorBrizzi)}</td>
-                                <td>${formatNumber(item.QtyMotorTapcash)}</td><td>${formatNumber(item.IncMotorTapcash)}</td>
-                                <!-- Box (Placeholder) -->
-                                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-                                <!-- Total -->
-                                <td>${formatNumber(totalQrisQty)}</td><td>${formatNumber(totalQrisInc)}</td>
-                                <td>${formatNumber(totalFlazzQty)}</td><td>${formatNumber(totalFlazzInc)}</td>
-                                <td>${formatNumber(totalEmoneyQty)}</td><td>${formatNumber(totalEmoneyInc)}</td>
-                                <td>${formatNumber(totalBrizziQty)}</td><td>${formatNumber(totalBrizziInc)}</td>
-                                <td>${formatNumber(totalTapcashQty)}</td><td>${formatNumber(totalTapcashInc)}</td>
-                                <!-- Grand Total -->
-                                <td style="font-weight:bold;">${formatNumber(grandTotalQty)}</td>
-                                <td style="font-weight:bold;">${formatNumber(grandTotalInc)}</td>
-                            </tr>`;
+                <!-- Date and Day -->
+                <td>${item.Tanggal ? new Date(item.Tanggal).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'2-digit'}).replace(/\./g, '') : '-'}</td>
+                <td>${item.Hari || '-'}</td>
+                
+                <!-- Mobil Data -->
+                <td>${formatNumber(item.QtyMobilQris)}</td><td>${formatNumber(item.IncMobilQris)}</td>
+                <td>${formatNumber(item.QtyMobilFlazz)}</td><td>${formatNumber(item.IncMobilFlazz)}</td>
+                <td>${formatNumber(item.QtyMobilEmoney)}</td><td>${formatNumber(item.IncMobilEmoney)}</td>
+                <td>${formatNumber(item.QtyMobilBrizzi)}</td><td>${formatNumber(item.IncMobilBrizzi)}</td>
+                <td>${formatNumber(item.QtyMobilTapcash)}</td><td>${formatNumber(item.IncMobilTapcash)}</td>
+                
+                <!-- Motor Data -->
+                <td>${formatNumber(item.QtyMotorQris)}</td><td>${formatNumber(item.IncMotorQris)}</td>
+                <td>${formatNumber(item.QtyMotorFlazz)}</td><td>${formatNumber(item.IncMotorFlazz)}</td>
+                <td>${formatNumber(item.QtyMotorEmoney)}</td><td>${formatNumber(item.IncMotorEmoney)}</td>
+                <td>${formatNumber(item.QtyMotorBrizzi)}</td><td>${formatNumber(item.IncMotorBrizzi)}</td>
+                <td>${formatNumber(item.QtyMotorTapcash)}</td><td>${formatNumber(item.IncMotorTapcash)}</td>
+                
+                <!-- Box Data (New) -->
+                <td>${formatNumber(item.QtyBoxQris)}</td><td>${formatNumber(item.IncBoxQris)}</td>
+                <td>${formatNumber(item.QtyBoxFlazz)}</td><td>${formatNumber(item.IncBoxFlazz)}</td>
+                <td>${formatNumber(item.QtyBoxEmoney)}</td><td>${formatNumber(item.IncBoxEmoney)}</td>
+                <td>${formatNumber(item.QtyBoxBrizzi)}</td><td>${formatNumber(item.IncBoxBrizzi)}</td>
+                <td>${formatNumber(item.QtyBoxTapcash)}</td><td>${formatNumber(item.IncBoxTapcash)}</td>
+                
+                <!-- Total by Payment Type -->
+                <td>${formatNumber(totalQrisQty)}</td><td>${formatNumber(totalQrisInc)}</td>
+                <td>${formatNumber(totalFlazzQty)}</td><td>${formatNumber(totalFlazzInc)}</td>
+                <td>${formatNumber(totalEmoneyQty)}</td><td>${formatNumber(totalEmoneyInc)}</td>
+                <td>${formatNumber(totalBrizziQty)}</td><td>${formatNumber(totalBrizziInc)}</td>
+                <td>${formatNumber(totalTapcashQty)}</td><td>${formatNumber(totalTapcashInc)}</td>
+                
+                <!-- Grand Total for the Row -->
+                <td style="font-weight:bold;">${formatNumber(grandTotalQty)}</td>
+                <td style="font-weight:bold;">${formatNumber(grandTotalInc)}</td>
+            </tr>`;
                             tableBody.append(row);
                         });
 
+                        // --- Populate Table Footer with Summary Data ---
                         if (summary) {
-                            const grandTotalQty = (summary.TotalQtyMobilQris || 0) + (summary.TotalQtyMobilFlazz || 0) +
-                                (summary.TotalQtyMobilEmoney || 0) + (summary.TotalQtyMobilBrizzi || 0) + (summary
-                                    .TotalQtyMobilTapcash || 0) +
-                                (summary.TotalQtyMotorQris || 0) + (summary.TotalQtyMotorFlazz || 0) + (summary
-                                    .TotalQtyMotorEmoney || 0) + (summary.TotalQtyMotorBrizzi || 0) + (summary
-                                    .TotalQtyMotorTapcash || 0);
-                            const grandTotalInc = (summary.TotalIncMobilQris || 0) + (summary.TotalIncMobilFlazz || 0) +
-                                (summary.TotalIncMobilEmoney || 0) + (summary.TotalIncMobilBrizzi || 0) + (summary
-                                    .TotalIncMobilTapcash || 0) +
-                                (summary.TotalIncMotorQris || 0) + (summary.TotalIncMotorFlazz || 0) + (summary
-                                    .TotalIncMotorEmoney || 0) + (summary.TotalIncMotorBrizzi || 0) + (summary
-                                    .TotalIncMotorTapcash || 0);
-
-                            const totalQrisQty = (summary.TotalQtyMobilQris || 0) + (summary.TotalQtyMotorQris || 0);
-                            const totalQrisInc = (summary.TotalIncMobilQris || 0) + (summary.TotalIncMotorQris || 0);
-                            const totalFlazzQty = (summary.TotalQtyMobilFlazz || 0) + (summary.TotalQtyMotorFlazz || 0);
-                            const totalFlazzInc = (summary.TotalIncMobilFlazz || 0) + (summary.TotalIncMotorFlazz || 0);
-                            const totalEmoneyQty = (summary.TotalQtyMobilEmoney || 0) + (summary.TotalQtyMotorEmoney ||
-                                0);
-                            const totalEmoneyInc = (summary.TotalIncMobilEmoney || 0) + (summary.TotalIncMotorEmoney ||
-                                0);
-                            const totalBrizziQty = (summary.TotalQtyMobilBrizzi || 0) + (summary.TotalQtyMotorBrizzi ||
-                                0);
-                            const totalBrizziInc = (summary.TotalIncMobilBrizzi || 0) + (summary.TotalIncMotorBrizzi ||
-                                0);
-                            const totalTapcashQty = (summary.TotalQtyMobilTapcash || 0) + (summary
-                                .TotalQtyMotorTapcash || 0);
-                            const totalTapcashInc = (summary.TotalIncMobilTapcash || 0) + (summary
-                                .TotalIncMotorTapcash || 0);
-
+                            // The API response already provides all necessary totals in the summary object.
+                            // We can use them directly instead of recalculating.
                             const footerRow = `<tr style="font-weight: bold;">
-                                <td colspan="2">Total</td>
-                                <!-- Mobil -->
-                                <td>${formatNumber(summary.TotalQtyMobilQris)}</td><td>${formatNumber(summary.TotalIncMobilQris)}</td>
-                                <td>${formatNumber(summary.TotalQtyMobilFlazz)}</td><td>${formatNumber(summary.TotalIncMobilFlazz)}</td>
-                                <td>${formatNumber(summary.TotalQtyMobilEmoney)}</td><td>${formatNumber(summary.TotalIncMobilEmoney)}</td>
-                                <td>${formatNumber(summary.TotalQtyMobilBrizzi)}</td><td>${formatNumber(summary.TotalIncMobilBrizzi)}</td>
-                                <td>${formatNumber(summary.TotalQtyMobilTapcash)}</td><td>${formatNumber(summary.TotalIncMobilTapcash)}</td>
-                                <!-- Motor -->
-                                <td>${formatNumber(summary.TotalQtyMotorQris)}</td><td>${formatNumber(summary.TotalIncMotorQris)}</td>
-                                <td>${formatNumber(summary.TotalQtyMotorFlazz)}</td><td>${formatNumber(summary.TotalIncMotorFlazz)}</td>
-                                <td>${formatNumber(summary.TotalQtyMotorEmoney)}</td><td>${formatNumber(summary.TotalIncMotorEmoney)}</td>
-                                <td>${formatNumber(summary.TotalQtyMotorBrizzi)}</td><td>${formatNumber(summary.TotalIncMotorBrizzi)}</td>
-                                <td>${formatNumber(summary.TotalQtyMotorTapcash)}</td><td>${formatNumber(summary.TotalIncMotorTapcash)}</td>
-                                <!-- Box (Placeholder) -->
-                                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
-                                <!-- Total -->
-                                <td>${formatNumber(totalQrisQty)}</td><td>${formatNumber(totalQrisInc)}</td>
-                                <td>${formatNumber(totalFlazzQty)}</td><td>${formatNumber(totalFlazzInc)}</td>
-                                <td>${formatNumber(totalEmoneyQty)}</td><td>${formatNumber(totalEmoneyInc)}</td>
-                                <td>${formatNumber(totalBrizziQty)}</td><td>${formatNumber(totalBrizziInc)}</td>
-                                <td>${formatNumber(totalTapcashQty)}</td><td>${formatNumber(totalTapcashInc)}</td>
-                                <!-- Grand Total -->
-                                <td>${formatNumber(grandTotalQty)}</td>
-                                <td>${formatNumber(grandTotalInc)}</td>
-                            </tr>`;
+                <td colspan="2">Total</td>
+                
+                <!-- Mobil Summary -->
+                <td>${formatNumber(summary.TotalQtyMobilQris)}</td><td>${formatNumber(summary.TotalIncMobilQris)}</td>
+                <td>${formatNumber(summary.TotalQtyMobilFlazz)}</td><td>${formatNumber(summary.TotalIncMobilFlazz)}</td>
+                <td>${formatNumber(summary.TotalQtyMobilEmoney)}</td><td>${formatNumber(summary.TotalIncMobilEmoney)}</td>
+                <td>${formatNumber(summary.TotalQtyMobilBrizzi)}</td><td>${formatNumber(summary.TotalIncMobilBrizzi)}</td>
+                <td>${formatNumber(summary.TotalQtyMobilTapcash)}</td><td>${formatNumber(summary.TotalIncMobilTapcash)}</td>
+                
+                <!-- Motor Summary -->
+                <td>${formatNumber(summary.TotalQtyMotorQris)}</td><td>${formatNumber(summary.TotalIncMotorQris)}</td>
+                <td>${formatNumber(summary.TotalQtyMotorFlazz)}</td><td>${formatNumber(summary.TotalIncMotorFlazz)}</td>
+                <td>${formatNumber(summary.TotalQtyMotorEmoney)}</td><td>${formatNumber(summary.TotalIncMotorEmoney)}</td>
+                <td>${formatNumber(summary.TotalQtyMotorBrizzi)}</td><td>${formatNumber(summary.TotalIncMotorBrizzi)}</td>
+                <td>${formatNumber(summary.TotalQtyMotorTapcash)}</td><td>${formatNumber(summary.TotalIncMotorTapcash)}</td>
+                
+                <!-- Box Summary (New) -->
+                <td>${formatNumber(summary.TotalQtyBoxQris)}</td><td>${formatNumber(summary.TotalIncBoxQris)}</td>
+                <td>${formatNumber(summary.TotalQtyBoxFlazz)}</td><td>${formatNumber(summary.TotalIncBoxFlazz)}</td>
+                <td>${formatNumber(summary.TotalQtyBoxEmoney)}</td><td>${formatNumber(summary.TotalIncBoxEmoney)}</td>
+                <td>${formatNumber(summary.TotalQtyBoxBrizzi)}</td><td>${formatNumber(summary.TotalIncBoxBrizzi)}</td>
+                <td>${formatNumber(summary.TotalQtyBoxTapcash)}</td><td>${formatNumber(summary.TotalIncBoxTapcash)}</td>
+                
+                <!-- Total by Payment Type Summary -->
+                <td>${formatNumber(summary.TotalQtyQris)}</td><td>${formatNumber(summary.TotalIncQris)}</td>
+                <td>${formatNumber(summary.TotalQtyFlazz)}</td><td>${formatNumber(summary.TotalIncFlazz)}</td>
+                <td>${formatNumber(summary.TotalQtyEmoney)}</td><td>${formatNumber(summary.TotalIncEmoney)}</td>
+                <td>${formatNumber(summary.TotalQtyBrizzi)}</td><td>${formatNumber(summary.TotalIncBrizzi)}</td>
+                <td>${formatNumber(summary.TotalQtyTapcash)}</td><td>${formatNumber(summary.TotalIncTapcash)}</td>
+                
+                <!-- Grand Total Summary -->
+                <td>${formatNumber(summary.GrandTotalQty)}</td>
+                <td>${formatNumber(summary.GrandTotalInc)}</td>
+            </tr>`;
                             tableFoot.append(footerRow);
                         }
+
+                        // --- Populate Table Footer with Last Month's Summary Data ---
+                        if (summaryLast) {
+                            const lastMonthFooterRow = `<tr style="font-weight: bold;">
+                <td colspan="2">Bulan lalu</td>
+                
+                <!-- Mobil Summary Last Month -->
+                <td>${formatNumber(summaryLast.TotalQtyMobilQris)}</td><td>${formatNumber(summaryLast.TotalIncMobilQris)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyMobilFlazz)}</td><td>${formatNumber(summaryLast.TotalIncMobilFlazz)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyMobilEmoney)}</td><td>${formatNumber(summaryLast.TotalIncMobilEmoney)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyMobilBrizzi)}</td><td>${formatNumber(summaryLast.TotalIncMobilBrizzi)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyMobilTapcash)}</td><td>${formatNumber(summaryLast.TotalIncMobilTapcash)}</td>
+                
+                <!-- Motor Summary Last Month -->
+                <td>${formatNumber(summaryLast.TotalQtyMotorQris)}</td><td>${formatNumber(summaryLast.TotalIncMotorQris)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyMotorFlazz)}</td><td>${formatNumber(summaryLast.TotalIncMotorFlazz)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyMotorEmoney)}</td><td>${formatNumber(summaryLast.TotalIncMotorEmoney)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyMotorBrizzi)}</td><td>${formatNumber(summaryLast.TotalIncMotorBrizzi)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyMotorTapcash)}</td><td>${formatNumber(summaryLast.TotalIncMotorTapcash)}</td>
+                
+                <!-- Box Summary Last Month -->
+                <td>${formatNumber(summaryLast.TotalQtyBoxQris)}</td><td>${formatNumber(summaryLast.TotalIncBoxQris)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyBoxFlazz)}</td><td>${formatNumber(summaryLast.TotalIncBoxFlazz)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyBoxEmoney)}</td><td>${formatNumber(summaryLast.TotalIncBoxEmoney)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyBoxBrizzi)}</td><td>${formatNumber(summaryLast.TotalIncBoxBrizzi)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyBoxTapcash)}</td><td>${formatNumber(summaryLast.TotalIncBoxTapcash)}</td>
+                
+                <!-- Total by Payment Type Summary Last Month -->
+                <td>${formatNumber(summaryLast.TotalQtyQris)}</td><td>${formatNumber(summaryLast.TotalIncQris)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyFlazz)}</td><td>${formatNumber(summaryLast.TotalIncFlazz)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyEmoney)}</td><td>${formatNumber(summaryLast.TotalIncEmoney)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyBrizzi)}</td><td>${formatNumber(summaryLast.TotalIncBrizzi)}</td>
+                <td>${formatNumber(summaryLast.TotalQtyTapcash)}</td><td>${formatNumber(summaryLast.TotalIncTapcash)}</td>
+                
+                <!-- Grand Total Summary Last Month -->
+                <td>${formatNumber(summaryLast.GrandTotalQty)}</td>
+                <td>${formatNumber(summaryLast.GrandTotalInc)}</td>
+            </tr>`;
+                            tableFoot.append(lastMonthFooterRow);
+                        }
+
                     } else {
+                        // Display a message if no data is found
                         tableBody.append('<tr><td colspan="44" class="text-center">Data tidak ditemukan.</td></tr>');
                     }
                 }

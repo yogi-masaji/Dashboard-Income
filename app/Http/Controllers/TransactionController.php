@@ -149,27 +149,27 @@ class TransactionController extends Controller
                 $thisWeekPassTotals = $this->calculateTotals($thisWeekPass, 'pass');
                 $lastWeekPassTotals = $this->calculateTotals($lastWeekPass, 'pass');
 
-                // Vehicle comparison (only casual), comparing this week vs two weeks ago
+                // Vehicle comparison (only casual), comparing last week vs two weeks ago
                 $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
                 $vehicleData = [];
                 $totalTwoWeeksAgo = 0;
-                $totalThisWeek = 0;
+                $totalLastWeek = 0;
 
                 foreach ($vehicleTypes as $type) {
                     $twoWeeksAgoValue = $twoWeeksAgoCasualTotals['total_' . $type];
-                    $thisWeekValue = $thisWeekCasualTotals['total_' . $type];
+                    $lastWeekValue = $lastWeekCasualTotals['total_' . $type];
 
                     $totalTwoWeeksAgo += $twoWeeksAgoValue;
-                    $totalThisWeek += $thisWeekValue;
+                    $totalLastWeek += $lastWeekValue;
 
-                    $percentChange = $twoWeeksAgoValue != 0 ? (($thisWeekValue - $twoWeeksAgoValue) / $twoWeeksAgoValue) * 100 : 0;
+                    $percentChange = $twoWeeksAgoValue != 0 ? (($lastWeekValue - $twoWeeksAgoValue) / $twoWeeksAgoValue) * 100 : 0;
                     $direction = $percentChange >= 0 ? '↑' : '↓';
                     $color = $percentChange >= 0 ? 'green' : 'red';
 
                     $vehicleData[] = [
                         'vehicle' => ucfirst($type),
                         'two_weeks_ago' => $twoWeeksAgoValue,
-                        'this_week' => $thisWeekValue,
+                        'this_week' => $lastWeekValue, // menggunakan last week sebagai 'this_week'
                         'percent_change' => number_format($percentChange, 1) . '%',
                         'direction' => $direction,
                         'color' => $color,
@@ -177,14 +177,14 @@ class TransactionController extends Controller
                 }
 
                 // All Vehicle Total
-                $percentChangeTotal = $totalTwoWeeksAgo != 0 ? (($totalThisWeek - $totalTwoWeeksAgo) / $totalTwoWeeksAgo) * 100 : 0;
+                $percentChangeTotal = $totalTwoWeeksAgo != 0 ? (($totalLastWeek - $totalTwoWeeksAgo) / $totalTwoWeeksAgo) * 100 : 0;
                 $directionTotal = $percentChangeTotal >= 0 ? '↑' : '↓';
                 $colorTotal = $percentChangeTotal >= 0 ? 'green' : 'red';
 
                 $vehicleData[] = [
                     'vehicle' => 'All Vehicle',
                     'two_weeks_ago' => $totalTwoWeeksAgo,
-                    'this_week' => $totalThisWeek,
+                    'this_week' => $totalLastWeek,
                     'percent_change' => number_format($percentChangeTotal, 1) . '%',
                     'direction' => $directionTotal,
                     'color' => $colorTotal,
@@ -222,6 +222,7 @@ class TransactionController extends Controller
     }
 
 
+
     public function MonthlyTransaction()
     {
         try {
@@ -229,15 +230,18 @@ class TransactionController extends Controller
 
             // Tanggal untuk bulan ini
             $thisMonthStart = $today->copy()->startOfMonth()->format('Y-m-d');
-            $thisMonthEnd = $today->format('Y-m-d');
+            $thisMonthEnd = $today->copy()->endOfMonth()->format('Y-m-d');
 
-            // Tanggal untuk bulan lalu
-            $lastMonthStart = $today->copy()->subMonth()->startOfMonth()->format('Y-m-d');
-            $lastMonthEnd = $today->copy()->subMonth()->endOfMonth()->format('Y-m-d');
+            // Tanggal untuk bulan lalu.
+            // FIX: Menggunakan subMonthNoOverflow() untuk menghindari bug saat bulan sebelumnya
+            // memiliki hari lebih sedikit (misal: dari 31 Juli ke Juni).
+            $lastMonthStart = $today->copy()->subMonthNoOverflow()->startOfMonth()->format('Y-m-d');
+            $lastMonthEnd = $today->copy()->subMonthNoOverflow()->endOfMonth()->format('Y-m-d');
 
-            // Tanggal untuk dua bulan lalu (khusus untuk vehicle_comparison)
-            $twoMonthsAgoStart = $today->copy()->subMonths(2)->startOfMonth()->format('Y-m-d');
-            $twoMonthsAgoEnd = $today->copy()->subMonths(2)->endOfMonth()->format('Y-m-d');
+            // Tanggal untuk dua bulan lalu (khusus untuk vehicle_comparison).
+            // FIX: Menggunakan subMonthsNoOverflow() untuk alasan yang sama.
+            $twoMonthsAgoStart = $today->copy()->subMonthsNoOverflow(2)->startOfMonth()->format('Y-m-d');
+            $twoMonthsAgoEnd = $today->copy()->subMonthsNoOverflow(2)->endOfMonth()->format('Y-m-d');
 
             $locationCode = session('selected_location_kode_lokasi');
 
@@ -281,41 +285,41 @@ class TransactionController extends Controller
                 $lastMonthPassTotals = $this->calculateTotals($lastMonthPass, 'pass');
                 $twoMonthsAgoCasualTotals = $this->calculateTotals($twoMonthsAgoCasual, 'casual');
 
-                // Vehicle comparison: 2 bulan lalu vs bulan ini
+                // Vehicle comparison: 2 bulan lalu vs bulan lalu (bukan this month)
                 $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
                 $vehicleData = [];
                 $totalTwoMonthsAgo = 0;
-                $totalThisMonth = 0;
+                $totalLastMonth = 0;
 
                 foreach ($vehicleTypes as $type) {
                     $twoMonthsAgoValue = $twoMonthsAgoCasualTotals['total_' . $type];
-                    $thisMonthValue = $thisMonthCasualTotals['total_' . $type];
+                    $lastMonthValue = $lastMonthCasualTotals['total_' . $type];
 
                     $totalTwoMonthsAgo += $twoMonthsAgoValue;
-                    $totalThisMonth += $thisMonthValue;
+                    $totalLastMonth += $lastMonthValue;
 
-                    $percentChange = $twoMonthsAgoValue != 0 ? (($thisMonthValue - $twoMonthsAgoValue) / $twoMonthsAgoValue) * 100 : 0;
+                    $percentChange = $twoMonthsAgoValue != 0 ? (($lastMonthValue - $twoMonthsAgoValue) / $twoMonthsAgoValue) * 100 : 0;
                     $direction = $percentChange >= 0 ? '↑' : '↓';
                     $color = $percentChange >= 0 ? 'green' : 'red';
 
                     $vehicleData[] = [
                         'vehicle' => ucfirst($type),
                         'two_months_ago' => $twoMonthsAgoValue,
-                        'this_month' => $thisMonthValue,
+                        'this_month' => $lastMonthValue, // ← isi dari last month
                         'percent_change' => number_format($percentChange, 1) . '%',
                         'direction' => $direction,
                         'color' => $color,
                     ];
                 }
 
-                $percentChangeTotal = $totalTwoMonthsAgo != 0 ? (($totalThisMonth - $totalTwoMonthsAgo) / $totalTwoMonthsAgo) * 100 : 0;
+                $percentChangeTotal = $totalTwoMonthsAgo != 0 ? (($totalLastMonth - $totalTwoMonthsAgo) / $totalTwoMonthsAgo) * 100 : 0;
                 $directionTotal = $percentChangeTotal >= 0 ? '↑' : '↓';
                 $colorTotal = $percentChangeTotal >= 0 ? 'green' : 'red';
 
                 $vehicleData[] = [
                     'vehicle' => 'All Vehicle',
                     'two_months_ago' => $totalTwoMonthsAgo,
-                    'this_month' => $totalThisMonth,
+                    'this_month' => $totalLastMonth, // ← juga pakai last month
                     'percent_change' => number_format($percentChangeTotal, 1) . '%',
                     'direction' => $directionTotal,
                     'color' => $colorTotal,
@@ -368,6 +372,7 @@ class TransactionController extends Controller
 
 
 
+
     // Helper function to calculate totals for casual or pass data
     private function calculateTotals($data, $type = 'casual')
     {
@@ -376,6 +381,7 @@ class TransactionController extends Controller
         $totalMotorbike = 0;
         $totalTruck = 0;
         $totalTaxi = 0;
+        $totalOther = 0;
 
         foreach ($data as $item) {
             $vehicleKey = $type === 'casual' ? 'vehiclecasual' : 'vehiclepass';
@@ -383,12 +389,14 @@ class TransactionController extends Controller
             $motorbikeKey = $type === 'casual' ? 'motorbikecasual' : 'motorbikepass';
             $truckKey = $type === 'casual' ? 'truckcasual' : 'truckpass';
             $taxiKey = $type === 'casual' ? 'taxicasual' : 'taxipass';
+            $otherKey = $type === 'casual' ? 'othercasual' : 'otherpass';
 
             $totalVehicle += $item[$vehicleKey] ?? 0;
             $totalCar += $item[$carKey] ?? 0;
             $totalMotorbike += $item[$motorbikeKey] ?? 0;
             $totalTruck += $item[$truckKey] ?? 0;
             $totalTaxi += $item[$taxiKey] ?? 0;
+            $totalOther += $item[$otherKey] ?? 0;
         }
 
         return [
@@ -397,6 +405,7 @@ class TransactionController extends Controller
             'total_motorbike' => $totalMotorbike,
             'total_truck' => $totalTruck,
             'total_taxi' => $totalTaxi,
+            'total_other' => $totalOther,
             'total_all' => $totalVehicle,
         ];
     }
