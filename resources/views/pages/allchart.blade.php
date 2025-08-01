@@ -566,52 +566,10 @@
         const dailyEpaymentURL = "{{ route('dailyEpayment') }}";
         const weeklyEpaymentURL = "{{ route('weeklyEpayment') }}";
         const monthlyEpaymentURL = "{{ route('monthlyEpayment') }}";
-        const dailyEpaymentChart = "{{ route('dailyEpaymentChart') }}";
+        const dailyEpaymentChartURL = "{{ route('dailyEpaymentChart') }}";
     </script>
 
-    <script src="{{ asset('js/testasync.js') }}"></script>
-    <script src="{{ asset('js/income.js') }}"></script>
-    <script src="{{ asset('js/epayment.js') }}"></script>
-
-    <script>
-        // --- NEW LOADING SCRIPT ---
-        // This script doesn't need changes, it will work with the new HTML structure.
-
-        // Counter for loaded scripts
-        let loadedDataScripts = 0;
-        const totalDataScripts = 3; // The number of scripts that need to report back
-
-        // Function to hide the loader
-        function hideLoader() {
-            const loadingOverlay = document.getElementById('loading-overlay');
-            const mainContent = document.getElementById('main-content');
-
-            if (loadingOverlay && mainContent && loadingOverlay.style.display !== 'none') {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                    mainContent.style.display = 'block';
-                }, 500); // Match CSS transition
-            }
-        }
-
-        // This function MUST be called by each of your data scripts
-        // after their initial data fetch is complete.
-        window.notifyDataLoaded = function() {
-            loadedDataScripts++;
-            if (loadedDataScripts >= totalDataScripts) {
-                hideLoader();
-            }
-        };
-
-        // Failsafe: If the scripts take too long, hide the loader anyway
-        setTimeout(function() {
-            if (loadedDataScripts < totalDataScripts) {
-                console.warn("Loading screen fallback timer triggered.");
-                hideLoader();
-            }
-        }, 15000); // 15 seconds
-    </script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
     {{-- @vite('resources/js/testasync.js')
     @vite('resources/js/income.js')
     @vite('resources/js/epayment.js') --}}

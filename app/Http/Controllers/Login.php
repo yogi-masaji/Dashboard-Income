@@ -463,12 +463,14 @@ class Login extends Controller
             ->whereYear('lh.datetime_Login', date('Y'))
             ->select(
                 DB::raw("COUNT(lh.id_Staff) as total_login"),
-                DB::raw("DATE_FORMAT(lh.datetime_Login, '%M %Y') as period")
+                DB::raw("DATE_FORMAT(lh.datetime_Login, '%M %Y') as period"),
+                DB::raw("DATE_FORMAT(lh.datetime_Login, '%Y-%m') as period_order") // for sorting
             )
-            ->groupBy('period')
-            ->orderBy(DB::raw("CAST(DATE_FORMAT(lh.datetime_Login, '%Y%m') AS UNSIGNED)"), 'asc')
+            ->groupBy('period', 'period_order')
+            ->orderBy('period_order', 'asc')
             ->get();
     }
+
 
     /**
      * API endpoint untuk mengambil riwayat login bulanan pengguna.
