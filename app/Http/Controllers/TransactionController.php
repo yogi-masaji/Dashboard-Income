@@ -92,25 +92,37 @@ class TransactionController extends Controller
     public function WeeklyTransaction()
     {
         try {
+            // --- LOGIKA TANGGAL BARU DENGAN SIKLUS ---
             $today = Carbon::now()->timezone('Asia/Jakarta');
 
-            // This week: 7 hari terakhir sampai hari ini
-            $thisWeekStart = $today->copy()->subDays(6)->format('Y-m-d');
-            $thisWeekEnd = $today->format('Y-m-d');
+            // Dapatkan siklus untuk minggu ini
+            $thisWeekCycle = $this->getWeekCycle($today);
+            $thisWeekStart = $thisWeekCycle['start'];
+            // Tanggal akhir adalah hari ini, tetapi tidak bisa melebihi akhir siklus
+            $thisWeekEnd = $today->min($thisWeekCycle['end']);
 
-            // Last week: 7 hari sebelum this week
-            $lastWeekStart = $today->copy()->subDays(13)->format('Y-m-d');
-            $lastWeekEnd = $today->copy()->subDays(7)->format('Y-m-d');
+            // Dapatkan siklus untuk minggu lalu
+            $dateForLastWeek = $thisWeekStart->copy()->subDay(); // Mundur satu hari untuk masuk ke siklus sebelumnya
+            $lastWeekCycle = $this->getWeekCycle($dateForLastWeek);
+            $lastWeekStart = $lastWeekCycle['start'];
+            $lastWeekEnd = $lastWeekCycle['end'];
 
-            // Two weeks ago: 7 hari sebelum last week
-            $twoWeeksAgoStart = $today->copy()->subDays(20)->format('Y-m-d');
-            $twoWeeksAgoEnd = $today->copy()->subDays(14)->format('Y-m-d');
+            // Dapatkan siklus untuk dua minggu lalu
+            $dateForTwoWeeksAgo = $lastWeekStart->copy()->subDay(); // Mundur satu hari dari awal siklus minggu lalu
+            $twoWeeksAgoCycle = $this->getWeekCycle($dateForTwoWeeksAgo);
+            $twoWeeksAgoStart = $twoWeeksAgoCycle['start'];
+            $twoWeeksAgoEnd = $twoWeeksAgoCycle['end'];
+
+            // Ambil data dari API untuk keseluruhan rentang tanggal
+            $apiStartDate = $twoWeeksAgoStart->format('Y-m-d');
+            $apiEndDate = $thisWeekEnd->format('Y-m-d');
+            // --- AKHIR LOGIKA TANGGAL BARU ---
 
             $locationCode = session('selected_location_kode_lokasi');
 
             $response = Http::post('http://110.0.100.70:8080/v3/api/getquantity', [
-                'effective_start_date' => $twoWeeksAgoStart,
-                'effective_end_date' => $thisWeekEnd,
+                'effective_start_date' => $apiStartDate,
+                'effective_end_date' => $apiEndDate,
                 'location_code' => $locationCode,
             ]);
 
@@ -120,36 +132,28 @@ class TransactionController extends Controller
                 $casualData = $data['casual'];
                 $passData = $data['pass'];
 
-                // Filter data by week ranges
-                $thisWeekCasual = array_values(collect($casualData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($thisWeekStart, $thisWeekEnd)
-                )->toArray());
+                // Filter data berdasarkan rentang tanggal yang sudah dihitung
+                $thisWeekCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($thisWeekStart, $thisWeekEnd))->toArray());
+                $thisWeekPass = array_values(collect($passData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($thisWeekStart, $thisWeekEnd))->toArray());
 
-                $thisWeekPass = array_values(collect($passData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($thisWeekStart, $thisWeekEnd)
-                )->toArray());
+                $lastWeekCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($lastWeekStart, $lastWeekEnd))->toArray());
+                $lastWeekPass = array_values(collect($passData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($lastWeekStart, $lastWeekEnd))->toArray());
 
-                $lastWeekCasual = array_values(collect($casualData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd)
-                )->toArray());
+                $twoWeeksAgoCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($twoWeeksAgoStart, $twoWeeksAgoEnd))->toArray());
+                $twoWeeksAgoPass = array_values(collect($passData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($twoWeeksAgoStart, $twoWeeksAgoEnd))->toArray());
 
-                $lastWeekPass = array_values(collect($passData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd)
-                )->toArray());
-
-                $twoWeeksAgoCasual = array_values(collect($casualData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($twoWeeksAgoStart, $twoWeeksAgoEnd)
-                )->toArray());
-
-                // Calculate totals
+                // Hitung total
                 $thisWeekCasualTotals = $this->calculateTotals($thisWeekCasual, 'casual');
-                $lastWeekCasualTotals = $this->calculateTotals($lastWeekCasual, 'casual');
-                $twoWeeksAgoCasualTotals = $this->calculateTotals($twoWeeksAgoCasual, 'casual');
-
                 $thisWeekPassTotals = $this->calculateTotals($thisWeekPass, 'pass');
+
+                $lastWeekCasualTotals = $this->calculateTotals($lastWeekCasual, 'casual');
                 $lastWeekPassTotals = $this->calculateTotals($lastWeekPass, 'pass');
 
-                // Vehicle comparison (only casual), comparing last week vs two weeks ago
+                $twoWeeksAgoCasualTotals = $this->calculateTotals($twoWeeksAgoCasual, 'casual');
+                $twoWeeksAgoPassTotals = $this->calculateTotals($twoWeeksAgoPass, 'pass');
+
+
+                // Perbandingan kendaraan (hanya casual), membandingkan 'last week' vs 'two weeks ago'
                 $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
                 $vehicleData = [];
                 $totalTwoWeeksAgo = 0;
@@ -169,14 +173,14 @@ class TransactionController extends Controller
                     $vehicleData[] = [
                         'vehicle' => ucfirst($type),
                         'two_weeks_ago' => $twoWeeksAgoValue,
-                        'this_week' => $lastWeekValue, // menggunakan last week sebagai 'this_week'
+                        'this_week' => $lastWeekValue, // Label di frontend mungkin perlu disesuaikan, ini adalah data 'last_week'
                         'percent_change' => number_format($percentChange, 1) . '%',
                         'direction' => $direction,
                         'color' => $color,
                     ];
                 }
 
-                // All Vehicle Total
+                // Total Semua Kendaraan
                 $percentChangeTotal = $totalTwoWeeksAgo != 0 ? (($totalLastWeek - $totalTwoWeeksAgo) / $totalTwoWeeksAgo) * 100 : 0;
                 $directionTotal = $percentChangeTotal >= 0 ? '↑' : '↓';
                 $colorTotal = $percentChangeTotal >= 0 ? 'green' : 'red';
@@ -184,7 +188,7 @@ class TransactionController extends Controller
                 $vehicleData[] = [
                     'vehicle' => 'All Vehicle',
                     'two_weeks_ago' => $totalTwoWeeksAgo,
-                    'this_week' => $totalLastWeek,
+                    'this_week' => $totalLastWeek, // Ini adalah data 'last_week'
                     'percent_change' => number_format($percentChangeTotal, 1) . '%',
                     'direction' => $directionTotal,
                     'color' => $colorTotal,
@@ -192,10 +196,11 @@ class TransactionController extends Controller
 
                 return response()->json([
                     'response' => 'Success Get Data',
-                    'message' => 'Get Quantity Data for Period ' . $locationCode . ' - ' . $thisWeekEnd . ' (This Week)',
+                    'message' => 'Get Quantity Data for Period ' . $locationCode,
                     'status_code' => 200,
                     'location_code' => $locationCode,
                     'this_week' => [
+                        'period' => $thisWeekStart->format('d M') . ' - ' . $thisWeekEnd->format('d M'),
                         'casual' => $thisWeekCasual,
                         'pass' => $thisWeekPass,
                         'totals' => [
@@ -204,11 +209,21 @@ class TransactionController extends Controller
                         ],
                     ],
                     'last_week' => [
+                        'period' => $lastWeekStart->format('d M') . ' - ' . $lastWeekEnd->format('d M'),
                         'casual' => $lastWeekCasual,
                         'pass' => $lastWeekPass,
                         'totals' => [
                             'casual' => $lastWeekCasualTotals,
                             'pass' => $lastWeekPassTotals,
+                        ],
+                    ],
+                    'two_weeks_ago' => [
+                        'period' => $twoWeeksAgoStart->format('d M') . ' - ' . $twoWeeksAgoEnd->format('d M'),
+                        'casual' => $twoWeeksAgoCasual,
+                        'pass' => $twoWeeksAgoPass,
+                        'totals' => [
+                            'casual' => $twoWeeksAgoCasualTotals,
+                            'pass' => $twoWeeksAgoPassTotals,
                         ],
                     ],
                     'vehicle_comparison' => $vehicleData,
@@ -233,13 +248,10 @@ class TransactionController extends Controller
             $thisMonthEnd = $today->copy()->endOfMonth()->format('Y-m-d');
 
             // Tanggal untuk bulan lalu.
-            // FIX: Menggunakan subMonthNoOverflow() untuk menghindari bug saat bulan sebelumnya
-            // memiliki hari lebih sedikit (misal: dari 31 Juli ke Juni).
             $lastMonthStart = $today->copy()->subMonthNoOverflow()->startOfMonth()->format('Y-m-d');
             $lastMonthEnd = $today->copy()->subMonthNoOverflow()->endOfMonth()->format('Y-m-d');
 
             // Tanggal untuk dua bulan lalu (khusus untuk vehicle_comparison).
-            // FIX: Menggunakan subMonthsNoOverflow() untuk alasan yang sama.
             $twoMonthsAgoStart = $today->copy()->subMonthsNoOverflow(2)->startOfMonth()->format('Y-m-d');
             $twoMonthsAgoEnd = $today->copy()->subMonthsNoOverflow(2)->endOfMonth()->format('Y-m-d');
 
@@ -258,25 +270,11 @@ class TransactionController extends Controller
                 $passData = $data['pass'];
 
                 // Filter data sesuai bulan
-                $thisMonthCasual = array_values(collect($casualData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($thisMonthStart, $thisMonthEnd)
-                )->toArray());
-
-                $thisMonthPass = array_values(collect($passData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($thisMonthStart, $thisMonthEnd)
-                )->toArray());
-
-                $lastMonthCasual = array_values(collect($casualData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd)
-                )->toArray());
-
-                $lastMonthPass = array_values(collect($passData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd)
-                )->toArray());
-
-                $twoMonthsAgoCasual = array_values(collect($casualData)->filter(
-                    fn($item) => Carbon::parse($item['tanggal'])->between($twoMonthsAgoStart, $twoMonthsAgoEnd)
-                )->toArray());
+                $thisMonthCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($thisMonthStart, $thisMonthEnd))->toArray());
+                $thisMonthPass = array_values(collect($passData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($thisMonthStart, $thisMonthEnd))->toArray());
+                $lastMonthCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd))->toArray());
+                $lastMonthPass = array_values(collect($passData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd))->toArray());
+                $twoMonthsAgoCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($twoMonthsAgoStart, $twoMonthsAgoEnd))->toArray());
 
                 // Hitung total
                 $thisMonthCasualTotals = $this->calculateTotals($thisMonthCasual, 'casual');
@@ -368,11 +366,6 @@ class TransactionController extends Controller
         }
     }
 
-
-
-
-
-
     // Helper function to calculate totals for casual or pass data
     private function calculateTotals($data, $type = 'casual')
     {
@@ -437,5 +430,36 @@ class TransactionController extends Controller
         }
 
         return $weeks;
+    }
+
+    /**
+     * Helper function to get the weekly cycle (1-7, 8-14, etc.) for a given date.
+     * @param Carbon $date
+     * @return array
+     */
+    private function getWeekCycle(Carbon $date)
+    {
+        $dayOfMonth = $date->day;
+        $month = $date->month;
+        $year = $date->year;
+
+        if ($dayOfMonth <= 7) {
+            $start = Carbon::create($year, $month, 1);
+            $end = Carbon::create($year, $month, 7);
+        } elseif ($dayOfMonth <= 14) {
+            $start = Carbon::create($year, $month, 8);
+            $end = Carbon::create($year, $month, 14);
+        } elseif ($dayOfMonth <= 21) {
+            $start = Carbon::create($year, $month, 15);
+            $end = Carbon::create($year, $month, 21);
+        } elseif ($dayOfMonth <= 28) {
+            $start = Carbon::create($year, $month, 22);
+            $end = Carbon::create($year, $month, 28);
+        } else { // For dates 29, 30, or 31
+            $start = Carbon::create($year, $month, 29);
+            $end = $date->copy()->endOfMonth(); // The end is the actual end of the month
+        }
+
+        return ['start' => $start->startOfDay(), 'end' => $end->endOfDay()];
     }
 }

@@ -126,7 +126,12 @@
             .easepick-wrapper {
                 z-index: 1060;
             }
+
+            .thick-border {
+                border: 2px solid #000 !important;
+            }
         </style>
+
     </head>
 
     <body>
@@ -234,8 +239,9 @@
                                         <th colspan="10" class="text-center">Mobil</th>
                                         <th colspan="10" class="text-center">Motor</th>
                                         <th colspan="10" class="text-center">Box</th>
-                                        <th colspan="10" class="text-center fw-bold">Total</th>
-                                        <th rowspan="2" colspan="2" class="text-center fw-bold">Grand Total</th>
+                                        <th colspan="10" class="text-center fw-bold thick-border">Total</th>
+                                        <th rowspan="2" colspan="2" class="text-center fw-bold thick-border">Grand
+                                            Total</th>
                                     </tr>
                                     <tr>
                                         <!-- Mobil -->
@@ -257,12 +263,11 @@
                                         <th colspan="2">Brizzi</th>
                                         <th colspan="2">Tapcash</th>
                                         <!-- Total -->
-                                        <th class="fw-bold" colspan="2">QRIS</th>
-                                        <th class="fw-bold" colspan="2">Flazz</th>
-                                        <th class="fw-bold" colspan="2">Emoney</th>
-                                        <th class="fw-bold" colspan="2">Brizzi</th>
-                                        <th class="fw-bold" colspan="2">Tapcash</th>
-
+                                        <th class="fw-bold thick-border" colspan="2">QRIS</th>
+                                        <th class="fw-bold thick-border" colspan="2">Flazz</th>
+                                        <th class="fw-bold thick-border" colspan="2">Emoney</th>
+                                        <th class="fw-bold thick-border" colspan="2">Brizzi</th>
+                                        <th class="fw-bold thick-border" colspan="2">Tapcash</th>
                                     </tr>
                                     <tr>
                                         <!-- Mobil -->
@@ -299,21 +304,22 @@
                                         <th>Qty</th>
                                         <th>Inc</th>
                                         <!-- Total -->
-                                        <th class="fw-bold">Qty</th>
-                                        <th class="fw-bold">Inc</th>
-                                        <th class="fw-bold">Qty</th>
-                                        <th class="fw-bold">Inc</th>
-                                        <th class="fw-bold">Qty</th>
-                                        <th class="fw-bold">Inc</th>
-                                        <th class="fw-bold">Qty</th>
-                                        <th class="fw-bold">Inc</th>
-                                        <th class="fw-bold">Qty</th>
-                                        <th class="fw-bold">Inc</th>
+                                        <th class="fw-bold thick-border">Qty</th>
+                                        <th class="fw-bold thick-border">Inc</th>
+                                        <th class="fw-bold thick-border">Qty</th>
+                                        <th class="fw-bold thick-border">Inc</th>
+                                        <th class="fw-bold thick-border">Qty</th>
+                                        <th class="fw-bold thick-border">Inc</th>
+                                        <th class="fw-bold thick-border">Qty</th>
+                                        <th class="fw-bold thick-border">Inc</th>
+                                        <th class="fw-bold thick-border">Qty</th>
+                                        <th class="fw-bold thick-border">Inc</th>
                                         <!-- Grand Total -->
-                                        <th class="fw-bold">Qty</th>
-                                        <th class="fw-bold">Inc</th>
+                                        <th class="fw-bold thick-border">Qty</th>
+                                        <th class="fw-bold thick-border">Inc</th>
                                     </tr>
                                 </thead>
+
                                 <tbody id="table-body-lost-ticket"></tbody>
                                 <tfoot id="table-foot-lost-ticket"></tfoot>
                             </table>
@@ -951,15 +957,15 @@
                 <td>${formatNumber(item.QtyBoxTapcash)}</td><td>${formatNumber(item.IncBoxTapcash)}</td>
                 
                 <!-- Total by Payment Type -->
-                <td>${formatNumber(totalQrisQty)}</td><td>${formatNumber(totalQrisInc)}</td>
-                <td>${formatNumber(totalFlazzQty)}</td><td>${formatNumber(totalFlazzInc)}</td>
-                <td>${formatNumber(totalEmoneyQty)}</td><td>${formatNumber(totalEmoneyInc)}</td>
-                <td>${formatNumber(totalBrizziQty)}</td><td>${formatNumber(totalBrizziInc)}</td>
-                <td>${formatNumber(totalTapcashQty)}</td><td>${formatNumber(totalTapcashInc)}</td>
-                
+                <td class="fw-bold thick-border">${formatNumber(totalQrisQty)}</td><td class="fw-bold thick-border">${formatNumber(totalQrisInc)}</td>
+                <td class="fw-bold thick-border">${formatNumber(totalFlazzQty)}</td><td class="fw-bold thick-border">${formatNumber(totalFlazzInc)}</td>
+                <td class="fw-bold thick-border">${formatNumber(totalEmoneyQty)}</td><td class="fw-bold thick-border">${formatNumber(totalEmoneyInc)}</td>
+                <td class="fw-bold thick-border">${formatNumber(totalBrizziQty)}</td><td class="fw-bold thick-border">${formatNumber(totalBrizziInc)}</td>
+                <td class="fw-bold thick-border">${formatNumber(totalTapcashQty)}</td><td class="fw-bold thick-border">${formatNumber(totalTapcashInc)}</td>
+
                 <!-- Grand Total for the Row -->
-                <td style="font-weight:bold;">${formatNumber(grandTotalQty)}</td>
-                <td style="font-weight:bold;">${formatNumber(grandTotalInc)}</td>
+                <td class="fw-bold thick-border" style="font-weight:bold;">${formatNumber(grandTotalQty)}</td>
+                <td class="fw-bold thick-border" style="font-weight:bold;">${formatNumber(grandTotalInc)}</td>
             </tr>`;
                             tableBody.append(row);
                         });
@@ -993,15 +999,15 @@
                 <td>${formatNumber(summary.TotalQtyBoxTapcash)}</td><td>${formatNumber(summary.TotalIncBoxTapcash)}</td>
                 
                 <!-- Total by Payment Type Summary -->
-                <td>${formatNumber(summary.TotalQtyQris)}</td><td>${formatNumber(summary.TotalIncQris)}</td>
-                <td>${formatNumber(summary.TotalQtyFlazz)}</td><td>${formatNumber(summary.TotalIncFlazz)}</td>
-                <td>${formatNumber(summary.TotalQtyEmoney)}</td><td>${formatNumber(summary.TotalIncEmoney)}</td>
-                <td>${formatNumber(summary.TotalQtyBrizzi)}</td><td>${formatNumber(summary.TotalIncBrizzi)}</td>
-                <td>${formatNumber(summary.TotalQtyTapcash)}</td><td>${formatNumber(summary.TotalIncTapcash)}</td>
-                
+                <td class="fw-bold thick-border">${formatNumber(summary.TotalQtyQris)}</td><td class="fw-bold thick-border">${formatNumber(summary.TotalIncQris)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summary.TotalQtyFlazz)}</td><td class="fw-bold thick-border">${formatNumber(summary.TotalIncFlazz)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summary.TotalQtyEmoney)}</td><td class="fw-bold thick-border">${formatNumber(summary.TotalIncEmoney)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summary.TotalQtyBrizzi)}</td><td class="fw-bold thick-border">${formatNumber(summary.TotalIncBrizzi)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summary.TotalQtyTapcash)}</td><td class="fw-bold thick-border">${formatNumber(summary.TotalIncTapcash)}</td>
+
                 <!-- Grand Total Summary -->
-                <td>${formatNumber(summary.GrandTotalQty)}</td>
-                <td>${formatNumber(summary.GrandTotalInc)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summary.GrandTotalQty)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summary.GrandTotalInc)}</td>
             </tr>`;
                             tableFoot.append(footerRow);
                         }
@@ -1033,15 +1039,15 @@
                 <td>${formatNumber(summaryLast.TotalQtyBoxTapcash)}</td><td>${formatNumber(summaryLast.TotalIncBoxTapcash)}</td>
                 
                 <!-- Total by Payment Type Summary Last Month -->
-                <td>${formatNumber(summaryLast.TotalQtyQris)}</td><td>${formatNumber(summaryLast.TotalIncQris)}</td>
-                <td>${formatNumber(summaryLast.TotalQtyFlazz)}</td><td>${formatNumber(summaryLast.TotalIncFlazz)}</td>
-                <td>${formatNumber(summaryLast.TotalQtyEmoney)}</td><td>${formatNumber(summaryLast.TotalIncEmoney)}</td>
-                <td>${formatNumber(summaryLast.TotalQtyBrizzi)}</td><td>${formatNumber(summaryLast.TotalIncBrizzi)}</td>
-                <td>${formatNumber(summaryLast.TotalQtyTapcash)}</td><td>${formatNumber(summaryLast.TotalIncTapcash)}</td>
-                
+                <td class="fw-bold thick-border">${formatNumber(summaryLast.TotalQtyQris)}</td><td class="fw-bold thick-border">${formatNumber(summaryLast.TotalIncQris)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summaryLast.TotalQtyFlazz)}</td><td class="fw-bold thick-border">${formatNumber(summaryLast.TotalIncFlazz)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summaryLast.TotalQtyEmoney)}</td><td class="fw-bold thick-border">${formatNumber(summaryLast.TotalIncEmoney)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summaryLast.TotalQtyBrizzi)}</td><td class="fw-bold thick-border">${formatNumber(summaryLast.TotalIncBrizzi)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summaryLast.TotalQtyTapcash)}</td><td class="fw-bold thick-border">${formatNumber(summaryLast.TotalIncTapcash)}</td>
+
                 <!-- Grand Total Summary Last Month -->
-                <td>${formatNumber(summaryLast.GrandTotalQty)}</td>
-                <td>${formatNumber(summaryLast.GrandTotalInc)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summaryLast.GrandTotalQty)}</td>
+                <td class="fw-bold thick-border">${formatNumber(summaryLast.GrandTotalInc)}</td>
             </tr>`;
                             tableFoot.append(lastMonthFooterRow);
                         }
@@ -1632,12 +1638,24 @@
                     } else if (currentReportType === 'income_lost_ticket') {
                         const fileName = `Income_Lost_Ticket_${startDate}_to_${endDate}.xlsx`;
                         const ws_name = "Income Lost Ticket";
-                        const colCount = 44;
+
+                        // Validasi struktur data
+                        if (!rawDataForExport.data || rawDataForExport.data.length < 3 ||
+                            !rawDataForExport.data[0].summaryTotal ||
+                            !rawDataForExport.data[1].summaryTotalLast ||
+                            !rawDataForExport.data[2].DetailTransaction) {
+                            alert("Struktur data untuk ekspor tidak valid atau tidak lengkap.");
+                            return;
+                        }
+
+                        const summary = rawDataForExport.data[0].summaryTotal;
+                        const summaryLast = rawDataForExport.data[1].summaryTotalLast;
+                        const details = rawDataForExport.data[2].DetailTransaction;
 
                         let exportData = [];
                         exportData.push([reportTitle]);
                         exportData.push([reportPeriod]);
-                        exportData.push([]);
+                        exportData.push([]); // Spacer
 
                         const headers = [
                             ["Tgl", "Hari", "Mobil", ...Array(9).fill(null), "Motor", ...Array(9).fill(
@@ -1657,11 +1675,10 @@
                             ]
                         ];
 
-                        const details = rawDataForExport.data[1].DetailTransaction;
-                        const summary = rawDataForExport.data[0].summaryTotal;
-
                         const bodyData = details.map(item => {
                             const rowData = [item.Tanggal ? new Date(item.Tanggal) : null, item.Hari];
+
+                            // Data Mobil, Motor, Box
                             ['Mobil', 'Motor', 'Box'].forEach(vType => {
                                 ['Qris', 'Flazz', 'Emoney', 'Brizzi', 'Tapcash'].forEach(
                                     pType => {
@@ -1671,8 +1688,8 @@
                                             0));
                                     });
                             });
-                            let totalRowQty = 0,
-                                totalRowInc = 0;
+
+                            // Data Total per Jenis Pembayaran
                             ['Qris', 'Flazz', 'Emoney', 'Brizzi', 'Tapcash'].forEach(pType => {
                                 const qty = (item[`QtyMobil${pType}`] || 0) + (item[
                                     `QtyMotor${pType}`] || 0) + (item[`QtyBox${pType}`] ||
@@ -1681,126 +1698,151 @@
                                     `IncMotor${pType}`] || 0) + (item[`IncBox${pType}`] ||
                                     0);
                                 rowData.push(qty, inc);
-                                totalRowQty += qty;
-                                totalRowInc += inc;
                             });
-                            rowData.push(totalRowQty, totalRowInc);
+
+                            // Data Grand Total per baris
+                            const grandTotalQty = (item.QtyMobilQris || 0) + (item.QtyMobilFlazz || 0) +
+                                (item.QtyMobilEmoney || 0) + (item.QtyMobilBrizzi || 0) + (item
+                                    .QtyMobilTapcash || 0) +
+                                (item.QtyMotorQris || 0) + (item.QtyMotorFlazz || 0) + (item
+                                    .QtyMotorEmoney || 0) + (item.QtyMotorBrizzi || 0) + (item
+                                    .QtyMotorTapcash || 0) +
+                                (item.QtyBoxQris || 0) + (item.QtyBoxFlazz || 0) + (item.QtyBoxEmoney ||
+                                    0) + (item.QtyBoxBrizzi || 0) + (item.QtyBoxTapcash || 0);
+                            const grandTotalInc = (item.IncMobilQris || 0) + (item.IncMobilFlazz || 0) +
+                                (item.IncMobilEmoney || 0) + (item.IncMobilBrizzi || 0) + (item
+                                    .IncMobilTapcash || 0) +
+                                (item.IncMotorQris || 0) + (item.IncMotorFlazz || 0) + (item
+                                    .IncMotorEmoney || 0) + (item.IncMotorBrizzi || 0) + (item
+                                    .IncMotorTapcash || 0) +
+                                (item.IncBoxQris || 0) + (item.IncBoxFlazz || 0) + (item.IncBoxEmoney ||
+                                    0) + (item.IncBoxBrizzi || 0) + (item.IncBoxTapcash || 0);
+                            rowData.push(grandTotalQty, grandTotalInc);
+
                             return rowData;
                         });
 
-                        const footerData = [
-                            []
-                        ];
-                        footerData[0][0] = "Total";
-                        footerData[0][1] = null;
-                        let totalGrandQty = 0,
-                            totalGrandInc = 0;
-                        ['Mobil', 'Motor', 'Box'].forEach(vType => {
-                            ['Qris', 'Flazz', 'Emoney', 'Brizzi', 'Tapcash'].forEach(pType => {
-                                footerData[0].push(Number(summary[`TotalQty${vType}${pType}`] ||
-                                    0));
-                                footerData[0].push(Number(summary[`TotalInc${vType}${pType}`] ||
-                                    0));
+                        const createFooterRow = (label, summaryData) => {
+                            if (!summaryData) return [];
+                            const footerRow = [label, null];
+                            ['Mobil', 'Motor', 'Box'].forEach(vType => {
+                                ['Qris', 'Flazz', 'Emoney', 'Brizzi', 'Tapcash'].forEach(pType => {
+                                    footerRow.push(Number(summaryData[
+                                        `TotalQty${vType}${pType}`] || 0));
+                                    footerRow.push(Number(summaryData[
+                                        `TotalInc${vType}${pType}`] || 0));
+                                });
                             });
-                        });
-                        ['Qris', 'Flazz', 'Emoney', 'Brizzi', 'Tapcash'].forEach(pType => {
-                            const qty = (summary[`TotalQtyMobil${pType}`] || 0) + (summary[
-                                `TotalQtyMotor${pType}`] || 0) + (summary[`TotalQtyBox${pType}`] ||
-                                0);
-                            const inc = (summary[`TotalIncMobil${pType}`] || 0) + (summary[
-                                `TotalIncMotor${pType}`] || 0) + (summary[`TotalIncBox${pType}`] ||
-                                0);
-                            footerData[0].push(qty, inc);
-                            totalGrandQty += qty;
-                            totalGrandInc += inc;
-                        });
-                        footerData[0].push(totalGrandQty, totalGrandInc);
+                            ['Qris', 'Flazz', 'Emoney', 'Brizzi', 'Tapcash'].forEach(pType => {
+                                footerRow.push(Number(summaryData[`TotalQty${pType}`] || 0));
+                                footerRow.push(Number(summaryData[`TotalInc${pType}`] || 0));
+                            });
+                            footerRow.push(Number(summaryData.GrandTotalQty || 0));
+                            footerRow.push(Number(summaryData.GrandTotalInc || 0));
+                            return footerRow;
+                        };
 
-                        exportData = exportData.concat(headers, bodyData, footerData);
+                        const footerDataCurrent = createFooterRow("Total", summary);
+                        const footerDataLast = createFooterRow("Bulan lalu", summaryLast);
+
+                        exportData = exportData.concat(headers, bodyData, [footerDataCurrent], [
+                            footerDataLast
+                        ]);
+
                         const ws = XLSX.utils.aoa_to_sheet(exportData);
 
+                        const colCount = 44;
                         const merges = [{
-                            s: {
-                                r: 0,
-                                c: 0
+                                s: {
+                                    r: 0,
+                                    c: 0
+                                },
+                                e: {
+                                    r: 0,
+                                    c: colCount - 1
+                                }
                             },
-                            e: {
-                                r: 0,
-                                c: colCount - 1
-                            }
-                        }, {
-                            s: {
-                                r: 1,
-                                c: 0
+                            {
+                                s: {
+                                    r: 1,
+                                    c: 0
+                                },
+                                e: {
+                                    r: 1,
+                                    c: colCount - 1
+                                }
                             },
-                            e: {
-                                r: 1,
-                                c: colCount - 1
-                            }
-                        }, {
-                            s: {
-                                r: 3,
-                                c: 0
-                            },
-                            e: {
-                                r: 5,
-                                c: 0
-                            }
-                        }, {
-                            s: {
-                                r: 3,
-                                c: 1
-                            },
-                            e: {
-                                r: 5,
-                                c: 1
-                            }
-                        }, {
-                            s: {
-                                r: 3,
-                                c: 2
-                            },
-                            e: {
-                                r: 3,
-                                c: 11
-                            }
-                        }, {
-                            s: {
-                                r: 3,
-                                c: 12
-                            },
-                            e: {
-                                r: 3,
-                                c: 21
-                            }
-                        }, {
-                            s: {
-                                r: 3,
-                                c: 22
-                            },
-                            e: {
-                                r: 3,
-                                c: 31
-                            }
-                        }, {
-                            s: {
-                                r: 3,
-                                c: 32
-                            },
-                            e: {
-                                r: 3,
-                                c: 41
-                            }
-                        }, {
-                            s: {
-                                r: 3,
-                                c: 42
-                            },
-                            e: {
-                                r: 4,
-                                c: 43
-                            }
-                        }, ];
+                            {
+                                s: {
+                                    r: 3,
+                                    c: 0
+                                },
+                                e: {
+                                    r: 5,
+                                    c: 0
+                                }
+                            }, // Tgl
+                            {
+                                s: {
+                                    r: 3,
+                                    c: 1
+                                },
+                                e: {
+                                    r: 5,
+                                    c: 1
+                                }
+                            }, // Hari
+                            {
+                                s: {
+                                    r: 3,
+                                    c: 2
+                                },
+                                e: {
+                                    r: 3,
+                                    c: 11
+                                }
+                            }, // Mobil
+                            {
+                                s: {
+                                    r: 3,
+                                    c: 12
+                                },
+                                e: {
+                                    r: 3,
+                                    c: 21
+                                }
+                            }, // Motor
+                            {
+                                s: {
+                                    r: 3,
+                                    c: 22
+                                },
+                                e: {
+                                    r: 3,
+                                    c: 31
+                                }
+                            }, // Box
+                            {
+                                s: {
+                                    r: 3,
+                                    c: 32
+                                },
+                                e: {
+                                    r: 3,
+                                    c: 41
+                                }
+                            }, // Total
+                            {
+                                s: {
+                                    r: 3,
+                                    c: 42
+                                },
+                                e: {
+                                    r: 4,
+                                    c: 43
+                                }
+                            }, // Grand Total
+                        ];
                         for (let i = 2; i < 42; i += 2) {
                             merges.push({
                                 s: {
@@ -1813,16 +1855,28 @@
                                 }
                             });
                         }
+                        const totalRowIndex = 3 + headers.length - 3 + bodyData.length;
                         merges.push({
                             s: {
-                                r: 6 + bodyData.length,
+                                r: totalRowIndex,
                                 c: 0
                             },
                             e: {
-                                r: 6 + bodyData.length,
+                                r: totalRowIndex,
                                 c: 1
                             }
                         });
+                        merges.push({
+                            s: {
+                                r: totalRowIndex + 1,
+                                c: 0
+                            },
+                            e: {
+                                r: totalRowIndex + 1,
+                                c: 1
+                            }
+                        });
+
                         ws['!merges'] = merges;
 
                         const borderStyle = {
@@ -1849,41 +1903,44 @@
                                 if (!ws[cell_ref]) continue;
 
                                 let style = {};
-                                if (R === 0) {
-                                    style.font = {
+                                // General styling
+                                if (R === 0) style = {
+                                    font: {
                                         bold: true,
                                         sz: 16
-                                    };
-                                    style.alignment = {
+                                    },
+                                    alignment: {
                                         horizontal: 'center'
-                                    };
-                                } else if (R === 1) {
-                                    style.font = {
+                                    }
+                                };
+                                else if (R === 1) style = {
+                                    font: {
                                         italic: true,
                                         sz: 12
-                                    };
-                                    style.alignment = {
+                                    },
+                                    alignment: {
                                         horizontal: 'center'
-                                    };
-                                }
-                                if (R >= 3 && R < exportData.length) {
-                                    style.border = borderStyle;
-                                }
-                                if (R >= 3 && R <= 5) {
-                                    style.alignment = {
-                                        ...(style.alignment || {}),
-                                        vertical: "center",
-                                        horizontal: "center",
-                                        wrapText: true
-                                    };
-                                }
-                                const footerRowIndex = 6 + bodyData.length;
-                                if (R === footerRowIndex) {
-                                    style.font = {
-                                        ...(style.font || {}),
-                                        bold: true
-                                    };
-                                }
+                                    }
+                                };
+
+                                // Borders for the whole table
+                                if (R >= 3 && R < exportData.length) style.border = borderStyle;
+
+                                // Header alignment
+                                if (R >= 3 && R <= 5) style.alignment = {
+                                    ...style.alignment,
+                                    vertical: "center",
+                                    horizontal: "center",
+                                    wrapText: true
+                                };
+
+                                // Footer font
+                                if (R >= totalRowIndex) style.font = {
+                                    ...style.font,
+                                    bold: true
+                                };
+
+                                // Number and date formatting
                                 if (R >= 6) {
                                     if (C === 0 && ws[cell_ref].v instanceof Date) {
                                         ws[cell_ref].t = 'd';
@@ -1903,6 +1960,7 @@
 
                         XLSX.utils.book_append_sheet(wb, ws, ws_name);
                         XLSX.writeFile(wb, fileName);
+
                     } else {
                         alert("Tipe laporan ini tidak didukung untuk ekspor.");
                     }

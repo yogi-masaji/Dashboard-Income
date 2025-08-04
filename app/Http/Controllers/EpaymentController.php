@@ -129,64 +129,77 @@ class EpaymentController extends Controller
 
         return $result;
     }
+
     public function weeklyEpayment()
     {
         try {
-            $today = Carbon::now('Asia/Jakarta');
+            // --- LOGIKA TANGGAL BARU DENGAN SIKLUS ---
+            $today = Carbon::now()->timezone('Asia/Jakarta');
 
-            $thisWeekStart = $today->copy()->subDays(6)->format('Y-m-d');
-            $thisWeekEnd = $today->format('Y-m-d');
+            // Dapatkan siklus untuk minggu ini
+            $thisWeekCycle = $this->getWeekCycle($today);
+            $thisWeekStart = $thisWeekCycle['start'];
+            // Tanggal akhir adalah hari ini, tetapi tidak bisa melebihi akhir siklus
+            $thisWeekEnd = $today->min($thisWeekCycle['end']);
 
-            $lastWeekStart = $today->copy()->subDays(13)->format('Y-m-d');
-            $lastWeekEnd = $today->copy()->subDays(7)->format('Y-m-d');
+            // Dapatkan siklus untuk minggu lalu
+            $dateForLastWeek = $thisWeekStart->copy()->subDay(); // Mundur satu hari untuk masuk ke siklus sebelumnya
+            $lastWeekCycle = $this->getWeekCycle($dateForLastWeek);
+            $lastWeekStart = $lastWeekCycle['start'];
+            $lastWeekEnd = $lastWeekCycle['end'];
 
-            $twoWeeksAgoStart = $today->copy()->subDays(20)->format('Y-m-d');
-            $twoWeeksAgoEnd = $today->copy()->subDays(14)->format('Y-m-d');
+            // Dapatkan siklus untuk dua minggu lalu
+            $dateForTwoWeeksAgo = $lastWeekStart->copy()->subDay(); // Mundur satu hari dari awal siklus minggu lalu
+            $twoWeeksAgoCycle = $this->getWeekCycle($dateForTwoWeeksAgo);
+            $twoWeeksAgoStart = $twoWeeksAgoCycle['start'];
+            $twoWeeksAgoEnd = $twoWeeksAgoCycle['end'];
+
+            // Ambil data dari API untuk keseluruhan rentang tanggal
+            $apiStartDate = $twoWeeksAgoStart->format('Y-m-d');
+            $apiEndDate = $thisWeekEnd->format('Y-m-d');
+            // --- AKHIR LOGIKA TANGGAL BARU ---
 
             $locationCode = session('selected_location_kode_lokasi');
 
             $response = Http::post('http://110.0.100.70:8080/v3/api/getepayment', [
-                'effective_start_date' => $twoWeeksAgoStart,
-                'effective_end_date' => $thisWeekEnd,
+                'effective_start_date' => $apiStartDate,
+                'effective_end_date' => $apiEndDate,
                 'location_code' => $locationCode,
             ]);
 
             if ($response->successful()) {
                 $epaymentData = collect($response->json()['data']);
 
-                $thisWeekData = $epaymentData->filter(function ($item) use ($thisWeekStart, $thisWeekEnd) {
-                    return isset($item['tanggal']) && Carbon::parse($item['tanggal'])->between($thisWeekStart, $thisWeekEnd);
-                })->values();
+                // Filter data berdasarkan rentang tanggal yang sudah dihitung
+                $thisWeekData = $epaymentData->filter(fn($item) => isset($item['tanggal']) && Carbon::parse($item['tanggal'])->betweenIncluded($thisWeekStart, $thisWeekEnd))->values();
+                $lastWeekData = $epaymentData->filter(fn($item) => isset($item['tanggal']) && Carbon::parse($item['tanggal'])->betweenIncluded($lastWeekStart, $lastWeekEnd))->values();
+                $twoWeeksAgoData = $epaymentData->filter(fn($item) => isset($item['tanggal']) && Carbon::parse($item['tanggal'])->betweenIncluded($twoWeeksAgoStart, $twoWeeksAgoEnd))->values();
 
-                $lastWeekData = $epaymentData->filter(function ($item) use ($lastWeekStart, $lastWeekEnd) {
-                    return isset($item['tanggal']) && Carbon::parse($item['tanggal'])->between($lastWeekStart, $lastWeekEnd);
-                })->values();
-
-                $twoWeeksAgoData = $epaymentData->filter(function ($item) use ($twoWeeksAgoStart, $twoWeeksAgoEnd) {
-                    return isset($item['tanggal']) && Carbon::parse($item['tanggal'])->between($twoWeeksAgoStart, $twoWeeksAgoEnd);
-                })->values();
-
+                // Hitung total untuk setiap periode
                 $thisWeekTotals = $this->calculateEpaymentTotals($thisWeekData);
                 $lastWeekTotals = $this->calculateEpaymentTotals($lastWeekData);
                 $twoWeeksAgoTotals = $this->calculateEpaymentTotals($twoWeeksAgoData);
 
                 return response()->json([
                     'response' => 'Success Get Epayment Data',
-                    'message' => 'Epayment Weekly Data',
+                    'message' => 'Epayment Weekly Data for ' . $locationCode,
                     'status_code' => 200,
                     'location_code' => $locationCode,
                     'this_week' => [
+                        'period' => $thisWeekStart->format('d M') . ' - ' . $thisWeekEnd->format('d M'),
                         'data' => $thisWeekData->toArray(),
                         'totals' => $thisWeekTotals,
                     ],
                     'last_week' => [
+                        'period' => $lastWeekStart->format('d M') . ' - ' . $lastWeekEnd->format('d M'),
                         'data' => $lastWeekData->toArray(),
                         'totals' => $lastWeekTotals,
                     ],
-                    // 'two_weeks_ago' => [
-                    //     // 'data' => $twoWeeksAgoData->toArray(),
-                    //     'totals' => $twoWeeksAgoTotals,
-                    // ],
+                    'two_weeks_ago' => [
+                        'period' => $twoWeeksAgoStart->format('d M') . ' - ' . $twoWeeksAgoEnd->format('d M'),
+                        'data' => $twoWeeksAgoData->toArray(),
+                        'totals' => $twoWeeksAgoTotals,
+                    ],
                     'table_data' => $this->formatEpaymentTable($lastWeekTotals, $twoWeeksAgoTotals),
                 ]);
             }
@@ -196,47 +209,6 @@ class EpaymentController extends Controller
             return response()->json(['message' => 'Internal Server Error: ' . $e->getMessage()], 500);
         }
     }
-
-
-    public function weeklyEpaymentThisWeekOnly()
-    {
-        try {
-            $today = Carbon::now('Asia/Jakarta');
-
-            // $prevWeek represents 6 days before today (start of this week)
-            $thisWeekStart = $today->copy()->modify('-6 day')->format('Y-m-d');
-            $thisWeekEnd = $today->format('Y-m-d');
-
-            $locationCode = session('selected_location_kode_lokasi');
-
-            $thisWeekResponse = Http::post('http://110.0.100.70:8080/v3/api/getepayment', [
-                'effective_start_date' => $thisWeekStart,
-                'effective_end_date' => $thisWeekEnd,
-                'location_code' => $locationCode,
-            ]);
-
-            if ($thisWeekResponse->successful()) {
-                $thisWeekData = collect($thisWeekResponse->json()['data']);
-                $thisWeekTotals = $this->calculateEpaymentTotals($thisWeekData);
-
-                return response()->json([
-                    'response' => 'Success Get Epayment Data (This Week Only)',
-                    'status_code' => 200,
-                    'location_code' => $locationCode,
-                    'this_week' => [
-                        'data' => $thisWeekData->toArray(),
-                        'totals' => $thisWeekTotals,
-                    ],
-                    'table_data' => $this->formatEpaymentTable($thisWeekTotals, null), // null for last week
-                ]);
-            }
-
-            return response()->json(['message' => 'Failed to fetch epayment data from API'], 500);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Internal Server Error: ' . $e->getMessage()], 500);
-        }
-    }
-
 
     public function monthlyEpayment()
     {
@@ -475,5 +447,36 @@ class EpaymentController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * Helper function to get the weekly cycle (1-7, 8-14, etc.) for a given date.
+     * @param Carbon $date
+     * @return array
+     */
+    private function getWeekCycle(Carbon $date)
+    {
+        $dayOfMonth = $date->day;
+        $month = $date->month;
+        $year = $date->year;
+
+        if ($dayOfMonth <= 7) {
+            $start = Carbon::create($year, $month, 1);
+            $end = Carbon::create($year, $month, 7);
+        } elseif ($dayOfMonth <= 14) {
+            $start = Carbon::create($year, $month, 8);
+            $end = Carbon::create($year, $month, 14);
+        } elseif ($dayOfMonth <= 21) {
+            $start = Carbon::create($year, $month, 15);
+            $end = Carbon::create($year, $month, 21);
+        } elseif ($dayOfMonth <= 28) {
+            $start = Carbon::create($year, $month, 22);
+            $end = Carbon::create($year, $month, 28);
+        } else { // For dates 29, 30, or 31
+            $start = Carbon::create($year, $month, 29);
+            $end = $date->copy()->endOfMonth(); // The end is the actual end of the month
+        }
+
+        return ['start' => $start->startOfDay(), 'end' => $end->endOfDay()];
     }
 }

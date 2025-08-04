@@ -86,16 +86,16 @@
         }
     </style>
 
-    <p>detail parkir search</p>
+    <p class="text-dark"">detail parkir search</p>
     <div class="search-wrapper">
         <div class="d-flex align-items-end gap-3 mb-3">
             <div>
-                <label for="start-date-1" class="form-label">Start Date</label>
+                <label for="start-date-1" class="form-label text-dark">Start Date</label>
                 <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
             </div>
-            <div class="pb-3 fw-semibold">to</div>
+            <div class="pb-3 fw-semibold text-dark">to</div>
             <div>
-                <label for="end-date-1" class="form-label">End Date</label>
+                <label for="end-date-1" class="form-label text-dark">End Date</label>
                 <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
             </div>
         </div>
@@ -167,6 +167,8 @@
 
 
     <script>
+        let detailParkirTable = null; // buat variabel di luar scope fungsi
+
         $('#cari').click(function() {
             const startDate = $('#start-date-1').val();
             const endDate = $('#end-date-1').val();
@@ -181,58 +183,7 @@
 
             // Disable button and show loading text
             $cariButton.prop('disabled', true).html('Loading...');
-            const detailParkirTable = $('#detailParkirTable').DataTable({
-                dom: "Bfltip",
-                pageLength: 100,
-                ordering: true,
-                lengthChange: false,
-                paging: true,
-                layout: {
-                    topEnd: {
-                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
-                    },
-                },
-                columns: [{
-                        data: 'no'
-                    },
-                    {
-                        data: 'tanggal_masuk'
-                    },
-                    {
-                        data: 'tanggal_keluar'
-                    },
-                    {
-                        data: 'nopol'
-                    },
-                    {
-                        data: 'barcode'
-                    },
-                    {
-                        data: 'kendaraan'
-                    },
-                    {
-                        data: 'tarif_parkir'
-                    },
-                    {
-                        data: 'dendalt'
-                    },
-                    {
-                        data: 'post_masuk'
-                    },
-                    {
-                        data: 'post_keluar'
-                    },
-                    {
-                        data: 'bank'
-                    },
-                    {
-                        data: 'shift'
-                    },
-                    {
-                        data: 'status'
-                    }
-                ]
-            });
+
             $.ajax({
                 url: '{{ route('parkingDetailSearch') }}',
                 method: 'POST',
@@ -243,8 +194,6 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        // Here you can also call a function to render the table
-
                         const detailParkirData = response.data.data;
 
                         const formattedDetailParkir = detailParkirData.map((item, index) => ({
@@ -263,11 +212,66 @@
                             status: item.statustransaction
                         }));
 
+                        // Inisialisasi hanya sekali
+                        if (!$.fn.DataTable.isDataTable('#detailParkirTable')) {
+                            detailParkirTable = $('#detailParkirTable').DataTable({
+                                dom: "Bfltip",
+                                pageLength: 100,
+                                ordering: true,
+                                lengthChange: false,
+                                paging: true,
+                                layout: {
+                                    topEnd: {
+                                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5',
+                                            'pdfHtml5'
+                                        ],
+                                    },
+                                },
+                                columns: [{
+                                        data: 'no'
+                                    },
+                                    {
+                                        data: 'tanggal_masuk'
+                                    },
+                                    {
+                                        data: 'tanggal_keluar'
+                                    },
+                                    {
+                                        data: 'nopol'
+                                    },
+                                    {
+                                        data: 'barcode'
+                                    },
+                                    {
+                                        data: 'kendaraan'
+                                    },
+                                    {
+                                        data: 'tarif_parkir'
+                                    },
+                                    {
+                                        data: 'dendalt'
+                                    },
+                                    {
+                                        data: 'post_masuk'
+                                    },
+                                    {
+                                        data: 'post_keluar'
+                                    },
+                                    {
+                                        data: 'bank'
+                                    },
+                                    {
+                                        data: 'shift'
+                                    },
+                                    {
+                                        data: 'status'
+                                    }
+                                ]
+                            });
+                        }
 
+                        // Update data
                         detailParkirTable.clear().rows.add(formattedDetailParkir).draw();
-
-
-
                     } else {
                         alert('No data found!');
                     }
@@ -277,7 +281,6 @@
                     alert('An error occurred while fetching data.');
                 },
                 complete: function() {
-                    // Re-enable button and reset text after AJAX (success or error)
                     $cariButton.prop('disabled', false).html('Cari');
                 }
             });

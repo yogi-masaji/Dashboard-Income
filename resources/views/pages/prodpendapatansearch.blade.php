@@ -27,7 +27,7 @@
         }
 
         tbody {
-            white-space: normal;
+            black-space: normal;
             word-break: break-all;
         }
 
@@ -76,8 +76,10 @@
     <style>
         .content-custom {
             padding: 10px !important;
-            background-color: #092953 !important;
+            background-color: #ffffff !important;
             border-radius: 10px !important;
+            box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
+            color: #000000 !important;
         }
 
         .search-wrapper {
@@ -106,8 +108,8 @@
         <div class="row g-3 mb-3 align-items-end">
 
             <div class="col-md-3">
-                <label for="vehicle-select" class="form-label">Pilih tahun</label>
-                <select class="form-select w-100" id="year-select" aria-label="Select year">
+                <label for="vehicle-select" class="form-label text-dark">Pilih tahun</label>
+                <select class="form-select w-100 text-dark" id="year-select" aria-label="Select year">
                     @php
                         $currentYear = date('Y');
                     @endphp
@@ -138,51 +140,51 @@
 
                 <tr>
                     <th scope="col" rowspan="4" class="text-center"
-                        style="border-left: 1px solid white; border-top: 1px solid white; border-right: 1px solid white; vertical-align: middle; width:6%;">
+                        style="border-left: 1px solid black; border-top: 1px solid black; border-right: 1px solid black; vertical-align: middle; width:6%;">
                         BULAN</th>
                     <th scope="col" rowspan="1" colspan="13" class="text-center"
-                        style="border-left: 1px solid white; border-top: 1px solid white; border-right: 1px solid white;">
+                        style="border-left: 1px solid black; border-top: 1px solid black; border-right: 1px solid black;">
                         PARKIR REGULER </th>
                 </tr>
 
                 <tr>
                     <th scope="col" colspan="4" rowspan="1" class="text-center"
-                        style="border-top: 1px solid white; border-right: 1px solid white;">CARGO</th>
+                        style="border-top: 1px solid black; border-right: 1px solid black;">CARGO</th>
                     <th scope="col" colspan="4" rowspan="1" class="text-center"
-                        style="border-top: 1px solid white; border-right: 1px solid white;">TERMINAL</th>
+                        style="border-top: 1px solid black; border-right: 1px solid black;">TERMINAL</th>
                     <th scope="col" colspan="4" rowspan="1" class="text-center"
-                        style="border-top: 1px solid white; border-right: 1px solid white;">TOTAL PRODUKSI</th>
+                        style="border-top: 1px solid black; border-right: 1px solid black;">TOTAL PRODUKSI</th>
                     <th scope="col" colspan="1" rowspan="3" class="text-center"
-                        style="border-top: 1px solid white; border-right: 1px solid white; width:7%; vertical-align: middle;">
+                        style="border-top: 1px solid black; border-right: 1px solid black; width:7%; vertical-align: middle;">
                         GRAND TOTAL PENDAPATAN</th>
                 </tr>
 
 
                 <tr>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid white;">RODA 2</th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid white;">RODA 4 & 6
+                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 2</th>
+                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 4 & 6
                     </th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid white;">RODA 2</th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid white;">RODA 4 & 6
+                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 2</th>
+                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 4 & 6
                     </th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid white;">RODA 2</th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid white;">RODA 4 & 6
+                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 2</th>
+                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 4 & 6
                     </th>
                 </tr>
 
                 <tr>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid white;">PEND</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
+                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
                 </tr>
 
             </thead>

@@ -77,8 +77,10 @@
     <style>
         .content-custom {
             padding: 10px !important;
-            background-color: #092953 !important;
+            background-color: #ffffff !important;
             border-radius: 10px !important;
+            box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
+            color: #000000 !important;
         }
 
         .search-wrapper {
@@ -86,20 +88,20 @@
         }
     </style>
 
-    <p>Ritase Search</p>
-    <div class="search-wrapper">
+    <div class="search-wrapper content-custom">
         <div class="row g-3 mb-3 align-items-end">
             <div class="col-md-3">
-                <label for="start-date-1" class="form-label">Start Date</label>
+                <p>Ritase Search</p>
+                <label for="start-date-1" class="form-label text-dark">Start Date</label>
                 <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
             </div>
 
             <div class="col-auto d-flex align-items-end">
-                <div class="fw-semibold pb-2">to</div>
+                <div class="fw-semibold pb-2 text-dark">to</div>
             </div>
 
             <div class="col-md-3">
-                <label for="end-date-1" class="form-label">End Date</label>
+                <label for="end-date-1" class="form-label text-dark">End Date</label>
                 <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
             </div>
         </div>
