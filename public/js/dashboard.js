@@ -1,14 +1,3 @@
-/**
- * Consolidated Dashboard Chart Loading and Updating
- *
- * This script replaces testasync.js, income.js, and epayment.js.
- * It fetches all data concurrently on initial load, shows a loading screen,
- * and then populates all charts and tables. It also sets up a single
- * interval to refresh all data periodically.
- *
- * NOTE: All logic from the original files has been merged here.
- */
-
 $(document).ready(function() {
 
     // --- GLOBAL CHART AND TABLE VARIABLES ---
@@ -67,8 +56,6 @@ $(document).ready(function() {
         weeklyEpaymentTable = $('#weeklyE-Payment').DataTable({ ...dtOptions, columns: [{ data: 'no' }, { data: 'payment' }, { data: 'last_week' }, { data: 'this_week' }] });
         monthlyEpaymentTable = $('#monthlyE-Payment').DataTable({ ...dtOptions, columns: [{ data: 'no' }, { data: 'payment' }, { data: 'last_month' }, { data: 'this_month' }] });
     }
-
-    // --- DATA FETCHING AND PROCESSING FUNCTIONS ---
 
     // == FROM testasync.js ==
     function fetchDailyTransactions() {

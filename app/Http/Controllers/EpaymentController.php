@@ -291,6 +291,45 @@ class EpaymentController extends Controller
         }
     }
 
+    public function weeklyEpaymentThisWeekOnly()
+    {
+        try {
+            $today = Carbon::now('Asia/Jakarta');
+
+            // $prevWeek represents 6 days before today (start of this week)
+            $thisWeekStart = $today->copy()->modify('-6 day')->format('Y-m-d');
+            $thisWeekEnd = $today->format('Y-m-d');
+
+            $locationCode = session('selected_location_kode_lokasi');
+
+            $thisWeekResponse = Http::post('http://110.0.100.70:8080/v3/api/getepayment', [
+                'effective_start_date' => $thisWeekStart,
+                'effective_end_date' => $thisWeekEnd,
+                'location_code' => $locationCode,
+            ]);
+
+            if ($thisWeekResponse->successful()) {
+                $thisWeekData = collect($thisWeekResponse->json()['data']);
+                $thisWeekTotals = $this->calculateEpaymentTotals($thisWeekData);
+
+                return response()->json([
+                    'response' => 'Success Get Epayment Data (This Week Only)',
+                    'status_code' => 200,
+                    'location_code' => $locationCode,
+                    'this_week' => [
+                        'data' => $thisWeekData->toArray(),
+                        'totals' => $thisWeekTotals,
+                    ],
+                    'table_data' => $this->formatEpaymentTable($thisWeekTotals, null), // null for last week
+                ]);
+            }
+
+            return response()->json(['message' => 'Failed to fetch epayment data from API'], 500);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Internal Server Error: ' . $e->getMessage()], 500);
+        }
+    }
+
     private function calculateEpaymentTotals($data)
     {
         return [

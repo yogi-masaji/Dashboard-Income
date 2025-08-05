@@ -33,10 +33,8 @@ Route::post('/login', [Login::class, 'authenticate']);
 Route::post('/logout', [Login::class, 'logout'])->name('logout');
 
 
-// --- Authenticated Routes ---
-// All routes within this group require the user to be logged in.
-// If a user is not authenticated, they will be redirected to the 'login' route.
-Route::middleware('auth')->group(function () {
+
+Route::middleware('custom.auth')->group(function () {
 
     // Authenticated dashboard/main page
     Route::get('/dashboard', function () {

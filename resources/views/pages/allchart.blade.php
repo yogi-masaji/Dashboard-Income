@@ -37,15 +37,37 @@
             /* Optional: to match content style */
         }
 
+        /* Kontainer untuk spinner dan logo */
+        .spinner-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Style baru untuk spinner */
         .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 8px solid rgba(52, 152, 219, 0.2);
+            border-top-color: #3498db;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
             animation: spin 1.5s linear infinite;
         }
 
+        /* Style baru untuk logo */
+        .spinner-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            /* Opsional */
+            object-fit: cover;
+        }
+
+        /* Pastikan animasi spin Anda sudah ada */
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
@@ -137,8 +159,12 @@
     <div class="content-wrapper">
         <!-- Loading Screen (now inside the wrapper) -->
         <div id="loading-overlay">
-            <div class="spinner"></div>
-            <p style="margin-top: 15px; font-size: 1.2em;">Loading Data...</p>
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <!-- Gunakan helper 'asset' dari Laravel untuk path logo Anda -->
+                <img src="{{ asset('/storage/logo-cp-ico.png') }}" alt="Logo" class="spinner-logo">
+            </div>
+
         </div>
 
         <!-- Main Content (also inside the wrapper) -->
