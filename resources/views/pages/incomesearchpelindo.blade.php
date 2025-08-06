@@ -7,6 +7,7 @@
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
         $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
+        $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 
@@ -40,10 +41,10 @@
         }
 
         /* table.dataTable thead th,
-                                                                                                                                                                                                                                                                                            table.dataTable thead td {
-                                                                                                                                                                                                                                                                                                padding: 16px;
-                                                                                                                                                                                                                                                                                                border-bottom: 1px solid #111
-                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                    table.dataTable thead td {
+                                                                                                                                                                                                                                                                                                        padding: 16px;
+                                                                                                                                                                                                                                                                                                        border-bottom: 1px solid #111
+                                                                                                                                                                                                                                                                                                    } */
 
         tbody {
             white-space: normal;
@@ -95,12 +96,12 @@
     <div class="search-wrapper">
         <div class="d-flex align-items-end gap-3 mb-3">
             <div>
-                <label for="start-date-1" class="form-label">Start Date</label>
+                <label for="start-date-1" class="form-label text-dark">Start Date</label>
                 <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
             </div>
             <div class="pb-3 fw-semibold">to</div>
             <div>
-                <label for="end-date-1" class="form-label">End Date</label>
+                <label for="end-date-1" class="form-label text-dark">End Date</label>
                 <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
             </div>
         </div>

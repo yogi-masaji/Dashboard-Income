@@ -7,6 +7,7 @@
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
         $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
+        $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 
@@ -22,10 +23,10 @@
         }
 
         /* table.dataTable thead th,
-                                                                                                                                                                                                                                                                        table.dataTable thead td {
-                                                                                                                                                                                                                                                                            padding: 16px;
-                                                                                                                                                                                                                                                                            border-bottom: 1px solid #111
-                                                                                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                                                                                    table.dataTable thead td {
+                                                                                                                                                                                                                                                                                        padding: 16px;
+                                                                                                                                                                                                                                                                                        border-bottom: 1px solid #111
+                                                                                                                                                                                                                                                                                    } */
 
         tbody {
             white-space: normal;
@@ -82,16 +83,16 @@
         }
 
         .search-wrapper {
-            width: 70%;
+            width: 100%;
         }
     </style>
     <style>
         /* .content-custom {
-                                                                                                                                                                                                                                                width: 100%;
-                                                                                                                                                                                                                                                overflow-x: hidden;
-                                                                                                                                                                                                                                                padding: 20px;
-                                                                                                                                                                                                                                                box-sizing: border-box;
-                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                            width: 100%;
+                                                                                                                                                                                                                                                            overflow-x: hidden;
+                                                                                                                                                                                                                                                            padding: 20px;
+                                                                                                                                                                                                                                                            box-sizing: border-box;
+                                                                                                                                                                                                                                                        } */
 
         .wide-data-table {
             width: 100%;
@@ -138,10 +139,10 @@
         }
 
         /* table.dataTable thead th,
-                                                                                                                                                                                                                                                                    table.dataTable thead td {
-                                                                                                                                                                                                                                                                        padding: 2px;
-                                                                                                                                                                                                                                                                        border-bottom: 1px solid #111;
-                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                table.dataTable thead td {
+                                                                                                                                                                                                                                                                                    padding: 2px;
+                                                                                                                                                                                                                                                                                    border-bottom: 1px solid #111;
+                                                                                                                                                                                                                                                                                } */
 
         .metrics-container {
             display: flex;
@@ -191,7 +192,7 @@
     <div class="search-wrapper">
         <div class="row g-3 mb-3 align-items-end">
             <div class="col-md-3">
-                <label for="start-date-1" class="form-label">Start Date</label>
+                <label for="start-date-1" class="form-label text-dark">Start Date</label>
                 <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
             </div>
             <div class="col-md-2 mt-3">

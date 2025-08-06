@@ -7,6 +7,7 @@
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
         $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
+        $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 
@@ -93,7 +94,7 @@
             </div>
 
             <div class="col-auto d-flex align-items-end">
-                <div class="fw-semibold pb-2">to</div>
+                <div class="fw-semibold pb-2 text-dark">to</div>
             </div>
 
             <div class="col-md-3">

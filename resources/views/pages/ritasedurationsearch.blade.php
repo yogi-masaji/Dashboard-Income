@@ -7,6 +7,7 @@
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
         $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
+        $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 
@@ -22,10 +23,10 @@
         }
 
         /* table.dataTable thead th,
-                                                                                                                                                                                                                                                                                                        table.dataTable thead td {
-                                                                                                                                                                                                                                                                                                            padding: 16px;
-                                                                                                                                                                                                                                                                                                            border-bottom: 1px solid #111
-                                                                                                                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                                                                                                                    table.dataTable thead td {
+                                                                                                                                                                                                                                                                                                                        padding: 16px;
+                                                                                                                                                                                                                                                                                                                        border-bottom: 1px solid #111
+                                                                                                                                                                                                                                                                                                                    } */
 
         tbody {
             white-space: normal;
@@ -141,8 +142,10 @@
     <style>
         .content-custom {
             padding: 10px !important;
-            background-color: #092953 !important;
+            background-color: #ffffff !important;
             border-radius: 10px !important;
+            box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
+            color: #000000 !important;
         }
     </style>
 
@@ -150,16 +153,16 @@
     <div class="search-wrapper content-custom">
         <div class="d-flex align-items-end gap-3 mb-3">
             <div>
-                <label for="start-date-1" class="form-label">Start Date</label>
+                <label for="start-date-1" class="form-label text-dark">Start Date</label>
                 <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
             </div>
             <div class="pb-3 fw-semibold">to</div>
             <div>
-                <label for="end-date-1" class="form-label">End Date</label>
+                <label for="end-date-1" class="form-label text-dark">End Date</label>
                 <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
             </div>
             <div>
-                <label for="end-date-1" class="form-label">Vehicle Type</label>
+                <label for="end-date-1" class="form-label text-dark">Vehicle Type</label>
                 <select name="selection" id="jenis_kendaraan" class="form-select">
                     <option value="ALL">ALL</option>
                     <option value="CAR">CAR</option>
@@ -168,7 +171,7 @@
                 </select>
             </div>
             <div>
-                <label for="end-date-1" class="form-label">Vehicle Status</label>
+                <label for="end-date-1" class="form-label text-dark">Vehicle Status</label>
                 <select name="selection" id="status_kendaraan" class="form-select">
                     <option value="ALL">ALL</option>
                     <option value="CASUAL">CASUAL</option>

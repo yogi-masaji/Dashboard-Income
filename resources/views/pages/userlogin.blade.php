@@ -2,8 +2,16 @@
 
 @section('content')
     @php
-        $navbarTitle = session('selected_location_name', 'User Login History');
+        $lokasiName = session('selected_location_name', 'Lokasi Default');
+        $ipLokasi = session('selected_location_ip_lokasi', 'IP Tidak Diketahui');
+        $lokasiId = session('selected_location_id', 0);
+        $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
+        $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
+        $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
+        $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
+        $navbarTitle = $lokasiName;
     @endphp
+
 
     {{-- Menambahkan beberapa style kustom dan Bootstrap Icons --}}
     @push('styles')
@@ -11,59 +19,68 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
         <style>
             body {
-                background-color: #0A1525;
-                /* New Body Color */
-                color: #ffffff;
-                /* Default text color */
+                background-color: #f8f9fa;
+                color: #212529;
             }
 
+            .card {
+                background-color: #ffffff !important;
+                border: #d9d9d9 1px solid !important;
+                border-radius: 10px !important;
+                color: #000 !important;
+            }
+
+            .card-header,
             #card_header {
-                background-color: #082142;
-                /* Darker header */
-                color: white;
-                border-bottom: 1px solid #10356A;
+                background-color: #f7f7f7 !important;
+                color: #000 !important;
+                border-bottom: 1px solid #d9d9d9 !important;
             }
 
-            .card-body.text-light {
-                background-color: #092953;
-                /* Main card body color */
+            .card-header h4,
+            #card_header h4,
+            #card_header p,
+            #card_header i {
+                color: #000 !important;
             }
 
+            .card-body {
+                background-color: #ffffff !important;
+                color: #000 !important;
+            }
 
-            .user-detail {
+            .user-detail-panel {
+                background-color: #8f0e0e;
+                padding: 10px;
                 border-radius: 0.25rem;
-                min-height: 250px;
+                border: 1px solid #291e1e !important;
             }
 
-            .list-cu-login text-white {
-                border: 1px solid #1a4a8a;
-                /* Adjusted border */
+
+            .list-group-item {
+                background-color: #ffffff;
+                color: #212529;
+                border: 1px solid #d9d9d9;
+            }
+
+            .list-group-item.header {
+                background-color: #f7f7f7;
+                color: #000;
+                font-weight: bold;
             }
 
             table.dataTable {
-                color: white;
+                color: #212529;
             }
 
             table.dataTable thead th {
-                color: #ffc107;
-                /* Gold header text */
+                color: #212529;
             }
 
-            /* Darker rows for striping effect */
             table.dataTable.table-striped tbody tr:nth-of-type(odd) {
-                background-color: #0f3161;
+                background-color: rgba(0, 0, 0, .05);
             }
 
-            table.dataTable.table-striped tbody tr:nth-of-type(even) {
-                background-color: #10356A;
-            }
-
-            table.dataTable tbody tr:hover {
-                background-color: #154282;
-                /* Row hover background */
-            }
-
-            /* Allow table cell content to wrap */
             table.dataTable td {
                 white-space: normal !important;
             }
@@ -76,124 +93,132 @@
             .dataTables_wrapper .dataTables_filter,
             .dataTables_wrapper .dataTables_info,
             .dataTables_wrapper .dataTables_paginate .paginate_button {
-                color: white !important;
+                color: #212529 !important;
             }
 
-            .dataTables_wrapper .dataTables_length select {
-                background-color: #10356A;
-                color: white;
-                border: 1px solid #1a4a8a;
-            }
-
+            .dataTables_wrapper .dataTables_length select,
             .dataTables_wrapper .dataTables_filter input {
-                background-color: #10356A;
-                color: white;
-                border: 1px solid #1a4a8a;
+                background-color: #ffffff;
+                color: #212529;
+                border: 1px solid #ced4da;
             }
 
-            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
-            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
-            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
-                color: #ffffff !important;
+            .page-item.active .page-link {
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+
+            .page-link {
+                background-color: #ffffff;
+                border: 1px solid #dee2e6;
+                color: #007bff;
             }
 
             .modal-content {
-                background-color: #092953;
-                border: 1px solid #ffc107;
+                background-color: #ffffff;
+                color: #212529;
+                border: 1px solid rgba(0, 0, 0, .2);
+                border-radius: 10px;
             }
 
-            .bi-circle-fill.text-success {
-                color: #28a745 !important;
+            .modal-header {
+                background-color: #f7f7f7;
+                color: #212529;
+                border-bottom: 1px solid #dee2e6;
             }
 
-            .bi-circle-fill.text-danger {
-                color: #dc3545 !important;
+            .modal-footer {
+                border-top: 1px solid #dee2e6;
+            }
+
+            .close {
+                color: #000;
+                text-shadow: 0 1px 0 #fff;
             }
         </style>
     @endpush
 
-    <div class="container-fluid px-0">
-        <div class="card no-body h-100" style="background-color: #092953;">
+    <div class="mt-4">
+        <div class="card shadow-lg">
             <!-- Card Header -->
             <div class="d-flex justify-content-between px-3 py-2 align-items-center" id="card_header">
                 <div class="d-flex align-items-center">
-                    <i class="bi bi-people-fill fa-lg me-2 text-white"></i>
-                    <h4 class="header text-white m-0">User Login</h4>
+                    <i class="bi bi-people-fill fa-lg me-2"></i>
+                    <h4 class="header m-0">User Login</h4>
                 </div>
-                <p class="card-text font-weight-light font-italic text-white m-0">
-                    {{ \Carbon\Carbon::now()->format('d F Y') }}</p>
+
             </div>
 
-            <div class="card-body text-light">
+            <div class="card-body">
                 <!-- Summary Cards -->
                 <div class="row g-4">
                     <!-- Kartu 1: Total Pengguna -->
-                    <div class="col-xl-3 col-lg-6">
-                        <div class="card" style="height: 100%;">
+                    <div class="col-xl-4 col-lg-6">
+                        <div class="card shadow-sm" style="height: 100%;">
                             <div class="card-body d-flex align-items-center">
                                 <div
-                                    style="background-color: #0d6efd; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
-                                    <i class="bi bi-people-fill" style="font-size: 1.75rem; color: #cfe2ff;"></i>
+                                    style="background-color: #cfe2ff; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
+                                    <i class="bi bi-people-fill" style="font-size: 1.75rem; color: #0d6efd;"></i>
                                 </div>
                                 <div style="margin-left: 12px;">
-                                    <h3 style="font-weight: bold; margin-bottom: 0; color: #212529;">{{ $totalUser }}
+                                    <h3 style="font-weight: bold; margin-bottom: 0;">{{ $totalUser }}
                                     </h3>
-                                    <p style="margin-bottom: 0; color: #212529;">Total Pengguna</p>
+                                    <p style="margin-bottom: 0;">Total Pengguna</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Kartu 2: Pengguna Online -->
-                    <div class="col-xl-3 col-lg-6">
-                        <div class="card" style="height: 100%;">
+                    <div class="col-xl-4 col-lg-6">
+                        <div class="card shadow-sm" style="height: 100%;">
                             <div class="card-body d-flex align-items-center">
                                 <div
-                                    style="background-color: #198754; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
-                                    <i class="bi bi-wifi" style="font-size: 1.75rem; color: #d1e7dd;"></i>
+                                    style="background-color: #d1e7dd; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
+                                    <i class="bi bi-wifi" style="font-size: 1.75rem; color: #198754;"></i>
                                 </div>
                                 <div style="margin-left: 12px;">
-                                    <h3 style="font-weight: bold; margin-bottom: 0; color: #212529;">{{ $onlineUser }}
+                                    <h3 style="font-weight: bold; margin-bottom: 0;">{{ $onlineUser }}
                                     </h3>
-                                    <p style="margin-bottom: 0; color: #212529;">Pengguna Online</p>
+                                    <p style="margin-bottom: 0;">Pengguna Online</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Kartu 3: Pengguna Offline -->
-                    <div class="col-xl-3 col-lg-6">
-                        <div class="card" style="height: 100%;">
+                    <div class="col-xl-4 col-lg-6">
+                        <div class="card shadow-sm" style="height: 100%;">
                             <div class="card-body d-flex align-items-center">
                                 <div
-                                    style="background-color: #ffc107; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
-                                    <i class="bi bi-wifi-off" style="font-size: 1.75rem; color: #fff3cd;"></i>
+                                    style="background-color: #fff3cd; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
+                                    <i class="bi bi-wifi-off" style="font-size: 1.75rem; color: #ffc107;"></i>
                                 </div>
                                 <div style="margin-left: 12px;">
-                                    <h3 style="font-weight: bold; margin-bottom: 0; color: #212529;">{{ $offlineUser }}
+                                    <h3 style="font-weight: bold; margin-bottom: 0;">{{ $offlineUser }}
                                     </h3>
-                                    <p style="margin-bottom: 0; color: #212529;">Pengguna Offline</p>
+                                    <p style="margin-bottom: 0;">Pengguna Offline</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Kartu 4: Pengguna Terdaftar -->
-                    <div class="col-xl-3 col-lg-6">
-                        <div class="card" style="height: 100%;">
+                    {{-- <div class="col-xl-4 col-lg-6">
+                        <div class="card shadow-sm" style="height: 100%;">
                             <div class="card-body d-flex align-items-center">
                                 <div
-                                    style="background-color: #dc3545; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
-                                    <i class="bi bi-person-fill-add" style="font-size: 1.75rem; color: #f8d7da;"></i>
+                                    style="background-color: #f8d7da; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
+                                    <i class="bi bi-person-fill-add" style="font-size: 1.75rem; color: #dc3545;"></i>
                                 </div>
                                 <div style="margin-left: 12px;">
-                                    <h3 style="font-weight: bold; margin-bottom: 0; color: #212529;">{{ $registeredUser }}
+                                    <h3 style="font-weight: bold; margin-bottom: 0;">{{ $registeredUser }}
                                     </h3>
-                                    <p style="margin-bottom: 0; color: #212529;">Pengguna Terdaftar</p>
+                                    <p style="margin-bottom: 0;">Pengguna Terdaftar</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
 
@@ -202,7 +227,7 @@
                     <!-- User List Table -->
                     <div class="col-lg-9">
                         <div class="text-center border-bottom border-top mb-2 p-3"
-                            style="color: #ffffff; border-color: #ffffff !important;">USER LIST</div>
+                            style="border-color: #d9d9d9 !important;">USER LIST</div>
                         <table id="tbUserlist" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
@@ -224,10 +249,10 @@
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td>
                                             @if ($user->foto_profile)
-                                                <img src="{{ asset('img/photos/' . $user->foto_profile) }}" alt="Profile"
-                                                    style="border-radius: 50%" width="40" height="40">
+                                                <img src="{{ asset('storage/photos/' . $user->foto_profile) }}"
+                                                    alt="Profile" style="border-radius: 50%" width="40" height="40">
                                             @else
-                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->nama_Staff) }}&background=5b00bd&color=fff"
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->nama_Staff) }}&background=0d6efd&color=fff"
                                                     style="border-radius: 50%;" width="40">
                                             @endif
                                             &nbsp; {{ $user->nama_Staff }}
@@ -245,8 +270,8 @@
                                         <td class="align-middle email-cell">{{ $user->email_Staff }}</td>
                                         @if (session('user_type') == 'IT')
                                             <td class="text-center align-middle">
-                                                <button type="button" class="btn btn-sm btn-success text-dark change-group"
-                                                    data-toggle="modal" data-target="#changeGroupModal"
+                                                <button type="button" class="btn btn-sm btn-info text-dark change-group"
+                                                    data-bs-toggle="modal" data-bs-target="#changeGroupModal"
                                                     data-id="{{ $user->id_Staff }}" data-group="{{ $user->id_Group }}">
                                                     {{ $user->nama_Group }}
                                                 </button>
@@ -262,9 +287,8 @@
                                             @endif
                                         </td>
                                         <td class="text-center align-middle">
-                                            <a href="#" class="text-info item-detail"
-                                                data-id="{{ $user->id_Staff }}" data-name="{{ $user->nama_Staff }}"
-                                                data-photo="{{ $user->foto_profile }}"
+                                            <a href="#" class="text-info item-detail" data-id="{{ $user->id_Staff }}"
+                                                data-name="{{ $user->nama_Staff }}" data-photo="{{ $user->foto_profile }}"
                                                 data-status_login="{{ $user->status_login }}"
                                                 data-email="{{ $user->email_Staff }}"
                                                 data-usertype="{{ $user->user_type_name }}"
@@ -281,7 +305,7 @@
                     </div>
                     <!-- User Detail Panel -->
                     <div class="col-lg-3">
-                        <div class="row" style="background-color: #082142; padding: 10px;border-radius: 0.25rem;">
+                        <div class="row user-detail-panel">
                             <div class="col-12 mb-3">
                                 <div class="user-detail p-3">
                                     @php $firstUser = $userlog_list->first(); @endphp
@@ -290,11 +314,11 @@
                                             <img src="{{ asset('img/photos/' . $firstUser->foto_profile) }}"
                                                 alt="Profile" style="border-radius: 50%" width="80">
                                         @elseif($firstUser)
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($firstUser->nama_Staff) }}&background=5b00bd&color=fff"
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($firstUser->nama_Staff) }}&background=0d6efd&color=fff"
                                                 style="border-radius: 50%;" width="80">
                                         @else
                                             <div
-                                                style="width: 80px; height: 80px; background-color: #ffffff; border-radius: 50%; margin: auto;">
+                                                style="width: 80px; height: 80px; background-color: #e9ecef; border-radius: 50%; margin: auto;">
                                             </div>
                                         @endif
                                     </div>
@@ -308,13 +332,13 @@
                                                 </b>
                                             @endif
                                         </h5>
-                                        <div id="detailEmailandType" class="small">
+                                        <div id="detailEmailandType" class="small text-muted">
                                             @if ($firstUser)
-                                                <span class="text-secondary">{{ $firstUser->email_Staff }}</span> |
+                                                <span>{{ $firstUser->email_Staff }}</span> |
                                                 {{ $firstUser->user_type_name }}
                                             @endif
                                         </div>
-                                        <div class="mt-2 text-light" id="detailDefaultLocation">
+                                        <div class="mt-2" id="detailDefaultLocation">
                                             @if ($firstUser)
                                                 <i class="bi bi-geo-alt-fill text-warning"></i>
                                                 {{ $firstUser->default_location }}
@@ -335,9 +359,7 @@
                                                 @endif
                                             </div>
                                             <div class="col-6">
-                                                <i
-                                                    class="bi bi-clock-history h3 text-white
-                                                "></i><br>
+                                                <i class="bi bi-clock-history h3"></i><br>
                                                 <small id="detailLastLogin">
                                                     @if ($firstUser)
                                                         {{ \Carbon\Carbon::parse($firstUser->last_login)->diffForHumans() }}
@@ -350,19 +372,17 @@
                             </div>
                             <div class="col-12">
                                 <ul class="list-group" id="totalLoginList">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center list-cu-login text-white text-center"
-                                        style="background-color: #082142; color: #FFC107;">
-                                        <span class="h6 text-white"><b>TOTAL LOGIN THIS YEAR</b></span>
+                                    <li class="list-group-item header text-center">
+                                        TOTAL LOGIN THIS YEAR
                                     </li>
                                     @forelse($totalLoginMonth as $loginData)
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center list-cu-login text-white text-white">
-                                            <p class="text-white">{{ $loginData->period }}</p>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <p class="mb-0">{{ $loginData->period }}</p>
                                             <span
-                                                class="badge badge-primary badge-pill">{{ $loginData->total_login }}</span>
+                                                class="badge bg-primary rounded-pill">{{ $loginData->total_login }}</span>
                                         </li>
                                     @empty
-                                        <li class="list-group-item list-cu-login text-white">No login data this year.</li>
+                                        <li class="list-group-item">No login data this year.</li>
                                     @endforelse
                                 </ul>
                             </div>
@@ -377,27 +397,26 @@
     <div class="modal fade" id="changeGroupModal" tabindex="-1" role="dialog" aria-labelledby="changeGroupModalTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content text-light">
+            <div class="modal-content">
                 <form action="{{ route('user.login.updateGroup') }}" method="POST">
                     @csrf
-                    <div class="modal-header border-secondary">
+                    <div class="modal-header">
                         <h5 class="modal-title" id="changeGroupModalTitle"><b>Change Group</b></h5>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="idStaff" id="modalIdStaff">
-                        <select class="form-control" name="groupUser" id="idSelected" required
-                            style="background-color: #10356A; color: white; border-color: #ffc107;">
+                        <select class="form-control" name="groupUser" id="idSelected" required>
                             <option value="">-- Select User Group --</option>
                             @foreach ($listGroupUser as $group)
                                 <option value="{{ $group->id_Group }}">{{ $group->nama_Group }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="modal-footer border-secondary">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                 </form>
@@ -413,8 +432,8 @@
         $(document).ready(function() {
             // Inisialisasi DataTable
             $('#tbUserlist').DataTable({
-                "responsive": false, // Disable responsive to prevent table modifications that can interfere
-                "scrollX": true, // Allow horizontal scroll if needed
+                "responsive": false,
+                "scrollX": true,
                 "lengthMenu": [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
@@ -427,7 +446,7 @@
 
             // Delegated event handler for detail links on table body
             $('#tbUserlist tbody').on('click', 'a.item-detail', function(e) {
-                e.preventDefault(); // Prevent default anchor behavior
+                e.preventDefault();
 
                 var clickedLink = $(this);
                 var id = clickedLink.data('id');
@@ -446,7 +465,7 @@
                     '<i class="bi bi-circle-fill text-danger ml-1" style="font-size: 0.7rem;"></i>';
 
                 $('#detailNama').html('<b>' + name + ' ' + statusIcon + '</b>');
-                $('#detailEmailandType').html('<span class="text-secondary">' + email + '</span> | ' +
+                $('#detailEmailandType').html('<span class="text-muted">' + email + '</span> | ' +
                     userType);
                 $('#detailDefaultLocation').html('<i class="bi bi-geo-alt-fill text-warning"></i> ' +
                     default_location);
@@ -460,7 +479,7 @@
                 var photoUrl = photo ?
                     '{{ asset('img/photos/') }}/' + photo :
                     'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) +
-                    '&background=5b00bd&color=fff';
+                    '&background=0d6efd&color=fff';
                 $('#detailPhoto').html('<img src="' + photoUrl +
                     '" alt="Profile" style="border-radius: 50%" width="80">');
 
@@ -471,7 +490,7 @@
                 // Show loading state
                 loginList.find("li:not(:first)").remove();
                 loginList.append(
-                    '<li class="list-group-item list-cu-login text-white text-center"><div class="spinner-border spinner-border-sm" role="status"></div></li>'
+                    '<li class="list-group-item text-center"><div class="spinner-border spinner-border-sm" role="status"></div></li>'
                 );
 
                 $.ajax({
@@ -484,23 +503,23 @@
                         if (data && data.length > 0) {
                             $.each(data, function(index, item) {
                                 var listItem =
-                                    '<li class="list-group-item d-flex justify-content-between align-items-center list-cu-login text-white">' +
+                                    '<li class="list-group-item d-flex justify-content-between align-items-center">' +
                                     item.period +
-                                    '<span class="badge badge-primary badge-pill">' +
+                                    '<span class="badge bg-primary rounded-pill">' +
                                     item.total_login + '</span>' +
                                     '</li>';
                                 loginList.append(listItem);
                             });
                         } else {
                             loginList.append(
-                                '<li class="list-group-item list-cu-login text-white">No login data this year.</li>'
+                                '<li class="list-group-item">No login data this year.</li>'
                             );
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         loginList.find("li:not(:first)").remove();
                         loginList.append(
-                            '<li class="list-group-item list-cu-login text-white text-danger">Failed to load data.</li>'
+                            '<li class="list-group-item text-danger">Failed to load data.</li>'
                         );
                     }
                 });
@@ -512,6 +531,7 @@
                 var group = $(this).data('group');
                 $('#modalIdStaff').val(id);
                 $('#idSelected').val(group);
+                $('#changeGroupModal').modal('show');
             });
 
             // Automatically click the first user detail link to load their info on page load.

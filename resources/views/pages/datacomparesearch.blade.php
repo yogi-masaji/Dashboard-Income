@@ -7,6 +7,7 @@
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
         $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
+        $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 
@@ -82,8 +83,10 @@
     <style>
         .content-custom {
             padding: 10px !important;
-            background-color: #092953 !important;
+            background-color: #ffffff !important;
             border-radius: 10px !important;
+            box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
+            color: #000000 !important;
         }
 
         .search-wrapper {
@@ -95,7 +98,7 @@
     <div class="search-wrapper">
         <div class="d-flex align-items-end gap-3 mb-3">
             <div>
-                <label for="start-date-1" class="form-label">Select Month</label>
+                <label for="start-date-1" class="form-label text-dark">Select Month</label>
                 <input type="month" name="start1" id="start-date-1" class="form-control" placeholder="Select month" />
             </div>
         </div>
@@ -208,10 +211,10 @@
                                 <th colspan="3" style="text-align:center;">Brizzi</th>
                                 <th colspan="3" style="text-align:center;">Tapcash</th>
                                 <!-- <th scope="col">DKIJack</th>
-                                                                                                            <th scope="col">EDC</th>
-                                                                                                            <th scope="col">Luminous</th>
-                                                                                                            <th scope="col">Mega</th>
-                                                                                                            <th scope="col">Nabu</th> -->
+                                                                                                                        <th scope="col">EDC</th>
+                                                                                                                        <th scope="col">Luminous</th>
+                                                                                                                        <th scope="col">Mega</th>
+                                                                                                                        <th scope="col">Nabu</th> -->
                             </tr>
                             <tr>
                                 <th>CP</th>

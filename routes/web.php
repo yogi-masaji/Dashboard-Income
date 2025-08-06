@@ -20,10 +20,7 @@ use Illuminate\Support\Facades\Session;
 // --- Public Routes ---
 // These routes are accessible to everyone, including guests.
 
-// Default landing page (can be a public welcome page)
-Route::get('/', function () {
-    return view('main');
-});
+
 
 // Login routes
 Route::get('/login', [Login::class, 'LoginView'])->name('login');
@@ -35,7 +32,10 @@ Route::post('/logout', [Login::class, 'logout'])->name('logout');
 
 
 Route::middleware('custom.auth')->group(function () {
-
+    // Default landing page (can be a public welcome page)
+    Route::get('/', function () {
+        return view('main');
+    });
     // Authenticated dashboard/main page
     Route::get('/dashboard', function () {
         return view('main');
@@ -67,6 +67,7 @@ Route::middleware('custom.auth')->group(function () {
                 'selected_location_ip_lokasi' => $lokasi->ip_Lokasi,
                 'selected_location_kode_lokasi' => $lokasi->kode_Lokasi,
                 'selected_location_chisel_Version' => $lokasi->chisel_Version,
+                'selected_location_system' => $lokasi->system_code,
             ]);
         }
         return redirect()->back();

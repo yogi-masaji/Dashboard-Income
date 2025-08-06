@@ -13,57 +13,118 @@
     <link rel="stylesheet" href="css/main.css">
     <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    {{-- Custom Styles for Light Theme --}}
     <style>
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
         .card {
-            background-color: #092953;
-            color: white;
+            background-color: #ffffff !important;
+            border: #d9d9d9 1px solid !important;
+            height: auto;
+            border-radius: 10px !important;
+            color: #000 !important;
         }
 
-
-        .table thead th {
-            background-color: #343a40;
-            color: #f8f9fa;
-            border-color: #6c757d;
+        .card-header {
+            background-color: #f7f7f7 !important;
+            color: #000;
+            border-bottom: 1px solid #d9d9d9;
         }
 
-        .table tbody td {
-            background-color: #092953;
-            color: white;
-            border-color: #6c757d;
+        label {
+            color: #212529;
         }
 
-        .modal-content {
-            background-color: #092953;
-            color: white;
+        .form-control {
+            background-color: #ffffff;
+            color: #212529;
+            border: 1px solid #ced4da;
         }
 
+        .form-control:focus {
+            background-color: #ffffff;
+            color: #212529;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+        }
+
+        .form-control option {
+            background: #ffffff;
+            color: #212529;
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+        }
+
+        /* DataTables light theme adjustments */
+        #user-table {
+            color: #212529;
+        }
+
+        #user-table thead th {
+            color: #212529;
+        }
 
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_processing,
+        .dataTables_wrapper .dataTables_paginate {
+            color: #212529 !important;
+        }
+
         .dataTables_wrapper .dataTables_paginate .paginate_button {
-            color: white !important;
+            color: #212529 !important;
         }
 
-        .dataTables_wrapper .dataTables_paginate .paginate_button a {
-            color: white !important;
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            color: #6c757d !important;
         }
 
-        form#formTambah {
-            border-radius: 8px;
+        .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
         }
 
-        #formTambah input,
-        #formTambah select {
-            background-color: white !important;
-            color: black;
+        .page-link {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            color: #007bff;
+        }
+
+        /* Modal light theme */
+        .modal-content {
+            background-color: #ffffff;
+            color: #212529;
+            border: 1px solid rgba(0, 0, 0, .2);
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            background-color: #f7f7f7;
+            color: #212529;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .close {
+            color: #000000;
+            text-shadow: 0 1px 0 #ffffff;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
         }
     </style>
 
     <div class="container-fluid mt-4">
-        <div class="card">
+        <div class="card shadow-lg">
             <div class="card-header">
-                <h4 class="text-white">Form Input User</h4>
+                <h4 class="mb-0">Form Input User</h4>
             </div>
             <div class="card-body">
                 <form id="formTambah">
@@ -112,14 +173,14 @@
                                 placeholder="System Default" required>
                         </div>
                     </div>
-                    <button type="submit" id="btn_submit" class="btn btn-submit mt-2">Simpan</button>
+                    <button type="submit" id="btn_submit" class="btn btn-primary mt-2">Simpan</button>
                 </form>
             </div>
         </div>
 
-        <div class="card mt-4">
+        <div class="card mt-4 shadow-lg">
             <div class="card-header">
-                <h4 class="text-white">Table Show</h4>
+                <h4 class="mb-0">Table Show</h4>
             </div>
             <div class="card-body">
                 <table id="user-table" class="table table-striped table-bordered" style="width:100%">
@@ -148,9 +209,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Change User Account</h5>
-                    {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button> --}}
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form id="formChange" method="POST">
@@ -169,7 +230,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary me-2" data-dismiss="modal">Close</button>
-                    <button type="button" id="btn_change" class="btn btn-submit">Save changes</button>
+                    <button type="button" id="btn_change" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -181,9 +242,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Default Location</h5>
-                    {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button> --}}
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form id="formEdit" method="POST">
@@ -209,7 +270,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary me-2" data-dismiss="modal">Close</button>
-                    <button type="button" id="btn_edit" class="btn btn-submit">Save changes</button>
+                    <button type="button" id="btn_edit" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -225,6 +286,15 @@
     <script>
         $(document).ready(function() {
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            // Customizing SweetAlert2 for light mode
+            const swalWithLightButton = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
 
             // Setup CSRF token for all AJAX requests
             $.ajaxSetup({
@@ -325,15 +395,15 @@
                 var data = $(this).serialize();
                 $.post('{{ route('form.user.insert') }}', data, function(r) {
                     if (r.code == 200) {
-                        Swal.fire('Success', r.message, 'success');
+                        swalWithLightButton.fire('Success', r.message, 'success');
                         $('#formTambah')[0].reset();
                         show_id();
                         reloadTable();
                     } else {
-                        Swal.fire('Error', r.message, 'error');
+                        swalWithLightButton.fire('Error', r.message, 'error');
                     }
                 }).fail(function(xhr) {
-                    Swal.fire('Error', 'An error occurred.', 'error');
+                    swalWithLightButton.fire('Error', 'An error occurred.', 'error');
                 });
             });
 
@@ -353,10 +423,10 @@
                 var data = $('#formChange').serialize();
                 $.post('{{ route('form.user.change') }}', data, function(r) {
                     $('#modalChange').modal('hide');
-                    Swal.fire('Success', r.message, 'success');
+                    swalWithLightButton.fire('Success', r.message, 'success');
                     reloadTable();
                 }).fail(function() {
-                    Swal.fire('Error', 'Update failed.', 'error');
+                    swalWithLightButton.fire('Error', 'Update failed.', 'error');
                 });
             });
 
@@ -382,16 +452,16 @@
                 var data = $('#formEdit').serialize();
                 $.post('{{ route('form.user.edit') }}', data, function(r) {
                     $('#modalEdit').modal('hide');
-                    Swal.fire('Success', r.message, 'success');
+                    swalWithLightButton.fire('Success', r.message, 'success');
                     reloadTable();
                 }).fail(function() {
-                    Swal.fire('Error', 'Update failed.', 'error');
+                    swalWithLightButton.fire('Error', 'Update failed.', 'error');
                 });
             });
 
             $('#user-table tbody').on('click', '.item_hapus', function() {
                 var id = $(this).data('id');
-                Swal.fire({
+                swalWithLightButton.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
                     icon: 'warning',
@@ -405,10 +475,12 @@
                             id: id
                         }, function(r) {
                             if (r.code == 200) {
-                                Swal.fire('Deleted!', 'User has been deleted.', 'success');
+                                swalWithLightButton.fire('Deleted!',
+                                    'User has been deleted.', 'success');
                                 reloadTable();
                             } else {
-                                Swal.fire('Error', 'Failed to delete user.', 'error');
+                                swalWithLightButton.fire('Error', 'Failed to delete user.',
+                                    'error');
                             }
                         });
                     }

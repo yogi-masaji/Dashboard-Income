@@ -7,6 +7,7 @@
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
         $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
+        $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css" />
@@ -214,11 +215,11 @@
         <h5>Custom Search</h5>
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="datepicker1" class="form-label" style="color:#000;">First Period</label>
+                <label for="datepicker1" class="form-label text-dark" style="color:#000;">First Period</label>
                 <input id="datepicker1" class="form-control" placeholder="Select date range..." />
             </div>
             <div class="col-md-6">
-                <label for="datepicker2" class="form-label" style="color:#000;">Second Period</label>
+                <label for="datepicker2" class="form-label text-dark" style="color:#000;">Second Period</label>
                 <input id="datepicker2" class="form-control" placeholder="Select date range..." />
             </div>
         </div>

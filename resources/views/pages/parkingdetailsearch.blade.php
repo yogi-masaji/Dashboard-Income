@@ -77,8 +77,10 @@
     <style>
         .content-custom {
             padding: 10px !important;
-            background-color: #092953 !important;
+            background-color: #ffffff !important;
             border-radius: 10px !important;
+            box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
+            color: #000000 !important;
         }
 
         .search-wrapper {

@@ -7,70 +7,67 @@
         $lokasiGrup = session('selected_location_id_grup', 'Group Tidak Diketahui');
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
         $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
+        $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 
-    {{-- Custom Styles for Dark Theme --}}
+    {{-- Custom Styles for Light Theme --}}
     <style>
         body {
-            background-color: #0A1525;
-            color: #E2E8F0;
-            /* Light gray for text */
+            background-color: #f8f9fa;
+            color: #212529;
         }
 
         .card {
-            background-color: #132b4a;
-            /* A darker blue-gray for cards */
-            border: 1px solid #334155;
-            color: #E2E8F0;
+            background-color: #ffffff !important;
+            border: #d9d9d9 1px solid !important;
+            height: auto;
+            border-radius: 10px !important;
+            color: #000 !important;
         }
 
         .card-header {
-            background-color: #092953 !important;
-            /* Navbar color for headers */
-            color: #FFFFFF;
-            border-bottom: 1px solid #334155;
+            background-color: #f7f7f7 !important;
+            color: #000;
+            border-bottom: 1px solid #d9d9d9;
         }
 
         label {
-            color: #cbd5e1;
-            /* Lighter text for labels */
+            color: #212529;
         }
 
         .form-control {
-            background-color: #334155;
-            /* Darker input background */
-            color: #FFFFFF;
-            border: 1px solid #475569;
+            background-color: #ffffff;
+            color: #212529;
+            border: 1px solid #ced4da;
         }
 
         .form-control:focus {
-            background-color: #334155;
-            color: #FFFFFF;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 0.2rem rgb(79 70 229 / 25%);
+            background-color: #ffffff;
+            color: #212529;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
         }
 
         .form-control option {
-            background: #334155;
-            color: #FFFFFF;
+            background: #ffffff;
+            color: #212529;
         }
 
-        /* Placeholder text color */
         .form-control::placeholder {
-            color: #94A3B8;
+            color: #6c757d;
         }
 
-        /* DataTables dark theme adjustments */
+        /* DataTables light theme adjustments */
         #location-table {
-            color: #E2E8F0;
+            color: #212529;
         }
 
         #location-table thead th {
-            color: #FFFFFF;
+            color: #212529;
         }
 
         .dataTables_wrapper .dataTables_length,
@@ -78,48 +75,49 @@
         .dataTables_wrapper .dataTables_info,
         .dataTables_wrapper .dataTables_processing,
         .dataTables_wrapper .dataTables_paginate {
-            color: #fff !important;
+            color: #212529 !important;
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button {
-            color: #fff !important;
+            color: #212529 !important;
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-            color: #64748b !important;
+            color: #6c757d !important;
         }
 
         .page-item.active .page-link {
-            background-color: #1351a2;
-            border-color: #092953;
+            background-color: #007bff;
+            border-color: #007bff;
         }
 
         .page-link {
-            background-color: #092953;
-            border: 1px solid #334155;
-            color: #E2E8F0;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            color: #007bff;
         }
 
-        /* Modal dark theme */
+        /* Modal light theme */
         .modal-content {
-            background-color: #092953;
-            color: #E2E8F0;
-            border: 1px solid #334155;
+            background-color: #ffffff;
+            color: #212529;
+            border: 1px solid rgba(0, 0, 0, .2);
+            border-radius: 10px;
         }
 
         .modal-header {
-            background-color: #092953;
-            color: #FFFFFF;
-            border-bottom: 1px solid #334155;
+            background-color: #f7f7f7;
+            color: #212529;
+            border-bottom: 1px solid #dee2e6;
         }
 
         .close {
-            color: #FFFFFF;
-            text-shadow: none;
+            color: #000000;
+            text-shadow: 0 1px 0 #ffffff;
         }
 
         .modal-footer {
-            border-top: 1px solid #334155;
+            border-top: 1px solid #dee2e6;
         }
     </style>
 
@@ -157,7 +155,7 @@
                             </select>
                         </div>
                     </div>
-                    <button type="submit" id="btn_submit" class="btn btn-submit">
+                    <button type="submit" id="btn_submit" class="btn btn-primary">
                         <i class="fas fa-save me-2"></i> Save
                     </button>
                 </form>
@@ -170,7 +168,7 @@
                 <h3 class="mb-0">Location List</h3>
             </div>
             <div class="card-body mt-3">
-                <table id="location-table" class="table table-striped table-hover table-dark" style="width:100%">
+                <table id="location-table" class="table table-striped table-hover" style="width:100%">
                     <thead>
                         <tr>
                             <th class="text-center">No</th>
@@ -195,9 +193,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title">Edit Location</h3>
-                    {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button> --}}
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form id="formEdit">
@@ -235,7 +233,7 @@
                 </div>
                 <div class="modal-footer gap-2">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="btn_update" class="btn btn-submit"><i class="fas fa-save"></i>
+                    <button type="button" id="btn_update" class="btn btn-primary"><i class="fas fa-save"></i>
                         Update</button>
                 </div>
             </div>
@@ -251,15 +249,13 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // Customizing SweetAlert2 for dark mode
-        const swalWithDarkButton = Swal.mixin({
+        // Customizing SweetAlert2 for light mode
+        const swalWithLightButton = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success',
                 cancelButton: 'btn btn-danger'
             },
-            buttonsStyling: false,
-            background: '#092953', // Modal background
-            color: '#E2E8F0' // Modal text color
+            buttonsStyling: false
         });
 
 
@@ -329,12 +325,12 @@
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(response) {
-                        swalWithDarkButton.fire('Success!', response.message, 'success');
+                        swalWithLightButton.fire('Success!', response.message, 'success');
                         $('#formTambah')[0].reset();
                         table.ajax.reload();
                     },
                     error: function(xhr) {
-                        swalWithDarkButton.fire('Error!', xhr.responseJSON.message, 'error');
+                        swalWithLightButton.fire('Error!', xhr.responseJSON.message, 'error');
                     }
                 });
             });
@@ -365,11 +361,11 @@
                     data: $('#formEdit').serialize(),
                     success: function(response) {
                         $('#modalEdit').modal('hide');
-                        swalWithDarkButton.fire('Success!', response.message, 'success');
+                        swalWithLightButton.fire('Success!', response.message, 'success');
                         table.ajax.reload();
                     },
                     error: function(xhr) {
-                        swalWithDarkButton.fire('Error!', xhr.responseJSON.message, 'error');
+                        swalWithLightButton.fire('Error!', xhr.responseJSON.message, 'error');
                     }
                 });
             });
@@ -378,7 +374,7 @@
             // Handle DELETE button click
             $('#location-table').on('click', '.item_hapus', function() {
                 var id = $(this).data('id');
-                swalWithDarkButton.fire({
+                swalWithLightButton.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
                     icon: 'warning',
@@ -393,12 +389,12 @@
                                 ':id', id),
                             type: 'DELETE',
                             success: function(response) {
-                                swalWithDarkButton.fire('Deleted!', response.message,
+                                swalWithLightButton.fire('Deleted!', response.message,
                                     'success');
                                 table.ajax.reload();
                             },
                             error: function(xhr) {
-                                swalWithDarkButton.fire('Error!',
+                                swalWithLightButton.fire('Error!',
                                     'Failed to delete location.', 'error');
                             }
                         });

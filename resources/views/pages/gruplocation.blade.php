@@ -12,49 +12,101 @@
 
 
     {{-- DataTables CSS --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+
 
     {{-- SweetAlert2 CSS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     <style>
-        .card {
-            background-color: #092953;
-            color: white;
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
         }
 
-        .form-check-label {
-            color: white;
+        .card {
+            background-color: #ffffff !important;
+            border: #d9d9d9 1px solid !important;
+            height: auto;
+            border-radius: 10px !important;
+            color: #000 !important;
+        }
+
+        .card-header {
+            background-color: #f7f7f7 !important;
+            color: #000;
+            border-bottom: 1px solid #d9d9d9;
+        }
+
+        label {
+            color: #212529;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: #ffffff;
+            color: #212529;
+            border: 1px solid #ced4da;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: #ffffff;
+            color: #212529;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
         }
 
         .modal-content {
-            background-color: #092953;
-            color: white;
+            background-color: #ffffff;
+            color: #212529;
+            border: 1px solid rgba(0, 0, 0, .2);
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            background-color: #f7f7f7;
+            color: #212529;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
         }
 
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
         .dataTables_wrapper .dataTables_paginate {
-            color: white !important;
+            color: #212529 !important;
         }
 
         .dataTables_wrapper .form-control {
-            background-color: #1e293b;
-            color: white;
+            background-color: #ffffff;
+            color: #212529;
         }
 
         .page-item.disabled .page-link {
-            background-color: #1e293b;
-            border-color: #444;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+        }
+
+        .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .page-link {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            color: #007bff;
         }
     </style>
 
 
-    <div class="">
-        <div class="card">
+    <div class="container-fluid mt-4">
+        <div class="card shadow-lg">
             <div class="card-header">
-                <h4 class="text-white">Form Group Location</h4>
+                <h4 class="mb-0">Form Group Location</h4>
             </div>
             <div class="card-body">
                 <div class="row align-items-end mb-4">
@@ -65,13 +117,13 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <button id="add-location-btn" type="button" class="btn btn-submit">Add Location</button>
+                        <button id="add-location-btn" type="button" class="btn btn-primary">Add Location</button>
                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
                             data-bs-target="#groupManagementModal">Manage Group</button>
                     </div>
                 </div>
 
-                <table id="group-location-table" class="table table-dark table-striped table-bordered" style="width:100%">
+                <table id="group-location-table" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th width="10%">No</th>
@@ -95,14 +147,14 @@
                     <div class="modal-header d-flex justify-content-between align-items-center">
                         <h5 class="modal-title mb-0" id="addLocationModalLabel">Add Data Location</h5>
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-submit btn-sm">Add Selected Locations</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Add Selected Locations</button>
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
 
                     <div class="modal-body">
                         <input type="hidden" name="group" id="selected-group-for-add">
-                        <table id="available-locations-table" class="table table-dark table-striped table-bordered"
+                        <table id="available-locations-table" class="table table-striped table-bordered"
                             style="width:100%;">
                             <thead>
                                 <tr>
@@ -128,11 +180,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="groupManagementModalLabel">List Group</h5>
-                    <button type="button" class="btn btn-submit ms-auto" data-bs-toggle="modal"
+                    <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal"
                         data-bs-target="#addGroupModal">Add Group</button>
                 </div>
                 <div class="modal-body">
-                    <table id="group-table" class="table table-dark table-striped table-bordered" style="width:100%;">
+                    <table id="group-table" class="table table-striped table-bordered" style="width:100%;">
                         <thead>
                             <tr>
                                 <th>Group Name</th>
@@ -173,7 +225,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-submit">Save</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -204,7 +256,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-submit">Save Changes</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </div>
                 </form>
             </div>
@@ -228,6 +280,15 @@
 
     <script>
         $(document).ready(function() {
+
+            // Customizing SweetAlert2 for light mode
+            const swalWithLightButton = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
 
             // Setup CSRF token untuk semua request AJAX
             $.ajaxSetup({
@@ -326,7 +387,8 @@
             $('#add-location-btn').on('click', function() {
                 let selectedGroup = $('#group').val();
                 if (!selectedGroup || selectedGroup === "0") {
-                    Swal.fire('Warning', 'Please select a group before adding locations.', 'warning');
+                    swalWithLightButton.fire('Warning', 'Please select a group before adding locations.',
+                        'warning');
                     return;
                 }
 
@@ -363,11 +425,11 @@
                     data: formData,
                     success: function(response) {
                         $('#addLocationModal').modal('hide');
-                        Swal.fire('Success', response.message, 'success');
+                        swalWithLightButton.fire('Success', response.message, 'success');
                         groupLocationTable.ajax.reload();
                     },
                     error: function(xhr) {
-                        Swal.fire('Error', xhr.responseJSON.message, 'error');
+                        swalWithLightButton.fire('Error', xhr.responseJSON.message, 'error');
                     }
                 });
             });
@@ -377,7 +439,7 @@
                 let id = $(this).data('id');
                 let url = `{{ url('config/group-locations') }}/${id}`;
 
-                Swal.fire({
+                swalWithLightButton.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
                     icon: 'warning',
@@ -391,13 +453,14 @@
                             url: url,
                             type: 'DELETE',
                             success: function(response) {
-                                Swal.fire('Deleted!',
+                                swalWithLightButton.fire('Deleted!',
                                     'The location has been removed from the group.',
                                     'success');
                                 groupLocationTable.ajax.reload();
                             },
                             error: function(xhr) {
-                                Swal.fire('Error!', 'Failed to delete location.',
+                                swalWithLightButton.fire('Error!',
+                                    'Failed to delete location.',
                                     'error');
                             }
                         });
@@ -466,12 +529,12 @@
                     data: formData,
                     success: function(response) {
                         $('#addGroupModal').modal('hide');
-                        Swal.fire('Success', response.message, 'success');
+                        swalWithLightButton.fire('Success', response.message, 'success');
                         groupTable.ajax.reload(); // Refresh tabel grup
                         loadGroupsDropdown(); // Refresh dropdown
                     },
                     error: function(xhr) {
-                        Swal.fire('Error', xhr.responseJSON.message, 'error');
+                        swalWithLightButton.fire('Error', xhr.responseJSON.message, 'error');
                     }
                 });
             });
@@ -506,13 +569,13 @@
                     data: formData,
                     success: function(response) {
                         $('#editGroupModal').modal('hide');
-                        Swal.fire('Success', response.message, 'success');
+                        swalWithLightButton.fire('Success', response.message, 'success');
                         // Refresh data
                         groupTable.ajax.reload(null, false);
                         loadGroupsDropdown();
                     },
                     error: function(xhr) {
-                        Swal.fire('Error', xhr.responseJSON.message, 'error');
+                        swalWithLightButton.fire('Error', xhr.responseJSON.message, 'error');
                     }
                 });
             });
@@ -522,7 +585,7 @@
                 let id = $(this).data('id');
                 let url = `{{ url('config/groups') }}/${id}`;
 
-                Swal.fire({
+                swalWithLightButton.fire({
                     title: 'Are you sure to delete this group?',
                     text: "This will delete the group and all its location & menu associations!",
                     icon: 'warning',
@@ -534,12 +597,14 @@
                             url: url,
                             type: 'DELETE',
                             success: function(response) {
-                                Swal.fire('Deleted!', response.message, 'success');
+                                swalWithLightButton.fire('Deleted!', response.message,
+                                    'success');
                                 groupTable.ajax.reload(null, false);
                                 loadGroupsDropdown();
                             },
                             error: function(xhr) {
-                                Swal.fire('Error!', xhr.responseJSON.message, 'error');
+                                swalWithLightButton.fire('Error!', xhr.responseJSON
+                                    .message, 'error');
                             }
                         });
                     }

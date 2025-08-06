@@ -230,15 +230,6 @@
                     </ul>
                 </div>
 
-
-
-
-
-
-
-
-
-
             </aside>
             <!-- / Menu -->
 
@@ -382,6 +373,10 @@
     <!-- Main JS -->
     <script src="vendor/js/main.js"></script>
 
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
     <!-- Page JS -->
 
 
@@ -512,6 +507,17 @@
             icon.classList.remove("bx-chevron-left");
             icon.classList.add("bx-chevron-right");
         }
+    });
+</script>
+
+<!-- Initialize Select2 -->
+<script>
+    $(document).ready(function() {
+        // Initialize Select2 on the location select element
+        $('#locationSelect').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#layout-menu')
+        });
     });
 </script>
 
