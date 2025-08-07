@@ -5,6 +5,7 @@
 
 <head>
     @include('layout.head')
+    <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}">
 </head>
 
 <body>
@@ -154,6 +155,54 @@
             }
         }
     </style>
+    <style>
+        /* CSS Kustom untuk Dark Mode Toggle */
+        .custom-dark-mode-toggle .form-check-input {
+            width: 60px;
+            height: 30px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            background-image: none !important;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        /* Tombol bulat di dalam toggle dengan ikon SVG */
+        .custom-dark-mode-toggle .form-check-input::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: #2563eb;
+            top: 3px;
+            left: 4px;
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3ccircle cx='12' cy='12' r='5'%3e%3c/circle%3e%3cline x1='12' y1='1' x2='12' y2='3'%3e%3c/line%3e%3cline x1='12' y1='21' x2='12' y2='23'%3e%3c/line%3e%3cline x1='4.22' y1='4.22' x2='5.64' y2='5.64'%3e%3c/line%3e%3cline x1='18.36' y1='18.36' x2='19.78' y2='19.78'%3e%3c/line%3e%3cline x1='1' y1='12' x2='3' y2='12'%3e%3c/line%3e%3cline x1='21' y1='12' x2='23' y2='12'%3e%3c/line%3e%3cline x1='4.22' y1='19.78' x2='5.64' y2='18.36'%3e%3c/line%3e%3cline x1='18.36' y1='5.64' x2='19.78' y2='4.22'%3e%3c/line%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* Saat mode gelap aktif (checked) */
+        .custom-dark-mode-toggle .form-check-input:checked {
+            background-color: #212529;
+            border-color: #444;
+        }
+
+        /* Pindahkan tombol ke kanan dan ganti ikon saat aktif */
+        .custom-dark-mode-toggle .form-check-input:checked::after {
+            transform: translateX(30px);
+            background-color: #4a5568;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'%3e%3c/path%3e%3c/svg%3e");
+        }
+
+        /* Hapus efek focus glow */
+        .custom-dark-mode-toggle .form-check-input:focus {
+            box-shadow: none;
+            border-color: #86b7fe;
+        }
+    </style>
 
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
@@ -275,7 +324,13 @@
                         <!-- /Search -->
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
+                            <li class="nav-item me-3 d-flex align-items-center">
 
+                                <div class="form-check form-switch custom-dark-mode-toggle">
+                                    <input class="form-check-input" type="checkbox" id="darkModeToggle"
+                                        role="switch">
+                                </div>
+                            </li>
                             <li class="nav-item me-3">
                                 {{ \Carbon\Carbon::now()->translatedFormat('l, j F Y') }}
                             </li>
@@ -359,7 +414,7 @@
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     {{-- DARK MODE --}}
-    <script src="js/darkmode.js"></script>
+    <script src="{{ asset('js/darkmode.js') }}"></script>
 
     <script src="vendor/libs/popper/popper.js"></script>
     <script src="vendor/js/bootstrap.js"></script>
@@ -518,6 +573,7 @@
             theme: 'bootstrap-5',
             dropdownParent: $('#layout-menu')
         });
+
     });
 </script>
 

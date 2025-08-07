@@ -1,0 +1,172 @@
+
+.layout-navbar,
+.container-xxl,
+.content-custom,
+p,
+h3,
+.table,
+.nav-tabs .nav-link {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ---------------------------------- */
+/* STYLES UNTUK MODE GELAP (.mode-gelap) */
+/* ---------------------------------- */
+
+/* 1. Target Navbar */
+body.mode-gelap {
+    background-color: #212121 !important;
+    color: #ffffff;
+}
+body.mode-gelap .navbar.bg-navbar-theme {
+    background-color: #192e50 !important;
+    color: #ecf0f1;
+}
+
+body.mode-gelap .layout-navbar h3,
+body.mode-gelap .layout-navbar .nav-item {
+    color: #ecf0f1 !important;
+}
+
+/* 2. Target Area Konten Utama */
+body.mode-gelap .container-xxl.flex-grow-1.container-p-y {
+    background-color: #212121;
+}
+
+/* 3. Target elemen di dalam konten (seperti card/box putih) */
+body.mode-gelap .content-custom {
+    background-color: #192e50 !important;
+    border-color: #424242 !important;
+    color: #ffffff;
+}
+
+/* 4. Target Teks Umum */
+body.mode-gelap p,
+body.mode-gelap .text-dark {
+    color: #ffffff !important;
+}
+
+/* 5. Target Tabel */
+body.mode-gelap table.dataTable {
+    color: #ffffff;
+}
+
+body.mode-gelap table.dataTable thead th,
+body.mode-gelap table.dataTable thead td {
+    color: #ffffff;
+    border-bottom: 1px solid #ffffff;
+}
+
+body.mode-gelap table.dataTable tbody th,
+body.mode-gelap table.dataTable tbody td {
+    color: #ffffff;
+}
+
+/* 6. Target Tab Navigasi (Bar/Line) */
+body.mode-gelap .nav-tabs .nav-link {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border-color: #555555;
+}
+
+body.mode-gelap .nav-tabs .nav-link.active {
+    background-color: #ffc107;
+    color: #000;
+}
+
+body.mode-gelap h3, .mode-gelap h5, .mode-gelap h6 {
+    color: #ffffff;
+}
+
+/* Dark Mode for Tables */
+.mode-gelap .table {
+    --bs-table-color: #ffffff; /* Light text color for the table */
+    --bs-table-bg: #121212; /* Dark background for the table */
+    --bs-table-border-color: #d9d9d9; /* Darker border color */
+    --bs-table-accent-bg: #192e50;
+    --bs-table-striped-color: #ffffff;
+    --bs-table-striped-bg: #121E32;
+    --bs-table-active-color: #ffffff; /* Light text color for active rows */
+    --bs-table-active-bg: rgba(
+        255,
+        255,
+        255,
+        0.1
+    ); /* Active row background color */
+    --bs-table-hover-color: #ffffff; /* Light text color for hovered rows */
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.1); /* Hover background color */
+    width: 100%;
+    margin-bottom: 1rem;
+    vertical-align: middle;
+    border-color: var(--bs-table-border-color);
+}
+
+
+
+.mode-gelap .table > :not(caption) > * > * {
+    color: var(
+        --bs-table-color-state,
+        var(--bs-table-color-type, var(--bs-table-color))
+    );
+    background-color: var(--bs-table-bg);
+    border-bottom-width: var(--bs-border-width);
+    box-shadow: inset 0 0 0 9999px
+        var(
+            --bs-table-bg-state,
+            var(--bs-table-bg-type, var(--bs-table-accent-bg))
+        );
+}
+
+.mode-gelap .table > tbody {
+    vertical-align: inherit;
+}
+
+.mode-gelap .table > thead {
+    vertical-align: bottom;
+}
+
+.mode-gelap .table-group-divider {
+    border-top: calc(var(--bs-border-width) * 2) solid #000000; /* Darker divider */
+}
+
+.mode-gelap .caption-top {
+    caption-side: top;
+}
+
+.mode-gelap .table-sm > :not(caption) > * > * {
+    padding: 0.594rem 1.25rem;
+}
+
+.mode-gelap .table-bordered > :not(caption) > * {
+    border-width: var(--bs-border-width) 0;
+}
+.mode-gelap .table-bordered > :not(caption) > * > * {
+    border-width: 0 var(--bs-border-width);
+}
+
+.mode-gelap .table-borderless > :not(caption) > * > * {
+    border-bottom-width: 0;
+}
+.mode-gelap .table-borderless > :not(:first-child) {
+    border-top-width: 0;
+}
+
+.mode-gelap .table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-color-type: #0080ff;
+    --bs-table-bg-type: #0f1928;
+}
+
+.mode-gelap .table-striped-columns > :not(caption) > tr > :nth-child(even) {
+    --bs-table-color-type: var(--bs-table-striped-color);
+    --bs-table-bg-type: var(--bs-table-striped-bg);
+}
+
+.mode-gelap .table-active {
+    --bs-table-color-state: var(--bs-table-active-color);
+    --bs-table-bg-state: var(--bs-table-active-bg);
+}
+
+.mode-gelap .table-hover > tbody > tr:hover > * {
+    --bs-table-color-state: var(--bs-table-hover-color);
+    --bs-table-bg-state: var(--bs-table-hover-bg);
+}
