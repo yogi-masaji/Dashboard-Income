@@ -102,6 +102,92 @@
         }
     </style>
 
+    <style>
+        .mode-gelap body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        .mode-gelap .card {
+            background-color: #192e50 !important;
+            border: #333 1px solid !important;
+            color: #ffffff !important;
+        }
+
+        .mode-gelap .card-header {
+            background-color: #070d17 !important;
+            color: #ffffff;
+            border-bottom: 1px solid #333;
+        }
+
+        .mode-gelap label {
+            color: #e0e0e0;
+        }
+
+        .mode-gelap .form-control,
+        .mode-gelap .form-select {
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #444;
+        }
+
+        .mode-gelap .form-control:focus,
+        .mode-gelap .form-select:focus {
+            background-color: #ffffff;
+            color: #000000;
+            border-color: #66afe9;
+            box-shadow: 0 0 0 0.2rem rgba(102, 175, 233, .25);
+        }
+
+        /* Modal */
+        .mode-gelap .modal-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .mode-gelap .modal-header {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border-bottom: 1px solid #333;
+        }
+
+        .mode-gelap .modal-footer {
+            border-top: 1px solid #333;
+        }
+
+        /* DataTables */
+        .mode-gelap .dataTables_wrapper .dataTables_length,
+        .mode-gelap .dataTables_wrapper .dataTables_filter,
+        .mode-gelap .dataTables_wrapper .dataTables_info,
+        .mode-gelap .dataTables_wrapper .dataTables_paginate {
+            color: #e0e0e0 !important;
+        }
+
+        .mode-gelap .dataTables_wrapper .form-control {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        /* Pagination */
+        .mode-gelap .page-item.disabled .page-link {
+            background-color: #1a1a1a;
+            border-color: #333;
+            color: #666;
+        }
+
+        .mode-gelap .page-item.active .page-link {
+            background-color: #66afe9;
+            border-color: #66afe9;
+        }
+
+        .mode-gelap .page-link {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            color: #ffffff;
+        }
+    </style>
+
 
     <div class="container-fluid mt-4">
         <div class="card shadow-lg">

@@ -120,9 +120,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h6 class="text-dark mb-1">Total Motorbike</h6>
-                            <h4 class="fw-bold mb-0 totalMotorbike"></h4>
-                            <small class="text-dark countMotorbike"></small>
+                            <h6 style="color: #000000 !important;" class="text-dark mb-1">Total Motorbike</h6>
+                            <h4 style="color: #000000 !important;" class="fw-bold mb-0 totalMotorbike"></h4>
+                            <small style="color: #000000 !important;" class="text-dark countMotorbike"></small>
                         </div>
                         <div class="text-success fs-4"><i class="bi bi-scooter"></i></div>
                     </div>
@@ -134,9 +134,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h6 class="text-dark mb-1">Total Car</h6>
-                            <h4 class="fw-bold mb-0 totalCar"></h4>
-                            <small class="text-dark countCar"></small>
+                            <h6 style="color: #000000 !important;" class="text-dark mb-1">Total Car</h6>
+                            <h4 style="color: #000000 !important;" class="fw-bold mb-0 totalCar"></h4>
+                            <small style="color: #000000 !important;" class="text-dark countCar"></small>
                         </div>
                         <div class="text-success fs-4"><i class="bi bi-car-front-fill"></i></div>
                     </div>
@@ -148,9 +148,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h6 class="text-dark mb-1">Total Box</h6>
-                            <h4 class="fw-bold mb-0 totalBox"></h4>
-                            <small class="text-dark countBox"></small>
+                            <h6 style="color: #000000 !important;" class="text-dark mb-1">Total Box</h6>
+                            <h4 style="color: #000000 !important;" class="fw-bold mb-0 totalBox"></h4>
+                            <small style="color: #000000 !important;" class="text-dark countBox"></small>
                         </div>
                         <div class="text-success fs-4"><i class="bi bi-truck"></i></div>
                     </div>

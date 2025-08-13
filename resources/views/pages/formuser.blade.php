@@ -10,7 +10,7 @@
     @endphp
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="css/main.css">
+
     <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -121,6 +121,108 @@
         }
     </style>
 
+    <style>
+        .mode-gelap body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        .mode-gelap .card {
+            background-color: #192e50 !important;
+            border: #333 1px solid !important;
+            color: #e0e0e0 !important;
+        }
+
+        .mode-gelap .card-header {
+            background-color: #070d17 !important;
+            color: #ffffff;
+            border-bottom: 1px solid #333;
+        }
+
+        .mode-gelap label {
+            color: #e0e0e0;
+        }
+
+        .mode-gelap .form-control {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: 1px solid #444;
+        }
+
+        .mode-gelap .form-control:focus {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border-color: #66afe9;
+            box-shadow: 0 0 0 0.2rem rgba(102, 175, 233, .25);
+        }
+
+        .mode-gelap .form-control option {
+            background: #1e1e1e;
+            color: #ffffff;
+        }
+
+        .mode-gelap .form-control::placeholder {
+            color: #aaaaaa;
+        }
+
+        /* DataTables dark theme adjustments */
+        .mode-gelap #user-table {
+            color: #e0e0e0;
+        }
+
+        .mode-gelap #user-table thead th {
+            color: #ffffff;
+        }
+
+        .mode-gelap .dataTables_wrapper .dataTables_length,
+        .mode-gelap .dataTables_wrapper .dataTables_filter,
+        .mode-gelap .dataTables_wrapper .dataTables_info,
+        .mode-gelap .dataTables_wrapper .dataTables_processing,
+        .mode-gelap .dataTables_wrapper .dataTables_paginate {
+            color: #e0e0e0 !important;
+        }
+
+        .mode-gelap .dataTables_wrapper .dataTables_paginate .paginate_button {
+            color: #ffffff !important;
+        }
+
+        .mode-gelap .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            color: #666666 !important;
+        }
+
+        .mode-gelap .page-item.active .page-link {
+            background-color: #66afe9;
+            border-color: #66afe9;
+        }
+
+        .mode-gelap .page-link {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            color: #66afe9;
+        }
+
+        /* Modal dark theme */
+        .mode-gelap .modal-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .mode-gelap .modal-header {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border-bottom: 1px solid #333;
+        }
+
+        .mode-gelap .close {
+            color: #ffffff;
+            text-shadow: 0 1px 0 #000000;
+        }
+
+        .mode-gelap .modal-footer {
+            border-top: 1px solid #333;
+        }
+    </style>
     <div class="container-fluid mt-4">
         <div class="card shadow-lg">
             <div class="card-header">

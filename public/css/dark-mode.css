@@ -74,7 +74,7 @@ body.mode-gelap .nav-tabs .nav-link.active {
     color: #000;
 }
 
-body.mode-gelap h3, .mode-gelap h5, .mode-gelap h6 {
+body.mode-gelap h3, .mode-gelap h5, .mode-gelap h6, .mode-gelap h4 {
     color: #ffffff;
 }
 
@@ -152,7 +152,7 @@ body.mode-gelap h3, .mode-gelap h5, .mode-gelap h6 {
 }
 
 .mode-gelap .table-striped > tbody > tr:nth-of-type(odd) > * {
-    --bs-table-color-type: #0080ff;
+    --bs-table-color-type: #ffffff;
     --bs-table-bg-type: #0f1928;
 }
 
@@ -170,3 +170,4 @@ body.mode-gelap h3, .mode-gelap h5, .mode-gelap h6 {
     --bs-table-color-state: var(--bs-table-hover-color);
     --bs-table-bg-state: var(--bs-table-hover-bg);
 }
+

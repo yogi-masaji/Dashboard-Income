@@ -132,7 +132,95 @@
                 border: 2px solid #000 !important;
             }
         </style>
+        <style>
+            .mode-gelap body {
+                font-family: 'Nunito', sans-serif;
+                background-color: #121212;
+                color: #e0e0e0;
+            }
 
+            .mode-gelap #card_header {
+                background-color: #071a39;
+                color: #ffffff;
+            }
+
+            .mode-gelap .form-control {
+                color: #000000;
+                background-color: #fff;
+            }
+
+            .mode-gelap .calendar>.days-grid>.day.today {
+                color: #ffffff !important;
+            }
+
+            .mode-gelap .card {
+                background-color: #192e50 !important;
+                border: none;
+                box-shadow: 0 0 1px rgba(255, 255, 255, .05), 0 1px 3px rgba(255, 255, 255, .1);
+            }
+
+            .mode-gelap .text-white {
+                color: #ffffff !important;
+            }
+
+            .mode-gelap .loading {
+                border: 4px solid rgba(255, 255, 255, 0.2);
+                border-top-color: #ffffff;
+            }
+
+            .mode-gelap .btn {
+                padding: 0.375rem 0.75rem !important;
+                font-size: 1rem !important;
+                border-radius: 0.25rem !important;
+                border: none !important;
+                cursor: pointer !important;
+                transition: background-color 0.2s ease !important;
+            }
+
+            /* Tombol Cari */
+            .mode-gelap .btn-cari {
+                background-color: #3399ff !important;
+                color: #ffffff !important;
+            }
+
+            .mode-gelap .btn-cari:hover {
+                background-color: #1a75d1 !important;
+            }
+
+            /* Tombol Export */
+            .mode-gelap .btn-export {
+                background-color: #33cc66 !important;
+                color: #ffffff !important;
+            }
+
+            .mode-gelap .btn-export:hover {
+                background-color: #28a745 !important;
+            }
+
+            /* Disabled state */
+            .mode-gelap .btn:disabled,
+            .mode-gelap .btn[disabled] {
+                opacity: 0.6 !important;
+                cursor: not-allowed !important;
+                pointer-events: none !important;
+            }
+
+            /* JSON output box */
+            .mode-gelap #json_output {
+                background-color: #1a1a1a;
+                color: #a9c5e8;
+            }
+
+            /* easepick popup z-index tetap */
+            .mode-gelap .easepick-wrapper {
+                z-index: 1060;
+            }
+
+            /* Border tebal */
+            .mode-gelap .thick-border {
+                border: 2px solid #ffffff !important;
+            }
+        </style>
     </head>
 
     <body>
@@ -198,8 +286,8 @@
 
                     <!-- Result area -->
                     <div id="result_area" class="mt-3" style="display: none;">
-                        <h3 id="report_title" class="text-center" style="color: black;"></h3>
-                        <h4 id="report_period" class="text-center mb-3" style="color: black;"></h4>
+                        <h3 id="report_title" class="text-center" style=" ;"></h3>
+                        <h4 id="report_period" class="text-center mb-3" style=" ;"></h4>
 
                         <div class="table-responsive" id="table_income_payment_wrapper">
                             <table class="table table-striped table-bordered " id="table-member">
@@ -577,7 +665,7 @@
                     ];
 
                     let tableHtml =
-                        `<h4 class="mt-4" style="color: black;">Rekap Income ${title.replace(/_/g, ' ')}</h4>`;
+                        `<h4 class="mt-4" style=" ;">Rekap Income ${title.replace(/_/g, ' ')}</h4>`;
                     tableHtml +=
                         `<div class="table-responsive"><table class="table table-striped table-bordered" style="width:100%;">`;
 
@@ -686,7 +774,7 @@
                         }
                     ];
 
-                    let tableHtml = `<h4 class="mt-4" style="color: black;">${title}</h4>`;
+                    let tableHtml = `<h4 class="mt-4" style=" ;">${title}</h4>`;
                     tableHtml +=
                         `<div class="table-responsive"><table class="table table-striped table-bordered" style="width:100%;">`;
 

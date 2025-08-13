@@ -18,9 +18,19 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
         <style>
+            /* ------------------------- */
+            /* --- LIGHT MODE STYLES --- */
+            /* ------------------------- */
             body {
                 background-color: #f8f9fa;
                 color: #212529;
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+
+            .card,
+            .list-group-item,
+            .modal-content {
+                transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
             }
 
             .card {
@@ -49,13 +59,13 @@
                 color: #000 !important;
             }
 
-            .user-detail-panel {
-                background-color: #8f0e0e;
-                padding: 10px;
-                border-radius: 0.25rem;
-                border: 1px solid #291e1e !important;
-            }
 
+            .user-detail-panel {
+                background-color: #f7f7f7;
+                padding: 15px;
+                border-radius: 0.5rem;
+                border: 1px solid #d9d9d9 !important;
+            }
 
             .list-group-item {
                 background-color: #ffffff;
@@ -135,18 +145,167 @@
                 color: #000;
                 text-shadow: 0 1px 0 #fff;
             }
+
+            .summary-icon-circle {
+                border-radius: 50%;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 50px;
+                height: 50px;
+                flex-shrink: 0;
+            }
+
+            .summary-icon-circle.bg-primary-light {
+                background-color: #cfe2ff;
+            }
+
+            .summary-icon-circle.bg-success-light {
+                background-color: #d1e7dd;
+            }
+
+            .summary-icon-circle.bg-warning-light {
+                background-color: #fff3cd;
+            }
+
+
+            /* ------------------------ */
+            /* --- DARK MODE STYLES --- */
+            /* ------------------------ */
+
+            body.mode-gelap .card {
+                background-color: #192e50 !important;
+                border-color: #424242 !important;
+                color: #ffffff !important;
+            }
+
+            body.mode-gelap .card-header,
+            body.mode-gelap #card_header {
+                background-color: #121E32 !important;
+                color: #ffffff !important;
+                border-bottom: 1px solid #424242 !important;
+            }
+
+            body.mode-gelap .card-header h4,
+            body.mode-gelap #card_header h4,
+            body.mode-gelap #card_header p,
+            body.mode-gelap #card_header i,
+            body.mode-gelap p,
+            body.mode-gelap h3,
+            body.mode-gelap h5 {
+                color: #ffffff !important;
+            }
+
+            body.mode-gelap .card-body {
+                background-color: #192e50 !important;
+                color: #ffffff !important;
+            }
+
+            body.mode-gelap .user-detail-panel {
+                background-color: #121E32;
+                border: 1px solid #424242 !important;
+            }
+
+            body.mode-gelap .user-detail-panel .small {
+                color: #adb5bd !important;
+            }
+
+            body.mode-gelap .list-group-item {
+                background-color: #192e50;
+                color: #ffffff;
+                border-color: #424242;
+            }
+
+            body.mode-gelap .list-group-item.header {
+                background-color: #121E32;
+            }
+
+            body.mode-gelap .text-center.border-bottom.border-top {
+                border-color: #424242 !important;
+            }
+
+            body.mode-gelap .dataTables_wrapper .dataTables_length,
+            body.mode-gelap .dataTables_wrapper .dataTables_filter,
+            body.mode-gelap .dataTables_wrapper .dataTables_info,
+            body.mode-gelap .dataTables_wrapper .dataTables_paginate .paginate_button {
+                color: #ffffff !important;
+            }
+
+            body.mode-gelap .dataTables_wrapper .dataTables_length select,
+            body.mode-gelap .dataTables_wrapper .dataTables_filter input {
+                background-color: #212121;
+                color: #ffffff;
+                border: 1px solid #424242;
+            }
+
+            body.mode-gelap .page-link {
+                background-color: #212121;
+                border: 1px solid #424242;
+                color: #ffffff;
+            }
+
+            body.mode-gelap .page-item.disabled .page-link {
+                background-color: #2a2a2a;
+                border-color: #424242;
+                color: #6c757d;
+            }
+
+            body.mode-gelap .page-item.active .page-link {
+                background-color: #ffc107;
+                border-color: #ffc107;
+                color: #000;
+            }
+
+            body.mode-gelap .modal-content {
+                background-color: #192e50;
+                color: #ffffff;
+            }
+
+            body.mode-gelap .modal-header {
+                background-color: #121E32;
+                border-bottom: 1px solid #424242;
+            }
+
+            body.mode-gelap .modal-header .close {
+                color: #fff;
+                text-shadow: none;
+            }
+
+            body.mode-gelap .modal-footer {
+                border-top: 1px solid #424242;
+            }
+
+            body.mode-gelap .summary-icon-circle.bg-primary-light {
+                background-color: rgba(13, 110, 253, 0.25);
+            }
+
+            body.mode-gelap .summary-icon-circle.bg-success-light {
+                background-color: rgba(25, 135, 84, 0.25);
+            }
+
+            body.mode-gelap .summary-icon-circle.bg-warning-light {
+                background-color: rgba(255, 193, 7, 0.25);
+            }
+
+            body.mode-gelap .dataTables_wrapper .dataTables_length,
+            .dataTables_wrapper .dataTables_filter,
+            .dataTables_wrapper .dataTables_info,
+            .dataTables_wrapper .dataTables_processing,
+            .dataTables_wrapper .dataTables_paginate {
+                color: #ffffff !important;
+            }
         </style>
     @endpush
 
     <div class="mt-4">
-        <div class="card shadow-lg">
+        <div class="card shadow-lg content-custom">
             <!-- Card Header -->
             <div class="d-flex justify-content-between px-3 py-2 align-items-center" id="card_header">
                 <div class="d-flex align-items-center">
                     <i class="bi bi-people-fill fa-lg me-2"></i>
                     <h4 class="header m-0">User Login</h4>
                 </div>
-
             </div>
 
             <div class="card-body">
@@ -156,14 +315,14 @@
                     <div class="col-xl-4 col-lg-6">
                         <div class="card shadow-sm" style="height: 100%;">
                             <div class="card-body d-flex align-items-center">
-                                <div
-                                    style="background-color: #cfe2ff; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
+                                <div class="summary-icon-circle bg-primary-light">
                                     <i class="bi bi-people-fill" style="font-size: 1.75rem; color: #0d6efd;"></i>
                                 </div>
                                 <div style="margin-left: 12px;">
-                                    <h3 style="font-weight: bold; margin-bottom: 0;">{{ $totalUser }}
+                                    <h3 style="font-weight: bold; margin-bottom: 0; color:#000 !important;">
+                                        {{ $totalUser }}
                                     </h3>
-                                    <p style="margin-bottom: 0;">Total Pengguna</p>
+                                    <p class="mb-0" style="color:#000 !important;">Total Pengguna</p>
                                 </div>
                             </div>
                         </div>
@@ -173,14 +332,14 @@
                     <div class="col-xl-4 col-lg-6">
                         <div class="card shadow-sm" style="height: 100%;">
                             <div class="card-body d-flex align-items-center">
-                                <div
-                                    style="background-color: #d1e7dd; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
+                                <div class="summary-icon-circle bg-success-light">
                                     <i class="bi bi-wifi" style="font-size: 1.75rem; color: #198754;"></i>
                                 </div>
                                 <div style="margin-left: 12px;">
-                                    <h3 style="font-weight: bold; margin-bottom: 0;">{{ $onlineUser }}
+                                    <h3 style="font-weight: bold; margin-bottom: 0;color:#000 !important;">
+                                        {{ $onlineUser }}
                                     </h3>
-                                    <p style="margin-bottom: 0;">Pengguna Online</p>
+                                    <p class="mb-0" style="color:#000 !important;">Pengguna Online</p>
                                 </div>
                             </div>
                         </div>
@@ -190,35 +349,18 @@
                     <div class="col-xl-4 col-lg-6">
                         <div class="card shadow-sm" style="height: 100%;">
                             <div class="card-body d-flex align-items-center">
-                                <div
-                                    style="background-color: #fff3cd; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
+                                <div class="summary-icon-circle bg-warning-light">
                                     <i class="bi bi-wifi-off" style="font-size: 1.75rem; color: #ffc107;"></i>
                                 </div>
                                 <div style="margin-left: 12px;">
-                                    <h3 style="font-weight: bold; margin-bottom: 0;">{{ $offlineUser }}
+                                    <h3 style="font-weight: bold; margin-bottom: 0;color:#000 !important;">
+                                        {{ $offlineUser }}
                                     </h3>
-                                    <p style="margin-bottom: 0;">Pengguna Offline</p>
+                                    <p class="mb-0" style="color:#000 !important;">Pengguna Offline</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Kartu 4: Pengguna Terdaftar -->
-                    {{-- <div class="col-xl-4 col-lg-6">
-                        <div class="card shadow-sm" style="height: 100%;">
-                            <div class="card-body d-flex align-items-center">
-                                <div
-                                    style="background-color: #f8d7da; border-radius: 50%; padding: 10px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-shrink: 0;">
-                                    <i class="bi bi-person-fill-add" style="font-size: 1.75rem; color: #dc3545;"></i>
-                                </div>
-                                <div style="margin-left: 12px;">
-                                    <h3 style="font-weight: bold; margin-bottom: 0;">{{ $registeredUser }}
-                                    </h3>
-                                    <p style="margin-bottom: 0;">Pengguna Terdaftar</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
 
 
@@ -226,8 +368,7 @@
                 <div class="row mt-4">
                     <!-- User List Table -->
                     <div class="col-lg-9">
-                        <div class="text-center border-bottom border-top mb-2 p-3"
-                            style="border-color: #d9d9d9 !important;">USER LIST</div>
+                        <div class="text-center border-bottom border-top mb-2 p-3">USER LIST</div>
                         <table id="tbUserlist" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
@@ -305,7 +446,7 @@
                     </div>
                     <!-- User Detail Panel -->
                     <div class="col-lg-3">
-                        <div class="row user-detail-panel">
+                        <div class="user-detail-panel">
                             <div class="col-12 mb-3">
                                 <div class="user-detail p-3">
                                     @php $firstUser = $userlog_list->first(); @endphp
@@ -332,7 +473,7 @@
                                                 </b>
                                             @endif
                                         </h5>
-                                        <div id="detailEmailandType" class="small text-muted">
+                                        <div id="detailEmailandType" class="small">
                                             @if ($firstUser)
                                                 <span>{{ $firstUser->email_Staff }}</span> |
                                                 {{ $firstUser->user_type_name }}
@@ -359,7 +500,7 @@
                                                 @endif
                                             </div>
                                             <div class="col-6">
-                                                <i class="bi bi-clock-history h3"></i><br>
+                                                <i class="bi bi-clock-history h3 text-success"></i><br>
                                                 <small id="detailLastLogin">
                                                     @if ($firstUser)
                                                         {{ \Carbon\Carbon::parse($firstUser->last_login)->diffForHumans() }}
@@ -373,7 +514,7 @@
                             <div class="col-12">
                                 <ul class="list-group" id="totalLoginList">
                                     <li class="list-group-item header text-center">
-                                        TOTAL LOGIN THIS YEAR
+                                        <p>TOTAL LOGIN THIS YEAR</p>
                                     </li>
                                     @forelse($totalLoginMonth as $loginData)
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -465,7 +606,7 @@
                     '<i class="bi bi-circle-fill text-danger ml-1" style="font-size: 0.7rem;"></i>';
 
                 $('#detailNama').html('<b>' + name + ' ' + statusIcon + '</b>');
-                $('#detailEmailandType').html('<span class="text-muted">' + email + '</span> | ' +
+                $('#detailEmailandType').html('<span>' + email + '</span> | ' +
                     userType);
                 $('#detailDefaultLocation').html('<i class="bi bi-geo-alt-fill text-warning"></i> ' +
                     default_location);
@@ -477,11 +618,20 @@
                 $('#detailActivated').html(registrationHtml);
 
                 var photoUrl = photo ?
-                    '{{ asset('img/photos/') }}/' + photo :
+                    '{{ asset('storage/photos/') }}/' + photo :
                     'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) +
                     '&background=0d6efd&color=fff';
                 $('#detailPhoto').html('<img src="' + photoUrl +
                     '" alt="Profile" style="border-radius: 50%" width="80">');
+
+                // In dark mode, update the avatar API URL to use a darker background
+                if (document.body.classList.contains('mode-gelap') && !photo) {
+                    var darkAvatarUrl = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) +
+                        '&background=424242&color=fff';
+                    $('#detailPhoto').html('<img src="' + darkAvatarUrl +
+                        '" alt="Profile" style="border-radius: 50%" width="80">');
+                }
+
 
                 // Update Total Login History list
                 var loginList = $('#totalLoginList');
@@ -504,7 +654,7 @@
                             $.each(data, function(index, item) {
                                 var listItem =
                                     '<li class="list-group-item d-flex justify-content-between align-items-center">' +
-                                    item.period +
+                                    '<p class="mb-0">' + item.period + '</p>' +
                                     '<span class="badge bg-primary rounded-pill">' +
                                     item.total_login + '</span>' +
                                     '</li>';

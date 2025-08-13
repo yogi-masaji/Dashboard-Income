@@ -16,15 +16,22 @@
 
     {{-- Custom Styles for Light Theme --}}
     <style>
+        /* --- Base Styles --- */
         body {
             background-color: #f8f9fa;
             color: #212529;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        .card,
+        .modal-content {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* --- Light Theme --- */
         .card {
             background-color: #ffffff !important;
             border: #d9d9d9 1px solid !important;
-            height: auto;
             border-radius: 10px !important;
             color: #000 !important;
         }
@@ -61,7 +68,6 @@
             color: #6c757d;
         }
 
-        /* DataTables light theme adjustments */
         #location-table {
             color: #212529;
         }
@@ -97,7 +103,6 @@
             color: #007bff;
         }
 
-        /* Modal light theme */
         .modal-content {
             background-color: #ffffff;
             color: #212529;
@@ -118,6 +123,110 @@
 
         .modal-footer {
             border-top: 1px solid #dee2e6;
+        }
+
+        /* --- Dark Theme --- */
+        body.mode-gelap {
+            background-color: #212121 !important;
+            color: #ffffff;
+        }
+
+        body.mode-gelap .card {
+            background-color: #192e50 !important;
+            border-color: #424242 !important;
+            color: #ffffff !important;
+        }
+
+        body.mode-gelap .card-header {
+            background-color: #121E32 !important;
+            color: #ffffff;
+            border-bottom: 1px solid #424242;
+        }
+
+        body.mode-gelap label,
+        body.mode-gelap h3 {
+            color: #ffffff;
+        }
+
+        body.mode-gelap .form-control {
+            background-color: #2c3e50;
+            color: #ffffff;
+            border: 1px solid #424242;
+        }
+
+        body.mode-gelap .form-control:focus {
+            background-color: #2c3e50;
+            color: #ffffff;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+        }
+
+        body.mode-gelap .form-control option {
+            background: #2c3e50;
+            color: #ffffff;
+        }
+
+        body.mode-gelap .form-control::placeholder {
+            color: #bdc3c7;
+        }
+
+        body.mode-gelap .table {
+            color: #ffffff;
+            --bs-table-striped-bg: #121E32;
+            --bs-table-striped-color: #ffffff;
+            --bs-table-hover-bg: #1f3a5a;
+            --bs-table-hover-color: #ffffff;
+        }
+
+        body.mode-gelap #location-table thead th {
+            color: #ffffff;
+        }
+
+        body.mode-gelap .dataTables_wrapper .dataTables_length,
+        body.mode-gelap .dataTables_wrapper .dataTables_filter,
+        body.mode-gelap .dataTables_wrapper .dataTables_info,
+        body.mode-gelap .dataTables_wrapper .dataTables_processing,
+        body.mode-gelap .dataTables_wrapper .dataTables_paginate {
+            color: #ffffff !important;
+        }
+
+        body.mode-gelap .dataTables_wrapper .dataTables_paginate .paginate_button {
+            color: #ffffff !important;
+        }
+
+        body.mode-gelap .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            color: #6c757d !important;
+        }
+
+        body.mode-gelap .page-link {
+            background-color: #2c3e50;
+            border-color: #424242;
+            color: #ffffff;
+        }
+
+        body.mode-gelap .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        body.mode-gelap .modal-content {
+            background-color: #192e50;
+            color: #ffffff;
+            border-color: #424242;
+        }
+
+        body.mode-gelap .modal-header {
+            background-color: #121E32;
+            border-bottom-color: #424242;
+        }
+
+        body.mode-gelap .modal-footer {
+            border-top-color: #424242;
+        }
+
+        body.mode-gelap .close {
+            color: #ffffff;
+            text-shadow: none;
         }
     </style>
 

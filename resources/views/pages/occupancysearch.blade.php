@@ -119,6 +119,15 @@
             z-index: 1;
         }
 
+        .mode-gelap .wide-data-table thead th {
+            background-color: #192e50;
+        }
+
+        .mode-gelap .wide-data-table td {
+            background-color: #192e50;
+            color: #ffffff;
+        }
+
         .wide-data-table td {
             position: sticky;
             top: 0;
@@ -221,8 +230,11 @@
     <script>
         const occupancyTable = $('#occupancyTable').DataTable({
             // dom: "Bfltip",
-            pageLength: 100,
+            searching: false,
+            paging: false,
+            pageLength: false,
             lengthChange: false,
+
             // layout: {
             //     topEnd: {
             //         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
