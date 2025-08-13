@@ -595,8 +595,8 @@
         const dailyEpaymentChartURL = "{{ route('dailyEpaymentChart') }}";
     </script>
 
-    {{-- <script src="{{ asset('js/dashboard.js') }}"></script> --}}
-    @vite('resources/js/dashboard.js')
+    <script src="{{ asset('js/dashboard.js') }}"></script>
+    {{-- @vite('resources/js/dashboard.js') --}}
     {{-- @vite('resources/js/dailyQuantity.js')
     {{-- @vite('resources/js/testasync.js')
     @vite('resources/js/income.js')

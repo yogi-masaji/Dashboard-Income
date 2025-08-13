@@ -7,6 +7,7 @@ use App\Http\Controllers\Login;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\EpaymentControllerController;
+use App\Http\Controllers\TarifController;
 use App\Http\Controllers\TrafficController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ConfigController;
@@ -184,4 +185,17 @@ Route::middleware('custom.auth')->group(function () {
     Route::post('/get-income-payment', [IncomePaymentController::class, 'getIncomePayment'])->name('income.get');
     Route::post('/get-lost-income', [IncomePaymentController::class, 'getLostIncomePayment'])->name('income.lost.get');
     Route::post('/get-rekap-income', [IncomePaymentController::class, 'getRekapIncome'])->name('income.recap.get');
+
+    Route::get('/simulasi-tarif', [TarifController::class, 'index'])->name('tarif.index');
+
+    // Route untuk menghandle submit form dan menampilkan hasil kalkulasi
+    Route::post('/simulasi-tarif', [TarifController::class, 'calculate'])->name('tarif.calculate');
+
+    Route::get('/change-password', [Login::class, 'showChangePasswordForm'])->name('password.change.form');
+    Route::post('/change-password', [Login::class, 'changePassword'])->name('password.change');
+
+    Route::get('/lama-parkir', [SearchController::class, 'longstaySearchView'])->name('longstay.index');
+
+    // Route untuk menghandle submit form dan mengambil data dari API
+    Route::post('/long-stay-search', [SearchController::class, 'longstaySearchAPI'])->name('longstay.search');
 }); // End of auth middleware group

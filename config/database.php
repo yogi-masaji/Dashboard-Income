@@ -97,6 +97,19 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'pgsql_tarif' => [
+            'driver' => 'pgsql',
+            'host' => 'localhost', // Host ini akan di-override di controller
+            'port' => '5432',
+            'database' => 'epis_4_0',
+            'username' => 'parkee',
+            'password' => 'parkee2018',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),
@@ -147,7 +160,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

@@ -1024,4 +1024,72 @@ class SearchController extends Controller
     {
         return view('pages.peaksearch');
     }
+
+    public function longstaySearchView()
+    {
+        return view('pages.longstaysearch');
+    }
+
+    public function longstaySearchAPI(Request $request)
+    {
+        // Validasi request
+        $request->validate([
+            'tgl_awal' => 'required|date',
+            'tgl_akhir' => 'required|date',
+            'tgl_awal_row2' => 'required|date',
+            'tgl_akhir_row2' => 'required|date',
+        ]);
+
+        // Mengambil kode lokasi dari session
+        $locationCode = session('selected_location_kode_lokasi');
+
+        if (!$locationCode) {
+            return response()->json(['error' => 'Kode lokasi tidak ditemukan di session.'], 400);
+        }
+
+        // Format tanggal dari Y-m-d (HTML date input) ke d-m-Y (API format)
+        $first_start_date = Carbon::parse($request->tgl_awal)->format('d-m-Y');
+        $first_end_date = Carbon::parse($request->tgl_akhir)->format('d-m-Y');
+        $second_start_date = Carbon::parse($request->tgl_awal_row2)->format('d-m-Y');
+        $second_end_date = Carbon::parse($request->tgl_akhir_row2)->format('d-m-Y');
+
+        // URL API
+        $apiUrl = 'http://110.0.100.70:8080/external/v1/report/long-stay-search';
+
+        // Body untuk request API
+        $payload = [
+            'first_start_date'  => $first_start_date,
+            'first_end_date'    => $first_end_date,
+            'second_start_date' => $second_start_date,
+            'second_end_date'   => $second_end_date,
+            'location_code'     => $locationCode,
+        ];
+
+        try {
+            // Melakukan POST request ke API menggunakan Laravel HTTP Client
+            $response = Http::post($apiUrl, $payload);
+
+            // Cek jika request berhasil
+            if ($response->successful()) {
+                $data = $response->json();
+
+                // Memastikan struktur data sesuai dengan yang diharapkan
+                if (isset($data['data']) && count($data['data']) > 0) {
+                    $first_period = $data['data'][0]['first_period'];
+                    $second_period = $data['data'][0]['second_period'];
+
+                    // Mengembalikan data dalam format yang sama dengan script PHP lama
+                    return response()->json([$first_period, $second_period]);
+                } else {
+                    return response()->json(['error' => 'Struktur data dari API tidak sesuai.'], 500);
+                }
+            } else {
+                // Mengembalikan error jika request ke API gagal
+                return response()->json(['error' => 'Gagal mengambil data dari API.', 'details' => $response->body()], $response->status());
+            }
+        } catch (\Exception $e) {
+            // Menangani exception jika terjadi error koneksi atau lainnya
+            return response()->json(['error' => 'Terjadi kesalahan saat menghubungi API.', 'details' => $e->getMessage()], 500);
+        }
+    }
 }

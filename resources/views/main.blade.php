@@ -8,6 +8,7 @@
         $kodeLokasi = session('selected_location_kode_lokasi', 'Kode Tidak Diketahui');
         $chiselVersion = session('selected_location_chisel_Version', 'Chisel Version Tidak Diketahui');
         $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
+        $userType = session('user_type', 'User Type Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
 
@@ -23,5 +24,5 @@
 
 
     <h3>{{ $navbarTitle }} - {{ $ipLokasi }} - {{ $lokasiId }} - {{ $lokasiGrup }} - {{ $chiselVersion }} -
-        {{ $systemCode }}</h3>
+        {{ $systemCode }} - {{ $userType }}</h3>
 @endsection

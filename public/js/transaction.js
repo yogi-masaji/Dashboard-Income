@@ -6,6 +6,32 @@ $(document).ready(function() {
         return isNaN(num) ? '0' : new Intl.NumberFormat('id-ID').format(num);
     }
 
+    /**
+     * Injects theme-based colors into a chart options object.
+     * @param {object} options - The chart options object to modify.
+     */
+    function applyThemeToChartOptions(options) {
+        const isDarkMode = localStorage.getItem('theme') === 'dark';
+        const textColor = isDarkMode ? '#ecf0f1' : '#000000';
+        const gridColor = isDarkMode ? 'rgba(236, 240, 241, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+
+        if (options.plugins && options.plugins.legend && options.plugins.legend.labels) {
+            options.plugins.legend.labels.color = textColor;
+        }
+
+        if (options.scales) {
+            Object.values(options.scales).forEach(scale => {
+                if (scale.ticks) {
+                    scale.ticks.color = textColor;
+                }
+                if (scale.grid) {
+                    scale.grid.color = gridColor;
+                }
+            });
+        }
+    }
+
+
     // --- DATATABLE INITIALIZATION ---
     // It's good practice to initialize all DataTables at once.
     const dtOptions = {
@@ -107,14 +133,16 @@ $(document).ready(function() {
                 const commonOptions = {
                     responsive: true, maintainAspectRatio: true,
                     plugins: {
-                        legend: { position: 'top', labels: { color: '#000' } },
+                        legend: { position: 'top', labels: {} },
                         datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold' }, formatter: Math.round, padding: 6, offset: 8 }
                     },
                     scales: {
-                        y: { beginAtZero: true, ticks: { precision: 0, color: '#000' }, grace: '10%' },
-                        x: { ticks: { color: '#000' } }
+                        y: { beginAtZero: true, ticks: { precision: 0 }, grid: {}, grace: '10%' },
+                        x: { ticks: {}, grid: {} }
                     }
                 };
+                
+                applyThemeToChartOptions(commonOptions);
 
                 const barData = {
                     labels,
@@ -135,8 +163,10 @@ $(document).ready(function() {
                 const ctxBar = document.getElementById('dailyQuantityBar')?.getContext('2d');
                 if (ctxBar) window.dailyBarChart = new Chart(ctxBar, { type: 'bar', data: barData, options: commonOptions, plugins: [ChartDataLabels] });
 
+                const lineOptions = { ...commonOptions, plugins: { ...commonOptions.plugins, datalabels: { ...commonOptions.plugins.datalabels, padding: 3, offset: 4 }}};
+
                 const ctxLine = document.getElementById('dailyQuantityLine')?.getContext('2d');
-                if (ctxLine) window.dailyLineChart = new Chart(ctxLine, { type: 'line', data: lineData, options: { ...commonOptions, plugins: { ...commonOptions.plugins, datalabels: { ...commonOptions.plugins.datalabels, padding: 3, offset: 4 }}}, plugins: [ChartDataLabels] });
+                if (ctxLine) window.dailyLineChart = new Chart(ctxLine, { type: 'line', data: lineData, options: lineOptions, plugins: [ChartDataLabels] });
             }
         });
     }
@@ -207,14 +237,16 @@ $(document).ready(function() {
                 const baseOptions = {
                     responsive: true, maintainAspectRatio: true,
                     plugins: {
-                        legend: { position: 'top', labels: { color: '#000' } },
+                        legend: { position: 'top', labels: {} },
                         datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold' }, formatter: formatQuantity, padding: 6, offset: 8 }
                     },
                     scales: {
-                        y: { beginAtZero: true, ticks: { precision: 0, color: '#000', callback: formatQuantity }, grace: '10%' },
-                        x: { ticks: { color: '#000' } }
+                        y: { beginAtZero: true, ticks: { precision: 0, callback: formatQuantity }, grid: {}, grace: '10%' },
+                        x: { ticks: {}, grid: {} }
                     }
                 };
+                
+                applyThemeToChartOptions(baseOptions);
 
                 const buildChart = (canvasId, type, data) => {
                     const chartInstanceName = `${canvasId}Chart`;
@@ -296,21 +328,26 @@ $(document).ready(function() {
                     hidden: type !== 'car'
                 }));
 
-                const chartOptions = (isLine = false) => ({
-                    type: isLine ? 'line' : 'bar',
-                    options: {
-                        responsive: true, maintainAspectRatio: true,
+                const chartOptions = (isLine = false) => {
+                    const options = {
+                        responsive: true,
+                        maintainAspectRatio: true,
                         plugins: {
-                            legend: { position: 'top', labels: { color: '#000' } },
+                            legend: { position: 'top', labels: {} },
                             datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold' }, formatter: value => formatQuantity(value), padding: isLine ? 3 : 6, offset: isLine ? 4 : 8 }
                         },
                         scales: {
-                            y: { beginAtZero: true, ticks: { precision: 0, color: '#000', callback: value => formatQuantity(value) }, grace: '10%' },
-                            x: { ticks: { color: '#000' } }
+                            y: { beginAtZero: true, ticks: { precision: 0, callback: value => formatQuantity(value) }, grid: {}, grace: '10%' },
+                            x: { ticks: {}, grid: {} }
                         }
-                    },
-                    plugins: [ChartDataLabels]
-                });
+                    };
+                    applyThemeToChartOptions(options);
+                    return {
+                        type: isLine ? 'line' : 'bar',
+                        options: options,
+                        plugins: [ChartDataLabels]
+                    };
+                };
 
                 const chartMap = [
                     { ctx: 'monthlyQuantityBar', data: response.this_month.weekly_totals.casual, line: false, name: 'monthlyBar' },

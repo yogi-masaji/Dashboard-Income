@@ -9,6 +9,45 @@ $(document).ready(function() {
         }).format(num);
     };
 
+    /**
+     * Menerapkan warna berbasis tema ke objek opsi grafik.
+     * @param {object} options - Objek opsi grafik yang akan diubah.
+     */
+    function applyThemeToChartOptions(options) {
+        const isDarkMode = localStorage.getItem('theme') === 'dark';
+        const textColor = isDarkMode ? '#ecf0f1' : '#000000';
+        const gridColor = isDarkMode ? 'rgba(236, 240, 241, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+
+        if (options.plugins && options.plugins.legend && options.plugins.legend.labels) {
+            options.plugins.legend.labels.color = textColor;
+        }
+
+        if (options.scales) {
+            Object.values(options.scales).forEach(scale => {
+                if (scale.ticks) {
+                    scale.ticks.color = textColor;
+                }
+                if (scale.grid) {
+                    scale.grid.color = gridColor;
+                }
+            });
+        }
+        
+        // Penanganan khusus untuk label data pada doughnut chart di mode gelap
+        if (options.plugins && options.plugins.datalabels) {
+            if (isDarkMode) {
+                options.plugins.datalabels.color = '#fff';
+                options.plugins.datalabels.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                options.plugins.datalabels.borderColor = '#444';
+            } else {
+                options.plugins.datalabels.color = '#000';
+                options.plugins.datalabels.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+                options.plugins.datalabels.borderColor = '#fff';
+            }
+        }
+    }
+
+
     // --- INISIALISASI DATATABLE ---
     const dtOptions = {
         searching: false,
@@ -59,8 +98,31 @@ $(document).ready(function() {
                 $('#dailyIncome tfoot').html(`<tr><th colspan="2" style="text-align:left">All Vehicle</th><th>${formatRupiah(yesterday.grandtotal)}</th><th>${formatRupiah(today.grandtotal)}</th></tr><tr><th colspan="2" style="text-align:left">All Sticker Income</th><th>${formatRupiah(yesterday.stickerincome)}</th><th>${formatRupiah(today.stickerincome)}</th></tr>`);
 
                 if (window.dailyIncomeChart) window.dailyIncomeChart.destroy();
+                
                 const donutData = { labels: ['Car', 'Motorbike', 'Truck', 'Taxi', 'Other'], datasets: [{ label: 'Income by Vehicle', data: [today.carincome, today.motorbikeincome, today.truckincome, today.taxiincome, today.otherincome], backgroundColor: ['#0D61E2', '#EF0F51', '#FFCD56', '#32CD7D', '#5a0e0eff'] }] };
-                const donutConfig = { type: 'doughnut', data: donutData, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: '#000' } }, datalabels: { color: '#000', borderColor: '#fff', backgroundColor: 'rgba(255, 255, 255, 0.63)', formatter: (value) => formatRupiah(value), font: { weight: 'bold' }, padding: 6, borderRadius: 25, borderWidth: 3 } } }, plugins: [ChartDataLabels] };
+                
+                const donutConfig = { 
+                    type: 'doughnut', 
+                    data: donutData, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { 
+                            legend: { position: 'top', labels: { /* color diatur oleh fungsi tema */ } }, 
+                            datalabels: { 
+                                formatter: (value) => formatRupiah(value), 
+                                font: { weight: 'bold' }, 
+                                padding: 6, 
+                                borderRadius: 25, 
+                                borderWidth: 3 
+                            } 
+                        } 
+                    }, 
+                    plugins: [ChartDataLabels] 
+                };
+                
+                applyThemeToChartOptions(donutConfig.options); // Terapkan tema
+
                 const ctx = document.getElementById('dailyIncomedonut')?.getContext('2d');
                 if (ctx) window.dailyIncomeChart = new Chart(ctx, donutConfig);
             }
@@ -94,12 +156,36 @@ $(document).ready(function() {
                 const vehicleTypes = ['car', 'motorbike', 'truck', 'taxi', 'vehicle'];
                 const colors = ['#0D61E2', '#E60045', '#FFCD56', '#32CD7D', '#E69500'];
                 const datasets = vehicleTypes.map((v, i) => ({ label: v.charAt(0).toUpperCase() + v.slice(1), data: this_week.data.map(item => item[`${v}income`]), backgroundColor: colors[i], borderColor: colors[i], hidden: i > 0, datalabels: { anchor: 'end', align: 'end' } }));
-                const commonOptions = { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top', labels: { color: '#000' } }, datalabels: { backgroundColor: (ctx) => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold' }, formatter: (val) => formatRupiah(val), padding: 6, offset: 8 } }, scales: { y: { beginAtZero: true, ticks: { precision: 0, color: '#000' }, grace: '10%' }, x: { ticks: { color: '#000' } } } };
                 
+                const commonOptions = { 
+                    responsive: true, 
+                    maintainAspectRatio: true, 
+                    plugins: { 
+                        legend: { position: 'top', labels: { /* color diatur oleh fungsi tema */ } }, 
+                        datalabels: { 
+                            backgroundColor: (ctx) => ctx.dataset.backgroundColor, 
+                            borderRadius: 4, 
+                            color: 'white', 
+                            font: { weight: 'bold' }, 
+                            formatter: (val) => formatRupiah(val), 
+                            padding: 6, 
+                            offset: 8 
+                        } 
+                    }, 
+                    scales: { 
+                        y: { beginAtZero: true, ticks: { precision: 0 }, grid:{}, grace: '10%' }, 
+                        x: { ticks: {}, grid:{} } 
+                    } 
+                };
+                
+                applyThemeToChartOptions(commonOptions); // Terapkan tema
+
                 const ctxBar = document.getElementById('weeklyIncomeBar')?.getContext('2d');
                 if (ctxBar) window.weeklyIncomeBarChart = new Chart(ctxBar, { type: 'bar', data: { labels, datasets }, options: commonOptions, plugins: [ChartDataLabels] });
+                
+                const lineOptions = { ...commonOptions, plugins: { ...commonOptions.plugins, datalabels: { ...commonOptions.plugins.datalabels, padding: 3, offset: 4 }}};
                 const ctxLine = document.getElementById('weeklyIncomeLine')?.getContext('2d');
-                if (ctxLine) window.weeklyIncomeLineChart = new Chart(ctxLine, { type: 'line', data: { labels, datasets: datasets.map(ds => ({ ...ds, borderWidth: 3, tension: 0.5 })) }, options: { ...commonOptions, plugins: { ...commonOptions.plugins, datalabels: { ...commonOptions.plugins.datalabels, padding: 3, offset: 4 }}} , plugins: [ChartDataLabels] });
+                if (ctxLine) window.weeklyIncomeLineChart = new Chart(ctxLine, { type: 'line', data: { labels, datasets: datasets.map(ds => ({ ...ds, borderWidth: 3, tension: 0.5 })) }, options: lineOptions , plugins: [ChartDataLabels] });
             }
         });
     }
@@ -131,12 +217,38 @@ $(document).ready(function() {
                 const vehicleTypes = ['car', 'motorbike', 'truck', 'taxi', 'other', 'vehicle'];
                 const colors = ['#51AA20', '#DB6715', '#8D60ED', '#C46EA6', '#5a0e0eff', '#D3D6DD'];
                 const datasets = vehicleTypes.map((v, i) => ({ label: v.charAt(0).toUpperCase() + v.slice(1), data: labels.map(label => this_Month.weekly_totals[label][`${v}income`]), backgroundColor: colors[i], borderColor: colors[i], hidden: i > 0 }));
-                const commonOptions = { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top', labels: { color: '#000' } }, datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold' }, formatter: val => formatRupiah(val), padding: 6, offset: 8, anchor: 'end', align: 'end' } }, scales: { y: { beginAtZero: true, ticks: { color: '#000', precision: 0 }, grace: '10%' }, x: { ticks: { color: '#000' } } } };
                 
+                const commonOptions = { 
+                    responsive: true, 
+                    maintainAspectRatio: true, 
+                    plugins: { 
+                        legend: { position: 'top', labels: { /* color diatur oleh fungsi tema */ } }, 
+                        datalabels: { 
+                            backgroundColor: ctx => ctx.dataset.backgroundColor, 
+                            borderRadius: 4, 
+                            color: 'white', 
+                            font: { weight: 'bold' }, 
+                            formatter: val => formatRupiah(val), 
+                            padding: 6, 
+                            offset: 8, 
+                            anchor: 'end', 
+                            align: 'end' 
+                        } 
+                    }, 
+                    scales: { 
+                        y: { beginAtZero: true, ticks: { precision: 0 }, grid:{}, grace: '10%' }, 
+                        x: { ticks: {}, grid:{} } 
+                    } 
+                };
+                
+                applyThemeToChartOptions(commonOptions); // Terapkan tema
+
                 const ctxBar = document.getElementById('monthlyIncomeBar')?.getContext('2d');
                 if (ctxBar) window.monthlyIncomeBarChart = new Chart(ctxBar, { type: 'bar', data: { labels, datasets }, options: commonOptions, plugins: [ChartDataLabels] });
+
+                const lineOptions = { ...commonOptions, plugins: { ...commonOptions.plugins, datalabels: { ...commonOptions.plugins.datalabels, padding: 3, offset: 4 }}};
                 const ctxLine = document.getElementById('monthlyIncomeLine')?.getContext('2d');
-                if (ctxLine) window.monthlyIncomeLineChart = new Chart(ctxLine, { type: 'line', data: { labels, datasets: datasets.map(ds => ({ ...ds, borderWidth: 3, tension: 0.5, fill: false })) }, options: { ...commonOptions, plugins: { ...commonOptions.plugins, datalabels: { ...commonOptions.plugins.datalabels, padding: 3, offset: 4 }}} , plugins: [ChartDataLabels] });
+                if (ctxLine) window.monthlyIncomeLineChart = new Chart(ctxLine, { type: 'line', data: { labels, datasets: datasets.map(ds => ({ ...ds, borderWidth: 3, tension: 0.5, fill: false })) }, options: lineOptions, plugins: [ChartDataLabels] });
             }
         });
     }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Models\MsLogin;
 use App\Models\TrStaff;
 use App\Models\MsStaff;
@@ -214,7 +215,7 @@ class Login extends Controller
             MsLogin::create([
                 'id_Staff' => $new_staff_id,
                 'email_Staff' => $request->email,
-                'password_Staff' => Hash::make($request->password),
+                'password_Staff' => password_hash($request->password, PASSWORD_ARGON2I),
                 'user_type_code' => 'UC', // Hardcoded as in original script
                 'lokasi' => $request->role,
                 'site_name' => $nama_Lokasi,
@@ -495,5 +496,81 @@ class Login extends Controller
             ->update(['id_Group' => $request->groupUser]);
 
         return redirect()->route('user.login.history')->with('success', 'User group has been updated successfully.');
+    }
+
+    public function showChangePasswordForm()
+    {
+        return view('pages.changepassword');
+    }
+
+    public function changePassword(Request $request)
+    {
+        // 1. Validasi input
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed', // 'confirmed' akan mencocokkan dengan 'new_password_confirmation'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'title' => 'Validation Error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        // 2. Dapatkan pengguna dari Session, bukan dari Auth::user()
+        $userId = Session::get('id_Staff');
+
+        // Cek jika ID pengguna ada di session
+        if (!$userId) {
+            return response()->json([
+                'success' => false,
+                'title' => 'Unauthorized',
+                'message' => 'Sesi Anda tidak valid atau telah berakhir. Silakan login kembali.'
+            ], 401);
+        }
+
+        // Ambil data user dari database menggunakan ID dari session
+        $user = MsLogin::find($userId);
+
+        // Cek jika user ditemukan di database
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'title' => 'User Not Found',
+                'message' => 'Pengguna dengan sesi ini tidak ditemukan di database.'
+            ], 404);
+        }
+
+
+        // 3. Cek apakah password saat ini cocok
+        if (!Hash::check($request->current_password, $user->password_Staff)) {
+            return response()->json([
+                'success' => false,
+                'title' => 'Password Salah',
+                'message' => 'Password Anda saat ini tidak cocok.'
+            ], 401);
+        }
+
+        // 4. Update password baru
+        try {
+            // Model user sudah didapatkan, jadi bisa langsung digunakan
+            $user->password_Staff = Hash::make($request->new_password);
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'title' => 'Berhasil',
+                'message' => 'Password Anda telah berhasil diperbarui.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Gagal mengubah password untuk user ID: ' . $user->id_Staff . ' - ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'title' => 'Kesalahan Server',
+                'message' => 'Terjadi kesalahan saat memperbarui password Anda. Silakan coba lagi.'
+            ], 500);
+        }
     }
 }

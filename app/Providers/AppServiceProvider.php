@@ -40,8 +40,9 @@ class AppServiceProvider extends ServiceProvider
 
                 // Ambil semua menu hanya sekali dari database
                 $menus = DB::table('ms_new_menu')
-                    ->join('group_menu', 'ms_new_menu.id_Menu', '=', 'group_menu.id_Menu')
+                    ->leftJoin('group_menu', 'ms_new_menu.id_Menu', '=', 'group_menu.id_Menu')
                     ->where('group_menu.id_Group', $idGroup)
+                    ->orWhere('ms_new_menu.id_Menu', 154)
                     ->orderBy('ms_new_menu.id_Menu')
                     ->select('ms_new_menu.*')
                     ->get();
@@ -90,7 +91,11 @@ class AppServiceProvider extends ServiceProvider
                 }
 
                 // Configuration
-                $configMenus = $menus->whereIn('id_Menu', [133, 134, 135, 146]);
+                $configMenus = collect();
+                if (session('user_type') === 'IT') {
+                    $configMenus = $menus->whereIn('id_Menu', [133, 134, 135, 146]);
+                }
+
                 if ($configMenus->isNotEmpty()) {
                     $navbarMenus[] = [
                         'name' => 'Configuration',
@@ -100,8 +105,9 @@ class AppServiceProvider extends ServiceProvider
                     ];
                 }
 
+
                 // My Account
-                $myAccount = $menus->whereIn('id_Menu', [27]);
+                $myAccount = $menus->whereIn('id_Menu', [27, 154]);
                 if ($myAccount->isNotEmpty()) {
                     $navbarMenus[] = [
                         'name' => 'My Account',

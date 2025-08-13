@@ -576,5 +576,36 @@
 
     });
 </script>
+<script>
+    // Skrip ini hanya akan berjalan jika pengguna sudah diautentikasi
+    @auth
+        (function() {
+            // Ambil durasi sesi dari konfigurasi Laravel (dalam milidetik)
+            const sessionTimeout = {{ config('session.lifetime') * 60 * 1000 }};
+            let logoutTimer;
 
+            function resetTimer() {
+                // Hapus timer sebelumnya
+                clearTimeout(logoutTimer);
+
+                // Atur timer baru
+                logoutTimer = setTimeout(function() {
+                    // Kirim form logout ketika timer berakhir
+                    // Ini adalah cara yang benar karena logout Anda menggunakan metode POST
+                    document.getElementById('logout-form').submit();
+                }, sessionTimeout);
+            }
+
+            // Atur ulang timer saat halaman dimuat
+            resetTimer();
+
+            // Atur ulang timer jika ada aktivitas dari pengguna
+            document.onmousemove = resetTimer;
+            document.onkeypress = resetTimer;
+            document.onclick = resetTimer;
+            document.onscroll = resetTimer;
+            document.ontouchstart = resetTimer;
+        })();
+    @endauth
+</script>
 </html>
