@@ -17,6 +17,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 
     <style>
+        .dt-button {
+            background-color: #FCB900 !important;
+            padding: 10px;
+            border-radius: 10px;
+            border: none !important;
+        }
+
         /* General Styling */
         .card {
             background: #fff;
@@ -66,21 +73,6 @@
             color: #e9ecef;
         }
 
-        /* ================================================================= */
-        /* PERBAIKAN UNTUK HEADER TABEL YANG TERLALU BESAR                   */
-        /* ================================================================= */
-        #table-perGate thead th {
-            white-space: nowrap;
-            /* Mencegah teks header turun ke bawah */
-            padding: 8px 5px;
-            /* Sedikit mengurangi padding agar lebih ramping */
-            vertical-align: middle;
-            /* Menjaga teks tetap di tengah */
-        }
-
-        /* ================================================================= */
-
-
         /* Loading Spinner Styles */
         .spinner-container {
             display: flex;
@@ -96,14 +88,6 @@
             position: relative;
             width: 80px;
             height: 80px;
-        }
-
-        .dt-button {
-            background-color: #FCB900 !important;
-            padding: 10px;
-            border-radius: 10px;
-            border: none !important;
-            margin-bottom: 10px;
         }
 
         .lds-ring div {
@@ -187,7 +171,7 @@
 
         <div class="card shadow-sm p-4 border-0 rounded-3 mt-4">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered" id="table-perGate" style="width:100%; font-size: 12px;">
+                <table class="table table-striped table-bordered" id="table-perGate" style="width:100%">
                     <thead>
                         <tr>
                             <th>Vehicle</th>
@@ -219,7 +203,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- Kosongkan tbody di sini. DataTable akan mengisinya. --}}
+                        <tr>
+                            <td colspan="26" class="text-center p-5">
+                                <i class="bi bi-calendar-week fs-1 text-muted"></i>
+                                <p class="mt-2 text-muted">Pilih tanggal dan gate untuk melihat data.</p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -261,7 +250,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Kosongkan tbody di sini. DataTable akan mengisinya. --}}
+                                <tr>
+                                    <td colspan="6" class="text-center p-5">
+                                        <i class="bi bi-calendar-week fs-1 text-muted"></i>
+                                        <p class="mt-2 text-muted">Pilih tanggal untuk melihat data.</p>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -282,7 +276,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Kosongkan tbody di sini. DataTable akan mengisinya. --}}
+                                <tr>
+                                    <td colspan="5" class="text-center p-5">
+                                        <i class="bi bi-calendar-week fs-1 text-muted"></i>
+                                        <p class="mt-2 text-muted">Pilih tanggal untuk melihat data.</p>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -302,7 +301,6 @@
             // =================================================================
             if (isPmbeLocation) {
                 let dataTable = $('#table-perGate').DataTable({
-                    data: [],
                     paging: false,
                     searching: false,
                     ordering: false,
@@ -310,103 +308,11 @@
                     dom: 'Bfrtip',
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                     language: {
-                        // PERBAIKAN: Hapus tag <td> dari string HTML
-                        emptyTable: '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal dan gate untuk melihat data.</p></div>'
+                        emptyTable: "Tidak ada data untuk ditampilkan"
                     },
-                    columns: [{
-                            data: 'vehicle',
-                            defaultContent: ''
-                        }, {
-                            data: 'gate',
-                            defaultContent: ''
-                        },
-                        {
-                            data: 'h00_01',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h01_02',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h02_03',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h03_04',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h04_05',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h05_06',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h06_07',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h07_08',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h08_09',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h09_10',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h10_11',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h11_12',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h12_13',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h13_14',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h14_15',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h15_16',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h16_17',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h17_18',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h18_19',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h19_20',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h20_21',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h21_22',
-                            defaultContent: '0'
-                        },
-                        {
-                            data: 'h22_23',
-                            defaultContent: '0'
-                        }, {
-                            data: 'h23_00',
-                            defaultContent: '0'
-                        }
-                    ],
                     createdRow: function(row, data, dataIndex) {
-                        const isVehicleHeaderRow = data.vehicle !== '' && data.gate === null;
+                        const isVehicleHeaderRow = data[0] !== '' && data[1] === '' && data.slice(2)
+                            .every(item => item === '');
                         if (isVehicleHeaderRow) {
                             const $firstCell = $(row).find('td:first-child');
                             $firstCell.attr('colspan', 26);
@@ -426,6 +332,7 @@
                     e.preventDefault();
                     const $cariButton = $('#cariPMBE');
                     const $alert = $('#alertMessage');
+
                     const tgl_awal = $('#tgl_awal').val();
                     const tgl_akhir = $('#tgl_akhir').val();
                     const gate_option = $('#gate_option').val();
@@ -439,27 +346,24 @@
                         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mencari...'
                     );
 
-                    dataTable.clear();
-                    // PERBAIKAN: Hapus tag <td> dari string HTML
-                    dataTable.settings()[0].oLanguage.sEmptyTable =
-                        '<div class="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><strong>Memuat data...</strong></div>';
-                    dataTable.draw();
+                    const spinner =
+                        '<tr><td colspan="26"><div class="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><strong>Memuat data...</strong></div></td></tr>';
+                    dataTable.clear().draw();
+                    $('#table-perGate tbody').html(spinner);
 
                     $.ajax({
                         url: '{{ route('quantitypergatePmbeAPI') }}',
                         method: 'POST',
                         data: {
-                            tgl_awal,
-                            tgl_akhir,
-                            gate_option,
+                            tgl_awal: tgl_awal,
+                            tgl_akhir: tgl_akhir,
+                            gate_option: gate_option,
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
-                            dataTable.settings()[0].oLanguage.sEmptyTable =
-                                '<div class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan.</p></div>';
-
+                            $('#table-perGate tbody').empty();
                             if (response && response.data) {
+                                const apiData = response.data;
                                 let newData = [];
                                 const VEHICLE_TYPES_CONFIG = [{
                                         key: 'car',
@@ -488,59 +392,54 @@
                                 ];
 
                                 VEHICLE_TYPES_CONFIG.forEach(function(vehicleType) {
-                                    const vehicleDataArray = response.data[vehicleType
-                                        .key];
+                                    const vehicleDataArray = apiData[vehicleType.key];
                                     if (vehicleDataArray && Array.isArray(
                                             vehicleDataArray) && vehicleDataArray
                                         .length > 0) {
-
-                                        let headerRow = {
-                                            vehicle: vehicleType.displayName,
-                                            gate: null
-                                        };
-                                        newData.push(headerRow);
+                                        let vehicleHeaderRow = [vehicleType.displayName,
+                                            ...Array(25).fill('')
+                                        ];
+                                        newData.push(vehicleHeaderRow);
 
                                         vehicleDataArray.forEach(function(gateEntry) {
                                             const gateName = Object.keys(
                                                 gateEntry)[0];
                                             const gateHourlyData = gateEntry[
                                                 gateName];
-                                            let rowData = {
-                                                vehicle: '',
-                                                gate: gateName === "" ?
-                                                    "Other" : gateName
-                                            };
-                                            TIME_SLOTS_CONFIG.forEach(slot => {
-                                                const key = 'h' + slot
-                                                    .replace('-', '_');
-                                                rowData[key] =
-                                                    gateHourlyData[
-                                                        slot] || 0;
-                                            });
+                                            let rowData = ['', gateName === "" ?
+                                                "Other" : gateName
+                                            ];
+                                            TIME_SLOTS_CONFIG.forEach(slot =>
+                                                rowData.push(gateHourlyData[
+                                                    slot] || 0));
                                             newData.push(rowData);
                                         });
                                     }
                                 });
 
-                                dataTable.rows.add(newData).draw();
+                                if (newData.length > 0) {
+                                    dataTable.rows.add(newData).draw();
+                                } else {
+                                    const noData =
+                                        '<tr><td colspan="26" class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan.</p></td></tr>';
+                                    $('#table-perGate tbody').html(noData);
+                                }
 
                             } else {
-                                dataTable.clear().draw();
+                                const noData =
+                                    '<tr><td colspan="26" class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan atau format respons salah.</p></td></tr>';
+                                $('#table-perGate tbody').html(noData);
                             }
                         },
                         error: function(xhr) {
                             console.error(xhr.responseText);
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
-                            dataTable.settings()[0].oLanguage.sEmptyTable =
-                                '<div class="text-center text-danger p-5"><i class="bi bi-exclamation-triangle fs-1"></i><p class="mt-2">Gagal memuat data.</p></div>';
-                            dataTable.clear().draw();
+                            const errorMsg =
+                                '<tr><td colspan="26" class="text-center text-danger p-5"><i class="bi bi-exclamation-triangle fs-1"></i><p class="mt-2">Gagal memuat data.</p></td></tr>';
+                            $('#table-perGate tbody').html(errorMsg);
                         },
                         complete: function() {
                             $cariButton.prop('disabled', false).html(
                                 '<i class="bi bi-search me-1"></i> Cari');
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
-                            dataTable.settings()[0].oLanguage.sEmptyTable =
-                                '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal dan gate untuk melihat data.</p></div>';
                         }
                     });
                 });
@@ -560,16 +459,11 @@
                 });
 
                 const tablePos = $('#tablePos').DataTable({
-                    data: [],
                     paging: false,
                     searching: false,
                     ordering: false,
                     info: false,
                     autoWidth: false,
-                    language: {
-                        // PERBAIKAN: Hapus tag <td> dari string HTML
-                        emptyTable: '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal untuk melihat data.</p></div>'
-                    },
                     columns: [{
                             data: 'jam'
                         }, {
@@ -588,16 +482,11 @@
                 });
 
                 const tableGolongan = $('#tableGolongan').DataTable({
-                    data: [],
                     paging: false,
                     searching: false,
                     ordering: false,
                     info: false,
                     autoWidth: false,
-                    language: {
-                        // PERBAIKAN: Hapus tag <td> dari string HTML
-                        emptyTable: '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal untuk melihat data.</p></div>'
-                    },
                     columns: [{
                             data: 'jam'
                         }, {
@@ -628,16 +517,15 @@
                     $cariButton.prop('disabled', true).html(
                         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mencari...'
                     );
+                    tablePos.clear().draw();
+                    tableGolongan.clear().draw();
 
-                    tablePos.clear();
-                    tableGolongan.clear();
-                    // PERBAIKAN: Hapus tag <td> dari string HTML
-                    tablePos.settings()[0].oLanguage.sEmptyTable =
-                        '<div class="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><strong>Memuat data...</strong></div>';
-                    tableGolongan.settings()[0].oLanguage.sEmptyTable =
-                        '<div class="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><strong>Memuat data...</strong></div>';
-                    tablePos.draw();
-                    tableGolongan.draw();
+                    const spinnerPos =
+                        '<tr><td colspan="6"><div class="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><strong>Memuat data...</strong></div></td></tr>';
+                    const spinnerGolongan =
+                        '<tr><td colspan="5"><div class="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><strong>Memuat data...</strong></div></td></tr>';
+                    $('#tablePos tbody').html(spinnerPos);
+                    $('#tableGolongan tbody').html(spinnerGolongan);
 
                     $.ajax({
                         url: '{{ route('quantitypergateAPI') }}',
@@ -648,103 +536,71 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
-                            tablePos.settings()[0].oLanguage.sEmptyTable =
-                                '<div class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan.</p></div>';
-                            tableGolongan.settings()[0].oLanguage.sEmptyTable =
-                                '<div class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan.</p></div>';
+                            $('#tablePos tbody').empty();
+                            $('#tableGolongan tbody').empty();
 
                             if (response.success && response.per_pos && response.per_golongan) {
+                                const {
+                                    pos1,
+                                    pos8,
+                                    pos9,
+                                    buffer_area
+                                } = response.per_pos;
+                                const {
+                                    mobil,
+                                    motor,
+                                    truk
+                                } = response.per_golongan;
                                 const formatTimeRange = (timeRange) => timeRange ?
                                     `${timeRange.slice(0, 5)}-${timeRange.slice(6, 11)}` : '-';
                                 const formatQuantity = (quantity) => new Intl.NumberFormat(
                                     'id-ID').format(quantity || 0);
 
-                                const perPosData = response.per_pos;
-                                const pos1Data = Array.isArray(perPosData.pos1) ? perPosData
-                                    .pos1 : [];
-                                const pos8Data = Array.isArray(perPosData.pos8) ? perPosData
-                                    .pos8 : [];
-                                const pos9Data = Array.isArray(perPosData.pos9) ? perPosData
-                                    .pos9 : [];
-                                const bufferData = Array.isArray(perPosData.buffer_area) ?
-                                    perPosData.buffer_area : [];
-
-                                let basePosData = pos1Data;
-                                if (pos8Data.length > basePosData.length) basePosData =
-                                    pos8Data;
-                                if (pos9Data.length > basePosData.length) basePosData =
-                                    pos9Data;
-                                if (bufferData.length > basePosData.length) basePosData =
-                                    bufferData;
-
-                                const dataPos = basePosData.map((item, index) => {
-                                    const p1 = pos1Data[index]?.qty || 0;
-                                    const p8 = pos8Data[index]?.qty || 0;
-                                    const p9 = pos9Data[index]?.qty || 0;
-                                    const ba = bufferData[index]?.qty || 0;
-                                    return {
-                                        jam: formatTimeRange(item.time),
-                                        pos1: formatQuantity(p1),
-                                        pos8: formatQuantity(p8),
-                                        pos9: formatQuantity(p9),
-                                        buffer_area: formatQuantity(ba),
-                                        total: formatQuantity(p1 + p8 + p9 + ba)
-                                    };
-                                });
+                                const dataPos = pos1.map((item, index) => ({
+                                    jam: formatTimeRange(item.time),
+                                    pos1: formatQuantity(pos1[index]?.qty),
+                                    pos8: formatQuantity(pos8[index]?.qty),
+                                    pos9: formatQuantity(pos9[index]?.qty),
+                                    buffer_area: formatQuantity(buffer_area[index]
+                                        ?.qty),
+                                    total: formatQuantity((pos1[index]?.qty || 0) +
+                                        (pos8[index]?.qty || 0) + (pos9[index]
+                                            ?.qty || 0) + (buffer_area[index]
+                                            ?.qty || 0))
+                                }));
                                 tablePos.rows.add(dataPos).draw();
 
-                                const perGolonganData = response.per_golongan;
-                                const mobilData = Array.isArray(perGolonganData.mobil) ?
-                                    perGolonganData.mobil : [];
-                                const motorData = Array.isArray(perGolonganData.motor) ?
-                                    perGolonganData.motor : [];
-                                const trukData = Array.isArray(perGolonganData.truk) ?
-                                    perGolonganData.truk : [];
-
-                                let baseData = mobilData.length >= motorData.length && mobilData
-                                    .length >= trukData.length ? mobilData :
-                                    motorData.length >= mobilData.length && motorData.length >=
-                                    trukData.length ? motorData : trukData;
-
-                                const dataGolongan = baseData.map((item, index) => {
-                                    const mobilQty = mobilData[index]?.qty || 0;
-                                    const motorQty = motorData[index]?.qty || 0;
-                                    const trukQty = trukData[index]?.qty || 0;
-                                    return {
-                                        jam: formatTimeRange(item.time),
-                                        mobil: formatQuantity(mobilQty),
-                                        motor: formatQuantity(motorQty),
-                                        truk: formatQuantity(trukQty),
-                                        total: formatQuantity(mobilQty + motorQty +
-                                            trukQty)
-                                    };
-                                });
+                                const dataGolongan = mobil.map((item, index) => ({
+                                    jam: formatTimeRange(item.time),
+                                    mobil: formatQuantity(mobil[index]?.qty),
+                                    motor: formatQuantity(motor[index]?.qty),
+                                    truk: formatQuantity(truk[index]?.qty),
+                                    total: formatQuantity((mobil[index]?.qty || 0) +
+                                        (motor[index]?.qty || 0) + (truk[index]
+                                            ?.qty || 0))
+                                }));
                                 tableGolongan.rows.add(dataGolongan).draw();
-
                             } else {
-                                tablePos.clear().draw();
-                                tableGolongan.clear().draw();
+                                const noDataPos =
+                                    '<tr><td colspan="6" class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan.</p></td></tr>';
+                                const noDataGolongan =
+                                    '<tr><td colspan="5" class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan.</p></td></tr>';
+                                $('#tablePos tbody').html(noDataPos);
+                                $('#tableGolongan tbody').html(noDataGolongan);
                             }
                         },
                         error: function(xhr) {
                             console.error(xhr.responseText);
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
-                            tablePos.settings()[0].oLanguage.sEmptyTable =
-                                '<div class="text-center text-danger p-5"><i class="bi bi-exclamation-triangle fs-1"></i><p class="mt-2">Gagal memuat data.</p></div>';
-                            tableGolongan.settings()[0].oLanguage.sEmptyTable =
-                                '<div class="text-center text-danger p-5"><i class="bi bi-exclamation-triangle fs-1"></i><p class="mt-2">Gagal memuat data.</p></div>';
-                            tablePos.clear().draw();
-                            tableGolongan.clear().draw();
+                            const errorPos =
+                                '<tr><td colspan="6" class="text-center text-danger p-5"><i class="bi bi-exclamation-triangle fs-1"></i><p class="mt-2">Gagal memuat data.</p></td></tr>';
+                            const errorGolongan =
+                                '<tr><td colspan="5" class="text-center text-danger p-5"><i class="bi bi-exclamation-triangle fs-1"></i><p class="mt-2">Gagal memuat data.</p></td></tr>';
+                            $('#tablePos tbody').html(errorPos);
+                            $('#tableGolongan tbody').html(errorGolongan);
                         },
                         complete: function() {
                             $cariButton.prop('disabled', false).html(
                                 '<i class="bi bi-search me-1"></i> Cari');
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
-                            tablePos.settings()[0].oLanguage.sEmptyTable =
-                                '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal untuk melihat data.</p></div>';
-                            tableGolongan.settings()[0].oLanguage.sEmptyTable =
-                                '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal untuk melihat data.</p></div>';
                         }
                     });
                 });

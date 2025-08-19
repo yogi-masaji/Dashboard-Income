@@ -11,16 +11,7 @@
         $navbarTitle = $lokasiName;
     @endphp
     <style>
-        /* Apply flextruck to the wrapper that contains the search and buttons */
-        #membershipTable_wrapper .dt-top {
-            display: flex;
-            justify-content: flex-start;
-            /* Align buttons and search to the left */
-            gap: 20px;
-            /* Add space between the buttons and search */
-            align-items: center;
-        }
-
+        /* General table and layout styles */
         table.dataTable thead th,
         table.dataTable thead td {
             padding: 5px;
@@ -28,22 +19,13 @@
         }
 
         tbody {
-            black-space: normal;
+            white-space: normal;
             word-break: break-all;
         }
 
-        /* Ensure the buttons are inline and spaced correctly */
         .dt-buttons {
             display: inline-flex;
             gap: 10px;
-            /* Space between individual buttons */
-        }
-
-        /* Make sure the search input aligns properly */
-        .dt-search input {
-            display: inline-block;
-            margin-right: 10px;
-            /* Space between the search input and buttons */
         }
 
         .dt-search {
@@ -51,44 +33,24 @@
             margin-bottom: 5px;
         }
 
-        button.dt-paging-button {
-            background-color: #ffffff !important;
-            padding: 10px;
-            width: 30px;
-            border-radius: 10px;
-            border: none !important;
-            margin-right: 2px;
-            margin-left: 2px;
-        }
-
-        .dt-button {
-            background-color: #FCB900 !important;
-            padding: 10px;
-            border-radius: 10px;
-            border: none !important;
-        }
-
-        #dt-search-0 {
+        .dt-search input {
             height: 40px;
             border-radius: 10px;
             margin-left: 10px;
         }
-    </style>
-    <style>
+
         .content-custom {
-            padding: 10px !important;
+            padding: 20px !important;
             background-color: #ffffff !important;
             border-radius: 10px !important;
             box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
             color: #000000 !important;
         }
 
-        .search-wrapper {
-            width: 100%;
-        }
-
         .table thead tr th {
             padding-block: 1.161rem;
+            text-align: center;
+            vertical-align: middle;
         }
 
         table.dataTable tbody th,
@@ -102,264 +64,340 @@
             padding: 8px 5px;
             font-size: 11px;
         }
+
+        /* --- START: New Spinner Styles --- */
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            gap: 10px;
+        }
+
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid #FCB900;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #FCB900 transparent transparent transparent;
+        }
+
+        .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- END: New Spinner Styles --- */
+
+        /* --- START: Dark Mode Styles --- */
+        .dt-search,
+        .dt-info {
+            color: #000000;
+        }
+
+        .mode-gelap .dt-search,
+        .mode-gelap .dt-info {
+            color: #ffffff;
+        }
+
+        .card {
+            background: #fff;
+        }
+
+        .mode-gelap .card {
+            background: #192e50;
+        }
+
+        .fw-medium,
+        .form-label,
+        h5,
+        .form-select {
+            color: #000000
+        }
+
+        .mode-gelap .fw-medium,
+        .mode-gelap .form-label,
+        .mode-gelap h5,
+        .mode-gelap .form-select {
+            color: #ffffff;
+        }
+
+        /* --- END: Dark Mode Styles --- */
     </style>
 
 
-    <div class="search-wrapper mb-3">
-        <div class="row g-3 mb-3 align-items-end">
-
-            <div class="col-md-3">
-                <label for="vehicle-select" class="form-label text-dark">Pilih tahun</label>
-                <select class="form-select w-100 text-dark" id="year-select" aria-label="Select year">
+    <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3 mb-4">
+        <h5 class="mb-3 fw-semibold">Produksi dan Pendapatan Search</h5>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="year-select" class="form-label fw-medium">Pilih Tahun</label>
+                <select class="form-select w-100" id="year-select" aria-label="Select year">
                     @php
                         $currentYear = date('Y');
                     @endphp
                     <option value="{{ $currentYear }}">{{ $currentYear }}</option>
                     <option value="{{ $currentYear - 1 }}">{{ $currentYear - 1 }}</option>
+                    <option value="{{ $currentYear - 2 }}">{{ $currentYear - 2 }}</option>
                 </select>
             </div>
         </div>
 
-
-
-
-        <div class="mt-3">
-            <button type="button" class="btn btn-submit" id="cari">Cari</button>
-        </div>
-
-        <!-- Alert Message -->
-        <div id="alertMessage" class="alert alert-danger mt-3" role="alert" style="display: none;">
-            Please fill in all the date fields before submitting.
+        <div class="d-flex align-items-center gap-2 mt-3">
+            <button type="button" class="btn btn-submit px-4" id="cari">
+                <i class="bi bi-search me-1"></i> Cari
+            </button>
+            <div id="alertMessage" class="alert alert-danger py-2 px-3 mb-0 small flex-grow-1 d-none" role="alert">
+                Silakan pilih tahun terlebih dahulu.
+            </div>
         </div>
     </div>
 
 
     <div class="content-custom">
-        <table class="table table-striped table-bordered" id="table-custom">
-
+        <table class="table table-striped table-bordered" id="table-custom" style="width:100%">
             <thead>
-
                 <tr>
-                    <th scope="col" rowspan="4" class="text-center"
-                        style="border-left: 1px solid black; border-top: 1px solid black; border-right: 1px solid black; vertical-align: middle; width:6%;">
-                        BULAN</th>
-                    <th scope="col" rowspan="1" colspan="13" class="text-center"
-                        style="border-left: 1px solid black; border-top: 1px solid black; border-right: 1px solid black;">
-                        PARKIR REGULER </th>
+                    <th rowspan="4" style="vertical-align: middle; width:6%;">BULAN</th>
+                    <th colspan="13">PARKIR REGULER</th>
                 </tr>
-
                 <tr>
-                    <th scope="col" colspan="4" rowspan="1" class="text-center"
-                        style="border-top: 1px solid black; border-right: 1px solid black;">CARGO</th>
-                    <th scope="col" colspan="4" rowspan="1" class="text-center"
-                        style="border-top: 1px solid black; border-right: 1px solid black;">TERMINAL</th>
-                    <th scope="col" colspan="4" rowspan="1" class="text-center"
-                        style="border-top: 1px solid black; border-right: 1px solid black;">TOTAL PRODUKSI</th>
-                    <th scope="col" colspan="1" rowspan="3" class="text-center"
-                        style="border-top: 1px solid black; border-right: 1px solid black; width:7%; vertical-align: middle;">
-                        GRAND TOTAL PENDAPATAN</th>
+                    <th colspan="4">CARGO</th>
+                    <th colspan="4">TERMINAL</th>
+                    <th colspan="4">TOTAL PRODUKSI</th>
+                    <th rowspan="3" style="width:7%; vertical-align: middle;">GRAND TOTAL PENDAPATAN</th>
                 </tr>
-
-
                 <tr>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 2</th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 4 & 6
-                    </th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 2</th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 4 & 6
-                    </th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 2</th>
-                    <th scope="col" colspan="2" class="text-center" style="border-right: 1px solid black;">RODA 4 & 6
-                    </th>
+                    <th colspan="2">RODA 2</th>
+                    <th colspan="2">RODA 4 & 6</th>
+                    <th colspan="2">RODA 2</th>
+                    <th colspan="2">RODA 4 & 6</th>
+                    <th colspan="2">RODA 2</th>
+                    <th colspan="2">RODA 4 & 6</th>
                 </tr>
-
                 <tr>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PROD</th>
-                    <th scope="col" class="text-center" style="border-right: 1px solid black;">PEND</th>
+                    <th>PROD</th>
+                    <th>PEND</th>
+                    <th>PROD</th>
+                    <th>PEND</th>
+                    <th>PROD</th>
+                    <th>PEND</th>
+                    <th>PROD</th>
+                    <th>PEND</th>
+                    <th>PROD</th>
+                    <th>PEND</th>
+                    <th>PROD</th>
+                    <th>PEND</th>
                 </tr>
-
             </thead>
+            <tbody>
+                <!-- Data will be loaded here -->
+            </tbody>
             <tfoot></tfoot>
         </table>
     </div>
 
     <script>
-        const tableCustom = $('#table-custom').DataTable({
-            paging: false,
-            searching: false,
-            ordering: false,
-            info: false,
-            autoWidth: false,
-            columns: [{
-                    data: 'bulan',
-                },
-                {
-                    data: 'cargo_rodadua_prod',
-                },
-                {
-                    data: 'cargo_rodadua_pend',
-                },
-                {
-                    data: 'cargo_rodaempat_prod',
-                },
-                {
-                    data: 'cargo_rodaempat_pend',
-                },
-                {
-                    data: 'terminal_rodadua_prod',
-                },
-                {
-                    data: 'terminal_rodadua_pend',
-                },
-                {
-                    data: 'terminal_rodaempat_prod',
-                },
-                {
-                    data: 'terminal_rodaempat_pend',
-                },
-                {
-                    data: 'totalproduksi_rodadua_prod',
-                },
-                {
-                    data: 'totalproduksi_rodadua_pend',
-                },
-                {
-                    data: 'totalproduksi_rodaempat_prod',
-                },
-                {
-                    data: 'totalproduksi_rodaempat_pend',
-                },
-                {
-                    data: 'grandtotal',
+        $(document).ready(function() {
+            const tableCustom = $('#table-custom').DataTable({
+                paging: false,
+                searching: false,
+                ordering: false,
+                info: false,
+                autoWidth: false,
+                data: [],
+                columns: [{
+                        data: 'bulan'
+                    },
+                    {
+                        data: 'cargo_rodadua_prod'
+                    },
+                    {
+                        data: 'cargo_rodadua_pend'
+                    },
+                    {
+                        data: 'cargo_rodaempat_prod'
+                    },
+                    {
+                        data: 'cargo_rodaempat_pend'
+                    },
+                    {
+                        data: 'terminal_rodadua_prod'
+                    },
+                    {
+                        data: 'terminal_rodadua_pend'
+                    },
+                    {
+                        data: 'terminal_rodaempat_prod'
+                    },
+                    {
+                        data: 'terminal_rodaempat_pend'
+                    },
+                    {
+                        data: 'totalproduksi_rodadua_prod'
+                    },
+                    {
+                        data: 'totalproduksi_rodadua_pend'
+                    },
+                    {
+                        data: 'totalproduksi_rodaempat_prod'
+                    },
+                    {
+                        data: 'totalproduksi_rodaempat_pend'
+                    },
+                    {
+                        data: 'grandtotal'
+                    }
+                ],
+                language: {
+                    emptyTable: "Silakan pilih tahun, lalu klik 'Cari' untuk melihat data.",
                 }
-            ]
-        });
+            });
 
-        function formatQuantity(quantity) {
-            return new Intl.NumberFormat().format(quantity);
-        }
-
-
-
-        $('#cari').click(function() {
-            const year = $('#year-select').val();
-            const $btn = $(this);
-
-            if (!year) {
-                $('#alertMessage').show();
-                return;
-            } else {
-                $('#alertMessage').hide();
+            function formatQuantity(quantity) {
+                return new Intl.NumberFormat('id-ID').format(quantity);
             }
 
-            // Ubah tombol jadi loading
-            $btn.prop('disabled', true).text('Loading...');
+            $('#cari').click(function() {
+                const year = $('#year-select').val();
+                const $cariButton = $(this);
 
-            $.ajax({
-                url: '{{ route('prodpendapatansearchAPI') }}',
-                method: 'POST',
-                data: {
-                    year: year,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    console.log(response);
-                    const cargo = response.data[0].cargo;
-                    const terminal = response.data[0].terminal;
-                    const grandtotal = response.data[0].grandtotal;
+                if (!year) {
+                    $('#alertMessage').show();
+                    return;
+                } else {
+                    $('#alertMessage').hide();
+                }
 
-                    console.log('hasil cargo', cargo);
-                    console.log('hasil terminal', terminal);
-                    console.log('hasil grandtotal', grandtotal);
-                    const listBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli',
-                        'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                    ];
+                $cariButton.prop('disabled', true);
+                tableCustom.clear().draw();
+                $('#table-custom tfoot').empty();
 
-                    const data = response.data.map((item) => ({
-                        bulan: item.bulan,
-                        cargo_rodadua_prod: formatQuantity(item.cargo[0].produksi_r2),
-                        cargo_rodadua_pend: formatQuantity(item.cargo[0].pendapatan_r2),
-                        cargo_rodaempat_prod: formatQuantity(item.cargo[0].produksi_r4_r6),
-                        cargo_rodaempat_pend: formatQuantity(item.cargo[0]
-                            .pendapatan_r4_r6),
-                        terminal_rodadua_prod: formatQuantity(item.terminal[0].produksi_r2),
-                        terminal_rodadua_pend: formatQuantity(item.terminal[0]
-                            .pendapatan_r2),
-                        terminal_rodaempat_prod: formatQuantity(item.terminal[0]
-                            .produksi_r4_r6),
-                        terminal_rodaempat_pend: formatQuantity(item.terminal[0]
-                            .pendapatan_r4_r6),
-                        totalproduksi_rodadua_prod: formatQuantity(item.grandtotal[0]
-                            .produksi_r2),
-                        totalproduksi_rodadua_pend: formatQuantity(item.grandtotal[0]
-                            .pendapatan_r2),
-                        totalproduksi_rodaempat_prod: formatQuantity(item.grandtotal[0]
-                            .produksi_r4_r6),
-                        totalproduksi_rodaempat_pend: formatQuantity(item.grandtotal[0]
-                            .pendapatan_r4_r6),
-                        grandtotal: formatQuantity(item.grandtotal[0]
-                            .grandtotal_pendapatan),
-                    }));
+                const spinnerHtml = `
+                <tr>
+                    <td colspan="14">
+                        <div class="spinner-container">
+                            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                            <strong>Memuat data...</strong>
+                        </div>
+                    </td>
+                </tr>
+            `;
+                $('#table-custom tbody').html(spinnerHtml);
 
-                    const totalAll = {
-                        cargo_rodadua_prod: 0,
-                        cargo_rodadua_pend: 0,
-                        cargo_rodaempat_prod: 0,
-                        cargo_rodaempat_pend: 0,
-                        terminal_rodadua_prod: 0,
-                        terminal_rodadua_pend: 0,
-                        terminal_rodaempat_prod: 0,
-                        terminal_rodaempat_pend: 0,
-                        totalproduksi_rodadua_prod: 0,
-                        totalproduksi_rodadua_pend: 0,
-                        totalproduksi_rodaempat_prod: 0,
-                        totalproduksi_rodaempat_pend: 0,
-                        grandtotal: 0
-                    };
+                $.ajax({
+                    url: '{{ route('prodpendapatansearchAPI') }}',
+                    method: 'POST',
+                    data: {
+                        year: year,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        const data = response.data.map((item) => ({
+                            bulan: item.bulan,
+                            cargo_rodadua_prod: formatQuantity(item.cargo[0]
+                                .produksi_r2),
+                            cargo_rodadua_pend: formatQuantity(item.cargo[0]
+                                .pendapatan_r2),
+                            cargo_rodaempat_prod: formatQuantity(item.cargo[0]
+                                .produksi_r4_r6),
+                            cargo_rodaempat_pend: formatQuantity(item.cargo[0]
+                                .pendapatan_r4_r6),
+                            terminal_rodadua_prod: formatQuantity(item.terminal[0]
+                                .produksi_r2),
+                            terminal_rodadua_pend: formatQuantity(item.terminal[0]
+                                .pendapatan_r2),
+                            terminal_rodaempat_prod: formatQuantity(item.terminal[0]
+                                .produksi_r4_r6),
+                            terminal_rodaempat_pend: formatQuantity(item.terminal[0]
+                                .pendapatan_r4_r6),
+                            totalproduksi_rodadua_prod: formatQuantity(item
+                                .grandtotal[0].produksi_r2),
+                            totalproduksi_rodadua_pend: formatQuantity(item
+                                .grandtotal[0].pendapatan_r2),
+                            totalproduksi_rodaempat_prod: formatQuantity(item
+                                .grandtotal[0].produksi_r4_r6),
+                            totalproduksi_rodaempat_pend: formatQuantity(item
+                                .grandtotal[0].pendapatan_r4_r6),
+                            grandtotal: formatQuantity(item.grandtotal[0]
+                                .grandtotal_pendapatan),
+                        }));
 
-                    response.data.forEach(item => {
-                        totalAll.cargo_rodadua_prod += parseFloat(item.cargo[0].produksi_r2) ||
-                            0;
-                        totalAll.cargo_rodadua_pend += parseFloat(item.cargo[0]
-                            .pendapatan_r2) || 0;
-                        totalAll.cargo_rodaempat_prod += parseFloat(item.cargo[0]
-                            .produksi_r4_r6) || 0;
-                        totalAll.cargo_rodaempat_pend += parseFloat(item.cargo[0]
-                            .pendapatan_r4_r6) || 0;
+                        const totalAll = {
+                            cargo_rodadua_prod: 0,
+                            cargo_rodadua_pend: 0,
+                            cargo_rodaempat_prod: 0,
+                            cargo_rodaempat_pend: 0,
+                            terminal_rodadua_prod: 0,
+                            terminal_rodadua_pend: 0,
+                            terminal_rodaempat_prod: 0,
+                            terminal_rodaempat_pend: 0,
+                            totalproduksi_rodadua_prod: 0,
+                            totalproduksi_rodadua_pend: 0,
+                            totalproduksi_rodaempat_prod: 0,
+                            totalproduksi_rodaempat_pend: 0,
+                            grandtotal: 0
+                        };
 
-                        totalAll.terminal_rodadua_prod += parseFloat(item.terminal[0]
-                            .produksi_r2) || 0;
-                        totalAll.terminal_rodadua_pend += parseFloat(item.terminal[0]
-                            .pendapatan_r2) || 0;
-                        totalAll.terminal_rodaempat_prod += parseFloat(item.terminal[0]
-                            .produksi_r4_r6) || 0;
-                        totalAll.terminal_rodaempat_pend += parseFloat(item.terminal[0]
-                            .pendapatan_r4_r6) || 0;
+                        response.data.forEach(item => {
+                            totalAll.cargo_rodadua_prod += parseFloat(item.cargo[0]
+                                .produksi_r2) || 0;
+                            totalAll.cargo_rodadua_pend += parseFloat(item.cargo[0]
+                                .pendapatan_r2) || 0;
+                            totalAll.cargo_rodaempat_prod += parseFloat(item.cargo[0]
+                                .produksi_r4_r6) || 0;
+                            totalAll.cargo_rodaempat_pend += parseFloat(item.cargo[0]
+                                .pendapatan_r4_r6) || 0;
+                            totalAll.terminal_rodadua_prod += parseFloat(item.terminal[
+                                0].produksi_r2) || 0;
+                            totalAll.terminal_rodadua_pend += parseFloat(item.terminal[
+                                0].pendapatan_r2) || 0;
+                            totalAll.terminal_rodaempat_prod += parseFloat(item
+                                .terminal[0].produksi_r4_r6) || 0;
+                            totalAll.terminal_rodaempat_pend += parseFloat(item
+                                .terminal[0].pendapatan_r4_r6) || 0;
+                            totalAll.totalproduksi_rodadua_prod += parseFloat(item
+                                .grandtotal[0].produksi_r2) || 0;
+                            totalAll.totalproduksi_rodadua_pend += parseFloat(item
+                                .grandtotal[0].pendapatan_r2) || 0;
+                            totalAll.totalproduksi_rodaempat_prod += parseFloat(item
+                                .grandtotal[0].produksi_r4_r6) || 0;
+                            totalAll.totalproduksi_rodaempat_pend += parseFloat(item
+                                .grandtotal[0].pendapatan_r4_r6) || 0;
+                            totalAll.grandtotal += parseFloat(item.grandtotal[0]
+                                .grandtotal_pendapatan) || 0;
+                        });
 
-                        totalAll.totalproduksi_rodadua_prod += parseFloat(item.grandtotal[0]
-                            .produksi_r2) || 0;
-                        totalAll.totalproduksi_rodadua_pend += parseFloat(item.grandtotal[0]
-                            .pendapatan_r2) || 0;
-                        totalAll.totalproduksi_rodaempat_prod += parseFloat(item.grandtotal[0]
-                            .produksi_r4_r6) || 0;
-                        totalAll.totalproduksi_rodaempat_pend += parseFloat(item.grandtotal[0]
-                            .pendapatan_r4_r6) || 0;
-                        totalAll.grandtotal += parseFloat(item.grandtotal[0]
-                            .grandtotal_pendapatan) || 0;
-                    });
-
-
-                    $('#table-custom tfoot').html(`
+                        $('#table-custom tfoot').html(`
                         <tr>
                             <th>Total</th>
                             <th>${formatQuantity(totalAll.cargo_rodadua_prod)}</th>
@@ -378,20 +416,24 @@
                         </tr>
                     `);
 
-
-                    tableCustom.clear().rows.add(data).draw();
-                    console.log('data mapping', data);
-
-
-                    console.log('list bulan', listBulan);
-                    $btn.prop('disabled', false).text('Cari');
-                },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
-                    alert('Terjadi kesalahan saat mengambil data.');
-                    // Kembalikan tombol seperti semula
-                    $btn.prop('disabled', false).text('Cari');
-                }
+                        tableCustom.clear().rows.add(data).draw();
+                    },
+                    error: function(xhr) {
+                        console.error("AJAX Error:", xhr.responseText);
+                        const errorHtml = `
+                        <tr>
+                            <td colspan="14" class="text-center text-danger" style="padding: 20px;">
+                                Terjadi kesalahan saat mengambil data. Silakan coba lagi.
+                            </td>
+                        </tr>
+                    `;
+                        $('#table-custom tbody').html(errorHtml);
+                    },
+                    complete: function() {
+                        $cariButton.prop('disabled', false).html(
+                            '<i class="bi bi-search me-1"></i> Cari');
+                    }
+                });
             });
         });
     </script>

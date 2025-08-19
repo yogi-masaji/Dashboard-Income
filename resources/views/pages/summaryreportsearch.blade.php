@@ -10,14 +10,13 @@
         $systemCode = session('selected_location_system', 'System Code Tidak Diketahui');
         $navbarTitle = $lokasiName;
     @endphp
+
     <style>
-        /* Apply flextruck to the wrapper that contains the search and buttons */
-        #membershipTable_wrapper .dt-top {
+        /* General table and layout styles */
+        #summaryReportTable_wrapper .dt-top {
             display: flex;
             justify-content: flex-start;
-            /* Align buttons and search to the left */
             gap: 20px;
-            /* Add space between the buttons and search */
             align-items: center;
         }
 
@@ -32,18 +31,9 @@
             word-break: break-all;
         }
 
-        /* Ensure the buttons are inline and spaced correctly */
         .dt-buttons {
             display: inline-flex;
             gap: 10px;
-            /* Space between individual buttons */
-        }
-
-        /* Make sure the search input aligns properly */
-        .dt-search input {
-            display: inline-block;
-            margin-right: 10px;
-            /* Space between the search input and buttons */
         }
 
         .dt-search {
@@ -73,8 +63,7 @@
             border-radius: 10px;
             margin-left: 10px;
         }
-    </style>
-    <style>
+
         .content-custom {
             padding: 10px !important;
             background-color: #ffffff !important;
@@ -83,32 +72,120 @@
             color: #000000 !important;
         }
 
-        .search-wrapper {
-            width: 100%;
+        /* --- START: New Spinner Styles --- */
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            gap: 10px;
         }
+
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid #FCB900;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #FCB900 transparent transparent transparent;
+        }
+
+        .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- END: New Spinner Styles --- */
+
+        /* --- START: Datepicker z-index fix --- */
+        .easepick-wrapper {
+            z-index: 9999 !important;
+        }
+
+        /* --- END: Datepicker z-index fix --- */
+
+        /* --- START: Dark Mode Styles --- */
+        .dt-search {
+            color: #000000;
+        }
+
+        .dt-info {
+            color: #000000;
+        }
+
+        .mode-gelap .dt-search {
+            color: #ffffff;
+        }
+
+        .mode-gelap .dt-info {
+            color: #ffffff;
+        }
+
+        .card {
+            background: #fff;
+        }
+
+        .mode-gelap .card {
+            background: #192e50;
+        }
+
+        .fw-medium,
+        .form-label,
+        .form-select {
+            color: #000000
+        }
+
+        .mode-gelap .fw-medium,
+        .mode-gelap .form-label,
+        .mode-gelap .form-select {
+            color: #ffffff;
+        }
+
+        /* --- END: Dark Mode Styles --- */
     </style>
 
-    <p>Summary Report Search</p>
-    <div class="search-wrapper">
-        <div class="row g-3 mb-3 align-items-end">
-            <div class="col-md-3">
-                <label for="start-date-1" class="form-label text-dark">Start Date</label>
-                <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
+    <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3">
+        <h5 class="mb-3 text-dark fw-semibold">Summary Report Search</h5>
+        <div class="row g-3">
+            {{-- Input for date range using easepick --}}
+            <div class="col-md-6">
+                <label for="datepicker" class="form-label fw-medium">Rentang Tanggal</label>
+                <input id="datepicker" class="form-control" placeholder="Pilih rentang tanggal" />
             </div>
 
-            <div class="col-auto d-flex align-items-end">
-                <div class="fw-semibold pb-2 text-dark">to</div>
-            </div>
-
-            <div class="col-md-3">
-                <label for="end-date-1" class="form-label text-dark">End Date</label>
-                <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
-            </div>
-
-            <div class="col-md-3">
-                <label for="vehicle-select" class="form-label text-dark">Select Vehicle</label>
-                <select class="form-select w-100 text-dark" id="vehicle-select" aria-label="Select vehicle">
-                    <option selected disabled>--Vehicle--</option>
+            <div class="col-md-6">
+                <label for="vehicle-select" class="form-label fw-medium">Pilih Kendaraan</label>
+                <select class="form-select w-100" id="vehicle-select" aria-label="Select vehicle">
+                    <option selected disabled value="">--Pilih Kendaraan--</option>
                     <option value="1">Car</option>
                     <option value="2">Motorbike</option>
                     <option value="3">Box</option>
@@ -118,26 +195,23 @@
             </div>
         </div>
 
-
-
-
-        <div class="mt-3">
-            <button type="button" class="btn btn-submit" id="cari">Cari</button>
-        </div>
-
-        <!-- Alert Message -->
-        <div id="alertMessage" class="alert alert-danger mt-3" role="alert" style="display: none;">
-            Please fill in all the date fields before submitting.
+        <div class="d-flex align-items-center gap-2 mt-3">
+            <button type="button" class="btn btn-submit px-4" id="cari">
+                <i class="bi bi-search me-1"></i> Cari
+            </button>
+            <div id="alertMessage" class="alert alert-danger py-2 px-3 mb-0 small flex-grow-1 d-none" role="alert">
+                Silakan lengkapi semua kolom terlebih dahulu.
+            </div>
         </div>
     </div>
 
-    <div class="result">
-        <div class="text-center">
-            <h5 id="dataResults">Data Report: Car</h5>
-        </div>
 
+    <div class="result mt-5">
+        <div class="text-center">
+            <h5 id="dataResults">Data Report</h5>
+        </div>
         <div class="content-custom mt-3">
-            <table id="summaryReportTable" class="table table-striped table-bordered">
+            <table id="summaryReportTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -150,203 +224,236 @@
                         <th>Revenue</th>
                     </tr>
                 </thead>
-                <tbody id="summaryReportBody">
-                    <!-- Data will be populated here -->
+                <tbody>
+                    <!-- Data will be loaded here -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <script>
-        const dateInputs = [{
-            start: '#start-date-1',
-            end: '#end-date-1'
-        }];
-
-        dateInputs.forEach(pair => {
-            $(pair.start).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-
-            $(pair.end).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-        });
-    </script>
+    {{-- CDN for easepick --}}
+    <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 
     <script>
-        const summaryReportTable = $('#summaryReportTable').DataTable({
-            // dom: "Bfltip",
-            pageLength: 100,
-            ordering: true,
-            lengthChange: false,
-            layout: {
-                topEnd: {
-                    // buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
-                },
-            },
-            columns: [{
-                    data: 'no'
-                },
-                {
-                    data: 'date'
-                },
-                {
-                    data: 'issued'
-                },
-                {
-                    data: 'return'
-                },
-                {
-                    data: 'member'
-                },
-                {
-                    data: 'paid'
-                },
-                {
-                    data: 'lost'
-                },
-                {
-                    data: 'revenue'
+        $(document).ready(function() {
+            // Initialize easepick
+            const picker = new easepick.create({
+                element: document.getElementById('datepicker'),
+                css: [
+                    'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                ],
+                plugins: ['RangePlugin'],
+                RangePlugin: {
+                    tooltipNumber(num) {
+                        return num - 1;
+                    },
+                    locale: {
+                        one: 'hari',
+                        other: 'hari',
+                    },
+                    format: 'YYYY-MM-DD',
+                    delimiter: ' to '
                 }
-            ]
-        });
+            });
 
-        $('#cari').click(function() {
-            const startDate = $('#start-date-1').val();
-            const endDate = $('#end-date-1').val();
-            const vehicleType = $('#vehicle-select').find(":selected").text(); // Ambil teks pilihan dari dropdown
+            // Initialize DataTable
+            let summaryReportTable = $('#summaryReportTable').DataTable({
+                dom: "Bfltip",
+                pageLength: 25,
+                ordering: true,
+                lengthChange: false,
+                paging: true,
+                data: [], // Start with empty data
+                layout: {
+                    topEnd: {
+                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
+                    },
+                },
+                columns: [{
+                        data: 'no'
+                    },
+                    {
+                        data: 'date'
+                    },
+                    {
+                        data: 'issued'
+                    },
+                    {
+                        data: 'return'
+                    },
+                    {
+                        data: 'member'
+                    },
+                    {
+                        data: 'paid'
+                    },
+                    {
+                        data: 'lost'
+                    },
+                    {
+                        data: 'revenue'
+                    }
+                ],
+                language: {
+                    emptyTable: "Silakan pilih rentang tanggal dan kendaraan, lalu klik 'Cari' untuk melihat data.",
+                    zeroRecords: "Data tidak ditemukan untuk filter yang dipilih."
+                }
+            });
 
+            $('#cari').click(function() {
+                const $cariButton = $(this);
+                const startDate = picker.getStartDate()?.format('YYYY-MM-DD');
+                const endDate = picker.getEndDate()?.format('YYYY-MM-DD');
+                const vehicleType = $('#vehicle-select').find(":selected").text();
+                const vehicleValue = $('#vehicle-select').val();
 
-            function formatDate(dateString) {
-                const options = {
-                    weekday: 'short'
+                if (!startDate || !endDate || !vehicleValue) {
+                    $('#alertMessage').text('Silakan pilih rentang tanggal dan kendaraan terlebih dahulu.')
+                        .show();
+                    return;
+                } else {
+                    $('#alertMessage').hide();
+                }
+
+                // Disable button and show spinner
+                $cariButton.prop('disabled', true);
+                summaryReportTable.clear().draw();
+                const spinnerHtml = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="spinner-container">
+                                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                                <strong>Loading...</strong>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                $('#summaryReportTable tbody').html(spinnerHtml);
+
+                // Helper functions
+                const formatDate = (dateString) => {
+                    const options = {
+                        weekday: 'short'
+                    };
+                    const dateObj = new Date(dateString);
+                    const day = String(dateObj.getDate()).padStart(2, '0');
+                    const weekday = dateObj.toLocaleDateString('en-US', options);
+                    return `${day} - ${weekday}`;
                 };
-                const dateObj = new Date(dateString);
+                const formatRupiah = (number) => {
+                    return new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 0
+                    }).format(number);
+                };
 
-                const day = String(dateObj.getDate()).padStart(2, '0'); // 01, 02, dst
-                const weekday = dateObj.toLocaleDateString('en-US',
-                    options); // Mon, Tue, Wed, etc.
+                // AJAX call to fetch data
+                $.ajax({
+                    url: '{{ route('summaryReportSearch') }}',
+                    method: 'POST',
+                    data: {
+                        start1: startDate,
+                        end1: endDate,
+                        vehicleType: vehicleType,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        let formattedData = [];
+                        $('#dataResults').text('Data Report: ' + vehicleType);
 
-                return `${day} - ${weekday}`;
-            }
-            const formatRupiah = (number) => {
-                return new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                    minimumFractionDigits: 0
-                }).format(number);
-            };
-            if (!startDate || !endDate || !vehicleType) {
-                $('#alertMessage').show();
-                return;
-            } else {
-                $('#alertMessage').hide();
-            }
+                        if (response.first_period && Array.isArray(response.first_period)) {
+                            formattedData = response.first_period.map((item, index) => {
+                                let issued = 0,
+                                    returned = 0,
+                                    member = 0,
+                                    paid = 0,
+                                    lost = 0,
+                                    revenue = 0;
 
-            // Kirim data ke server menggunakan AJAX
-            $.ajax({
-                url: '{{ route('summaryReportSearch') }}',
-                method: 'POST',
-                data: {
-                    start1: startDate,
-                    end1: endDate,
-                    vehicleType: vehicleType, // Kirim tipe kendaraan
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    console.log(response);
+                                if (vehicleType === 'Car') {
+                                    issued = item.car_in + item.carpass_in;
+                                    returned = item.car_out + item.carpass_out;
+                                    member = item.carpass_out;
+                                    paid = item.car_out;
+                                    lost = item.carlt;
+                                    revenue = item.carincome + item.carltincome;
+                                } else if (vehicleType === 'Motorbike') {
+                                    issued = item.motorbike_in + item.motorbikepass_in;
+                                    returned = item.motorbike_out + item
+                                        .motorbikepass_out;
+                                    member = item.motorbikepass_out;
+                                    paid = item.motorbike_out;
+                                    lost = item.motorbikelt;
+                                    revenue = item.motorbikeincome + item
+                                        .motorbikeltincome;
+                                } else if (vehicleType === 'Box') {
+                                    issued = item.truck_in + item.truckpass_in;
+                                    returned = item.truck_out + item.truckpass_out;
+                                    member = item.truckpass_out;
+                                    paid = item.truck_out;
+                                    lost = item.trucklt;
+                                    revenue = item.truckincome;
+                                } else if (vehicleType === 'Valet') {
+                                    issued = item.valetqtylobby_in + item
+                                        .valetqtynonlobby_in;
+                                    returned = item.valetqtylobby_out + item
+                                        .valetqtynonlobby_out;
+                                    member = 0;
+                                    paid = item.valetqtylobby_out + item
+                                        .valetqtynonlobby_out + item.valetramayanaqty +
+                                        item.valetnonramayanaqty + item.valetvoucherqty;
+                                    lost = item.valetramayanalt + item
+                                        .valetnonramayanalt + item.valetvoucherlt;
+                                    revenue = item.valetincomelobby + item
+                                        .valetincomenonlobby + item
+                                        .valetramayanaincome + item
+                                        .valetnonramayanaincome + item
+                                        .valetvoucherincome + item.valetlobbyltincome +
+                                        item.valetnonlobbyltincome + item
+                                        .valetramayanaltincome + item
+                                        .valetnonramayanaltincome + item
+                                        .valetvoucherltincome;
+                                } else if (vehicleType === 'Preffered') {
+                                    issued = item.preferredqty_in;
+                                    returned = item.preferredqty_out;
+                                    member = 0;
+                                    paid = item.preferredqty_out;
+                                    lost = item.lostticketincome;
+                                    revenue = item.preferredincome + item
+                                        .preferredltincome;
+                                }
 
-
-
-                    $('#dataResults').text('Data Results : ' + vehicleType);
-                    const summary = response.first_period;
-                    const formattedData = summary.map((item, index) => {
-                        let issued = 0;
-                        let returned = 0;
-                        let member = 0;
-                        let paid = 0;
-                        let lost = 0;
-                        let revenue = 0;
-
-                        if (vehicleType === 'Car') {
-                            issued = item.car_in + item.carpass_in;
-                            returned = item.car_out + item.carpass_out;
-                            member = item.carpass_out;
-                            paid = item.car_out;
-                            lost = item.carlt;
-                            revenue = item.carincome + item.carltincome;
-                        } else if (vehicleType === 'Motorbike') {
-                            issued = item.motorbike_in + item.motorbikepass_in;
-                            returned = item.motorbike_out + item.motorbikepass_out;
-                            member = item.motorbikepass_out;
-                            paid = item.motorbike_out;
-                            lost = item.motorbikelt;
-                            revenue = item.motorbikeincome + item.motorbikeltincome;
-                        } else if (vehicleType === 'Box') {
-                            issued = item.truck_in + item.truckpass_in;
-                            returned = item.truck_out + item.truckpass_out;
-                            member = item.truckpass_out;
-                            paid = item.truck_out;
-                            lost = item.trucklt;
-                            revenue = item.truckincome;
-                        } else if (vehicleType === 'Valet') {
-                            issued = item.valetqtylobby_in + item.valetqtynonlobby_in;
-                            returned = item.valetqtylobby_out + item.valetqtynonlobby_out;
-                            member = 0;
-                            paid = item.valetqtylobby_out + item.valetqtynonlobby_out + item
-                                .valetramayanaqty + item.valetnonramayanaqty + item
-                                .valetvoucherqty;
-                            lost = item.valetramayanalt + item.valetnonramayanalt + item
-                                .valetvoucherlt;
-                            revenue = item.valetincomelobby + item.valetincomenonlobby + item
-                                .valetramayanaincome + item.valetnonramayanaincome + item
-                                .valetvoucherincome + item.valetlobbyltincome + item
-                                .valetnonlobbyltincome + item.valetramayanaltincome + item
-                                .valetnonramayanaltincome + item.valetvoucherltincome;;
-                        } else if (vehicleType === 'Preffered') {
-                            issued = item.preferredqty_in;
-                            returned = item.preferredqty_out;
-                            member = 0;
-                            paid = item.preferredqty_out;
-                            lost = item.lostticketincome;
-                            revenue = item.preferredincome + item.preferredltincome;
+                                return {
+                                    no: index + 1,
+                                    date: formatDate(item.dateTrx),
+                                    issued: issued,
+                                    return: returned,
+                                    member: member,
+                                    paid: paid,
+                                    lost: lost,
+                                    revenue: formatRupiah(revenue)
+                                };
+                            });
                         }
-
-                        return {
-                            no: index + 1,
-                            date: formatDate(item.dateTrx),
-                            issued: issued,
-                            return: returned,
-                            member: member,
-                            paid: paid,
-                            lost: lost,
-                            revenue: formatRupiah(revenue)
-                        };
-                    });
-
-
-                    summaryReportTable.clear().rows.add(formattedData).draw();
-
-                },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
-                    alert('Error while fetching data.');
-                }
+                        summaryReportTable.clear().rows.add(formattedData).draw();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        const errorHtml = `
+                            <tr>
+                                <td colspan="8" class="text-center text-danger" style="padding: 20px;">
+                                    Terjadi kesalahan saat mengambil data. Silakan coba lagi.
+                                </td>
+                            </tr>
+                        `;
+                        $('#summaryReportTable tbody').html(errorHtml);
+                    },
+                    complete: function() {
+                        // Re-enable button
+                        $cariButton.prop('disabled', false);
+                    }
+                });
             });
         });
     </script>

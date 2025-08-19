@@ -12,13 +12,11 @@
     @endphp
 
     <style>
-        /* Apply flextruck to the wrapper that contains the search and buttons */
-        #membershipTable_wrapper .dt-top {
+        /* General table and layout styles from summaryreportsearch */
+        #incomeGateSearch_wrapper .dt-top {
             display: flex;
             justify-content: flex-start;
-            /* Align buttons and search to the left */
             gap: 20px;
-            /* Add space between the buttons and search */
             align-items: center;
         }
 
@@ -33,18 +31,9 @@
             word-break: break-all;
         }
 
-        /* Ensure the buttons are inline and spaced correctly */
         .dt-buttons {
             display: inline-flex;
             gap: 10px;
-            /* Space between individual buttons */
-        }
-
-        /* Make sure the search input aligns properly */
-        .dt-search input {
-            display: inline-block;
-            margin-right: 10px;
-            /* Space between the search input and buttons */
         }
 
         .dt-search {
@@ -74,43 +63,134 @@
             border-radius: 10px;
             margin-left: 10px;
         }
-    </style>
-    <style>
+
         .content-custom {
-            padding: 10px !important;
+            padding: 20px !important;
             background-color: #ffffff !important;
             border-radius: 10px !important;
             box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
             color: #000000 !important;
         }
+
+        /* --- START: New Spinner Styles --- */
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            gap: 10px;
+        }
+
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid #FCB900;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #FCB900 transparent transparent transparent;
+        }
+
+        .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- END: New Spinner Styles --- */
+
+        /* --- START: Datepicker z-index fix --- */
+        .easepick-wrapper {
+            z-index: 9999 !important;
+        }
+
+        /* --- END: Datepicker z-index fix --- */
+
+        /* --- START: Dark Mode Styles --- */
+        .dt-search,
+        .dt-info {
+            color: #000000;
+        }
+
+        .mode-gelap .dt-search,
+        .mode-gelap .dt-info {
+            color: #ffffff;
+        }
+
+        .card {
+            background: #fff;
+        }
+
+        .mode-gelap .card {
+            background: #192e50;
+        }
+
+        .fw-medium,
+        .form-label,
+        h5 {
+            color: #000000
+        }
+
+        .mode-gelap .fw-medium,
+        .mode-gelap .form-label,
+        .mode-gelap h5 {
+            color: #ffffff;
+        }
+
+        /* --- END: Dark Mode Styles --- */
     </style>
 
-    <div class="search-wrapper content-custom">
-        <div class="row g-3 mb-3 align-items-end">
-            <div class="col-md-3">
-                <p>Income Gate Search</p>
-                <label for="start-date-1" class="form-label text-dark">Start Date</label>
-                <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
-            </div>
-
-            <div class="col-auto d-flex align-items-end">
-                <div class="fw-semibold pb-2 text-dark">to</div>
-            </div>
-
-            <div class="col-md-3">
-                <label for="end-date-1" class="form-label text-dark">End Date</label>
-                <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
+    <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3">
+        <h5 class="mb-3 fw-semibold">Income Gate Search</h5>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="datepicker" class="form-label fw-medium">Rentang Tanggal</label>
+                <input id="datepicker" class="form-control" placeholder="Pilih rentang tanggal" />
             </div>
         </div>
-        <div class="mt-3">
-            <button type="button" class="btn btn-submit" id="cari">Cari</button>
-        </div>
 
+        <div class="d-flex align-items-center gap-2 mt-3">
+            <button type="button" class="btn btn-submit px-4" id="cari">
+                <i class="bi bi-search me-1"></i> Cari
+            </button>
+            <div id="alertMessage" class="alert alert-danger py-2 px-3 mb-0 small flex-grow-1 d-none" role="alert">
+                Silakan pilih rentang tanggal terlebih dahulu.
+            </div>
+        </div>
     </div>
 
-    <div class="content-custom mt-3">
-        <canvas id="incomeGateBar" height="100" style="display: none;"> </canvas>
-        <table id="incomeGateSearch" class="table table-striped table-bordered mt-5">
+    <div class="content-custom mt-4">
+        <div id="chartContainer" style="position: relative; height: 350px; display: none;" class="mb-4">
+            <canvas id="incomeGateBar"></canvas>
+        </div>
+        <table id="incomeGateSearch" class="table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
                     <th>No</th>
@@ -118,171 +198,214 @@
                     <th>Income</th>
                 </tr>
             </thead>
+            <tbody>
+                <!-- Data will be loaded here -->
+            </tbody>
         </table>
     </div>
 
-    <script>
-        const dateInputs = [{
-            start: '#start-date-1',
-            end: '#end-date-1'
-        }];
-
-        dateInputs.forEach(pair => {
-            $(pair.start).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-
-            $(pair.end).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-        });
-    </script>
+    {{-- CDN for easepick --}}
+    <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 
     <script>
-        const formatRupiah = (number) => {
-            return new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                minimumFractionDigits: 0
-            }).format(number);
-        };
-        const incomeGateSearchTable = $('#incomeGateSearch').DataTable({
-            pageLength: 100,
-            ordering: true,
-            lengthChange: false,
-            searching: false,
-            layout: {
-                topEnd: {
-                    buttons: true
+        $(document).ready(function() {
+            // Initialize easepick
+            const picker = new easepick.create({
+                element: document.getElementById('datepicker'),
+                css: [
+                    'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                ],
+                plugins: ['RangePlugin'],
+                RangePlugin: {
+                    tooltipNumber(num) {
+                        return num - 1;
+                    },
+                    locale: {
+                        one: 'hari',
+                        other: 'hari',
+                    },
+                    format: 'YYYY-MM-DD',
+                    delimiter: ' to '
                 }
-            },
-            columns: [{
-                    data: 'no',
-                },
-                {
-                    data: 'pos_out',
-                },
-                {
-                    data: 'income',
-                }
-            ]
-        });
-        $('#cari').click(function() {
-            const startDate = $('#start-date-1').val();
-            const endDate = $('#end-date-1').val();
+            });
 
-            $.ajax({
-                url: '{{ route('incomeGateSearchApi') }}',
-                method: 'POST',
-                data: {
-                    start1: startDate,
-                    end1: endDate,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    $("canvas").show();
-
-                    // const resultIncomeGate = response.data.income_gate_periode[0];
-                    // console.log(resultIncomeGate);
-                    let res = response;
-
-                    // Jika response berupa string, parse dulu
-                    if (typeof response === 'string') {
-                        res = JSON.parse(response);
+            // Initialize DataTable
+            const incomeGateSearchTable = $('#incomeGateSearch').DataTable({
+                pageLength: 25,
+                ordering: true,
+                lengthChange: false,
+                searching: false, // You can enable this if you want a search box
+                data: [], // Start with empty data
+                columns: [{
+                        data: 'no',
+                    },
+                    {
+                        data: 'pos_out',
+                    },
+                    {
+                        data: 'income',
                     }
+                ],
+                language: {
+                    emptyTable: "Silakan pilih rentang tanggal, lalu klik 'Cari' untuk melihat data.",
+                    zeroRecords: "Data tidak ditemukan untuk tanggal yang dipilih."
+                }
+            });
 
-                    // console.log('Parsed response:', res);
-                    const incomeGate = res.data[0]?.income_gate_periode;
-                    const formattedIncomeGate = incomeGate.map((item, index) => ({
-                        no: index + 1,
-                        pos_out: item.poscode,
-                        income: formatRupiah(item.totalincome)
-                    }));
+            let incomeChart = null; // Variable to hold the chart instance
 
-                    incomeGateSearchTable.clear().rows.add(formattedIncomeGate).draw();
+            $('#cari').click(function() {
+                const $cariButton = $(this);
+                const startDate = picker.getStartDate()?.format('YYYY-MM-DD');
+                const endDate = picker.getEndDate()?.format('YYYY-MM-DD');
 
+                // Validation
+                if (!startDate || !endDate) {
+                    $('#alertMessage').text('Silakan pilih rentang tanggal terlebih dahulu.').show();
+                    return;
+                } else {
+                    $('#alertMessage').hide();
+                }
 
+                // Disable button and show spinner
+                $cariButton.prop('disabled', true);
+                incomeGateSearchTable.clear().draw();
+                const spinnerHtml = `
+                    <tr>
+                        <td colspan="3">
+                            <div class="spinner-container">
+                                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                                <strong>Loading...</strong>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                $('#incomeGateSearch tbody').html(spinnerHtml);
+                $('#chartContainer').hide(); // Hide chart container
 
+                // Helper function
+                const formatRupiah = (number) => {
+                    return new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 0
+                    }).format(number);
+                };
 
-                    const colors = [
-                        '#D10300', '#9966FF', '#7E00F5', '#36A2EB', '#00FFFF', '#FF6347',
-                        '#E67E00', '#F4A460', '#FFCE56', '#90EE90', '#148F49', '#708090',
-                        '#DAB370', '#F8AD2B', '#DFC639', '#E3E32A', '#00943E', '#0E17C4',
-                        '#057385', '#101A9F', '#4F236E', '#634E32', '#C233EE', '#BC8F8F'
-                    ];
-                    // Gabungkan labels dan dataIncome ke dalam satu array objek
-                    const combined = incomeGate.map(item => ({
-                        poscode: item.poscode,
-                        totalincome: item.totalincome
-                    }));
+                // AJAX call
+                $.ajax({
+                    url: '{{ route('incomeGateSearchApi') }}',
+                    method: 'POST',
+                    data: {
+                        start1: startDate,
+                        end1: endDate,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        let res = (typeof response === 'string') ? JSON.parse(response) :
+                            response;
+                        const incomeGate = res.data[0]?.income_gate_periode || [];
 
-                    // Urutkan berdasarkan totalincome (dari besar ke kecil)
-                    combined.sort((a, b) => b.totalincome - a.totalincome);
+                        const formattedIncomeGate = incomeGate.map((item, index) => ({
+                            no: index + 1,
+                            pos_out: item.poscode,
+                            income: formatRupiah(item.totalincome)
+                        }));
 
-                    // Ambil kembali labels dan data setelah diurutkan
-                    const labels = combined.map(item => item.poscode);
-                    const dataIncome = combined.map(item => item.totalincome);
+                        incomeGateSearchTable.clear().rows.add(formattedIncomeGate).draw();
 
-                    const backgroundColors = labels.map((_, index) => colors[index % colors.length]);
-                    // Buat chart data-nya
-                    const incomeBarData = {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Statistik Income Gate',
-                            data: dataIncome,
-                            backgroundColor: backgroundColors,
-                            borderWidth: 1
-                        }]
-                    };
+                        if (incomeGate.length > 0) {
+                            $('#chartContainer').show();
 
+                            // Chart logic
+                            const colors = [
+                                '#D10300', '#9966FF', '#7E00F5', '#36A2EB', '#00FFFF',
+                                '#FF6347',
+                                '#E67E00', '#F4A460', '#FFCE56', '#90EE90', '#148F49',
+                                '#708090',
+                                '#DAB370', '#F8AD2B', '#DFC639', '#E3E32A', '#00943E',
+                                '#0E17C4',
+                                '#057385', '#101A9F', '#4F236E', '#634E32', '#C233EE',
+                                '#BC8F8F'
+                            ];
 
-                    const incomeBarConfig = {
-                        type: 'bar',
-                        data: incomeBarData,
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    labels: {
-                                        color: '#fff'
-                                    }
-                                },
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        color: '#fff'
-                                    }
-                                },
-                                x: {
-                                    ticks: {
-                                        color: '#fff'
+                            const combined = incomeGate.map(item => ({
+                                poscode: item.poscode,
+                                totalincome: item.totalincome
+                            })).sort((a, b) => b.totalincome - a.totalincome);
+
+                            const labels = combined.map(item => item.poscode);
+                            const dataIncome = combined.map(item => item.totalincome);
+                            const backgroundColors = labels.map((_, index) => colors[index %
+                                colors.length]);
+
+                            const incomeBarData = {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Statistik Income Gate',
+                                    data: dataIncome,
+                                    backgroundColor: backgroundColors,
+                                    borderWidth: 1
+                                }]
+                            };
+
+                            const textColor = $('body').hasClass('mode-gelap') ? '#fff' :
+                                '#666';
+
+                            const incomeBarConfig = {
+                                type: 'bar',
+                                data: incomeBarData,
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            labels: {
+                                                color: textColor
+                                            }
+                                        },
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                color: textColor
+                                            }
+                                        },
+                                        x: {
+                                            ticks: {
+                                                color: textColor
+                                            }
+                                        }
                                     }
                                 }
+                            };
+
+                            const ctx = document.getElementById('incomeGateBar').getContext(
+                                '2d');
+                            if (incomeChart) {
+                                incomeChart.destroy(); // Destroy previous chart instance
                             }
+                            incomeChart = new Chart(ctx, incomeBarConfig);
                         }
-                    };
-                    const incomeBarCtx = document.getElementById('incomeGateBar').getContext('2d');
-                    new Chart(incomeBarCtx, incomeBarConfig);
-
-                }
-
-            })
-        })
+                    },
+                    error: function(xhr) {
+                        console.error("AJAX Error:", xhr.responseText);
+                        const errorHtml = `
+                            <tr>
+                                <td colspan="3" class="text-center text-danger" style="padding: 20px;">
+                                    Terjadi kesalahan saat mengambil data. Silakan coba lagi.
+                                </td>
+                            </tr>
+                        `;
+                        $('#incomeGateSearch tbody').html(errorHtml);
+                    },
+                    complete: function() {
+                        // Re-enable button
+                        $cariButton.prop('disabled', false);
+                    }
+                });
+            });
+        });
     </script>
 @endsection

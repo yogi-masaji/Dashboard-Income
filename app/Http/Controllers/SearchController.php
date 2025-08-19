@@ -1092,4 +1092,45 @@ class SearchController extends Controller
             return response()->json(['error' => 'Terjadi kesalahan saat menghubungi API.', 'details' => $e->getMessage()], 500);
         }
     }
+    public function quantityPerGatePmbeAPI(Request $request)
+    {
+        $validated = $request->validate([
+            'tgl_awal' => 'required|date',
+            'tgl_akhir' => 'required|date',
+            'gate_option' => 'required|string|in:IN,OUT',
+        ]);
+
+        $locationCode = session('selected_location_kode_lokasi', 'PMBE');
+
+        $payload = [
+            'start_date' => $validated['tgl_awal'],
+            'end_date' => $validated['tgl_akhir'],
+            'location_code' => $locationCode,
+            'gate' => $validated['gate_option'],
+        ];
+
+        $apiUrl = 'http://110.0.100.70:8080/v3/api/quantity-pergate-pmbe';
+
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->post($apiUrl, $payload);
+
+            if ($response->successful()) {
+                return $response->json();
+            } else {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Failed to fetch data from API.',
+                    'status' => $response->status()
+                ], $response->status());
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

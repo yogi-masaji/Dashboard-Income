@@ -12,13 +12,12 @@
     @endphp
 
     <style>
-        /* Apply flextruck to the wrapper that contains the search and buttons */
-        #membershipTable_wrapper .dt-top {
+        /* General table and layout styles */
+        #RitaseMember_wrapper .dt-top,
+        #RitaseCasual_wrapper .dt-top {
             display: flex;
             justify-content: flex-start;
-            /* Align buttons and search to the left */
             gap: 20px;
-            /* Add space between the buttons and search */
             align-items: center;
         }
 
@@ -33,18 +32,9 @@
             word-break: break-all;
         }
 
-        /* Ensure the buttons are inline and spaced correctly */
         .dt-buttons {
             display: inline-flex;
             gap: 10px;
-            /* Space between individual buttons */
-        }
-
-        /* Make sure the search input aligns properly */
-        .dt-search input {
-            display: inline-block;
-            margin-right: 10px;
-            /* Space between the search input and buttons */
         }
 
         .dt-search {
@@ -69,53 +59,139 @@
             border: none !important;
         }
 
-        #dt-search-0 {
+        .dt-search input {
             height: 40px;
             border-radius: 10px;
             margin-left: 10px;
         }
-    </style>
-    <style>
+
         .content-custom {
-            padding: 10px !important;
+            padding: 20px !important;
             background-color: #ffffff !important;
             border-radius: 10px !important;
             box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
             color: #000000 !important;
         }
 
-        .search-wrapper {
-            width: 100%;
+        /* --- START: New Spinner Styles --- */
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            gap: 10px;
         }
+
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid #FCB900;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #FCB900 transparent transparent transparent;
+        }
+
+        .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- END: New Spinner Styles --- */
+
+        /* --- START: Datepicker z-index fix --- */
+        .easepick-wrapper {
+            z-index: 9999 !important;
+        }
+
+        /* --- END: Datepicker z-index fix --- */
+
+        /* --- START: Dark Mode Styles --- */
+        .dt-search,
+        .dt-info {
+            color: #000000;
+        }
+
+        .mode-gelap .dt-search,
+        .mode-gelap .dt-info {
+            color: #ffffff;
+        }
+
+        .card {
+            background: #fff;
+        }
+
+        .mode-gelap .card {
+            background: #192e50;
+        }
+
+        .fw-medium,
+        .form-label,
+        h5 {
+            color: #000000
+        }
+
+        .mode-gelap .fw-medium,
+        .mode-gelap .form-label,
+        .mode-gelap h5 {
+            color: #ffffff;
+        }
+
+        /* --- END: Dark Mode Styles --- */
     </style>
 
-    <div class="search-wrapper content-custom">
-        <div class="row g-3 mb-3 align-items-end">
-            <div class="col-md-3">
-                <p>Ritase Search</p>
-                <label for="start-date-1" class="form-label text-dark">Start Date</label>
-                <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
-            </div>
-
-            <div class="col-auto d-flex align-items-end">
-                <div class="fw-semibold pb-2 text-dark">to</div>
-            </div>
-
-            <div class="col-md-3">
-                <label for="end-date-1" class="form-label text-dark">End Date</label>
-                <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
+    <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3">
+        <h5 class="mb-3 fw-semibold">Ritase Search</h5>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="datepicker" class="form-label fw-medium">Rentang Tanggal</label>
+                <input id="datepicker" class="form-control" placeholder="Pilih rentang tanggal" />
             </div>
         </div>
-        <div class="mt-3">
-            <button type="button" class="btn btn-submit" id="cari">Cari</button>
+
+        <div class="d-flex align-items-center gap-2 mt-3">
+            <button type="button" class="btn btn-submit px-4" id="cari">
+                <i class="bi bi-search me-1"></i> Cari
+            </button>
+            <div id="alertMessage" class="alert alert-danger py-2 px-3 mb-0 small flex-grow-1 d-none" role="alert">
+                Silakan pilih rentang tanggal terlebih dahulu.
+            </div>
         </div>
     </div>
 
-    <div class="content-custom mt-5">
+    <div class="content-custom mt-4">
         <div class="row">
             <div class="col-md-6">
-                <h5 class="text-center">Member</h5>
-                <table id="RitaseMember" class="table table-striped table-bordered">
+                <h5 class="text-center mb-3">Member</h5>
+                <table id="RitaseMember" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -124,11 +200,14 @@
                             <th>Quantity Keluar</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        <!-- Data will be loaded here -->
+                    </tbody>
                 </table>
             </div>
             <div class="col-md-6">
-                <h5 class="text-center">Casual</h5>
-                <table id="RitaseCasual" class="table table-striped table-bordered">
+                <h5 class="text-center mb-3">Casual</h5>
+                <table id="RitaseCasual" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -137,127 +216,152 @@
                             <th>Quantity Keluar</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        <!-- Data will be loaded here -->
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <script>
-        const dateInputs = [{
-            start: '#start-date-1',
-            end: '#end-date-1'
-        }];
-
-        dateInputs.forEach(pair => {
-            $(pair.start).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-
-            $(pair.end).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-        });
-    </script>
+    {{-- CDN for easepick --}}
+    <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 
     <script>
-        const memberTable = $('#RitaseMember').DataTable({
-            dom: "Bfltip",
-            pageLength: 100,
-            ordering: true,
-            lengthChange: false,
-            layout: {
-                topEnd: {
-                    search: true,
-                    buttons: true
+        $(document).ready(function() {
+            // Initialize easepick
+            const picker = new easepick.create({
+                element: document.getElementById('datepicker'),
+                css: [
+                    'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                ],
+                plugins: ['RangePlugin'],
+                RangePlugin: {
+                    tooltipNumber(num) {
+                        return num - 1;
+                    },
+                    locale: {
+                        one: 'hari',
+                        other: 'hari',
+                    },
+                    format: 'YYYY-MM-DD',
+                    delimiter: ' to '
                 }
-            },
-            columns: [{
-                    data: 'no',
-                },
-                {
-                    data: 'nama',
-                },
-                {
-                    data: 'nomor_plat',
-                },
-                {
-                    data: 'quantity_keluar',
+            });
+
+            // Initialize DataTables
+            const commonTableOptions = {
+                pageLength: 10,
+                ordering: true,
+                lengthChange: false,
+                searching: true,
+                data: [],
+                language: {
+                    emptyTable: "Silakan pilih rentang tanggal, lalu klik 'Cari' untuk melihat data.",
+                    zeroRecords: "Data tidak ditemukan untuk tanggal yang dipilih."
                 }
-            ]
+            };
+
+            const memberTable = $('#RitaseMember').DataTable({
+                ...commonTableOptions,
+                columns: [{
+                    data: 'no'
+                }, {
+                    data: 'nama'
+                }, {
+                    data: 'nomor_plat'
+                }, {
+                    data: 'quantity_keluar'
+                }]
+            });
+
+            const casualTable = $('#RitaseCasual').DataTable({
+                ...commonTableOptions,
+                columns: [{
+                    data: 'no'
+                }, {
+                    data: 'nama'
+                }, {
+                    data: 'nomor_plat'
+                }, {
+                    data: 'quantity_keluar'
+                }]
+            });
+
+            $('#cari').click(function() {
+                const $cariButton = $(this);
+                const startDate = picker.getStartDate()?.format('YYYY-MM-DD');
+                const endDate = picker.getEndDate()?.format('YYYY-MM-DD');
+
+                if (!startDate || !endDate) {
+                    $('#alertMessage').text('Silakan pilih rentang tanggal terlebih dahulu.').show();
+                    return;
+                } else {
+                    $('#alertMessage').hide();
+                }
+
+                $cariButton.prop('disabled', true);
+                memberTable.clear().draw();
+                casualTable.clear().draw();
+
+                const spinnerHtml = `
+                    <tr>
+                        <td colspan="4">
+                            <div class="spinner-container">
+                                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                                <strong>Memuat data...</strong>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                $('#RitaseMember tbody').html(spinnerHtml);
+                $('#RitaseCasual tbody').html(spinnerHtml);
+
+                $.ajax({
+                    url: '{{ route('ritaseSearchApi') }}',
+                    method: 'POST',
+                    data: {
+                        start1: startDate,
+                        end1: endDate,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        const memberData = (response.data[0]?.member || []).map((item, index) =>
+                            ({
+                                no: index + 1,
+                                nama: item.nama,
+                                nomor_plat: item.kodeproduk,
+                                quantity_keluar: item.quantity
+                            }));
+
+                        const casualData = (response.data[0]?.casual || []).map((item, index) =>
+                            ({
+                                no: index + 1,
+                                nama: item.nama,
+                                nomor_plat: item.kodeproduk,
+                                quantity_keluar: item.quantity
+                            }));
+
+                        memberTable.clear().rows.add(memberData).draw();
+                        casualTable.clear().rows.add(casualData).draw();
+                    },
+                    error: function(xhr) {
+                        console.error("AJAX Error:", xhr.responseText);
+                        const errorHtml = `
+                            <tr>
+                                <td colspan="4" class="text-center text-danger" style="padding: 20px;">
+                                    Terjadi kesalahan saat mengambil data. Silakan coba lagi.
+                                </td>
+                            </tr>
+                        `;
+                        $('#RitaseMember tbody').html(errorHtml);
+                        $('#RitaseCasual tbody').html(errorHtml);
+                    },
+                    complete: function() {
+                        $cariButton.prop('disabled', false);
+                    }
+                });
+            });
         });
-
-        const casualTable = $('#RitaseCasual').DataTable({
-            dom: "Bfltip",
-            pageLength: 100,
-            ordering: true,
-            lengthChange: false,
-            layout: {
-                topEnd: {
-                    search: true,
-                    buttons: true
-                }
-            },
-            columns: [{
-                    data: 'no',
-                },
-                {
-                    data: 'nama',
-                },
-                {
-                    data: 'nomor_plat',
-                },
-                {
-                    data: 'quantity_keluar',
-                }
-            ]
-        });
-        $('#cari').click(function() {
-            const startDate = $('#start-date-1').val();
-            const endDate = $('#end-date-1').val();
-
-            $.ajax({
-                url: '{{ route('ritaseSearchApi') }}',
-                method: 'POST',
-                data: {
-                    start1: startDate,
-                    end1: endDate,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    console.log(response.data[0].member);
-                    console.log(response.data[0].casual);
-                    const memberData = response.data[0].member.map((item, index) => ({
-                        no: index + 1,
-                        nama: item.nama,
-                        nomor_plat: item.kodeproduk,
-                        quantity_keluar: item.quantity
-                    }));
-
-                    const casualData = response.data[0].casual.map((item, index) => ({
-                        no: index + 1,
-                        nama: item.nama,
-                        nomor_plat: item.kodeproduk,
-                        quantity_keluar: item.quantity
-                    }));
-
-                    memberTable.clear().rows.add(memberData).draw();
-                    casualTable.clear().rows.add(casualData).draw();
-                }
-            })
-        })
     </script>
 @endsection

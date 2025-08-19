@@ -151,11 +151,12 @@ class Login extends Controller
             Log::info('Logout berhasil untuk id_Staff: ' . $id_Staff);
         }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $request->session()->flush();
+        $request->session()->regenerate();
 
         return redirect()->route('login');
     }
+
 
     public function formUserView()
     {

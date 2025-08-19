@@ -66,21 +66,6 @@
             color: #e9ecef;
         }
 
-        /* ================================================================= */
-        /* PERBAIKAN UNTUK HEADER TABEL YANG TERLALU BESAR                   */
-        /* ================================================================= */
-        #table-perGate thead th {
-            white-space: nowrap;
-            /* Mencegah teks header turun ke bawah */
-            padding: 8px 5px;
-            /* Sedikit mengurangi padding agar lebih ramping */
-            vertical-align: middle;
-            /* Menjaga teks tetap di tengah */
-        }
-
-        /* ================================================================= */
-
-
         /* Loading Spinner Styles */
         .spinner-container {
             display: flex;
@@ -96,14 +81,6 @@
             position: relative;
             width: 80px;
             height: 80px;
-        }
-
-        .dt-button {
-            background-color: #FCB900 !important;
-            padding: 10px;
-            border-radius: 10px;
-            border: none !important;
-            margin-bottom: 10px;
         }
 
         .lds-ring div {
@@ -187,7 +164,7 @@
 
         <div class="card shadow-sm p-4 border-0 rounded-3 mt-4">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered" id="table-perGate" style="width:100%; font-size: 12px;">
+                <table class="table table-striped table-bordered" id="table-perGate" style="width:100%; font-size: 10px;">
                     <thead>
                         <tr>
                             <th>Vehicle</th>
@@ -672,9 +649,9 @@
 
                                 let basePosData = pos1Data;
                                 if (pos8Data.length > basePosData.length) basePosData =
-                                    pos8Data;
+                                pos8Data;
                                 if (pos9Data.length > basePosData.length) basePosData =
-                                    pos9Data;
+                                pos9Data;
                                 if (bufferData.length > basePosData.length) basePosData =
                                     bufferData;
 

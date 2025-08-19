@@ -23,10 +23,10 @@
         }
 
         /* table.dataTable thead th,
-                                                                                                                                                                                                                                                                                                                    table.dataTable thead td {
-                                                                                                                                                                                                                                                                                                                        padding: 16px;
-                                                                                                                                                                                                                                                                                                                        border-bottom: 1px solid #111
-                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                            table.dataTable thead td {
+                                                                                                                                                                                                                                                                                                                                padding: 16px;
+                                                                                                                                                                                                                                                                                                                                border-bottom: 1px solid #111
+                                                                                                                                                                                                                                                                                                                            } */
 
         tbody {
             white-space: normal;

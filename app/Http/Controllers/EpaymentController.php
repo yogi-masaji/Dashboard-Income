@@ -133,31 +133,35 @@ class EpaymentController extends Controller
     public function weeklyEpayment()
     {
         try {
-            // --- LOGIKA TANGGAL BARU DENGAN SIKLUS ---
             $today = Carbon::now()->timezone('Asia/Jakarta');
 
-            // Dapatkan siklus untuk minggu ini
+            // --- DATE LOGIC FOR MAIN DATA (CYCLE-BASED) ---
             $thisWeekCycle = $this->getWeekCycle($today);
             $thisWeekStart = $thisWeekCycle['start'];
-            // Tanggal akhir adalah hari ini, tetapi tidak bisa melebihi akhir siklus
             $thisWeekEnd = $today->min($thisWeekCycle['end']);
 
-            // Dapatkan siklus untuk minggu lalu
-            $dateForLastWeek = $thisWeekStart->copy()->subDay(); // Mundur satu hari untuk masuk ke siklus sebelumnya
+            $dateForLastWeek = $thisWeekStart->copy()->subDay();
             $lastWeekCycle = $this->getWeekCycle($dateForLastWeek);
             $lastWeekStart = $lastWeekCycle['start'];
             $lastWeekEnd = $lastWeekCycle['end'];
 
-            // Dapatkan siklus untuk dua minggu lalu
-            $dateForTwoWeeksAgo = $lastWeekStart->copy()->subDay(); // Mundur satu hari dari awal siklus minggu lalu
+            $dateForTwoWeeksAgo = $lastWeekStart->copy()->subDay();
             $twoWeeksAgoCycle = $this->getWeekCycle($dateForTwoWeeksAgo);
             $twoWeeksAgoStart = $twoWeeksAgoCycle['start'];
             $twoWeeksAgoEnd = $twoWeeksAgoCycle['end'];
+            // --- END OF CYCLE-BASED DATE LOGIC ---
 
-            // Ambil data dari API untuk keseluruhan rentang tanggal
-            $apiStartDate = $twoWeeksAgoStart->format('Y-m-d');
+            // --- NEW DATE LOGIC FOR TABLE_DATA COMPARISON (MONDAY-SUNDAY) ---
+            $lastWeekCompareStart = $today->copy()->subWeek()->startOfWeek(Carbon::MONDAY);
+            $lastWeekCompareEnd = $today->copy()->subWeek()->endOfWeek(Carbon::SUNDAY);
+
+            $twoWeeksAgoCompareStart = $today->copy()->subWeeks(2)->startOfWeek(Carbon::MONDAY);
+            $twoWeeksAgoCompareEnd = $today->copy()->subWeeks(2)->endOfWeek(Carbon::SUNDAY);
+            // --- END OF MONDAY-SUNDAY DATE LOGIC ---
+
+            // Determine the earliest date needed for the API call.
+            $apiStartDate = min($twoWeeksAgoStart, $twoWeeksAgoCompareStart)->format('Y-m-d');
             $apiEndDate = $thisWeekEnd->format('Y-m-d');
-            // --- AKHIR LOGIKA TANGGAL BARU ---
 
             $locationCode = session('selected_location_kode_lokasi');
 
@@ -170,15 +174,23 @@ class EpaymentController extends Controller
             if ($response->successful()) {
                 $epaymentData = collect($response->json()['data']);
 
-                // Filter data berdasarkan rentang tanggal yang sudah dihitung
+                // --- FILTERING FOR MAIN DATA (CYCLE-BASED) ---
                 $thisWeekData = $epaymentData->filter(fn($item) => isset($item['tanggal']) && Carbon::parse($item['tanggal'])->betweenIncluded($thisWeekStart, $thisWeekEnd))->values();
                 $lastWeekData = $epaymentData->filter(fn($item) => isset($item['tanggal']) && Carbon::parse($item['tanggal'])->betweenIncluded($lastWeekStart, $lastWeekEnd))->values();
                 $twoWeeksAgoData = $epaymentData->filter(fn($item) => isset($item['tanggal']) && Carbon::parse($item['tanggal'])->betweenIncluded($twoWeeksAgoStart, $twoWeeksAgoEnd))->values();
 
-                // Hitung total untuk setiap periode
+                // --- CALCULATE TOTALS FOR MAIN DATA (CYCLE-BASED) ---
                 $thisWeekTotals = $this->calculateEpaymentTotals($thisWeekData);
                 $lastWeekTotals = $this->calculateEpaymentTotals($lastWeekData);
                 $twoWeeksAgoTotals = $this->calculateEpaymentTotals($twoWeeksAgoData);
+
+                // --- NEW: FILTERING & TOTALS FOR TABLE_DATA (MONDAY-SUNDAY) ---
+                $lastWeekCompareData = $epaymentData->filter(fn($item) => isset($item['tanggal']) && Carbon::parse($item['tanggal'])->betweenIncluded($lastWeekCompareStart, $lastWeekCompareEnd))->values();
+                $twoWeeksAgoCompareData = $epaymentData->filter(fn($item) => isset($item['tanggal']) && Carbon::parse($item['tanggal'])->betweenIncluded($twoWeeksAgoCompareStart, $twoWeeksAgoCompareEnd))->values();
+
+                $lastWeekCompareTotals = $this->calculateEpaymentTotals($lastWeekCompareData);
+                $twoWeeksAgoCompareTotals = $this->calculateEpaymentTotals($twoWeeksAgoCompareData);
+                // --- END OF NEW LOGIC ---
 
                 return response()->json([
                     'response' => 'Success Get Epayment Data',
@@ -200,7 +212,8 @@ class EpaymentController extends Controller
                         'data' => $twoWeeksAgoData->toArray(),
                         'totals' => $twoWeeksAgoTotals,
                     ],
-                    'table_data' => $this->formatEpaymentTable($lastWeekTotals, $twoWeeksAgoTotals),
+                    // This now uses the Monday-Sunday totals for comparison.
+                    'table_data' => $this->formatEpaymentTable($lastWeekCompareTotals, $twoWeeksAgoCompareTotals),
                 ]);
             }
 

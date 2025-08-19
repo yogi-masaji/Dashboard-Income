@@ -11,9 +11,12 @@
         $navbarTitle = $lokasiName;
     @endphp
 
+    <!-- Easepick CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css" />
+
     <style>
         /* Apply flexbox to the wrapper that contains the search and buttons */
-        #membershipTable_wrapper .dt-top {
+        #ParkirMemberTable_wrapper .dt-top {
             display: flex;
             justify-content: flex-start;
             /* Align buttons and search to the left */
@@ -74,36 +77,151 @@
             border-radius: 10px;
             margin-left: 10px;
         }
-    </style>
-    <style>
+
         .content-custom {
             padding: 10px !important;
             background-color: #ffffff !important;
             border-radius: 10px !important;
             box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
             color: #000000 !important;
+            border: #d9d9d9 1px solid !important;
         }
 
-        .search-wrapper {
-            width: 40%;
+
+
+        /* Dark Mode Styles */
+        .mode-gelap .content-custom,
+        .mode-gelap .card {
+            background-color: #192e50 !important;
+            color: #ffffff !important;
+            border-color: #424242 !important;
+        }
+
+        .mode-gelap .form-label,
+        .mode-gelap h4,
+        .mode-gelap h6,
+        .mode-gelap small,
+        .mode-gelap p {
+            color: #ffffff !important;
+        }
+
+        .mode-gelap .form-control {
+            background-color: #3a3a3a;
+            color: #fff;
+            border-color: #555;
+        }
+
+        .mode-gelap .form-control::placeholder {
+            color: #aaa;
+        }
+
+        /* Easepick Dark Mode Styles */
+        .mode-gelap .easepick-wrapper {
+            background-color: #333;
+            border-color: #555;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .mode-gelap .easepick-wrapper .ep-header {
+            background-color: #444;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-header button {
+            color: #ddd;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-header button:hover {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-month-name {
+            color: #fff;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-day-name {
+            color: #aaa;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-day {
+            color: #ddd;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-day.ep-today {
+            color: #FCB900;
+            background-color: rgba(252, 185, 0, 0.2);
+        }
+
+        .mode-gelap .easepick-wrapper .ep-day.ep-selected {
+            background-color: #FCB900;
+            color: #000;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-day.in-range {
+            background-color: rgba(252, 185, 0, 0.3);
+        }
+
+        .mode-gelap .easepick-wrapper .ep-day:not(.ep-disabled):hover {
+            background-color: rgba(252, 185, 0, 0.5);
+            color: #000;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-day.ep-disabled {
+            color: #666;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-footer {
+            background-color: #444;
+            border-top: 1px solid #555;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-footer button {
+            background-color: #555;
+            color: #ddd;
+        }
+
+        .mode-gelap .easepick-wrapper .ep-footer button:hover {
+            background-color: #666;
+        }
+
+        /* Fix for datepicker overlapping issue */
+        .easepick-wrapper {
+            z-index: 1060;
+        }
+
+        .form-label {
+            color: #000;
+        }
+
+        .mode-gelap .form-label {
+            color: #fff;
+        }
+
+        .dt-info,
+        .dt-search {
+            color: #000;
+        }
+
+        .mode-gelap .dt-info,
+        .mode-gelap .dt-search {
+            color: #fff;
+        }
+
+        /* Style for table loading spinner */
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 0;
         }
     </style>
 
-    <p>Parking Member Search</p>
-    <div class="search-wrapper">
-        <div class="d-flex align-items-end gap-3 mb-3">
-            <div>
-                <label for="start-date-1" class="form-label text-dark">Start Date</label>
-                <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
-            </div>
-            <div class="pb-3 fw-semibold">to</div>
-            <div>
-                <label for="end-date-1" class="form-label text-dark">End Date</label>
-                <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
-            </div>
+    <div class="search-wrapper content-custom">
+        <div class="mb-3">
+            <p class="fw-bold">Parking Member Search</p>
+            <label for="datepicker" class="form-label">Date Range</label>
+            <input id="datepicker" class="form-control" placeholder="Select date range..." />
         </div>
-
-
 
         <div class="mt-3">
             <button type="button" class="btn btn-submit" id="cari">Cari</button>
@@ -114,43 +232,43 @@
             Please fill in all the date fields before submitting.
         </div>
     </div>
-    <div class="row gap-5 mt-5">
-        <div class="col-md-3">
+    <div class="row mt-5">
+        <div class="col-md-4">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h6 style="color: #000000 !important;" class="text-dark mb-1">Total Motorbike</h6>
-                            <h4 style="color: #000000 !important;" class="fw-bold mb-0 totalMotorbike"></h4>
-                            <small style="color: #000000 !important;" class="text-dark countMotorbike"></small>
+                            <h6 class="mb-1">Total Motorbike</h6>
+                            <h4 class="fw-bold mb-0 totalMotorbike"></h4>
+                            <small class="countMotorbike"></small>
                         </div>
                         <div class="text-success fs-4"><i class="bi bi-scooter"></i></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h6 style="color: #000000 !important;" class="text-dark mb-1">Total Car</h6>
-                            <h4 style="color: #000000 !important;" class="fw-bold mb-0 totalCar"></h4>
-                            <small style="color: #000000 !important;" class="text-dark countCar"></small>
+                            <h6 class="mb-1">Total Car</h6>
+                            <h4 class="fw-bold mb-0 totalCar"></h4>
+                            <small class="countCar"></small>
                         </div>
                         <div class="text-success fs-4"><i class="bi bi-car-front-fill"></i></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h6 style="color: #000000 !important;" class="text-dark mb-1">Total Box</h6>
-                            <h4 style="color: #000000 !important;" class="fw-bold mb-0 totalBox"></h4>
-                            <small style="color: #000000 !important;" class="text-dark countBox"></small>
+                            <h6 class="mb-1">Total Box</h6>
+                            <h4 class="fw-bold mb-0 totalBox"></h4>
+                            <small class="countBox"></small>
                         </div>
                         <div class="text-success fs-4"><i class="bi bi-truck"></i></div>
                     </div>
@@ -159,72 +277,53 @@
         </div>
     </div>
     <div class="result mt-5">
-        <table id="ParkirMemberTable" class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>Periode</th>
-                    <th>Vehicle Type</th>
-                    <th>Tenant Name</th>
-                    <th>Plat Number</th>
-                    <th>Total Amount</th>
-                    <th>Start Date</th>
-                    <th>Finish Date</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-        </table>
+        <!-- Loading Spinner -->
+        <div id="table-loading-spinner" class="spinner-container" style="display: none;">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <!-- Table -->
+        <div id="table-container" style="display: none;">
+            <table id="ParkirMemberTable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Periode</th>
+                        <th>Vehicle Type</th>
+                        <th>Tenant Name</th>
+                        <th>Plat Number</th>
+                        <th>Total Amount</th>
+                        <th>Start Date</th>
+                        <th>Finish Date</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 
-    <script>
-        const dateInputs = [{
-            start: '#start-date-1',
-            end: '#end-date-1'
-        }];
-
-        dateInputs.forEach(pair => {
-            $(pair.start).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-
-            $(pair.end).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-        });
-    </script>
-
+    <!-- Easepick JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 
     <script>
-        $('#cari').click(function() {
-            const startDate = $('#start-date-1').val();
-            const endDate = $('#end-date-1').val();
-            const $cariButton = $(this);
+        $(document).ready(function() {
+            // Initialize the new date range picker
+            const picker = new easepick.create({
+                element: document.getElementById('datepicker'),
+                css: [
+                    'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                ],
+                plugins: ['RangePlugin'],
+                RangePlugin: {
+                    delimiter: ' to ',
+                },
+                format: 'YYYY-MM-DD' // Ensure the format is correct for the backend
+            });
 
-            if (!startDate || !endDate) {
-                $('#alertMessage').show();
-                return;
-            } else {
-                $('#alertMessage').hide();
-            }
-
-            // Disable button and show loading text
-            $cariButton.prop('disabled', true).html('Loading...');
+            // Initialize DataTable once on page load
             const table = $('#ParkirMemberTable').DataTable({
                 dom: "Bfltip",
-                pageLength: 100,
+                pageLength: 25,
                 ordering: true,
                 lengthChange: false,
                 bDestroy: true,
@@ -260,68 +359,99 @@
                 ],
             });
 
-            function formatQuantity(quantity) {
-                return new Intl.NumberFormat().format(quantity);
-            }
 
-            const formatRupiah = (number) => {
-                return new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                    minimumFractionDigits: 0
-                }).format(number);
-            };
-            $.ajax({
-                url: '{{ route('parkingMemberSearch') }}',
-                method: 'POST',
-                data: {
-                    start1: startDate,
-                    end1: endDate,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Here you can also call a function to render the table
-                        console.log(response);
-                        const totalMotorbike = formatRupiah(response.summary.motor.total_income);
-                        const totalCar = formatRupiah(response.summary.mobil.total_income);
-                        const totalBox = formatRupiah(response.summary.box.total_income);
-                        const countMotorbike = formatQuantity(response.summary.motor.count);
-                        const countCar = formatQuantity(response.summary.mobil.count);
-                        const countBox = formatQuantity(response.summary.box.count);
-                        $('.countMotorbike').text(countMotorbike + ' Motorbike');
-                        $('.totalMotorbike').text(totalMotorbike);
-                        $('.totalCar').text(totalCar);
-                        $('.countCar').text(countCar + ' Car');
-                        $('.totalBox').text(totalBox);
-                        $('.countBox').text(countBox + ' Box');
-                        const parkingMemberData = response.data;
-                        console.log(parkingMemberData);
-                        const formattedData = parkingMemberData.map((item, index) => ({
-                            periode: item.transactionDate,
-                            vehicleType: item.vehicleType,
-                            nameTenant: item.nameTenant,
-                            vehiclePlateNumber: item.vehiclePlateNumber,
-                            grandTotalAmount: item.grandTotalAmount,
-                            startDate: item.startDate,
-                            endDate: item.endDate,
-                            description: item.description
-                        }));
-                        table.clear().rows.add(formattedData).draw();
+            $('#cari').click(function() {
+                const $cariButton = $(this);
+                // Get dates from the easepick instance
+                const startDate = picker.getStartDate() ? picker.getStartDate().format('YYYY-MM-DD') : null;
+                const endDate = picker.getEndDate() ? picker.getEndDate().format('YYYY-MM-DD') : null;
 
-
-                    } else {
-                        alert('No data found!');
-                    }
-                },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred while fetching data.');
-                },
-                complete: function() {
-                    // Re-enable button and reset text after AJAX (success or error)
-                    $cariButton.prop('disabled', false).html('Cari');
+                if (!startDate || !endDate) {
+                    $('#alertMessage').text('Please select a valid date range.').show();
+                    return;
+                } else {
+                    $('#alertMessage').hide();
                 }
+
+                // Disable button and show loading spinner
+                $cariButton.prop('disabled', true).html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+                );
+
+                // Hide table and show spinner
+                $('#table-container').hide();
+                $('#table-loading-spinner').show();
+
+                function formatQuantity(quantity) {
+                    return new Intl.NumberFormat().format(quantity);
+                }
+
+                const formatRupiah = (number) => {
+                    return new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 0
+                    }).format(number);
+                };
+
+                $.ajax({
+                    url: '{{ route('parkingMemberSearch') }}',
+                    method: 'POST',
+                    data: {
+                        start1: startDate,
+                        end1: endDate,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            console.log(response);
+                            const totalMotorbike = formatRupiah(response.summary.motor
+                                .total_income);
+                            const totalCar = formatRupiah(response.summary.mobil.total_income);
+                            const totalBox = formatRupiah(response.summary.box.total_income);
+                            const countMotorbike = formatQuantity(response.summary.motor.count);
+                            const countCar = formatQuantity(response.summary.mobil.count);
+                            const countBox = formatQuantity(response.summary.box.count);
+
+                            $('.countMotorbike').text(countMotorbike + ' Motorbike');
+                            $('.totalMotorbike').text(totalMotorbike);
+                            $('.totalCar').text(totalCar);
+                            $('.countCar').text(countCar + ' Car');
+                            $('.totalBox').text(totalBox);
+                            $('.countBox').text(countBox + ' Box');
+
+                            const parkingMemberData = response.data;
+                            const formattedData = parkingMemberData.map((item, index) => ({
+                                periode: item.transactionDate,
+                                vehicleType: item.vehicleType,
+                                nameTenant: item.nameTenant,
+                                vehiclePlateNumber: item.vehiclePlateNumber,
+                                grandTotalAmount: formatRupiah(item
+                                    .grandTotalAmount),
+                                startDate: item.startDate,
+                                endDate: item.endDate,
+                                description: item.description
+                            }));
+                            table.clear().rows.add(formattedData).draw();
+
+                        } else {
+                            alert('No data found!');
+                            table.clear().draw(); // Clear table if no data
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert('An error occurred while fetching data.');
+                    },
+                    complete: function() {
+                        // Hide spinner and show table
+                        $('#table-loading-spinner').hide();
+                        $('#table-container').show();
+
+                        // Re-enable button and restore text
+                        $cariButton.prop('disabled', false).html('Cari');
+                    }
+                });
             });
         });
     </script>

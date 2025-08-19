@@ -11,13 +11,11 @@
     @endphp
 
     <style>
-        /* Apply flexbox to the wrapper that contains the search and buttons */
+        /* General table and layout styles */
         #membershipTable_wrapper .dt-top {
             display: flex;
             justify-content: flex-start;
-            /* Align buttons and search to the left */
             gap: 20px;
-            /* Add space between the buttons and search */
             align-items: center;
         }
 
@@ -32,18 +30,9 @@
             word-break: break-all;
         }
 
-        /* Ensure the buttons are inline and spaced correctly */
         .dt-buttons {
             display: inline-flex;
             gap: 10px;
-            /* Space between individual buttons */
-        }
-
-        /* Make sure the search input aligns properly */
-        .dt-search input {
-            display: inline-block;
-            margin-right: 10px;
-            /* Space between the search input and buttons */
         }
 
         .dt-search {
@@ -73,8 +62,7 @@
             border-radius: 10px;
             margin-left: 10px;
         }
-    </style>
-    <style>
+
         .content-custom {
             padding: 10px !important;
             background-color: #ffffff !important;
@@ -83,39 +71,124 @@
             color: #000000 !important;
         }
 
-        .search-wrapper {
-            width: 40%;
+
+
+        /* --- START: New Spinner Styles --- */
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            gap: 10px;
+        }
+
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid #FCB900;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #FCB900 transparent transparent transparent;
+        }
+
+        .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- END: New Spinner Styles --- */
+
+        /* --- START: Datepicker z-index fix --- */
+        .easepick-wrapper {
+            z-index: 9999 !important;
+        }
+
+        /* --- END: Datepicker z-index fix --- */
+
+        .dt-search {
+            color: #000000;
+        }
+
+        .dt-info {
+            color: #000000;
+        }
+
+        .mode-gelap .dt-search {
+            color: #ffffff;
+        }
+
+        .mode-gelap .dt-info {
+            color: #ffffff;
+        }
+
+        .card {
+            background: #fff;
+        }
+
+        .mode-gelap .card {
+            background: #192e50;
+        }
+
+        .fw-medium {
+            color: #000000
+        }
+
+        .mode-gelap .fw-medium {
+            color: #ffffff;
         }
     </style>
 
-    <p class="text-dark"">detail parkir search</p>
-    <div class="search-wrapper">
-        <div class="d-flex align-items-end gap-3 mb-3">
-            <div>
-                <label for="start-date-1" class="form-label text-dark">Start Date</label>
-                <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
-            </div>
-            <div class="pb-3 fw-semibold text-dark">to</div>
-            <div>
-                <label for="end-date-1" class="form-label text-dark">End Date</label>
-                <input type="text" name="end1" id="end-date-1" class="form-control" placeholder="Select end date" />
-            </div>
+    <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3">
+        <h5 class="mb-3 text-dark fw-semibold">Detail Parkir Search</h5>
+
+        {{-- Input for date range using easepick --}}
+        <div class="mb-3">
+            <label for="datepicker" class="fw-medium">Rentang Tanggal</label>
+            <input id="datepicker" class="form-control" placeholder="Pilih rentang tanggal" />
         </div>
 
-
-
-        <div class="mt-3">
-            <button type="button" class="btn btn-submit" id="cari">Cari</button>
-        </div>
-
-        <!-- Alert Message -->
-        <div id="alertMessage" class="alert alert-danger mt-3" role="alert" style="display: none;">
-            Please fill in all the date fields before submitting.
+        <div class="d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-primary px-4" id="cari">
+                <i class="bi bi-search me-1"></i> Cari
+            </button>
+            <div id="alertMessage" class="alert alert-danger py-2 px-3 mb-0 small flex-grow-1 d-none" role="alert">
+                Silakan pilih rentang tanggal terlebih dahulu.
+            </div>
         </div>
     </div>
-    <div class="result mt-5">
 
-        <table id="detailParkirTable" class="table table-striped table-bordered">
+
+    <div class="result mt-5">
+        <table id="detailParkirTable" class="table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
                     <th>No</th>
@@ -125,7 +198,7 @@
                     <th>Barcode</th>
                     <th>Kendaraan</th>
                     <th>Tarif Parkir</th>
-                    <th>Dendalt</th>
+                    <th>Denda</th>
                     <th>Post Masuk</th>
                     <th>Post Keluar</th>
                     <th>Bank</th>
@@ -133,158 +206,175 @@
                     <th>Status</th>
                 </tr>
             </thead>
+            <tbody>
+                <!-- Data will be loaded here -->
+            </tbody>
         </table>
     </div>
 
-    <script>
-        const dateInputs = [{
-            start: '#start-date-1',
-            end: '#end-date-1'
-        }];
-
-        dateInputs.forEach(pair => {
-            $(pair.start).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-
-            $(pair.end).daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
-            });
-        });
-    </script>
-
+    {{-- CDN for easepick --}}
+    <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 
     <script>
-        let detailParkirTable = null; // buat variabel di luar scope fungsi
+        $(document).ready(function() {
+            // Initialize easepick
+            const picker = new easepick.create({
+                element: document.getElementById('datepicker'),
+                css: [
+                    'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                ],
+                plugins: ['RangePlugin'],
+                RangePlugin: {
+                    tooltipNumber(num) {
+                        return num - 1;
+                    },
+                    locale: {
+                        one: 'hari',
+                        other: 'hari',
+                    },
+                    format: 'YYYY-MM-DD',
+                    delimiter: ' to '
+                }
+            });
 
-        $('#cari').click(function() {
-            const startDate = $('#start-date-1').val();
-            const endDate = $('#end-date-1').val();
-            const $cariButton = $(this);
-
-            if (!startDate || !endDate) {
-                $('#alertMessage').show();
-                return;
-            } else {
-                $('#alertMessage').hide();
-            }
-
-            // Disable button and show loading text
-            $cariButton.prop('disabled', true).html('Loading...');
-
-            $.ajax({
-                url: '{{ route('parkingDetailSearch') }}',
-                method: 'POST',
-                data: {
-                    start1: startDate,
-                    end1: endDate,
-                    _token: '{{ csrf_token() }}'
+            // Initialize DataTable
+            let detailParkirTable = $('#detailParkirTable').DataTable({
+                dom: "Bfltip",
+                pageLength: 25,
+                ordering: true,
+                lengthChange: false,
+                paging: true,
+                data: [], // Start with empty data
+                layout: {
+                    topEnd: {
+                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
+                    },
                 },
-                success: function(response) {
-                    if (response.success) {
-                        const detailParkirData = response.data.data;
-
-                        const formattedDetailParkir = detailParkirData.map((item, index) => ({
-                            no: index + 1,
-                            tanggal_masuk: item.tglmasuk,
-                            tanggal_keluar: item.tglkeluar,
-                            nopol: item.noplat,
-                            barcode: item.nobarcode,
-                            kendaraan: item.namavehicle,
-                            tarif_parkir: item.tarif,
-                            dendalt: item.dendalt,
-                            post_masuk: item.kodeposin,
-                            post_keluar: item.kodeposout,
-                            bank: item.bank,
-                            shift: item.kodeshiftin,
-                            status: item.statustransaction
-                        }));
-
-                        // Inisialisasi hanya sekali
-                        if (!$.fn.DataTable.isDataTable('#detailParkirTable')) {
-                            detailParkirTable = $('#detailParkirTable').DataTable({
-                                dom: "Bfltip",
-                                pageLength: 100,
-                                ordering: true,
-                                lengthChange: false,
-                                paging: true,
-                                layout: {
-                                    topEnd: {
-                                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5',
-                                            'pdfHtml5'
-                                        ],
-                                    },
-                                },
-                                columns: [{
-                                        data: 'no'
-                                    },
-                                    {
-                                        data: 'tanggal_masuk'
-                                    },
-                                    {
-                                        data: 'tanggal_keluar'
-                                    },
-                                    {
-                                        data: 'nopol'
-                                    },
-                                    {
-                                        data: 'barcode'
-                                    },
-                                    {
-                                        data: 'kendaraan'
-                                    },
-                                    {
-                                        data: 'tarif_parkir'
-                                    },
-                                    {
-                                        data: 'dendalt'
-                                    },
-                                    {
-                                        data: 'post_masuk'
-                                    },
-                                    {
-                                        data: 'post_keluar'
-                                    },
-                                    {
-                                        data: 'bank'
-                                    },
-                                    {
-                                        data: 'shift'
-                                    },
-                                    {
-                                        data: 'status'
-                                    }
-                                ]
-                            });
-                        }
-
-                        // Update data
-                        detailParkirTable.clear().rows.add(formattedDetailParkir).draw();
-                    } else {
-                        alert('No data found!');
+                columns: [{
+                        data: 'no'
+                    },
+                    {
+                        data: 'tanggal_masuk'
+                    },
+                    {
+                        data: 'tanggal_keluar'
+                    },
+                    {
+                        data: 'nopol'
+                    },
+                    {
+                        data: 'barcode'
+                    },
+                    {
+                        data: 'kendaraan'
+                    },
+                    {
+                        data: 'tarif_parkir'
+                    },
+                    {
+                        data: 'dendalt'
+                    },
+                    {
+                        data: 'post_masuk'
+                    },
+                    {
+                        data: 'post_keluar'
+                    },
+                    {
+                        data: 'bank'
+                    },
+                    {
+                        data: 'shift'
+                    },
+                    {
+                        data: 'status'
                     }
-                },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred while fetching data.');
-                },
-                complete: function() {
-                    $cariButton.prop('disabled', false).html('Cari');
+                ],
+                language: {
+                    emptyTable: "Silakan pilih rentang tanggal dan klik 'Cari' untuk melihat data.",
+                    zeroRecords: "Data tidak ditemukan untuk rentang tanggal yang dipilih."
                 }
+            });
+
+            $('#cari').click(function() {
+                const $cariButton = $(this);
+                const startDate = picker.getStartDate()?.format('YYYY-MM-DD');
+                const endDate = picker.getEndDate()?.format('YYYY-MM-DD');
+
+                if (!startDate || !endDate) {
+                    $('#alertMessage').text('Silakan pilih rentang tanggal terlebih dahulu.').show();
+                    return;
+                } else {
+                    $('#alertMessage').hide();
+                }
+
+                // Disable button
+                $cariButton.prop('disabled', true);
+
+                // --- START: Show loading spinner in table ---
+                // Clear the table and show the spinner
+                detailParkirTable.clear().draw();
+                const spinnerHtml = `
+                    <tr>
+                        <td colspan="13">
+                            <div class="spinner-container">
+                                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                                <strong>Loading...</strong>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                $('#detailParkirTable tbody').html(spinnerHtml);
+                // --- END: Show loading spinner in table ---
+
+                $.ajax({
+                    url: '{{ route('parkingDetailSearch') }}',
+                    method: 'POST',
+                    data: {
+                        start1: startDate,
+                        end1: endDate,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        let formattedDetailParkir = [];
+                        if (response.success && Array.isArray(response.data.data) && response
+                            .data.data.length > 0) {
+                            formattedDetailParkir = response.data.data.map((item, index) => ({
+                                no: index + 1,
+                                tanggal_masuk: item.tglmasuk,
+                                tanggal_keluar: item.tglkeluar,
+                                nopol: item.noplat,
+                                barcode: item.nobarcode,
+                                kendaraan: item.namavehicle,
+                                tarif_parkir: item.tarif,
+                                dendalt: item.dendalt,
+                                post_masuk: item.kodeposin,
+                                post_keluar: item.kodeposout,
+                                bank: item.bank,
+                                shift: item.kodeshiftin,
+                                status: item.statustransaction
+                            }));
+                        }
+                        // Update table data. This will automatically remove the spinner.
+                        detailParkirTable.clear().rows.add(formattedDetailParkir).draw();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        // Show an error message in the table
+                        const errorHtml = `
+                            <tr>
+                                <td colspan="13" class="text-center text-danger" style="padding: 20px;">
+                                    Terjadi kesalahan saat mengambil data. Silakan coba lagi.
+                                </td>
+                            </tr>
+                        `;
+                        $('#detailParkirTable tbody').html(errorHtml);
+                    },
+                    complete: function() {
+                        // Re-enable button
+                        $cariButton.prop('disabled', false);
+                    }
+                });
             });
         });
     </script>

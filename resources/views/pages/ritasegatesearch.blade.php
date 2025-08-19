@@ -23,10 +23,10 @@
         }
 
         /* table.dataTable thead th,
-                                                                                                                                                                                                                                                                                                                                                                table.dataTable thead td {
-                                                                                                                                                                                                                                                                                                                                                                    padding: 16px;
-                                                                                                                                                                                                                                                                                                                                                                    border-bottom: 1px solid #111
-                                                                                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                                                                                                        table.dataTable thead td {
+                                                                                                                                                                                                                                                                                                                                                                                            padding: 16px;
+                                                                                                                                                                                                                                                                                                                                                                                            border-bottom: 1px solid #111
+                                                                                                                                                                                                                                                                                                                                                                                        } */
 
         tbody {
             white-space: normal;
@@ -103,8 +103,13 @@
         .wide-data-table td {
             position: sticky;
             top: 0;
-            background-color: #00356b;
+            background-color: #ffffff;
             z-index: 1;
+        }
+
+        .mode-gelap .wide-data-table td {
+            background-color: #192E50;
+            color: #ffffff;
         }
 
         /* Adjust column widths */

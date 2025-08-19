@@ -154,21 +154,28 @@
             padding: 2px;
             border-bottom: 1px solid #111;
         }
+
+        .form-label {
+            color: #000000;
+        }
+
+        .mode-gelap .form-label {
+            color: #ffffff;
+        }
     </style>
     <div class="search-wrapper">
-        <div class="row g-3 mb-3 align-items-end">
-            <div class="col-md-3">
-                <label for="start-date-1" class="form-label text-dark">Start Date</label>
-                <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="Select start date" />
+        <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="start-date-1" class="form-label">Select Date</label>
+                <input type="text" name="start1" id="start-date-1" class="form-control" placeholder="YYYY-MM-DD" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-submit" id="cari">Search</button>
             </div>
         </div>
-        <div class="mt-3">
-            <button type="button" class="btn btn-submit" id="cari">Cari</button>
-        </div>
-
     </div>
 
-    <div class="content-custom">
+    <div class="content-custom mt-5">
         <div class="table-scroll-wrapper">
             <table class="wide-data-table" id="occupancyTable">
                 <thead>
@@ -234,7 +241,7 @@
             paging: false,
             pageLength: false,
             lengthChange: false,
-
+            bInfo: false,
             // layout: {
             //     topEnd: {
             //         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],

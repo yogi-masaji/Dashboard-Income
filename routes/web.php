@@ -100,6 +100,7 @@ Route::middleware('custom.auth')->group(function () {
     Route::get('/data-compare', [SearchController::class, 'dataCompareView'])->name('dataCompareView');
     Route::post('/data-compare-api', [SearchController::class, 'dataCompareAPI'])->name('dataCompareAPI');
     Route::post('/quantity-pergate-api', [SearchController::class, 'quantitypergateAPI'])->name('quantitypergateAPI');
+    Route::post('/quantity-pergate-pmbe-api', [SearchController::class, 'quantityPerGatePmbeAPI'])->name('quantitypergatePmbeAPI');
     Route::get('/quantity-pergate', [SearchController::class, 'quantitypergateView'])->name('quantitypergateView');
     Route::post('/income-reguler-search-api', [SearchController::class, 'prodpendapatansearchAPI'])->name('prodpendapatansearchAPI');
     Route::get('/income-reguler-search', [SearchController::class, 'prodpendapatansearchView'])->name('prodpendapatansearchView');

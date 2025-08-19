@@ -49,6 +49,22 @@
             margin-bottom: 5px;
         }
 
+        .dt-search {
+            color: #000;
+        }
+
+        .mode-gelap .dt-search {
+            color: #fff;
+        }
+
+        .form-select {
+            color: #000000;
+        }
+
+        .mode-gelap .form-select {
+            color: #fff;
+        }
+
         button.dt-paging-button {
             background-color: #ffffff !important;
             padding: 10px;
@@ -138,7 +154,7 @@
             let lastPeriod = '';
             const TableMembership = $('#membershipTable').DataTable({
                 dom: "Bfltip",
-                pageLength: 100,
+                pageLength: 50,
                 ordering: true,
                 lengthChange: false,
                 layout: {
@@ -265,7 +281,7 @@
                     resultTable = [...aktifData, ...nonaktifData]; // ✅ period = gabungkan semua
                 }
 
-                console.log('Data to display:', resultTable);
+                // console.log('Data to display:', resultTable);
 
                 const formattedResult = formatDataForTable(resultTable);
                 TableMembership.clear().rows.add(formattedResult).draw();

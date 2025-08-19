@@ -190,7 +190,7 @@ $(document).ready(function() {
                 const compare = response.vehicle_comparison;
 
                 const container = $('#weekly-transaction-comparison').empty();
-                const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-12'];
+                const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6'];
                 compare.forEach((vehicle, index) => {
                     container.append(`
                         <div class="${colClasses[index] || 'col-md-4'} d-flex">
@@ -288,7 +288,7 @@ $(document).ready(function() {
                 const compare = response.vehicle_comparison;
 
                 const container = $('#monthly-transaction-comparison').empty();
-                const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-12'];
+                const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6'];
                 compare.forEach((vehicle, index) => {
                     container.append(`
                         <div class="${colClasses[index]}">

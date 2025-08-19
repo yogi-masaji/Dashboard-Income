@@ -65,7 +65,7 @@ class TransactionController extends Controller
                         ];
                     }
 
-                    // Tambahkan hasil compare ke response
+                    // Add comparison results to the response
                     $originalData['vehicle_comparison'] = $comparison;
                 }
 
@@ -92,31 +92,38 @@ class TransactionController extends Controller
     public function WeeklyTransaction()
     {
         try {
-            // --- LOGIKA TANGGAL BARU DENGAN SIKLUS ---
             $today = Carbon::now()->timezone('Asia/Jakarta');
 
-            // Dapatkan siklus untuk minggu ini
+            // --- DATE LOGIC FOR MAIN DATA (CYCLE-BASED) ---
             $thisWeekCycle = $this->getWeekCycle($today);
             $thisWeekStart = $thisWeekCycle['start'];
-            // Tanggal akhir adalah hari ini, tetapi tidak bisa melebihi akhir siklus
             $thisWeekEnd = $today->min($thisWeekCycle['end']);
 
-            // Dapatkan siklus untuk minggu lalu
-            $dateForLastWeek = $thisWeekStart->copy()->subDay(); // Mundur satu hari untuk masuk ke siklus sebelumnya
+            $dateForLastWeek = $thisWeekStart->copy()->subDay();
             $lastWeekCycle = $this->getWeekCycle($dateForLastWeek);
             $lastWeekStart = $lastWeekCycle['start'];
             $lastWeekEnd = $lastWeekCycle['end'];
 
-            // Dapatkan siklus untuk dua minggu lalu
-            $dateForTwoWeeksAgo = $lastWeekStart->copy()->subDay(); // Mundur satu hari dari awal siklus minggu lalu
+            $dateForTwoWeeksAgo = $lastWeekStart->copy()->subDay();
             $twoWeeksAgoCycle = $this->getWeekCycle($dateForTwoWeeksAgo);
             $twoWeeksAgoStart = $twoWeeksAgoCycle['start'];
             $twoWeeksAgoEnd = $twoWeeksAgoCycle['end'];
+            // --- END OF CYCLE-BASED DATE LOGIC ---
 
-            // Ambil data dari API untuk keseluruhan rentang tanggal
-            $apiStartDate = $twoWeeksAgoStart->format('Y-m-d');
+
+            // --- NEW DATE LOGIC FOR VEHICLE COMPARISON (MONDAY-SUNDAY) ---
+            // This is the new logic specifically for the comparison section.
+            $lastWeekCompareStart = $today->copy()->subWeek()->startOfWeek(Carbon::MONDAY);
+            $lastWeekCompareEnd = $today->copy()->subWeek()->endOfWeek(Carbon::SUNDAY);
+
+            $twoWeeksAgoCompareStart = $today->copy()->subWeeks(2)->startOfWeek(Carbon::MONDAY);
+            $twoWeeksAgoCompareEnd = $today->copy()->subWeeks(2)->endOfWeek(Carbon::SUNDAY);
+            // --- END OF MONDAY-SUNDAY DATE LOGIC ---
+
+
+            // Determine the earliest date needed for the API call to cover all ranges.
+            $apiStartDate = min($twoWeeksAgoStart, $twoWeeksAgoCompareStart)->format('Y-m-d');
             $apiEndDate = $thisWeekEnd->format('Y-m-d');
-            // --- AKHIR LOGIKA TANGGAL BARU ---
 
             $locationCode = session('selected_location_kode_lokasi');
 
@@ -128,11 +135,10 @@ class TransactionController extends Controller
 
             if ($response->successful()) {
                 $data = $response->json()['data'][0];
-
                 $casualData = $data['casual'];
                 $passData = $data['pass'];
 
-                // Filter data berdasarkan rentang tanggal yang sudah dihitung
+                // --- FILTERING FOR MAIN DATA (CYCLE-BASED) ---
                 $thisWeekCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($thisWeekStart, $thisWeekEnd))->toArray());
                 $thisWeekPass = array_values(collect($passData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($thisWeekStart, $thisWeekEnd))->toArray());
 
@@ -142,26 +148,35 @@ class TransactionController extends Controller
                 $twoWeeksAgoCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($twoWeeksAgoStart, $twoWeeksAgoEnd))->toArray());
                 $twoWeeksAgoPass = array_values(collect($passData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($twoWeeksAgoStart, $twoWeeksAgoEnd))->toArray());
 
-                // Hitung total
+                // --- CALCULATE TOTALS FOR MAIN DATA (CYCLE-BASED) ---
                 $thisWeekCasualTotals = $this->calculateTotals($thisWeekCasual, 'casual');
                 $thisWeekPassTotals = $this->calculateTotals($thisWeekPass, 'pass');
-
                 $lastWeekCasualTotals = $this->calculateTotals($lastWeekCasual, 'casual');
                 $lastWeekPassTotals = $this->calculateTotals($lastWeekPass, 'pass');
-
                 $twoWeeksAgoCasualTotals = $this->calculateTotals($twoWeeksAgoCasual, 'casual');
                 $twoWeeksAgoPassTotals = $this->calculateTotals($twoWeeksAgoPass, 'pass');
 
 
-                // Perbandingan kendaraan (hanya casual), membandingkan 'last week' vs 'two weeks ago'
-                $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
+                // --- NEW: FILTERING & TOTALS FOR VEHICLE COMPARISON (MONDAY-SUNDAY) ---
+                $lastWeekCompareCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($lastWeekCompareStart, $lastWeekCompareEnd))->toArray());
+                $twoWeeksAgoCompareCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->betweenIncluded($twoWeeksAgoCompareStart, $twoWeeksAgoCompareEnd))->toArray());
+
+                $lastWeekCompareCasualTotals = $this->calculateTotals($lastWeekCompareCasual, 'casual');
+                $twoWeeksAgoCompareCasualTotals = $this->calculateTotals($twoWeeksAgoCompareCasual, 'casual');
+                // --- END OF NEW LOGIC ---
+
+
+                // --- VEHICLE COMPARISON LOGIC ---
+                // This now uses the Monday-Sunday totals.
+                $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi', 'other'];
                 $vehicleData = [];
                 $totalTwoWeeksAgo = 0;
                 $totalLastWeek = 0;
 
                 foreach ($vehicleTypes as $type) {
-                    $twoWeeksAgoValue = $twoWeeksAgoCasualTotals['total_' . $type];
-                    $lastWeekValue = $lastWeekCasualTotals['total_' . $type];
+                    // Use the new comparison totals
+                    $twoWeeksAgoValue = $twoWeeksAgoCompareCasualTotals['total_' . $type];
+                    $lastWeekValue = $lastWeekCompareCasualTotals['total_' . $type];
 
                     $totalTwoWeeksAgo += $twoWeeksAgoValue;
                     $totalLastWeek += $lastWeekValue;
@@ -173,14 +188,14 @@ class TransactionController extends Controller
                     $vehicleData[] = [
                         'vehicle' => ucfirst($type),
                         'two_weeks_ago' => $twoWeeksAgoValue,
-                        'this_week' => $lastWeekValue, // Label di frontend mungkin perlu disesuaikan, ini adalah data 'last_week'
+                        'this_week' => $lastWeekValue, // Key name is kept for frontend consistency
                         'percent_change' => number_format($percentChange, 1) . '%',
                         'direction' => $direction,
                         'color' => $color,
                     ];
                 }
 
-                // Total Semua Kendaraan
+                // Total All Vehicles (also uses comparison totals)
                 $percentChangeTotal = $totalTwoWeeksAgo != 0 ? (($totalLastWeek - $totalTwoWeeksAgo) / $totalTwoWeeksAgo) * 100 : 0;
                 $directionTotal = $percentChangeTotal >= 0 ? '↑' : '↓';
                 $colorTotal = $percentChangeTotal >= 0 ? 'green' : 'red';
@@ -188,7 +203,7 @@ class TransactionController extends Controller
                 $vehicleData[] = [
                     'vehicle' => 'All Vehicle',
                     'two_weeks_ago' => $totalTwoWeeksAgo,
-                    'this_week' => $totalLastWeek, // Ini adalah data 'last_week'
+                    'this_week' => $totalLastWeek,
                     'percent_change' => number_format($percentChangeTotal, 1) . '%',
                     'direction' => $directionTotal,
                     'color' => $colorTotal,
@@ -199,6 +214,7 @@ class TransactionController extends Controller
                     'message' => 'Get Quantity Data for Period ' . $locationCode,
                     'status_code' => 200,
                     'location_code' => $locationCode,
+                    // The main data sections remain unchanged, using cycle-based periods
                     'this_week' => [
                         'period' => $thisWeekStart->format('d M') . ' - ' . $thisWeekEnd->format('d M'),
                         'casual' => $thisWeekCasual,
@@ -226,6 +242,7 @@ class TransactionController extends Controller
                             'pass' => $twoWeeksAgoPassTotals,
                         ],
                     ],
+                    // This section now uses Monday-Sunday data for its calculations
                     'vehicle_comparison' => $vehicleData,
                 ]);
             }
@@ -243,15 +260,15 @@ class TransactionController extends Controller
         try {
             $today = Carbon::now()->timezone('Asia/Jakarta');
 
-            // Tanggal untuk bulan ini
+            // Dates for this month
             $thisMonthStart = $today->copy()->startOfMonth()->format('Y-m-d');
             $thisMonthEnd = $today->copy()->endOfMonth()->format('Y-m-d');
 
-            // Tanggal untuk bulan lalu.
+            // Dates for last month.
             $lastMonthStart = $today->copy()->subMonthNoOverflow()->startOfMonth()->format('Y-m-d');
             $lastMonthEnd = $today->copy()->subMonthNoOverflow()->endOfMonth()->format('Y-m-d');
 
-            // Tanggal untuk dua bulan lalu (khusus untuk vehicle_comparison).
+            // Dates for two months ago (specifically for vehicle_comparison).
             $twoMonthsAgoStart = $today->copy()->subMonthsNoOverflow(2)->startOfMonth()->format('Y-m-d');
             $twoMonthsAgoEnd = $today->copy()->subMonthsNoOverflow(2)->endOfMonth()->format('Y-m-d');
 
@@ -269,22 +286,22 @@ class TransactionController extends Controller
                 $casualData = $data['casual'];
                 $passData = $data['pass'];
 
-                // Filter data sesuai bulan
+                // Filter data by month
                 $thisMonthCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($thisMonthStart, $thisMonthEnd))->toArray());
                 $thisMonthPass = array_values(collect($passData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($thisMonthStart, $thisMonthEnd))->toArray());
                 $lastMonthCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd))->toArray());
                 $lastMonthPass = array_values(collect($passData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($lastMonthStart, $lastMonthEnd))->toArray());
                 $twoMonthsAgoCasual = array_values(collect($casualData)->filter(fn($item) => Carbon::parse($item['tanggal'])->between($twoMonthsAgoStart, $twoMonthsAgoEnd))->toArray());
 
-                // Hitung total
+                // Calculate totals
                 $thisMonthCasualTotals = $this->calculateTotals($thisMonthCasual, 'casual');
                 $thisMonthPassTotals = $this->calculateTotals($thisMonthPass, 'pass');
                 $lastMonthCasualTotals = $this->calculateTotals($lastMonthCasual, 'casual');
                 $lastMonthPassTotals = $this->calculateTotals($lastMonthPass, 'pass');
                 $twoMonthsAgoCasualTotals = $this->calculateTotals($twoMonthsAgoCasual, 'casual');
 
-                // Vehicle comparison: 2 bulan lalu vs bulan lalu (bukan this month)
-                $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi'];
+                // Vehicle comparison: 2 months ago vs last month (not this month)
+                $vehicleTypes = ['car', 'motorbike', 'truck', 'taxi', 'other']; // Added 'other'
                 $vehicleData = [];
                 $totalTwoMonthsAgo = 0;
                 $totalLastMonth = 0;
@@ -303,7 +320,7 @@ class TransactionController extends Controller
                     $vehicleData[] = [
                         'vehicle' => ucfirst($type),
                         'two_months_ago' => $twoMonthsAgoValue,
-                        'this_month' => $lastMonthValue, // ← isi dari last month
+                        'this_month' => $lastMonthValue, // ← content from last month
                         'percent_change' => number_format($percentChange, 1) . '%',
                         'direction' => $direction,
                         'color' => $color,
@@ -317,13 +334,13 @@ class TransactionController extends Controller
                 $vehicleData[] = [
                     'vehicle' => 'All Vehicle',
                     'two_months_ago' => $totalTwoMonthsAgo,
-                    'this_month' => $totalLastMonth, // ← juga pakai last month
+                    'this_month' => $totalLastMonth, // ← also uses last month
                     'percent_change' => number_format($percentChangeTotal, 1) . '%',
                     'direction' => $directionTotal,
                     'color' => $colorTotal,
                 ];
 
-                // Optional: Grouping per minggu
+                // Optional: Grouping by week
                 $thisMonthCasualByWeek = $this->groupByWeek($thisMonthCasual);
                 $thisMonthPassByWeek = $this->groupByWeek($thisMonthPass);
 

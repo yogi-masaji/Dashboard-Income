@@ -70,7 +70,7 @@ class AppServiceProvider extends ServiceProvider
                 }
 
                 // Search
-                $searchMenus = $menus->whereIn('id_Menu', [12, 13, 15, 16, 19, 20, 26, 30, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 147, 148, 149, 150, 151, 152, 153]);
+                $searchMenus = $menus->whereIn('id_Menu', [12, 13, 15, 19, 20, 26, 30, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 147, 148, 149, 150, 151, 152, 153]);
                 if ($searchMenus->isNotEmpty()) {
                     $navbarMenus[] = [
                         'name' => 'Search',
