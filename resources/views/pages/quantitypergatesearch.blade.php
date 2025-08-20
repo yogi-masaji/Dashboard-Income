@@ -33,10 +33,12 @@
             border-color: #2c4060;
         }
 
-        .form-label {
+        .form-label,
+        .form-select {
             color: #000;
         }
 
+        .mode-gelap .form-select,
         .mode-gelap .form-label,
         .mode-gelap .fw-semibold,
         .mode-gelap h5 {
@@ -144,6 +146,21 @@
         .easepick-wrapper {
             z-index: 9999 !important;
         }
+
+        /* Default (light mode) */
+        td.vehicle-header {
+            background-color: #083a62;
+            color: #000;
+            font-weight: bold;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        /* Dark mode */
+        body.mode-gelap td.vehicle-header {
+            background-color: #2a3a5a;
+            color: #fff;
+        }
     </style>
 
     {{-- ================================================================= --}}
@@ -152,19 +169,15 @@
 
     @if (isset($kodeLokasi) && in_array($kodeLokasi, ['PMBE', 'GACI', 'BMP']))
         {{-- ================================================================= --}}
-        {{-- TAMPILAN KHUSUS UNTUK PMBE, GACI, BMP                           --}}
+        {{-- TAMPILAN KHUSUS UNTUK PMBE, GACI, BMP (DENGAN EASEPICK)         --}}
         {{-- ================================================================= --}}
         <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3">
             <h5 class="mb-3 fw-semibold">Quantity Per Gate Search ({{ $kodeLokasi }})</h5>
             <form id="formPMBE">
                 <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="tgl_awal" class="form-label">Tanggal Awal</label>
-                        <input id="tgl_awal" type="date" class="form-control" name="tgl_awal">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="tgl_akhir" class="form-label">Tanggal Akhir</label>
-                        <input id="tgl_akhir" type="date" class="form-control" name="tgl_akhir">
+                    <div class="col-md-8 mb-3">
+                        <label for="datepicker_pmbe" class="form-label">Rentang Tanggal</label>
+                        <input id="datepicker_pmbe" class="form-control" placeholder="Pilih rentang tanggal" />
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="gate_option" class="form-label">Gate</label>
@@ -301,6 +314,18 @@
             // SCRIPT UNTUK LOKASI PMBE, GACI, BMP
             // =================================================================
             if (isPmbeLocation) {
+
+                // Inisialisasi easepick untuk form PMBE
+                const pickerPMBE = new easepick.create({
+                    element: document.getElementById('datepicker_pmbe'),
+                    css: ['https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css'],
+                    plugins: ['RangePlugin'],
+                    RangePlugin: {
+                        format: 'YYYY-MM-DD',
+                        delimiter: ' to '
+                    }
+                });
+
                 let dataTable = $('#table-perGate').DataTable({
                     data: [],
                     paging: false,
@@ -310,8 +335,7 @@
                     dom: 'Bfrtip',
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                     language: {
-                        // PERBAIKAN: Hapus tag <td> dari string HTML
-                        emptyTable: '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal dan gate untuk melihat data.</p></div>'
+                        emptyTable: '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih rentang tanggal dan gate untuk melihat data.</p></div>'
                     },
                     columns: [{
                             data: 'vehicle',
@@ -323,84 +347,96 @@
                         {
                             data: 'h00_01',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h01_02',
                             defaultContent: '0'
                         },
                         {
                             data: 'h02_03',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h03_04',
                             defaultContent: '0'
                         },
                         {
                             data: 'h04_05',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h05_06',
                             defaultContent: '0'
                         },
                         {
                             data: 'h06_07',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h07_08',
                             defaultContent: '0'
                         },
                         {
                             data: 'h08_09',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h09_10',
                             defaultContent: '0'
                         },
                         {
                             data: 'h10_11',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h11_12',
                             defaultContent: '0'
                         },
                         {
                             data: 'h12_13',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h13_14',
                             defaultContent: '0'
                         },
                         {
                             data: 'h14_15',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h15_16',
                             defaultContent: '0'
                         },
                         {
                             data: 'h16_17',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h17_18',
                             defaultContent: '0'
                         },
                         {
                             data: 'h18_19',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h19_20',
                             defaultContent: '0'
                         },
                         {
                             data: 'h20_21',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h21_22',
                             defaultContent: '0'
                         },
                         {
                             data: 'h22_23',
                             defaultContent: '0'
-                        }, {
+                        },
+                        {
                             data: 'h23_00',
                             defaultContent: '0'
                         }
@@ -408,30 +444,32 @@
                     createdRow: function(row, data, dataIndex) {
                         const isVehicleHeaderRow = data.vehicle !== '' && data.gate === null;
                         if (isVehicleHeaderRow) {
-                            const $firstCell = $(row).find('td:first-child');
-                            $firstCell.attr('colspan', 26);
-                            $firstCell.css({
-                                'background-color': '#083a62',
-                                'color': '#fff',
-                                'font-weight': 'bold',
-                                'text-align': 'center',
-                                'font-size': '15px',
-                            });
+                            // Kasih colspan ke td pertama
+                            $(row).find('td:first-child').attr('colspan', 26);
+
+                            // Tambahkan class biar bisa diatur via CSS
+                            $(row).find('td[colspan="26"]').addClass('vehicle-header');
+
+                            // Hide td lainnya
                             $(row).find('td:gt(0)').hide();
                         }
                     }
+
                 });
 
                 $('#formPMBE').submit(function(e) {
                     e.preventDefault();
                     const $cariButton = $('#cariPMBE');
                     const $alert = $('#alertMessage');
-                    const tgl_awal = $('#tgl_awal').val();
-                    const tgl_akhir = $('#tgl_akhir').val();
+
+                    // Mengambil tanggal dari instance easepick
+                    const tgl_awal = pickerPMBE.getStartDate()?.format('YYYY-MM-DD');
+                    const tgl_akhir = pickerPMBE.getEndDate()?.format('YYYY-MM-DD');
                     const gate_option = $('#gate_option').val();
 
                     if (!tgl_awal || !tgl_akhir || !gate_option) {
-                        $alert.text('Silakan lengkapi semua field.').removeClass('d-none');
+                        $alert.text('Silakan lengkapi rentang tanggal dan pilih gate.').removeClass(
+                            'd-none');
                         return;
                     }
                     $alert.addClass('d-none');
@@ -440,7 +478,6 @@
                     );
 
                     dataTable.clear();
-                    // PERBAIKAN: Hapus tag <td> dari string HTML
                     dataTable.settings()[0].oLanguage.sEmptyTable =
                         '<div class="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><strong>Memuat data...</strong></div>';
                     dataTable.draw();
@@ -455,7 +492,6 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
                             dataTable.settings()[0].oLanguage.sEmptyTable =
                                 '<div class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan.</p></div>';
 
@@ -480,11 +516,9 @@
                                 ];
                                 const TIME_SLOTS_CONFIG = [
                                     "00-01", "01-02", "02-03", "03-04", "04-05", "05-06",
-                                    "06-07", "07-08",
-                                    "08-09", "09-10", "10-11", "11-12", "12-13", "13-14",
-                                    "14-15", "15-16",
-                                    "16-17", "17-18", "18-19", "19-20", "20-21", "21-22",
-                                    "22-23", "23-00"
+                                    "06-07", "07-08", "08-09", "09-10", "10-11", "11-12",
+                                    "12-13", "13-14", "14-15", "15-16", "16-17", "17-18",
+                                    "18-19", "19-20", "20-21", "21-22", "22-23", "23-00"
                                 ];
 
                                 VEHICLE_TYPES_CONFIG.forEach(function(vehicleType) {
@@ -530,7 +564,6 @@
                         },
                         error: function(xhr) {
                             console.error(xhr.responseText);
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
                             dataTable.settings()[0].oLanguage.sEmptyTable =
                                 '<div class="text-center text-danger p-5"><i class="bi bi-exclamation-triangle fs-1"></i><p class="mt-2">Gagal memuat data.</p></div>';
                             dataTable.clear().draw();
@@ -538,7 +571,6 @@
                         complete: function() {
                             $cariButton.prop('disabled', false).html(
                                 '<i class="bi bi-search me-1"></i> Cari');
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
                             dataTable.settings()[0].oLanguage.sEmptyTable =
                                 '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal dan gate untuk melihat data.</p></div>';
                         }
@@ -567,7 +599,6 @@
                     info: false,
                     autoWidth: false,
                     language: {
-                        // PERBAIKAN: Hapus tag <td> dari string HTML
                         emptyTable: '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal untuk melihat data.</p></div>'
                     },
                     columns: [{
@@ -595,7 +626,6 @@
                     info: false,
                     autoWidth: false,
                     language: {
-                        // PERBAIKAN: Hapus tag <td> dari string HTML
                         emptyTable: '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal untuk melihat data.</p></div>'
                     },
                     columns: [{
@@ -631,7 +661,6 @@
 
                     tablePos.clear();
                     tableGolongan.clear();
-                    // PERBAIKAN: Hapus tag <td> dari string HTML
                     tablePos.settings()[0].oLanguage.sEmptyTable =
                         '<div class="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><strong>Memuat data...</strong></div>';
                     tableGolongan.settings()[0].oLanguage.sEmptyTable =
@@ -648,7 +677,6 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
                             tablePos.settings()[0].oLanguage.sEmptyTable =
                                 '<div class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan.</p></div>';
                             tableGolongan.settings()[0].oLanguage.sEmptyTable =
@@ -729,7 +757,6 @@
                         },
                         error: function(xhr) {
                             console.error(xhr.responseText);
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
                             tablePos.settings()[0].oLanguage.sEmptyTable =
                                 '<div class="text-center text-danger p-5"><i class="bi bi-exclamation-triangle fs-1"></i><p class="mt-2">Gagal memuat data.</p></div>';
                             tableGolongan.settings()[0].oLanguage.sEmptyTable =
@@ -740,7 +767,6 @@
                         complete: function() {
                             $cariButton.prop('disabled', false).html(
                                 '<i class="bi bi-search me-1"></i> Cari');
-                            // PERBAIKAN: Hapus tag <td> dari string HTML
                             tablePos.settings()[0].oLanguage.sEmptyTable =
                                 '<div class="text-center p-5"><i class="bi bi-calendar-week fs-1 text-muted"></i><p class="mt-2 text-muted">Pilih tanggal untuk melihat data.</p></div>';
                             tableGolongan.settings()[0].oLanguage.sEmptyTable =

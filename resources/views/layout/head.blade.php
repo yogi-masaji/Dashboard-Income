@@ -62,5 +62,124 @@
 
 <script src="vendor/js/helpers.js"></script>
 
+{{-- CSS Preloader --}}
+<style>
+    :root {
+        --hue: 223;
+        --bg: hsl(var(--hue), 90%, 90%);
+        --fg: hsl(var(--hue), 90%, 10%);
+        --primary: hsl(var(--hue), 90%, 50%);
+        --trans-dur: 0.3s;
+    }
+
+    body.preloader-active {
+        overflow: hidden;
+    }
+
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #061933;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999999;
+        transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
+
+    #preloader.hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .pl2 {
+        display: block;
+        width: 8em;
+        height: 8em;
+    }
+
+    .pl2__rect,
+    .pl2__rect-g {
+        animation: pl2-a 1.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    }
+
+    .pl2__rect {
+        animation-name: pl2-b;
+    }
+
+    .pl2__rect-g .pl2__rect {
+        transform-origin: 20px 128px;
+    }
+
+    .pl2__rect-g:first-child,
+    .pl2__rect-g:first-child .pl2__rect {
+        animation-delay: -0.25s;
+    }
+
+    .pl2__rect-g:nth-child(2),
+    .pl2__rect-g:nth-child(2) .pl2__rect {
+        animation-delay: -0.125s;
+    }
+
+    .pl2__rect-g:nth-child(2) .pl2__rect {
+        transform-origin: 64px 128px;
+    }
+
+    .pl2__rect-g:nth-child(3) .pl2__rect {
+        transform-origin: 108px 128px;
+    }
+
+    /* Dark theme */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg: hsl(var(--hue), 90%, 10%);
+            --fg: hsl(var(--hue), 90%, 90%);
+        }
+    }
+
+    /* Animations */
+    @keyframes pl2-a {
+
+        from,
+        25%,
+        66.67%,
+        to {
+            transform: translateY(0);
+        }
+
+        50% {
+            animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0);
+            transform: translateY(-80px);
+        }
+    }
+
+    @keyframes pl2-b {
+
+        from,
+        to {
+            animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0);
+            width: 40px;
+            height: 24px;
+            transform: rotate(180deg) translateX(0);
+        }
+
+        33.33% {
+            animation-timing-function: cubic-bezier(0.33, 1, 0.67, 1);
+            width: 20px;
+            height: 64px;
+            transform: rotate(180deg) translateX(10px);
+        }
+
+        66.67% {
+            animation-timing-function: cubic-bezier(0.33, 1, 0.67, 1);
+            width: 28px;
+            height: 44px;
+            transform: rotate(180deg) translateX(6px);
+        }
+    }
+</style>
 
 @stack('scripts')

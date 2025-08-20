@@ -117,62 +117,6 @@
         .chart canvas {
             cursor: pointer;
         }
-
-        /* ================================================================= */
-        /* DARK MODE COMPATIBILITY FOR MODAL                                 */
-        /* ================================================================= */
-        .mode-gelap .modal-content {
-            background-color: #192e50;
-            color: #ffffff;
-        }
-
-        .mode-gelap .modal-header {
-            border-bottom: 1px solid #2c4060;
-        }
-
-        .mode-gelap .modal-footer {
-            border-top: 1px solid #2c4060;
-        }
-
-        .mode-gelap .btn-close {
-            filter: invert(1) grayscale(100%) brightness(200%);
-        }
-
-        .mode-gelap .table {
-            color: #e9ecef;
-        }
-
-        .mode-gelap .table-bordered th,
-        .mode-gelap .table-bordered td,
-        .mode-gelap .table-bordered thead th,
-        .mode-gelap .table-bordered tfoot th {
-            border-color: #2c4060;
-        }
-
-        /* ================================================================= */
-        /* LOADING SPINNER STYLE                                             */
-        /* ================================================================= */
-        #loadingSpinner {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1061;
-            /* Pastikan di atas easepick dan modal */
-        }
-
-        .spinner-border {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 3rem;
-            height: 3rem;
-        }
-
-        /* ================================================================= */
     </style>
     <p class="text-dark"> Peak Search</p>
     <div class="search-wrapper content-custom mb-3">
@@ -188,7 +132,6 @@
             <div class="col-md-4">
                 <label for="jamType" class="form-label text-dark">Pilih Tipe Jam</label>
                 <select id="jamType" class="form-select">
-                    <option value="" disabled selected>-- Pilih Tipe Jam --</option>
                     <option value="entry">Jam Masuk</option>
                     <option value="exit">Jam Keluar</option>
                 </select>
@@ -278,7 +221,7 @@
             <h5>Truck Data Comparison</h5>
         </div>
         <div class="col-md-6">
-            <div class="chart content-custom">
+            <div class="content-custom">
                 <canvas id="truckFirstPeriodBar"></canvas>
             </div>
             <table id="truckFirstPeriod" class="table table-striped mt-3">
@@ -349,12 +292,12 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="gateDetailModalLabel">Detail Quantity pergate</h5>
+                    <h5 class="modal-title" id="gateDetailModalLabel">Detail Kuantitas per Gate</h5>
                     {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
                 </div>
                 <div class="modal-body">
-                    <h6 class="mb-1"><strong>Vehicle Type :</strong> <span id="modalVehicleType"></span></h6>
-                    <h6><strong>Jam :</strong> <span id="modalJam"></span></h6>
+                    <p class="mb-1"><strong>Vehicle Type :</strong> <span id="modalVehicleType"></span></p>
+                    <p><strong>Jam :</strong> <span id="modalJam"></span></p>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
@@ -367,12 +310,6 @@
                             <tbody id="gateDetailTableBody">
                                 <!-- Data akan diisi oleh JavaScript -->
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="2" class="text-end">Total</th>
-                                    <th id="gateDetailTotal">0</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -384,18 +321,6 @@
     </div>
     <!-- ================================================================= -->
     <!-- END OF MODAL                                                      -->
-    <!-- ================================================================= -->
-
-    <!-- ================================================================= -->
-    <!-- LOADING SPINNER ELEMENT                                           -->
-    <!-- ================================================================= -->
-    <div id="loadingSpinner">
-        <div class="spinner-border text-light" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-    <!-- ================================================================= -->
-    <!-- END OF SPINNER                                                    -->
     <!-- ================================================================= -->
 
 
@@ -747,7 +672,6 @@
                     return;
                 }
                 $('#alertMessage').hide();
-                $('#loadingSpinner').show(); // Tampilkan spinner
 
                 // Fungsi format tanggal untuk API Peak Search
                 const formatDateForBackend = (dateStr) => {
@@ -758,9 +682,6 @@
 
                 // Kondisi untuk lokasi khusus (PMBE, GACI, BMP)
                 if (isSpecialLocation) {
-                    const selectedJamType = $('#jamType').val();
-                    const gateOption = selectedJamType === 'entry' ? 'IN' : 'OUT';
-
                     // 1. Request untuk Peak Search (data chart)
                     const peakSearchRequest = $.ajax({
                         url: '{{ route('peakSearch') }}',
@@ -778,38 +699,69 @@
                         })
                     });
 
-                    // 2. Request untuk Quantity Per Gate - Periode 1
-                    const gateDetailsP1 = $.ajax({
+                    // 2. Request untuk Quantity Per Gate - Periode 1, Tipe IN (Entry)
+                    const gateDetailsP1_IN = $.ajax({
                         url: '{{ route('quantitypergatePmbeAPI') }}',
                         method: 'POST',
                         data: {
                             tgl_awal: startDate1,
                             tgl_akhir: endDate1,
-                            gate_option: gateOption,
+                            gate_option: 'IN',
                             _token: '{{ csrf_token() }}'
                         }
                     });
 
-                    // 3. Request untuk Quantity Per Gate - Periode 2
-                    const gateDetailsP2 = $.ajax({
+                    // 3. Request untuk Quantity Per Gate - Periode 1, Tipe OUT (Exit)
+                    const gateDetailsP1_OUT = $.ajax({
+                        url: '{{ route('quantitypergatePmbeAPI') }}',
+                        method: 'POST',
+                        data: {
+                            tgl_awal: startDate1,
+                            tgl_akhir: endDate1,
+                            gate_option: 'OUT',
+                            _token: '{{ csrf_token() }}'
+                        }
+                    });
+
+                    // 4. Request untuk Quantity Per Gate - Periode 2, Tipe IN (Entry)
+                    const gateDetailsP2_IN = $.ajax({
                         url: '{{ route('quantitypergatePmbeAPI') }}',
                         method: 'POST',
                         data: {
                             tgl_awal: startDate2,
                             tgl_akhir: endDate2,
-                            gate_option: gateOption,
+                            gate_option: 'IN',
+                            _token: '{{ csrf_token() }}'
+                        }
+                    });
+
+                    // 5. Request untuk Quantity Per Gate - Periode 2, Tipe OUT (Exit)
+                    const gateDetailsP2_OUT = $.ajax({
+                        url: '{{ route('quantitypergatePmbeAPI') }}',
+                        method: 'POST',
+                        data: {
+                            tgl_awal: startDate2,
+                            tgl_akhir: endDate2,
+                            gate_option: 'OUT',
                             _token: '{{ csrf_token() }}'
                         }
                     });
 
                     // Menjalankan semua request secara paralel
-                    $.when(peakSearchRequest, gateDetailsP1, gateDetailsP2)
-                        .done(function(peakRes, p1Res, p2Res) {
+                    $.when(peakSearchRequest, gateDetailsP1_IN, gateDetailsP1_OUT, gateDetailsP2_IN,
+                            gateDetailsP2_OUT)
+                        .done(function(peakRes, p1InRes, p1OutRes, p2InRes, p2OutRes) {
                             // Menyimpan hasil dari semua API
                             savedHours = peakRes[0].data[0];
                             savedGateDetails = {
-                                first_period: p1Res[0].data,
-                                second_period: p2Res[0].data
+                                first_period: {
+                                    entry: p1InRes[0].data,
+                                    exit: p1OutRes[0].data
+                                },
+                                second_period: {
+                                    entry: p2InRes[0].data,
+                                    exit: p2OutRes[0].data
+                                }
                             };
                             console.log("All data loaded and saved:", {
                                 savedHours,
@@ -820,9 +772,6 @@
                         .fail(function(xhr, status, error) {
                             console.error("Error during parallel AJAX requests:", error);
                             $('#alertMessage').text('Error fetching data. Please try again.').show();
-                        })
-                        .always(function() {
-                            $('#loadingSpinner').hide(); // Sembunyikan spinner
                         });
 
                 } else {
@@ -851,8 +800,6 @@
                             $('#alertMessage').text('Error fetching data. Please try again.')
                                 .show();
                         }
-                    }).always(function() {
-                        $('#loadingSpinner').hide(); // Sembunyikan spinner
                     });
                 }
             });
@@ -887,12 +834,12 @@
                 $('#modalJam').text(timeInterval);
 
                 const tableBody = $('#gateDetailTableBody');
-                const tableTotal = $('#gateDetailTotal');
                 tableBody.empty();
-                tableTotal.text('0'); // Reset total
 
                 const gateDetailModal = new bootstrap.Modal(document.getElementById('gateDetailModal'));
                 gateDetailModal.show();
+
+                const jamType = $('#jamType').val(); // 'entry' or 'exit'
 
                 if (!savedGateDetails) {
                     tableBody.html(
@@ -901,9 +848,16 @@
                     return;
                 }
 
-                const responseData = savedGateDetails[period];
-                if (!responseData) {
+                const periodData = savedGateDetails[period];
+                if (!periodData) {
                     tableBody.html('<tr><td colspan="3" class="text-center">No data for this period.</td></tr>');
+                    return;
+                }
+                const responseData = periodData[jamType];
+                if (!responseData) {
+                    tableBody.html(
+                        '<tr><td colspan="3" class="text-center">No data for this gate type (IN/OUT).</td></tr>'
+                    );
                     return;
                 }
 
@@ -915,6 +869,9 @@
                 };
                 const apiVehicleKey = vehicleTypeMap[vehicleType] || vehicleType.toLowerCase();
 
+                // =================================================================
+                // PERBAIKAN: Logika untuk membuat timeKey yang benar
+                // =================================================================
                 const startHourStr = timeInterval.substring(0, 2);
                 const startHour = parseInt(startHourStr, 10);
                 let endHour;
@@ -925,11 +882,11 @@
                     endHour = (startHour + 1).toString().padStart(2, '0');
                 }
                 const timeKey = `${startHourStr}-${endHour}`;
+                // =================================================================
 
                 if (responseData[apiVehicleKey]) {
                     const vehicleData = responseData[apiVehicleKey];
                     let counter = 1;
-                    let totalQuantity = 0;
                     let hasData = false;
 
                     vehicleData.forEach(gateObject => {
@@ -939,7 +896,6 @@
 
                         if (quantity !== undefined) {
                             hasData = true;
-                            totalQuantity += quantity;
                             const row = `<tr>
                                 <td>${counter++}</td>
                                 <td>${gateName}</td>
@@ -949,9 +905,7 @@
                         }
                     });
 
-                    if (hasData) {
-                        tableTotal.text(totalQuantity);
-                    } else {
+                    if (!hasData) {
                         tableBody.html(
                             '<tr><td colspan="3" class="text-center">No data available for this time slot.</td></tr>'
                         );
@@ -965,7 +919,7 @@
 
 
             // =================================================================
-            // MODIFIKASI: Event onClick pada chart & Dark Mode Compatibility
+            // MODIFIKASI: Event onClick pada chart
             // =================================================================
             function createOrUpdateChart(canvasId, chartInstance, chartData, chartLabel, vehicleType, period) {
                 const ctx = document.getElementById(canvasId)?.getContext('2d');
@@ -974,11 +928,6 @@
                 if (chartInstance) {
                     chartInstance.destroy();
                 }
-
-                // Cek mode gelap
-                const isDarkMode = document.body.classList.contains('mode-gelap');
-                const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-                const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
 
                 const colors = [
                     '#D10300', '#9966FF', '#7E00F5', '#36A2EB', '#00FFFF', '#FF6347',
@@ -1013,7 +962,7 @@
                         plugins: {
                             legend: {
                                 labels: {
-                                    color: textColor // Warna teks legenda dinamis
+                                    color: '#000'
                                 }
                             }
                         },
@@ -1021,18 +970,12 @@
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    color: textColor // Warna teks sumbu Y dinamis
-                                },
-                                grid: {
-                                    color: gridColor // Warna grid sumbu Y dinamis
+                                    color: '#000'
                                 }
                             },
                             x: {
                                 ticks: {
-                                    color: textColor // Warna teks sumbu X dinamis
-                                },
-                                grid: {
-                                    color: gridColor // Warna grid sumbu X dinamis
+                                    color: '#000'
                                 }
                             }
                         }

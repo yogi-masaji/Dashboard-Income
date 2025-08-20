@@ -8,7 +8,36 @@
     <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}">
 </head>
 
-<body>
+<body class="preloader-active">
+    {{-- Preloader Start --}}
+    <div id="preloader">
+        <svg class="pl2" viewBox="0 0 128 128" width="128px" height="128px">
+            <g fill="var(--primary)">
+                <g class="pl2__rect-g">
+                    <rect class="pl2__rect" rx="8" ry="8" x="0" y="128" width="40" height="24" transform="rotate(180)" />
+                </g>
+                <g class="pl2__rect-g">
+                    <rect class="pl2__rect" rx="8" ry="8" x="44" y="128" width="40" height="24" transform="rotate(180)" />
+                </g>
+                <g class="pl2__rect-g">
+                    <rect class="pl2__rect" rx="8" ry="8" x="88" y="128" width="40" height="24" transform="rotate(180)" />
+                </g>
+            </g>
+            <g fill="hsl(55, 90%, 50%)" mask="url(#pl-mask)">
+                <g class="pl2__rect-g">
+                    <rect class="pl2__rect" rx="8" ry="8" x="0" y="128" width="40" height="24" transform="rotate(180)" />
+                </g>
+                <g class="pl2__rect-g">
+                    <rect class="pl2__rect" rx="8" ry="8" x="44" y="128" width="40" height="24" transform="rotate(180)" />
+                </g>
+                <g class="pl2__rect-g">
+                    <rect class="pl2__rect" rx="8" ry="8" x="88" y="128" width="40" height="24" transform="rotate(180)" />
+                </g>
+            </g>
+        </svg>
+    </div>
+    {{-- Preloader End --}}
+
     <style>
         a.menu-link::before {
             background-color: #fff !important;
@@ -438,6 +467,17 @@
 
 
 </body>
+{{-- Preloader Script --}}
+<script>
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            const preloader = document.getElementById('preloader');
+            preloader.classList.add('hidden');
+            document.body.classList.remove('preloader-active');
+        }, 2000); // 2000 milliseconds = 2 seconds
+    });
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Elements

@@ -87,51 +87,132 @@
             border-radius: 10px;
             margin-left: 10px;
         }
+
+        .dt-info {
+            color: #000000;
+        }
+
+        .mode-gelap .dt-info {
+            color: #ffffff;
+        }
+
+        /* Container for the table to position the overlay correctly */
+        #table-container {
+            position: relative;
+        }
+
+        /* Loading Overlay Styles */
+        #loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            font-size: 1.2rem;
+            border-radius: 10px;
+        }
+
+        /* Spinner Styles */
+        .spinner {
+            display: flex;
+            justify-content: space-around;
+            width: 70px;
+            margin-bottom: 20px;
+        }
+
+        .spinner div {
+            width: 18px;
+            height: 18px;
+            background-color: #FCB900;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .spinner .dot1 {
+            animation-delay: -0.32s;
+        }
+
+        .spinner .dot2 {
+            animation-delay: -0.16s;
+        }
+
+        .form-label {
+            color: #000;
+        }
+
+        .mode-gelap .form-label {
+            color: #fff;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1.0);
+            }
+        }
     </style>
-    <h5>membership search</h5>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="row">
-
-                <div class="col-md-6">
-                    <select class="form-select" id="memberStatus" aria-label="Default select example">
-                        <option selected disabled>--Member Status--</option>
-                        <option value="aktif">Member Aktif</option>
-                        <option value="nonaktif">Member Nonaktif</option>
-                        <option value="period">Member By Period</option>
-                    </select>
-
-                </div>
-                <div class="col-md-6" id="periodInput" style="display: none;"> <!-- hidden by default -->
-                    <input type="text" name="start1" id="start-date-1" class="form-control start-date"
-                        placeholder="Select start date" />
-                </div>
-
-            </div>
-            <div class="mt-3">
-                <button type="button" class="btn btn-submit" id="cari">Cari</button>
-            </div>
+    <h5>Membership Search</h5>
+    <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label for="memberStatus" class="form-label">Member Status</label>
+            <select class="form-select" id="memberStatus" aria-label="Default select example">
+                <option selected disabled>--Select Status--</option>
+                <option value="aktif">Member Aktif</option>
+                <option value="nonaktif">Member Nonaktif</option>
+                <option value="period">Member By Period</option>
+            </select>
+        </div>
+        <div class="col-md-4" id="periodInput" style="display: none;">
+            <label for="start-date-1" class="form-label">Select Period</label>
+            <input type="text" name="start1" id="start-date-1" class="form-control start-date"
+                placeholder="Select start date" />
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-submit w-100" id="cari">Cari</button>
         </div>
     </div>
+
 
     <div class="result mt-5">
         <div class="text-center">
             <h5>BCA Membership</h5>
         </div>
-
-        <table id="membershipTable" class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>No Plat</th>
-                    <th>Jenis Kendaraan</th>
-                    <th>Nama Member</th>
-                    <th>Nama Produk</th>
-                    <th>Masa Berlaku</th>
-                    <th>Masa Akhir Berlaku</th>
-                </tr>
-            </thead>
-        </table>
+        <div id="table-container">
+            <div id="loading-overlay" style="display: none;">
+                <div class="spinner">
+                    <div class="dot1"></div>
+                    <div class="dot2"></div>
+                    <div class="dot3"></div>
+                </div>
+                <p>Loading</p>
+            </div>
+            <table id="membershipTable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>No Plat</th>
+                        <th>Jenis Kendaraan</th>
+                        <th>Nama Member</th>
+                        <th>Nama Produk</th>
+                        <th>Masa Berlaku</th>
+                        <th>Masa Akhir Berlaku</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
     <script>
         $(document).ready(function() {
@@ -154,7 +235,7 @@
             let lastPeriod = '';
             const TableMembership = $('#membershipTable').DataTable({
                 dom: "Bfltip",
-                pageLength: 50,
+                pageLength: 25,
                 ordering: true,
                 lengthChange: false,
                 layout: {
@@ -244,9 +325,17 @@
                 let selection = $('#memberStatus').val();
                 let period = $('#start-date-1').val();
 
+                if (!selection) {
+                    alert('Please select a member status.');
+                    return;
+                }
+
+                $('#loading-overlay').show();
+
                 // ✅ Kalau period berubah, harus fetch ulang
                 if (aktifData.length > 0 && nonaktifData.length > 0 && period === lastPeriod) {
                     updateTableBySelection(selection);
+                    $('#loading-overlay').hide(); // Hide immediately if no fetch is needed
                 } else {
                     $.ajax({
                         url: "{{ route('membershipApi') }}",
@@ -265,6 +354,9 @@
                         },
                         error: function(xhr) {
                             alert('Failed to fetch data.');
+                        },
+                        complete: function() {
+                            $('#loading-overlay').hide();
                         }
                     });
                 }

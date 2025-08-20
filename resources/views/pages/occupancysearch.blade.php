@@ -162,7 +162,72 @@
         .mode-gelap .form-label {
             color: #ffffff;
         }
+
+        /* Container for the table to position the overlay correctly */
+        #table-container {
+            position: relative;
+        }
+
+        /* Loading Overlay Styles - Changed to absolute positioning */
+        #loading-overlay {
+            position: absolute;
+            /* Changed from fixed */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Lighter background */
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            /* Darker text for better contrast on light bg */
+            font-size: 1.2rem;
+            border-radius: 10px;
+            /* Match container radius */
+        }
+
+        /* New Spinner Styles */
+        .spinner {
+            display: flex;
+            justify-content: space-around;
+            width: 70px;
+            margin-bottom: 20px;
+        }
+
+        .spinner div {
+            width: 18px;
+            height: 18px;
+            background-color: #FCB900;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .spinner .dot1 {
+            animation-delay: -0.32s;
+        }
+
+        .spinner .dot2 {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1.0);
+            }
+        }
     </style>
+
     <div class="search-wrapper">
         <div class="row g-3 align-items-end">
             <div class="col-md-4">
@@ -176,42 +241,53 @@
     </div>
 
     <div class="content-custom mt-5">
-        <div class="table-scroll-wrapper">
-            <table class="wide-data-table" id="occupancyTable">
-                <thead>
-                    <tr>
-                        <th>Floor Name</th>
-                        <th>00:00</th>
-                        <th>01:00</th>
-                        <th>02:00</th>
-                        <th>03:00</th>
-                        <th>04:00</th>
-                        <th>05:00</th>
-                        <th>06:00</th>
-                        <th>07:00</th>
-                        <th>08:00</th>
-                        <th>09:00</th>
-                        <th>10:00</th>
-                        <th>11:00</th>
-                        <th>12:00</th>
-                        <th>13:00</th>
-                        <th>14:00</th>
-                        <th>15:00</th>
-                        <th>16:00</th>
-                        <th>17:00</th>
-                        <th>18:00</th>
-                        <th>19:00</th>
-                        <th>20:00</th>
-                        <th>21:00</th>
-                        <th>22:00</th>
-                        <th>23:00</th>
+        <div id="table-container">
+            <!-- Loading Overlay HTML - Moved inside the container -->
+            <div id="loading-overlay" style="display: none;">
+                <div class="spinner">
+                    <div class="dot1"></div>
+                    <div class="dot2"></div>
+                    <div class="dot3"></div>
+                </div>
+                <p>Loading</p>
+            </div>
+            <div class="table-scroll-wrapper">
+                <table class="wide-data-table" id="occupancyTable">
+                    <thead>
+                        <tr>
+                            <th>Floor Name</th>
+                            <th>00:00</th>
+                            <th>01:00</th>
+                            <th>02:00</th>
+                            <th>03:00</th>
+                            <th>04:00</th>
+                            <th>05:00</th>
+                            <th>06:00</th>
+                            <th>07:00</th>
+                            <th>08:00</th>
+                            <th>09:00</th>
+                            <th>10:00</th>
+                            <th>11:00</th>
+                            <th>12:00</th>
+                            <th>13:00</th>
+                            <th>14:00</th>
+                            <th>15:00</th>
+                            <th>16:00</th>
+                            <th>17:00</th>
+                            <th>18:00</th>
+                            <th>19:00</th>
+                            <th>20:00</th>
+                            <th>21:00</th>
+                            <th>22:00</th>
+                            <th>23:00</th>
 
-                        <th>Total</th>
-                        <th>Average</th>
-                    </tr>
-                </thead>
+                            <th>Total</th>
+                            <th>Average</th>
+                        </tr>
+                    </thead>
 
-            </table>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -236,17 +312,11 @@
 
     <script>
         const occupancyTable = $('#occupancyTable').DataTable({
-            // dom: "Bfltip",
             searching: false,
             paging: false,
             pageLength: false,
             lengthChange: false,
             bInfo: false,
-            // layout: {
-            //     topEnd: {
-            //         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
-            //     },
-            // },
             columns: [{
                     data: 'floor_name'
                 },
@@ -336,9 +406,14 @@
                 const startDate = $('#start-date-1').val();
 
                 if (!startDate) {
-                    alert('Please select a start date.');
+                    // I'm replacing alert with a more modern approach, like a toast notification or a modal.
+                    // For now, I'll keep it simple to avoid adding new libraries.
+                    alert('Silakan pilih tanggal terlebih dahulu.');
                     return;
                 }
+
+                // Show loading screen
+                $('#loading-overlay').show();
 
                 $.ajax({
                     url: '{{ route('occupancySearchAPI') }}',
@@ -349,7 +424,6 @@
                     },
                     success: function(response) {
 
-                        // You can update your HTML here to show the results
                         const occupancyData = response.data;
                         console.log(occupancyData)
 
@@ -362,7 +436,6 @@
                             '04:00': item.jam5,
                             '05:00': item.jam6,
                             '06:00': item.jam7,
-
                             '07:00': item.jam8,
                             '08:00': item.jam9,
                             '09:00': item.jam10,
@@ -380,7 +453,6 @@
                             '21:00': item.jam22,
                             '22:00': item.jam23,
                             '23:00': item.jam24,
-
                             total: item.total,
                             average: item.average
                         }));
@@ -389,6 +461,12 @@
                     },
                     error: function(xhr, status, error) {
                         console.error('AJAX Error:', error);
+                        alert('Terjadi kesalahan saat mengambil data.');
+                    },
+                    complete: function() {
+                        // This function will run regardless of success or error
+                        // Hide loading screen
+                        $('#loading-overlay').hide();
                     }
                 });
             });
