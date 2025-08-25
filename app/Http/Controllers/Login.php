@@ -152,6 +152,7 @@ class Login extends Controller
         }
     }
 
+
     /**
      * Menangani proses logout pengguna.
      */
@@ -160,20 +161,40 @@ class Login extends Controller
         $id_Staff = $request->session()->get('id_Staff');
 
         if ($id_Staff) {
-            // ### MODIFIKASI ###
-            // Set status_login ke 0 dan bersihkan session_id saat logout
             DB::table('ms_login')->where('id_Staff', $id_Staff)->update([
                 'status_login' => 0,
-                'session_id' => null // Hapus ID sesi dari database
+                'session_id' => null
             ]);
             Log::info('Logout berhasil untuk id_Staff: ' . $id_Staff);
         }
 
-        $request->session()->flush();    // Hapus semua data sesi
-        $request->session()->invalidate(); // Invalidate sesi
-        $request->session()->regenerateToken(); // Regenerate CSRF token
+        // Hancurkan sesi lama
+        $request->session()->flush();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        // Buat URL ke halaman login
+        $loginUrl = route('login');
+
+        // Kembalikan respons HTML yang berisi JavaScript untuk redirect
+        // Ini memaksa browser untuk melakukan navigasi baru ke halaman login
+        $html = "
+            <!DOCTYPE html>
+            <html>
+                <head>
+                    <title>Logging out...</title>
+                    <script>
+                        // Paksa browser untuk pindah ke halaman login
+                        window.location.href = '{$loginUrl}';
+                    </script>
+                </head>
+                <body>
+                    <p>Redirecting to login page...</p>
+                </body>
+            </html>
+        ";
+
+        return response($html);
     }
 
 

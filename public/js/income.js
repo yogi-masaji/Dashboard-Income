@@ -90,7 +90,7 @@ $(document).ready(function() {
                 const container = $('#daily-income-comparison').empty();
                 const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6'];
                 compare.forEach((vehicle, index) => {
-                    container.append(`<div class="${colClasses[index]}"><div class="dashboard-card"><div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div><div class="d-flex align-items-baseline"><h6 class="card-value" style="color: #000 !important;">${formatRupiah(vehicle.today)}</h6><span class="ms-2" style="color: ${vehicle.color}; font-size:12px;">${vehicle.percent_change} ${vehicle.direction}</span></div><div class="yesterday" style="color: #000 !important;">Yesterday: ${formatRupiah(vehicle.yesterday)}</div></div></div>`);
+                    container.append(`<div class="${colClasses[index]}"><div class="dashboard-card"><div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div><div class="d-flex align-items-baseline"><h6 class="card-value fs-6 fs-md-5" style="color: #000 !important;">${formatRupiah(vehicle.today)}</h6><span class="ms-2 fs-6 fs-md-5" style="color: ${vehicle.color}; font-size:12px;">${vehicle.percent_change} ${vehicle.direction}</span></div><div class="yesterday fs-6 fs-md-5" style="color: #000 !important;">Yesterday: ${formatRupiah(vehicle.yesterday)}</div></div></div>`);
                 });
 
                 const rows = [{ type: 'Car', yesterday: yesterday.carincome, today: today.carincome }, { type: 'Motorbike', yesterday: yesterday.motorbikeincome, today: today.motorbikeincome }, { type: 'Truck', yesterday: yesterday.truckincome, today: today.truckincome }, { type: 'Taxi', yesterday: yesterday.taxiincome, today: today.taxiincome }, { type: 'Lost Ticket', yesterday: yesterday.ticketincome, today: today.ticketincome }, { type: 'Other', yesterday: yesterday.otherincome, today: today.otherincome }, ];
@@ -142,7 +142,7 @@ $(document).ready(function() {
                 const container = $('#weekly-income-comparison').empty();
                 const colClasses = ['col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6', 'col-md-6'];
                 table_data.forEach((vehicle, index) => {
-                    container.append(`<div class="${colClasses[index]}"><div class="dashboard-card"><div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div><div class="d-flex align-items-baseline"><h6 class="card-value" style="color: #000 !important;">${formatRupiah(vehicle.this_week)}</h6><span class="ms-2" style="color: ${vehicle.color}; font-size:12px;">${vehicle.percent_change} ${vehicle.direction}</span></div><div class="yesterday" style="color: #000 !important;">Two Weeks Ago: ${formatRupiah(vehicle.last_week)}</div></div></div>`);
+                    container.append(`<div class="${colClasses[index]}"><div class="dashboard-card"><div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div><div class="d-flex align-items-baseline"><h6 class="card-value fs-6 fs-md-5" style="color: #000 !important;">${formatRupiah(vehicle.this_week)}</h6><span class="ms-2 fs-6 fs-md-5" style="color: ${vehicle.color}; font-size:12px;">${vehicle.percent_change} ${vehicle.direction}</span></div><div class="yesterday fs-6 fs-md-5" style="color: #000 !important;">Two Weeks Ago: ${formatRupiah(vehicle.last_week)}</div></div></div>`);
                 });
 
                 const rows = [{ type: 'Car', thisWeekIncome: this_week.totals.carincome, lastWeekIncome: last_week.totals.carincome }, { type: 'Motorbike', thisWeekIncome: this_week.totals.motorbikeincome, lastWeekIncome: last_week.totals.motorbikeincome }, { type: 'Truck', thisWeekIncome: this_week.totals.truckincome, lastWeekIncome: last_week.totals.truckincome }, { type: 'Taxi', thisWeekIncome: this_week.totals.taxiincome, lastWeekIncome: last_week.totals.taxiincome }, { type: 'lost ticket', thisWeekIncome: this_week.totals.ticketincome, lastWeekIncome: last_week.totals.ticketincome }, { type: 'Other', thisWeekIncome: this_week.totals.otherincome, lastWeekIncome: last_week.totals.otherincome }, ];
@@ -159,7 +159,7 @@ $(document).ready(function() {
                 
                 const commonOptions = { 
                     responsive: true, 
-                    maintainAspectRatio: true, 
+                    maintainAspectRatio: false, 
                     plugins: { 
                         legend: { position: 'top', labels: { /* color diatur oleh fungsi tema */ } }, 
                         datalabels: { 
@@ -203,7 +203,7 @@ $(document).ready(function() {
                 const container = $('#monthly-income-comparison').empty();
                 const colClasses = Array(table_data.length).fill('col-md-6');
                 table_data.forEach((vehicle, index) => {
-                    container.append(`<div class="${colClasses[index]}"><div class="dashboard-card"><div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div><div class="d-flex align-items-baseline"><h6 class="card-value" style="color: #000 !important;">${formatRupiah(vehicle.this_month)}</h6><span class="ms-2" style="color: ${vehicle.color}; font-size:12px;">${vehicle.percent_change} ${vehicle.direction}</span></div><div class="yesterday" style="color: #000 !important;">Two Months Ago: ${formatRupiah(vehicle.last_month)}</div></div></div>`);
+                    container.append(`<div class="${colClasses[index]}"><div class="dashboard-card"><div class="card-title" style="color: #000 !important;">${vehicle.vehicle}</div><div class="d-flex align-items-baseline"><h6 class="card-value fs-6 fs-md-5" style="color: #000 !important;">${formatRupiah(vehicle.this_month)}</h6><span class="ms-2 fs-6 fs-md-5" style="color: ${vehicle.color}; font-size:12px;">${vehicle.percent_change} ${vehicle.direction}</span></div><div class="yesterday fs-6 fs-md-5" style="color: #000 !important;">Two Months Ago: ${formatRupiah(vehicle.last_month)}</div></div></div>`);
                 });
 
                 const rows = [{ type: 'Car', thisMonthIncome: this_Month.totals.carincome, lastMonthIncome: last_Month.totals.carincome }, { type: 'Motorbike', thisMonthIncome: this_Month.totals.motorbikeincome, lastMonthIncome: last_Month.totals.motorbikeincome }, { type: 'Truck', thisMonthIncome: this_Month.totals.truckincome, lastMonthIncome: last_Month.totals.truckincome }, { type: 'Taxi', thisMonthIncome: this_Month.totals.taxiincome, lastMonthIncome: last_Month.totals.taxiincome }, { type: 'Lost Ticket', thisMonthIncome: this_Month.totals.ticketincome, lastMonthIncome: last_Month.totals.ticketincome }, { type: 'Other', thisMonthIncome: this_Month.totals.otherincome, lastMonthIncome: last_Month.totals.otherincome }, ];
@@ -220,7 +220,7 @@ $(document).ready(function() {
                 
                 const commonOptions = { 
                     responsive: true, 
-                    maintainAspectRatio: true, 
+                    maintainAspectRatio: false, 
                     plugins: { 
                         legend: { position: 'top', labels: { /* color diatur oleh fungsi tema */ } }, 
                         datalabels: { 

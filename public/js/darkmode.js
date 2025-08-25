@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
             Chart.defaults.scale.ticks.color = newColor;
             Chart.defaults.scale.grid.color = gridColor;
             Chart.defaults.plugins.legend.labels.color = newColor;
-
+            Chart.defaults.plugins.title.color = newColor;
             // Also, loop through any *currently existing* charts and update them.
             // This is useful for when the user manually clicks the theme toggle.
             for (const id in Chart.instances) {
@@ -28,6 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (chart.options.plugins && chart.options.plugins.legend) {
                     chart.options.plugins.legend.labels.color = newColor;
                 }
+
+                if (chart.options.plugins?.title) {
+                chart.options.plugins.title.color = newColor; // 🔑 Update warna title chart yang ada
+            }
 
                 // Update axis (scale) colors
                 if (chart.options.scales) {

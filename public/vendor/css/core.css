@@ -641,7 +641,7 @@ progress {
   color: rgba(34, 48, 62, 0.6);
 }
 .blockquote-footer::before {
-  content: "— ";
+  content: "— ";
 }
 
 .img-fluid {
@@ -21664,8 +21664,8 @@ body {
 .container-lg,
 .container-xl,
 .container-xxl {
-  padding-right: 1rem;
-  padding-left: 1rem;
+  padding-right: 0.2rem;
+  padding-left: 0.2rem;
 }
 @media (min-width: 992px) {
   .container,

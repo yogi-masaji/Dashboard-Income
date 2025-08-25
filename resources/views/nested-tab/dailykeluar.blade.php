@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-6">
+    <div class="col-12 col-md-6">
         <div class="content-custom mb-2">
 
             <canvas id="DailyPintuKeluarToday" height="300px"></canvas>
@@ -15,7 +15,7 @@
             </thead>
         </table>
     </div>
-    <div class="col-6">
+    <div class="col-12 col-md-6">
         <div class="content-custom mb-2">
 
             <canvas id="DailyPintuKeluarYesterday" height="300px"></canvas>

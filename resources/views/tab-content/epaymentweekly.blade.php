@@ -1,14 +1,45 @@
+<style>
+    @media (max-width: 768px) {
+        #weeklyE-Payment {
+            font-size: 11px;
+        }
+
+        #weeklyE-Payment tfoot th,
+        #weeklyE-Payment thead th {
+            font-size: 10px;
+        }
+
+        #weeklyE-Payment th,
+        #weeklyE-Payment td {
+            padding: 1px 2px;
+            white-space: nowrap;
+        }
+    }
+
+    .chart-container {
+        position: relative;
+        height: 45vh;
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .chart-container {
+            height: 25vh;
+
+        }
+    }
+</style>
 <div class="row">
     <div class="col-md-12">
         <h5>Weekly E-Payment</h5>
         <div class="row d-flex align-items-stretch" id="dashboardRow">
-            <div class="col-md-6 d-flex">
+            <div class="col-12 col-md-6 d-flex">
                 <div class="content-custom flex-fill">
                     <h6>Comparison last week & two weeks ago (range: senin - minggu)</h6>
                     <div class="row" id="weekly-epayment-comparison"></div>
                 </div>
             </div>
-            <div class="col-md-6 d-flex">
+            <div class="col-12 mt-3 mt-md-0 col-md-6 d-flex">
                 <div class="content-custom flex-fill">
                     <table id="weeklyE-Payment" class="table table-striped table-bordered">
                         <thead>
@@ -41,11 +72,17 @@
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-weeklyE-Payment" role="tabpanel"
                             aria-labelledby="nav-weeklyE-Payment-tab" tabindex="0">
-                            <canvas id="weeklyE-PaymentBar" height="100" width="auto"></canvas>
+                            <div class="chart-container">
+
+                                <canvas id="weeklyE-PaymentBar"></canvas>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="nav-weeklyE-Payment-line" role="tabpanel"
                             aria-labelledby="nav-weeklyE-Payment-line-tab" tabindex="0">
-                            <canvas id="weeklyE-PaymentLine" height="100" width="auto"></canvas>
+                            <div class="chart-container">
+
+                                <canvas id="weeklyE-PaymentLine"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>

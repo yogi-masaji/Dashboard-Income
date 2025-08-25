@@ -1,14 +1,45 @@
+<style>
+    @media (max-width: 768px) {
+        #weeklyIncome {
+            font-size: 11px;
+        }
+
+        #weeklyIncome tfoot th,
+        #weeklyIncome thead th {
+            font-size: 9px !important;
+        }
+
+        #weeklyIncome th,
+        #weeklyIncome td {
+            padding: 1px 2px;
+            white-space: nowrap;
+        }
+    }
+
+    .chart-container {
+        position: relative;
+        height: 45vh;
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .chart-container {
+            height: 25vh;
+
+        }
+    }
+</style>
 <h5>Weekly Income</h5>
 <div class="row">
     <div class="col-12">
         <div class="row d-flex align-items-stretch" id="dashboardRow">
-            <div class="col-md-6 d-flex">
+            <div class="col-12 col-md-6 d-flex">
                 <div class="content-custom flex-fill">
                     <h6>Comparison last week & two weeks ago (range: senin - minggu)</h6>
                     <div class="row" id="weekly-income-comparison"></div>
                 </div>
             </div>
-            <div class="col-md-6 d-flex">
+            <div class="col-12 mt-3 mt-md-0 col-md-6 d-flex">
                 <div class="content-custom flex-fill">
                     <table id="weeklyIncome" class="table table-striped table-bordered">
                         <thead>
@@ -46,11 +77,17 @@
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-weeklyIncome" role="tabpanel"
                             aria-labelledby="nav-weeklyIncome-tab" tabindex="0">
-                            <canvas id="weeklyIncomeBar" height="100" width="auto"></canvas>
+                            <div class="chart-container">
+
+                                <canvas id="weeklyIncomeBar"></canvas>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="nav-weeklyIncome-line" role="tabpanel"
                             aria-labelledby="nav-weeklyIncome-line-tab" tabindex="0">
-                            <canvas id="weeklyIncomeLine" height="100" width="auto"></canvas>
+                            <div class="chart-container">
+
+                                <canvas id="weeklyIncomeLine"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -2909,9 +2909,9 @@
                                     <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.tapcash)}</td>
                                     <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(secondPeriodTotals.tapcash)}</td>
                                     <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Other</td>
-                                    <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.otherpassqty)}</td>
+                                    <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.otherqtypass)}</td>
                                     <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(firstPeriodTotals.otherqty)}</td>
-                                    <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.otherpassqty)}</td>
+                                    <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.otherqtypass)}</td>
                                     <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatQuantity(secondPeriodTotals.otherqty)}</td>
                                     <td class="text-start" style="border-left: 1px solid #000; border-top: 1px solid #000;border-right: 1px solid #000;">Other</td>
                                     <td class="text-start" style="border-top: 1px solid #000; border-right: 1px solid #000;">${formatRupiah(firstPeriodTotals.otherincome)}</td>

@@ -1,6 +1,6 @@
 <div class="tab-pane fade show active" id="pills-pintumasuk" role="tabpanel" aria-labelledby="pills-pintumasuk-tab">
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <div class="content-custom mb-2">
                 <canvas id="DailyPintuMasukToday" height="300px"></canvas>
             </div>
@@ -15,7 +15,7 @@
                 </thead>
             </table>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <div class="content-custom mb-2">
                 <canvas id="DailyPintuMasukYesterday" height="300px"></canvas>
             </div>
@@ -36,7 +36,7 @@
 
 <div class="tab-pane fade" id="pills-pintukeluar" role="tabpanel" aria-labelledby="pills-pintukeluar-tab">
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <canvas id="DailyPintuKeluarToday" height="300px"></canvas>
             <table id="DailyPintuKeluarTodayTable" class="table table-striped table-bordered">
                 <thead>
@@ -49,7 +49,7 @@
                 </thead>
             </table>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <canvas id="DailyPintuKeluarYesterday" height="300px"></canvas>
             <table id="DailyPintuKeluarYesterdayTable" class="table table-striped table-bordered">
                 <thead>

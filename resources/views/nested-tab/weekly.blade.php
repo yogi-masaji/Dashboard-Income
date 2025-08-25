@@ -1,7 +1,7 @@
 <div class="tab-pane fade show active" id="pills-pintumasuk-weekly" role="tabpanel"
     aria-labelledby="pills-pintumasuk-tab-weekly">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 col-12">
             <canvas id="WeeklyPintuMasukToday" height="300px"></canvas>
             <table id="weeklyPintuMasukTable" class="table table-striped table-bordered">
                 <thead>
@@ -14,7 +14,7 @@
                 </thead>
             </table>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 col-12">
             <canvas id="WeeklyPintuMasukYesterday" height="300px"></canvas>
             <table id="LastweeklyPintuMasukTable" class="table table-striped table-bordered">
                 <thead>

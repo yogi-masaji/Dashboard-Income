@@ -58,10 +58,10 @@ $(document).ready(function() {
                             <div class="dashboard-card">
                                 <div class="card-title" style="color: #000 !important">${payment.method}</div>
                                 <div class="d-flex align-items-baseline">
-                                    <h6 class="card-value" style="color: #000 !important">${formatRupiah(payment.today)}</h6>
-                                    <span class="ms-2" style="color: ${payment.color}">${payment.percent_change} ${payment.direction}</span>
+                                    <h6 class="card-value fs-6 fs-md-5" style="color: #000 !important">${formatRupiah(payment.today)}</h6>
+                                    <span class="ms-2 fs-6 fs-md-5" style="color: ${payment.color}">${payment.percent_change} ${payment.direction}</span>
                                 </div>
-                                <div class="yesterday" style="color: #000 !important">Yesterday: ${formatRupiah(payment.yesterday)}</div>
+                                <div class="yesterday fs-6 fs-md-5" style="color: #000 !important">Yesterday: ${formatRupiah(payment.yesterday)}</div>
                             </div>
                         </div>
                     `);
@@ -104,7 +104,7 @@ $(document).ready(function() {
 
                 const dataChart = { labels, datasets };
                 const commonOptions = {
-                    responsive: true, maintainAspectRatio: true,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { position: 'top', labels: { color: '#000' } }, datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold', size: 9 }, formatter: value => formatRupiah(value), padding: 6, offset: 8 } },
                     scales: { y: { beginAtZero: true, ticks: { precision: 0, color: '#000' }, grace: '10%' }, x: { ticks: { color: '#000' } } }
                 };
@@ -138,10 +138,10 @@ $(document).ready(function() {
                             <div class="dashboard-card">
                                 <div class="card-title" style="color: #000 !important">${payment.method}</div>
                                 <div class="d-flex align-items-baseline">
-                                    <h6 class="card-value" style="color: #000 !important">${formatRupiah(payment.this_week)}</h6>
-                                    <span class="ms-2" style="color: ${payment.color}">${payment.percent_change}${payment.direction}</span>
+                                    <h6 class="card-value fs-6 fs-md-5" style="color: #000 !important">${formatRupiah(payment.this_week)}</h6>
+                                    <span class="ms-2 fs-6 fs-md-5" style="color: ${payment.color}">${payment.percent_change}${payment.direction}</span>
                                 </div>
-                                <div class="yesterday"  style="color: #000 !important">Two Weeks Ago: ${formatRupiah(payment.last_week)}</div>
+                                <div class="yesterday fs-6 fs-md-5"  style="color: #000 !important">Two Weeks Ago: ${formatRupiah(payment.last_week)}</div>
                             </div>
                         </div>
                     `);
@@ -175,7 +175,7 @@ $(document).ready(function() {
                 }));
 
                 const commonOptions = {
-                    responsive: true, maintainAspectRatio: true,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { position: 'top', labels: { color: '#000' } }, datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold', size: 9 }, formatter: value => formatRupiah(value), padding: 6, offset: 8 } },
                     scales: { y: { beginAtZero: true, ticks: { precision: 0, color: '#000' }, grace: '10%' }, x: { ticks: { color: '#000' } } }
                 };
@@ -209,10 +209,10 @@ $(document).ready(function() {
                             <div class="dashboard-card">
                                 <div class="card-title" style="color: #000 !important">${payment.method}</div>
                                 <div class="d-flex align-items-baseline">
-                                    <h6 class="card-value" style="color: #000 !important">${formatRupiah(payment.this_month)}</h6>
-                                    <span class="ms-2" style="color: ${payment.color}">${payment.percent_change} ${payment.direction}</span>
+                                    <h6 class="card-value fs-6 fs-md-5" style="color: #000 !important">${formatRupiah(payment.this_month)}</h6>
+                                    <span class="ms-2 fs-6 fs-md-5" style="color: ${payment.color}">${payment.percent_change} ${payment.direction}</span>
                                 </div>
-                                <div class="yesterday" style="color: #000 !important">Two Months Ago: ${formatRupiah(payment.last_month)}</div>
+                                <div class="yesterday fs-6 fs-md-5" style="color: #000 !important">Two Months Ago: ${formatRupiah(payment.last_month)}</div>
                             </div>
                         </div>
                     `);
@@ -246,7 +246,7 @@ $(document).ready(function() {
                 }));
 
                 const commonOptions = {
-                    responsive: true, maintainAspectRatio: true,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { position: 'top', labels: { color: '#000' } }, datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold', size: 9 }, formatter: value => formatRupiah(value), padding: 6, offset: 8 } },
                     scales: { y: { beginAtZero: true, ticks: { precision: 0, color: '#000' }, grace: '10%' }, x: { ticks: { color: '#000' } } }
                 };

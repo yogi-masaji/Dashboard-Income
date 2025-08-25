@@ -14,7 +14,6 @@
         .content-wrapper {
             position: relative;
             min-height: 100vh;
-            /* Ensure it takes at least the full viewport height */
         }
 
         /* Styles for the loading screen */

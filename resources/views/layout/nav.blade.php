@@ -231,6 +231,17 @@
             box-shadow: none;
             border-color: #86b7fe;
         }
+        a#mobile-toggle {
+            color:#000;
+        }
+        .mode-gelap a#mobile-toggle {
+            color: #fff !important;
+        }
+        .responsive-heading {
+    font-size: clamp(14px, 2vw, 24px);  
+        line-height: 20px !important;
+}
+
     </style>
 
     <!-- Layout wrapper -->
@@ -247,10 +258,10 @@
 
                     </a>
 
-                    <a href="javascript:void(0);"
-                        class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                    {{-- <a href="javascript:void(0);"
+                        class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" >
                         <i class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"></i>
-                    </a>
+                    </a> --}}
                 </div>
 
 
@@ -258,8 +269,8 @@
                 <div class="menu-inner-shadow"></div>
                 <form method="POST" action="{{ route('set.location') }}">
                     @csrf
-                    <div class="p-5">
-                        <h5 class="brand-title" style="color: #fff !important">
+                    <div class="p-2">
+                        <h5 class="brand-title text-center" style="color: #fff !important">
                             {{ session('selected_location_name', 'GRAND INDONESIA') }}</h5>
 
                         <label for="locationSelect" class="select-label">Select Location</label>
@@ -315,86 +326,82 @@
             <div class="layout-page">
                 <!-- Navbar -->
 
-                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-                    id="layout-navbar">
-                    <div class="layout-menu-toggle navbar-nav align-items-center me-3 d-none d-xl-block">
-                        <a class="nav-item nav-link px-0 text-dark" href="javascript:void(0);" id="desktop-toggle">
-                            <i class="bx bx-chevron-left bx-md"></i>
-                        </a>
-                    </div>
-                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
-                        <a class="nav-item nav-link px-0 me-xl-6 text-dark" href="javascript:void(0)"
-                            id="mobile-toggle">
-                            <i class="bx bx-menu bx-md"></i>
-                        </a>
-                    </div>
+                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+    <!-- Hamburger menu for mobile -->
+    <div class="layout-menu-toggle navbar-nav align-items-center me-3 d-xl-none">
+        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)" id="mobile-toggle">
+            <i class="bx bx-menu bx-sm"></i>
+        </a>
+    </div>
+
+    <!-- Close button for mobile sidenav -->
+    <div class="navbar-nav align-items-center d-xl-none ms-auto">
+        <a class="nav-item nav-link px-0" href="javascript:void(0);" id="mobile-close-toggle" style="display: none;">
+            <i class="bx bx-x bx-sm"></i>
+        </a>
+    </div>
+
+    <!-- Desktop toggle -->
+    <div class="layout-menu-toggle navbar-nav align-items-center me-3 d-none d-xl-block">
+        <a class="nav-item nav-link px-0 text-dark" href="javascript:void(0);" id="desktop-toggle">
+            <i class="bx bx-chevron-left bx-md"></i>
+        </a>
+    </div>
+
+    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+        <!-- Title -->
+        <div class="navbar-nav align-items-center">
+            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <div class="d-flex flex-column flex-md-row align-items-md-center">
+    <h4 class="text-dark mb-1 responsive-heading">
+        {{ $navbarTitle ?? 'Default Title' }}
+    </h4>
+    <small class="text-muted ms-md-3 d-md-none d-inline">
+       {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, j F Y') }}
+    </small>
+</div>
+
+            </li>
+        </div>
+        <!-- /Title -->
+
+        <ul class="navbar-nav flex-row align-items-center ms-auto">
+            <li class="nav-item me-3 d-none d-md-block">
+    {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, j F Y') }}
+</li>
+            <li class="nav-item me-3 d-flex align-items-center">
+                <div class="form-check form-switch custom-dark-mode-toggle">
+                    <input class="form-check-input" type="checkbox" id="darkModeToggle" role="switch">
+                </div>
+            </li>
 
 
-                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                        <!-- Search -->
-                        <div class="navbar-nav align-items-center">
-
-
-                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
-
-
-                                <!-- Flex container to align name and avatar in the same row -->
-                                <div class="d-flex align-items-center">
-                                    <!-- User's name -->
-
-                                    <span class="mt-5">
-                                        <h3 class="text-dark">{{ $navbarTitle ?? 'Default Title' }}</h3>
-                                    </span>
-                                </div>
-
-
-                            </li>
+            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-icon avatar avatar-online">
+                            @if (Session::has('nama_Staff') && !empty(session('nama_Staff')))
+                                {{ strtoupper(substr(session('nama_Staff'), 0, 1)) }}
+                            @else
+                                U
+                            @endif
                         </div>
-                        <!-- /Search -->
-
-                        <ul class="navbar-nav flex-row align-items-center ms-auto">
-                            <li class="nav-item me-3 d-flex align-items-center">
-
-                                <div class="form-check form-switch custom-dark-mode-toggle">
-                                    <input class="form-check-input" type="checkbox" id="darkModeToggle"
-                                        role="switch">
-                                </div>
-                            </li>
-                            <li class="nav-item me-3">
-                                {{ \Carbon\Carbon::now()->translatedFormat('l, j F Y') }}
-                            </li>
-
-                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                                <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
-                                    data-bs-toggle="dropdown">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar-icon avatar avatar-online">
-
-                                            @if (Session::has('nama_Staff') && !empty(session('nama_Staff')))
-                                                {{ strtoupper(substr(session('nama_Staff'), 0, 1)) }}
-                                            @else
-                                                U
-                                            @endif
-                                        </div>
-                                    </div>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0);"
-                                            onclick="document.getElementById('logout-form').submit();">
-                                            <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
-                                        </a>
-                                    </li>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        style="display: none;">
-                                        @csrf
-                                    </form>
-                                </ul>
-                            </li>
-                        </ul>
-
                     </div>
-                </nav>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <li>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('logout-form').submit();">
+                                <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
+                            </a>
+                        </li>
+                    </form>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
 
                 <!-- / Navbar -->
 
@@ -477,7 +484,68 @@
         }, 2000); // 2000 milliseconds = 2 seconds
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileCloseToggle = document.getElementById('mobile-close-toggle');
+    const layoutWrapper = document.querySelector('.layout-wrapper');
+    const layoutMenu = document.getElementById('layout-menu');
 
+    function toggleMobileNav() {
+        layoutWrapper.classList.toggle('layout-menu-expanded'); // Use a different class for mobile
+        
+        // Toggle visibility of open/close icons
+        if (layoutWrapper.classList.contains('layout-menu-expanded')) {
+            mobileToggle.style.display = 'none';
+            mobileCloseToggle.style.display = 'block';
+        } else {
+            mobileToggle.style.display = 'block';
+            mobileCloseToggle.style.display = 'none';
+        }
+    }
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', toggleMobileNav);
+    }
+
+    if (mobileCloseToggle) {
+        mobileCloseToggle.addEventListener('click', toggleMobileNav);
+    }
+    
+    // Also, ensure the overlay closes the mobile nav
+    const overlay = document.querySelector('.layout-overlay');
+    if(overlay) {
+        overlay.addEventListener('click', function() {
+            if (window.innerWidth < 1200 && layoutWrapper.classList.contains('layout-menu-expanded')) {
+                 toggleMobileNav();
+            }
+        });
+    }
+});
+</script>
+
+<!-- Add this CSS to your existing style section or a separate CSS file -->
+<style>
+    /* Styles for the expanded mobile menu */
+    @media (max-width: 1199.98px) {
+        .layout-wrapper.layout-menu-expanded .layout-menu {
+            transform: translateX(0);
+        }
+        .layout-wrapper.layout-menu-expanded .layout-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Ensure the close button is positioned correctly */
+        #mobile-close-toggle {
+            position: absolute;
+            right: 1.5rem; /* Adjust as needed */
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1050; /* Ensure it's above other elements */
+        }
+    }
+</style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Elements

@@ -131,7 +131,7 @@ $(document).ready(function() {
                 if (window.dailyLineChart) window.dailyLineChart.destroy();
 
                 const commonOptions = {
-                    responsive: true, maintainAspectRatio: true,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'top', labels: {} },
                         datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold' }, formatter: Math.round, padding: 6, offset: 8 }
@@ -235,7 +235,7 @@ $(document).ready(function() {
                 const passData = [thisWeekPassChart.map(item => item.carpass), thisWeekPassChart.map(item => item.motorbikepass), thisWeekPassChart.map(item => item.truckpass), thisWeekPassChart.map(item => item.taxipass), thisWeekPassChart.map(item => item.vehiclepass), thisWeekPassChart.map(item => item.otherpass)];
 
                 const baseOptions = {
-                    responsive: true, maintainAspectRatio: true,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'top', labels: {} },
                         datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold' }, formatter: formatQuantity, padding: 6, offset: 8 }
@@ -331,7 +331,7 @@ $(document).ready(function() {
                 const chartOptions = (isLine = false) => {
                     const options = {
                         responsive: true,
-                        maintainAspectRatio: true,
+                        maintainAspectRatio: false,
                         plugins: {
                             legend: { position: 'top', labels: {} },
                             datalabels: { backgroundColor: ctx => ctx.dataset.backgroundColor, borderRadius: 4, color: 'white', font: { weight: 'bold' }, formatter: value => formatQuantity(value), padding: isLine ? 3 : 6, offset: isLine ? 4 : 8 }

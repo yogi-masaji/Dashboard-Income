@@ -9,7 +9,7 @@
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>Dashboard Income</title>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="description" content="" />
 
     <!-- Favicon -->
@@ -78,7 +78,12 @@
                             </div>
 
                             <div class="mb-6">
-                                <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
+                                {{-- Tombol diubah untuk menyertakan spinner --}}
+                                <button class="btn btn-primary d-grid w-100" type="submit" id="loginButton">
+                                    <span class="spinner-border spinner-border-sm d-none" role="status"
+                                        aria-hidden="true"></span>
+                                    <span id="buttonText">Login</span>
+                                </button>
                             </div>
                         </form>
 
@@ -105,12 +110,24 @@
     <script src="vendor/js/bootstrap.js"></script>
     <script src="vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vendor/js/menu.js"></script>
-
-
     <script src="vendor/js/main.js"></script>
-
-
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    {{-- Script untuk menampilkan loading --}}
+    <script>
+        document.getElementById('formAuthentication').addEventListener('submit', function() {
+            var loginButton = document.getElementById('loginButton');
+            var spinner = loginButton.querySelector('.spinner-border');
+            var buttonText = document.getElementById('buttonText');
+
+            // Menonaktifkan tombol untuk mencegah klik ganda
+            loginButton.disabled = true;
+
+            // Menyembunyikan teks dan menampilkan spinner
+            buttonText.classList.add('d-none');
+            spinner.classList.remove('d-none');
+        });
+    </script>
 </body>
 
 </html>

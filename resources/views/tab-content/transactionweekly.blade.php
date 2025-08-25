@@ -1,16 +1,50 @@
+<style>
+    @media (max-width: 768px) {
+        #weeklyQuantity {
+            font-size: 10px;
+            /* kecilin font biar muat */
+        }
+
+        #weeklyQuantity tfoot th,
+        #weeklyQuantity thead th {
+            font-size: 10px;
+        }
+
+        #weeklyQuantity th,
+        #weeklyQuantity td {
+            padding: 4px 6px;
+            /* kecilin padding */
+            white-space: nowrap;
+            /* cegah teks pecah ke 2 baris */
+        }
+    }
+
+    .chart-container {
+        position: relative;
+        height: 45vh;
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .chart-container {
+            height: 25vh;
+
+        }
+    }
+</style>
 <div class="row">
     <div class="col-12">
         <h5>Weekly Quantity</h5>
 
         <div class="row d-flex align-items-stretch" id="dashboardRow">
-            <div class="col-md-6 d-flex">
+            <div class="col-12 col-md-6 d-flex">
                 <div class="content-custom flex-fill">
                     <h6>Comparison last week & two weeks ago (range: senin - minggu)</h6>
                     <div class="row" id="weekly-transaction-comparison"></div>
                 </div>
             </div>
-            <div class="col-md-6 d-flex">
-                <div class="content-custom flex-fill" style="min-height: 373px;">
+            <div class="col-12 mt-3 mt-md-0 col-md-6 d-flex">
+                <div class="content-custom flex-fill" style="">
                     <table id="weeklyQuantity" class="table table-striped">
                         <thead>
                             <tr>
@@ -35,7 +69,7 @@
         </div>
         <div class="row mt-5">
             <div class="col-md-12">
-                <div class="content-custom" style="min-height: 350px;">
+                <div class="content-custom" style="min-height: 250px;">
 
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -50,11 +84,15 @@
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-weekly" role="tabpanel"
                             aria-labelledby="nav-weekly-tab" tabindex="0">
-                            <canvas id="weeklyQuantityBar" height="100" width="auto"></canvas>
+                            <div class="chart-container">
+                                <canvas id="weeklyQuantityBar"></canvas>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="nav-weekly-line" role="tabpanel"
                             aria-labelledby="nav-weekly-line-tab" tabindex="0">
-                            <canvas id="weeklyQuantityLine" height="100" width="auto"></canvas>
+                            <div class="chart-container">
+                                <canvas id="weeklyQuantityLine"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>

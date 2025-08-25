@@ -1,5 +1,6 @@
 <div class="row">
-    <div class="col-6">
+    <!-- Today -->
+    <div class="col-12 col-md-6">
         <div class="content-custom mb-2">
             <canvas id="DailyPintuMasukToday" height="300px"></canvas>
         </div>
@@ -14,7 +15,9 @@
             </thead>
         </table>
     </div>
-    <div class="col-6">
+
+    <!-- Yesterday -->
+    <div class="col-12 col-md-6">
         <div class="content-custom mb-2">
             <canvas id="DailyPintuMasukYesterday" height="300px"></canvas>
         </div>

@@ -11,14 +11,12 @@
         $navbarTitle = $lokasiName;
     @endphp
 
-
-
-
-
     <script>
         const kodeLokasi = @json($kodeLokasi);
     </script>
+
     <style>
+        /* General Body and Component Styling */
         body {
             background-color: #0a1929;
             color: white;
@@ -26,7 +24,6 @@
 
         .nav-tabs {
             border-bottom: none;
-            /* background-color: #0d2d5a; */
             border-radius: 10px;
             padding: 10px;
         }
@@ -38,6 +35,10 @@
             border-radius: 10px;
             padding: 10px 20px;
             margin: 0 5px;
+            display: flex;
+            /* Added for alignment */
+            align-items: center;
+            /* Added for alignment */
         }
 
         .nav-tabs .nav-link.active {
@@ -46,13 +47,30 @@
             font-weight: bold;
         }
 
-        .nav-tabs .nav-link:not(.active):hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .nav-pills .nav-item .nav-link:not(.active) {
+            border: 2px solid #4e4e4e;
+            padding-bottom: 0.5435rem;
+            border-radius: 10px;
+            color: #000;
         }
+
+        .nav-pills .nav-item .nav-link:not(.active):hover {
+            border: 2px solid #4e4e4e;
+            padding-bottom: 0.5435rem;
+            border-radius: 10px;
+            color: #000;
+        }
+
+        .mode-gelap .nav-pills .nav-item .nav-link:not(.active) {
+            color: #fff;
+        }
+
+
 
         .dropdown-menu {
             background-color: #f8f9fa;
             border-radius: 10px;
+            margin-top: 0;
         }
 
         .dropdown-item {
@@ -76,10 +94,6 @@
             font-weight: bold;
         }
 
-        .negative-change {
-            color: #ff4d4f;
-        }
-
         .data-table {
             background-color: #0d2d5a;
             border-radius: 10px;
@@ -98,92 +112,6 @@
             padding: 15px;
         }
 
-        .chart-toggle {
-            background-color: #0d2d5a;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .chart-toggle .btn {
-            border-radius: 0;
-            padding: 10px 30px;
-        }
-
-        .chart-toggle .btn.active {
-            background-color: #ffc107;
-            color: #000;
-            font-weight: bold;
-        }
-
-        .chart-container {
-            background-color: #0d2d5a;
-            border-radius: 10px;
-            height: 300px;
-            position: relative;
-        }
-
-        .chart-bar {
-            position: absolute;
-            bottom: 40px;
-            width: 40px;
-            background-color: #1890ff;
-            border-radius: 5px 5px 0 0;
-            text-align: center;
-        }
-
-        .chart-bar.casual {
-            background-color: #ff4d4f;
-        }
-
-        .chart-bar.pass {
-            background-color: #1890ff;
-        }
-
-        .chart-label {
-            position: absolute;
-            top: -25px;
-            width: 100%;
-            text-align: center;
-            color: white;
-            font-weight: bold;
-            background-color: #1890ff;
-            border-radius: 5px;
-            padding: 2px 0;
-        }
-
-        .chart-bar.casual .chart-label {
-            background-color: #ff4d4f;
-        }
-
-        .dropdown-menu {
-            margin-top: 0;
-        }
-    </style>
-    <style>
-        .nav-custom-tab {
-            background-color: #061933;
-            padding: 10px;
-            border-radius: 10px;
-        }
-    </style>
-
-    <style>
-        .custom-nav {
-            background-color: #185BB4 !important;
-            padding: 10px;
-            border-radius: 10px;
-            width: 40% !important;
-        }
-
-        .nav-pills~.tab-content {
-            box-shadow: none !important;
-        }
-
-        .tab-content {
-            background-color: transparent !important;
-            width: 100% !important;
-        }
-
         .dashboard-card {
             background-color: #ffffff;
             border-radius: 10px;
@@ -193,9 +121,7 @@
         }
 
         .dashboard-card span {
-
             font-weight: 800;
-
         }
 
         .card-title {
@@ -212,26 +138,9 @@
             color: #FFFFFF;
         }
 
-        .percentage {
-            color: #ff4d4d;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .yesterday {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-
-        .tab-content:not(.doc-example-content) {
-            /* padding: 0.5rem; */
-        }
-
-        .nav-tabs {
-            padding: 10px;
-            /* background-color: #003b86; */
-            border-radius: 10px;
+        .tab-content {
+            background-color: transparent !important;
+            width: 100% !important;
         }
 
         .content-custom {
@@ -240,38 +149,43 @@
             border-radius: 10px !important;
             box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
         }
+
+        /* Responsive Design Media Queries */
+
+        /* Mobile optimizations */
+        @media (max-width: 767.98px) {
+            .nav-tabs-responsive {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .nav-tabs-responsive .nav-item {
+                width: 100%;
+                margin: 0;
+                /* Reset margin for stacked items */
+            }
+
+            .nav-tabs-responsive .nav-link {
+                justify-content: space-between;
+                padding: 14px 16px;
+                width: 100%;
+                margin: 0;
+            }
+        }
+
+        /* Tablet optimizations */
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .nav-tabs-responsive .nav-link {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 
     <div class="">
         <!-- Main Tabs Navigation -->
-        <style>
-            /* Mobile optimizations */
-            @media (max-width: 767.98px) {
-                .nav-tabs-responsive {
-                    flex-direction: column;
-                    gap: 6px;
-                }
-
-                .nav-tabs-responsive .nav-item {
-                    width: 100%;
-                }
-
-                .nav-tabs-responsive .nav-link {
-                    justify-content: space-between;
-                    padding: 14px 16px;
-                }
-            }
-
-            /* Medium screens */
-            @media (min-width: 768px) and (max-width: 991.98px) {
-                .nav-tabs-responsive .nav-link {
-                    padding: 10px 12px;
-                    font-size: 0.9rem;
-                }
-            }
-        </style>
-
-        <ul class="nav nav-tabs mb-4 d-flex w-100" id="mainTabs" role="tablist" style="gap: 10px;">
+        <!-- I've added the 'nav-tabs-responsive' class here to apply the media queries -->
+        <ul class="nav nav-tabs nav-tabs-responsive mb-4 d-flex w-100" id="mainTabs" role="tablist" style="gap: 10px;">
             @if (isset($tabMenus['Transaction']))
                 <li class="nav-item dropdown flex-fill text-center" role="presentation">
                     <a class="nav-link active dropdown-toggle w-100" data-bs-toggle="dropdown" href="#" role="button"
@@ -405,17 +319,13 @@
 
                     // Update dropdown button text
                     const dropdownButton = this.closest('.dropdown').querySelector('.nav-link');
-                    dropdownButton.textContent = this.textContent + ' ';
-
-                    // Add dropdown icon back
-
+                    dropdownButton.textContent = this.textContent;
 
                     // Activate the tab
                     const tab = new bootstrap.Tab(document.querySelector(`a[href="${targetTab}"]`));
                     tab.show();
 
                     // Update active states in nav
-                    // Hanya hapus .active dari nav-link dalam nav-tabs
                     document.querySelectorAll('#mainTabs .nav-link').forEach(link => {
                         link.classList.remove('active');
                     });
