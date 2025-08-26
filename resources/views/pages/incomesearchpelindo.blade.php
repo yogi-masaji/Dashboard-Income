@@ -12,6 +12,9 @@
     @endphp
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+
 
     <style>
         /* General Styling */
@@ -154,6 +157,22 @@
         .easepick-wrapper {
             z-index: 9999 !important;
         }
+
+        .dt-button {
+            background-color: #FCB900 !important;
+            padding: 10px;
+            border-radius: 10px;
+            border: none !important;
+            margin-bottom: 10px;
+        }
+
+        .form-label {
+            color: #000;
+        }
+
+        .mode-gelap .form-label {
+            color: #fff;
+        }
     </style>
 
     <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3">
@@ -172,41 +191,50 @@
         </div>
     </div>
 
-    <div class="table-responsive mt-4 card shadow-sm p-4 border-0 rounded-3">
-        <table class="table table-striped table-bordered" id="table-custom" style="width:100%">
-            <thead class="text-center" style="vertical-align: middle;">
-                <tr>
-                    <th scope="col" rowspan="2" style="width:13%;">POS</th>
-                    <th scope="col" rowspan="2" style="width:6%;">LANE</th>
-                    <th scope="col" colspan="3">MOTOR</th>
-                    <th scope="col" colspan="3">MOBIL</th>
-                    <th scope="col" colspan="3">TRUK</th>
-                    <th scope="col" rowspan="2" style="width:10%;">TOTAL PENDAPATAN</th>
-                </tr>
-                <tr>
-                    <th>PRODUKSI</th>
-                    <th>TARIF</th>
-                    <th>PENDAPATAN</th>
-                    <th>PRODUKSI</th>
-                    <th>TARIF</th>
-                    <th>PENDAPATAN</th>
-                    <th>PRODUKSI</th>
-                    <th>TARIF</th>
-                    <th>PENDAPATAN</th>
-                </tr>
-            </thead>
-            <tbody id="tbody-custom">
-                <tr>
-                    <td colspan="12" class="text-center p-5">
-                        <p class="mt-2 text-muted">Silakan pilih rentang tanggal dan klik 'Cari' untuk melihat data.</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="table-container mt-4 card shadow-sm p-4 border-0 rounded-3" style="display: none;">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered" id="table-custom" style="width:100%">
+                <thead class="text-center" style="vertical-align: middle;">
+                    <tr>
+                        <th scope="col" rowspan="2" style="width:13%;">POS</th>
+                        <th scope="col" rowspan="2" style="width:6%;">LANE</th>
+                        <th scope="col" colspan="3">MOTOR</th>
+                        <th scope="col" colspan="3">MOBIL</th>
+                        <th scope="col" colspan="3">TRUK</th>
+                        <th scope="col" rowspan="2" style="width:10%;">TOTAL PENDAPATAN</th>
+                    </tr>
+                    <tr>
+                        <th>PRODUKSI</th>
+                        <th>TARIF</th>
+                        <th>PENDAPATAN</th>
+                        <th>PRODUKSI</th>
+                        <th>TARIF</th>
+                        <th>PENDAPATAN</th>
+                        <th>PRODUKSI</th>
+                        <th>TARIF</th>
+                        <th>PENDAPATAN</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-custom">
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <div id="initial-message" class="mt-4 card shadow-sm p-4 border-0 rounded-3 text-center">
+        <p class="mt-2 text-muted">Silakan pilih rentang tanggal dan klik 'Cari' untuk melihat data.</p>
+    </div>
+
 
     {{-- CDN for easepick --}}
     <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -223,6 +251,8 @@
                 }
             });
 
+            let dataTableInstance;
+
             $('#cari').click(function() {
                 const $cariButton = $(this);
                 const startDate = picker.getStartDate()?.format('YYYY-MM-DD');
@@ -236,10 +266,11 @@
                     $('#alertMessage').addClass('d-none');
                 }
 
-                // Disable button and show loading spinner
                 $cariButton.prop('disabled', true).html(
                     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
                 );
+                $('#initial-message').hide();
+                $('.table-container').show();
 
                 const spinnerHtml = `
                     <tr>
@@ -249,11 +280,9 @@
                                 <strong>Loading...</strong>
                             </div>
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
                 $('#tbody-custom').html(spinnerHtml);
 
-                // Helper functions for formatting
                 const formatQuantity = (quantity) => new Intl.NumberFormat('id-ID').format(quantity);
                 const formatRupiah = (number) => new Intl.NumberFormat('id-ID', {
                     style: 'currency',
@@ -270,9 +299,14 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        $('#tbody-custom').empty(); // Clear spinner/old data
+                        $('#tbody-custom').empty();
+
+                        if (dataTableInstance) {
+                            dataTableInstance.destroy();
+                        }
 
                         if (response.success && response.data) {
+                            // ... (AJAX data processing logic remains the same)
                             const data = response.data;
                             const buffer = data.buffer.buffer_line[0];
                             const pos1 = data.pos1;
@@ -332,36 +366,21 @@
                                 subTotalPos1.total += lane.total;
                                 $('#tbody-custom').append(`
                                     <tr>
-                                        <td class="text-center">POS 1</td>
-                                        <td class="text-center">${index + 1}</td>
-                                        <td class="text-center">${formatQuantity(lane.prod_motor)}</td>
-                                        <td class="text-center">${formatRupiah(lane.tarif_motor)}</td>
-                                        <td class="text-center">${formatRupiah(lane.pend_motor)}</td>
-                                        <td class="text-center">${formatQuantity(lane.prod_mobil)}</td>
-                                        <td class="text-center">${formatRupiah(lane.tarif_mobil)}</td>
-                                        <td class="text-center">${formatRupiah(lane.pend_mobil)}</td>
-                                        <td class="text-center">${formatQuantity(lane.prod_truck)}</td>
-                                        <td class="text-center">${formatRupiah(lane.tarif_truck)}</td>
-                                        <td class="text-center">${formatRupiah(lane.pend_truck)}</td>
+                                        <td class="text-center">POS 1</td> <td class="text-center">${index + 1}</td>
+                                        <td class="text-center">${formatQuantity(lane.prod_motor)}</td> <td class="text-center">${formatRupiah(lane.tarif_motor)}</td> <td class="text-center">${formatRupiah(lane.pend_motor)}</td>
+                                        <td class="text-center">${formatQuantity(lane.prod_mobil)}</td> <td class="text-center">${formatRupiah(lane.tarif_mobil)}</td> <td class="text-center">${formatRupiah(lane.pend_mobil)}</td>
+                                        <td class="text-center">${formatQuantity(lane.prod_truck)}</td> <td class="text-center">${formatRupiah(lane.tarif_truck)}</td> <td class="text-center">${formatRupiah(lane.pend_truck)}</td>
                                         <td class="text-center">${formatRupiah(lane.total)}</td>
-                                    </tr>
-                                `);
+                                    </tr>`);
                             });
                             $('#tbody-custom').append(`
                                 <tr class="sub-total-row">
                                     <td class="text-center" colspan="2">SUB TOTAL POS 1</td>
-                                    <td class="text-center">${formatQuantity(subTotalPos1.prod_motor)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(subTotalPos1.pend_motor)}</td>
-                                    <td class="text-center">${formatQuantity(subTotalPos1.prod_mobil)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(subTotalPos1.pend_mobil)}</td>
-                                    <td class="text-center">${formatQuantity(subTotalPos1.prod_truck)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(subTotalPos1.pend_truck)}</td>
+                                    <td class="text-center">${formatQuantity(subTotalPos1.prod_motor)}</td> <td>-</td> <td class="text-center">${formatRupiah(subTotalPos1.pend_motor)}</td>
+                                    <td class="text-center">${formatQuantity(subTotalPos1.prod_mobil)}</td> <td>-</td> <td class="text-center">${formatRupiah(subTotalPos1.pend_mobil)}</td>
+                                    <td class="text-center">${formatQuantity(subTotalPos1.prod_truck)}</td> <td>-</td> <td class="text-center">${formatRupiah(subTotalPos1.pend_truck)}</td>
                                     <td class="text-center">${formatRupiah(subTotalPos1.total)}</td>
-                                </tr>
-                            `);
+                                </tr>`);
 
                             // --- RENDER POS 8 ---
                             let subTotalPos8 = {
@@ -386,36 +405,21 @@
                                 subTotalPos8.total += lane.total;
                                 $('#tbody-custom').append(`
                                     <tr>
-                                        <td class="text-center">POS 8</td>
-                                        <td class="text-center">${index + 1}</td>
-                                        <td class="text-center">${formatQuantity(lane.prod_motor)}</td>
-                                        <td class="text-center">${formatRupiah(lane.tarif_motor)}</td>
-                                        <td class="text-center">${formatRupiah(lane.pend_motor)}</td>
-                                        <td class="text-center">${formatQuantity(lane.prod_mobil)}</td>
-                                        <td class="text-center">${formatRupiah(lane.tarif_mobil)}</td>
-                                        <td class="text-center">${formatRupiah(lane.pend_mobil)}</td>
-                                        <td class="text-center">${formatQuantity(lane.prod_truck)}</td>
-                                        <td class="text-center">${formatRupiah(lane.tarif_truck)}</td>
-                                        <td class="text-center">${formatRupiah(lane.pend_truck)}</td>
+                                        <td class="text-center">POS 8</td> <td class="text-center">${index + 1}</td>
+                                        <td class="text-center">${formatQuantity(lane.prod_motor)}</td> <td class="text-center">${formatRupiah(lane.tarif_motor)}</td> <td class="text-center">${formatRupiah(lane.pend_motor)}</td>
+                                        <td class="text-center">${formatQuantity(lane.prod_mobil)}</td> <td class="text-center">${formatRupiah(lane.tarif_mobil)}</td> <td class="text-center">${formatRupiah(lane.pend_mobil)}</td>
+                                        <td class="text-center">${formatQuantity(lane.prod_truck)}</td> <td class="text-center">${formatRupiah(lane.tarif_truck)}</td> <td class="text-center">${formatRupiah(lane.pend_truck)}</td>
                                         <td class="text-center">${formatRupiah(lane.total)}</td>
-                                    </tr>
-                                `);
+                                    </tr>`);
                             });
                             $('#tbody-custom').append(`
                                 <tr class="sub-total-row">
                                     <td class="text-center" colspan="2">SUB TOTAL POS 8</td>
-                                    <td class="text-center">${formatQuantity(subTotalPos8.prod_motor)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(subTotalPos8.pend_motor)}</td>
-                                    <td class="text-center">${formatQuantity(subTotalPos8.prod_mobil)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(subTotalPos8.pend_mobil)}</td>
-                                    <td class="text-center">${formatQuantity(subTotalPos8.prod_truck)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(subTotalPos8.pend_truck)}</td>
+                                    <td class="text-center">${formatQuantity(subTotalPos8.prod_motor)}</td> <td>-</td> <td class="text-center">${formatRupiah(subTotalPos8.pend_motor)}</td>
+                                    <td class="text-center">${formatQuantity(subTotalPos8.prod_mobil)}</td> <td>-</td> <td class="text-center">${formatRupiah(subTotalPos8.pend_mobil)}</td>
+                                    <td class="text-center">${formatQuantity(subTotalPos8.prod_truck)}</td> <td>-</td> <td class="text-center">${formatRupiah(subTotalPos8.pend_truck)}</td>
                                     <td class="text-center">${formatRupiah(subTotalPos8.total)}</td>
-                                </tr>
-                            `);
+                                </tr>`);
 
                             // --- RENDER POS 9 ---
                             let subTotalPos9 = {
@@ -439,36 +443,21 @@
                                 subTotalPos9.total += lane.total;
                                 $('#tbody-custom').append(`
                                     <tr>
-                                        <td class="text-center">POS 9</td>
-                                        <td class="text-center">${index + 1}</td>
-                                        <td class="text-center">${formatQuantity(lane.prod_motor)}</td>
-                                        <td class="text-center">${formatRupiah(lane.tarif_motor)}</td>
-                                        <td class="text-center">${formatRupiah(lane.pend_motor)}</td>
-                                        <td class="text-center">${formatQuantity(lane.prod_mobil)}</td>
-                                        <td class="text-center">${formatRupiah(lane.tarif_mobil)}</td>
-                                        <td class="text-center">${formatRupiah(lane.pend_mobil)}</td>
-                                        <td class="text-center">${formatQuantity(lane.prod_truck)}</td>
-                                        <td class="text-center">${formatRupiah(lane.tarif_truck)}</td>
-                                        <td class="text-center">${formatRupiah(lane.pend_truck)}</td>
+                                        <td class="text-center">POS 9</td> <td class="text-center">${index + 1}</td>
+                                        <td class="text-center">${formatQuantity(lane.prod_motor)}</td> <td class="text-center">${formatRupiah(lane.tarif_motor)}</td> <td class="text-center">${formatRupiah(lane.pend_motor)}</td>
+                                        <td class="text-center">${formatQuantity(lane.prod_mobil)}</td> <td class="text-center">${formatRupiah(lane.tarif_mobil)}</td> <td class="text-center">${formatRupiah(lane.pend_mobil)}</td>
+                                        <td class="text-center">${formatQuantity(lane.prod_truck)}</td> <td class="text-center">${formatRupiah(lane.tarif_truck)}</td> <td class="text-center">${formatRupiah(lane.pend_truck)}</td>
                                         <td class="text-center">${formatRupiah(lane.total)}</td>
-                                    </tr>
-                                `);
+                                    </tr>`);
                             });
                             $('#tbody-custom').append(`
                                 <tr class="sub-total-row">
                                     <td class="text-center" colspan="2">SUB TOTAL POS 9</td>
-                                    <td class="text-center">${formatQuantity(subTotalPos9.prod_motor)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(subTotalPos9.pend_motor)}</td>
-                                    <td class="text-center">${formatQuantity(subTotalPos9.prod_mobil)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(subTotalPos9.pend_mobil)}</td>
-                                    <td class="text-center">${formatQuantity(subTotalPos9.prod_truck)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(subTotalPos9.pend_truck)}</td>
+                                    <td class="text-center">${formatQuantity(subTotalPos9.prod_motor)}</td> <td>-</td> <td class="text-center">${formatRupiah(subTotalPos9.pend_motor)}</td>
+                                    <td class="text-center">${formatQuantity(subTotalPos9.prod_mobil)}</td> <td>-</td> <td class="text-center">${formatRupiah(subTotalPos9.pend_mobil)}</td>
+                                    <td class="text-center">${formatQuantity(subTotalPos9.prod_truck)}</td> <td>-</td> <td class="text-center">${formatRupiah(subTotalPos9.pend_truck)}</td>
                                     <td class="text-center">${formatRupiah(subTotalPos9.total)}</td>
-                                </tr>
-                            `);
+                                </tr>`);
 
                             // --- RENDER GRAND TOTAL ---
                             const grandTotal = {
@@ -487,43 +476,48 @@
                                 total: buffer.total + subTotalPos1.total + subTotalPos8
                                     .total + subTotalPos9.total
                             };
-
                             $('#tbody-custom').append(`
                                 <tr class="grand-total-row">
                                     <td class="text-center" colspan="2">GRAND TOTAL</td>
-                                    <td class="text-center">${formatQuantity(grandTotal.prod_motor)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(grandTotal.pend_motor)}</td>
-                                    <td class="text-center">${formatQuantity(grandTotal.prod_mobil)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(grandTotal.pend_mobil)}</td>
-                                    <td class="text-center">${formatQuantity(grandTotal.prod_truck)}</td>
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">${formatRupiah(grandTotal.pend_truck)}</td>
+                                    <td class="text-center">${formatQuantity(grandTotal.prod_motor)}</td> <td>-</td> <td class="text-center">${formatRupiah(grandTotal.pend_motor)}</td>
+                                    <td class="text-center">${formatQuantity(grandTotal.prod_mobil)}</td> <td>-</td> <td class="text-center">${formatRupiah(grandTotal.pend_mobil)}</td>
+                                    <td class="text-center">${formatQuantity(grandTotal.prod_truck)}</td> <td>-</td> <td class="text-center">${formatRupiah(grandTotal.pend_truck)}</td>
                                     <td class="text-center">${formatRupiah(grandTotal.total)}</td>
-                                </tr>
-                            `);
+                                </tr>`);
+
+                            // Initialize DataTables with Buttons
+                            dataTableInstance = $('#table-custom').DataTable({
+                                paging: false,
+                                searching: false,
+                                info: false,
+                                ordering: false,
+                                dom: 'Bfrtip',
+                                buttons: [{
+                                        extend: 'excelHtml5',
+                                        title: `Income Pelindo ${startDate} to ${endDate}`
+                                    },
+                                    {
+                                        extend: 'pdfHtml5',
+                                        title: `Income Pelindo ${startDate} to ${endDate}`,
+                                        orientation: 'landscape',
+                                        pageSize: 'A4'
+                                    }
+                                ]
+                            });
 
                         } else {
                             $('#tbody-custom').html(
-                                '<tr><td colspan="12" class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan untuk rentang tanggal yang dipilih.</p></td></tr>'
+                                '<tr><td colspan="12" class="text-center p-5"><i class="bi bi-x-circle fs-1 text-danger"></i><p class="mt-2 text-danger">Data tidak ditemukan.</p></td></tr>'
                             );
                         }
                     },
                     error: function(xhr) {
                         console.error(xhr.responseText);
-                        const errorHtml = `
-                            <tr>
-                                <td colspan="12" class="text-center text-danger p-5">
-                                     <i class="bi bi-exclamation-triangle fs-1"></i>
-                                     <p class="mt-2">Terjadi kesalahan saat mengambil data. Silakan coba lagi.</p>
-                                </td>
-                            </tr>
-                        `;
-                        $('#tbody-custom').html(errorHtml);
+                        $('#tbody-custom').html(
+                            '<tr><td colspan="12" class="text-center text-danger p-5"><i class="bi bi-exclamation-triangle fs-1"></i><p class="mt-2">Terjadi kesalahan.</p></td></tr>'
+                        );
                     },
                     complete: function() {
-                        // Re-enable button and restore text
                         $cariButton.prop('disabled', false).html(
                             '<i class="bi bi-search me-1"></i> Cari');
                     }

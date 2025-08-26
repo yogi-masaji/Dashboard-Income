@@ -13,6 +13,10 @@
 
     <!-- Easepick Stylesheet -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css" />
+    <!-- Chart.js and DataLabels plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
 
     <style>
         /* Custom styles for content blocks */
@@ -46,8 +50,10 @@
 
         /* Wide table styles */
         .wide-data-table {
-            width: 100%;
-            table-layout: fixed;
+            /* width: 100%; */
+            /* Removed to allow table to expand beyond screen width */
+            /* table-layout: fixed; */
+            /* Removed to allow columns to size based on content */
             border-collapse: collapse;
             font-size: 12px;
             text-align: center;
@@ -63,6 +69,8 @@
             position: sticky;
             top: 0;
             z-index: 1;
+            background-color: #f8f9fa;
+            /* Light background for header */
         }
 
         table.dataTable thead th,
@@ -110,13 +118,7 @@
 
         .mode-gelap .wide-data-table tbody td {
             background-color: #283447;
-            /* Darker background for table body cells */
             color: #e2e8f0;
-            /* White text for table body */
-        }
-
-        .mode-gelap .wide-data-table tfoot th {
-            background-color: #1e293b;
         }
 
         /* Ensure easepick calendar appears above other elements */
@@ -183,7 +185,7 @@
                 <table class="wide-data-table" id="ritaseDurationTable">
                     <thead>
                         <tr>
-                            <th>Tanggal</th>
+                            <th>Jam</th>
                             <th>01</th>
                             <th>02</th>
                             <th>03</th>
@@ -211,41 +213,13 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Grand Total</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
+                    <!-- Grand Total Footer Removed -->
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Easepick and Chart.js Scripts -->
+    <!-- Easepick Script -->
     <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 
     <script>
@@ -337,17 +311,7 @@
                         data: 'total'
                     }
                 ],
-                footerCallback: function(row, data, start, end, display) {
-                    const api = this.api();
-                    for (let i = 1; i < api.columns().count(); i++) {
-                        const total = api.column(i).data().reduce((a, b) => {
-                            const val = typeof b === 'string' ? parseFloat(b.replace(/,/g,
-                                '')) || 0 : b || 0;
-                            return a + val;
-                        }, 0);
-                        $(api.column(i).footer()).html(new Intl.NumberFormat().format(total));
-                    }
-                }
+                // footerCallback removed to hide Grand Total
             });
 
             // Search Button Click Event
@@ -383,7 +347,8 @@
                                 return new Intl.NumberFormat().format(quantity);
                             }
 
-                            const ritaseDurationData = response.data.map(item => ({
+                            // Populate table data
+                            const tableData = response.data.map(item => ({
                                 tanggal: item.tanggal,
                                 '01': formatQuantity(item.jam1),
                                 '02': formatQuantity(item.jam2),
@@ -410,15 +375,28 @@
                                 '23': formatQuantity(item.jam23),
                                 total: formatQuantity(item.total),
                             }));
+                            ritaseDurationTable.clear().rows.add(tableData).draw();
 
-                            ritaseDurationTable.clear().rows.add(ritaseDurationData).draw();
+                            // --- Chart Update Logic ---
+                            // Aggregate data per hour for the entire date range
+                            const hourlyTotals = Array(24).fill(0);
+                            response.data.forEach(dayData => {
+                                for (let i = 1; i <= 23; i++) {
+                                    const key = `jam${i}`;
+                                    if (dayData[key]) {
+                                        hourlyTotals[i] += dayData[key];
+                                    }
+                                }
+                            });
 
-                            // Chart Update Logic
-                            const labels = response.data.map(item => item.tanggal);
-                            const dataRitaseDuration = response.data.map(item => item.total);
+                            const chartLabels = Array.from({
+                                length: 24
+                            }, (_, i) => `Jam ${i.toString().padStart(2, '0')}`);
+                            const chartData = hourlyTotals;
+                            const maxValue = Math.max(...chartData);
+
                             const ctx = document.getElementById('RitaseDurationChart')
                                 .getContext('2d');
-
                             if (window.ritaseDurationChart instanceof Chart) {
                                 window.ritaseDurationChart.destroy();
                             }
@@ -431,12 +409,12 @@
                             window.ritaseDurationChart = new Chart(ctx, {
                                 type: 'bar',
                                 data: {
-                                    labels: labels,
+                                    labels: chartLabels,
                                     datasets: [{
-                                        label: 'Total per tanggal',
-                                        data: dataRitaseDuration,
-                                        backgroundColor: 'rgba(252, 185, 0, 0.8)',
-                                        borderColor: 'rgba(252, 185, 0, 1)',
+                                        label: 'Total Kendaraan Per Jam',
+                                        data: chartData,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
                                         borderWidth: 1
                                     }]
                                 },
@@ -446,6 +424,8 @@
                                     scales: {
                                         y: {
                                             beginAtZero: true,
+                                            suggestedMax: maxValue + (maxValue *
+                                            0.1), // Add 10% grace
                                             ticks: {
                                                 color: textColor
                                             },
@@ -455,7 +435,9 @@
                                         },
                                         x: {
                                             ticks: {
-                                                color: textColor
+                                                color: textColor,
+                                                maxRotation: 45, // Rotate labels for better fit
+                                                minRotation: 45
                                             },
                                             grid: {
                                                 display: false
@@ -488,7 +470,6 @@
                                 plugins: [ChartDataLabels]
                             });
                         } else {
-                            // Handle no data found
                             ritaseDurationTable.clear().draw();
                             $('.chartRitase').hide();
                             alert('No data found for the selected criteria.');

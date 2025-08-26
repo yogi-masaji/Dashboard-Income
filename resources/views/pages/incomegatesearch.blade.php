@@ -11,19 +11,27 @@
         $navbarTitle = $lokasiName;
     @endphp
 
+    {{-- CDN for DataTables Responsive and Buttons CSS --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+
     <style>
-        /* General table and layout styles from summaryreportsearch */
+        /* General table and layout styles */
         #incomeGateSearch_wrapper .dt-top {
             display: flex;
-            justify-content: flex-start;
-            gap: 20px;
+            flex-wrap: wrap;
+            /* Allow items to wrap on smaller screens */
+            justify-content: space-between;
+            /* Space out items */
+            gap: 15px;
             align-items: center;
+            padding-bottom: 1rem;
         }
 
         table.dataTable thead th,
         table.dataTable thead td {
             padding: 16px;
-            border-bottom: 1px solid #111
+            border-bottom: 1px solid #dee2e6;
         }
 
         tbody {
@@ -33,46 +41,67 @@
 
         .dt-buttons {
             display: inline-flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .dt-search {
-            float: right !important;
             margin-bottom: 5px;
         }
 
         button.dt-paging-button {
             background-color: #ffffff !important;
             padding: 10px;
-            width: 30px;
-            border-radius: 10px;
-            border: none !important;
-            margin-right: 2px;
-            margin-left: 2px;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            border: 1px solid #ddd !important;
+            margin: 0 2px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        button.dt-paging-button:hover {
+            background-color: #f0f0f0 !important;
+        }
+
+        button.dt-paging-button.current {
+            background-color: #FCB900 !important;
+            color: #fff !important;
+            border-color: #FCB900 !important;
         }
 
         .dt-button {
             background-color: #FCB900 !important;
-            padding: 10px;
-            border-radius: 10px;
+            color: #ffffff !important;
+            padding: 8px 16px;
+            border-radius: 8px !important;
             border: none !important;
+            transition: all 0.2s ease-in-out;
         }
 
-        #dt-search-0 {
+        .dt-button:hover {
+            opacity: 0.9;
+        }
+
+        .dt-search input {
             height: 40px;
-            border-radius: 10px;
+            border-radius: 8px;
             margin-left: 10px;
+            border: 1px solid #ccc;
+            padding: 0 10px;
         }
 
         .content-custom {
             padding: 20px !important;
             background-color: #ffffff !important;
             border-radius: 10px !important;
-            box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             color: #000000 !important;
         }
 
-        /* --- START: New Spinner Styles --- */
+        /* Spinner Styles */
         .spinner-container {
             display: flex;
             flex-direction: column;
@@ -124,19 +153,15 @@
             }
         }
 
-        /* --- END: New Spinner Styles --- */
-
-        /* --- START: Datepicker z-index fix --- */
+        /* Datepicker z-index fix */
         .easepick-wrapper {
             z-index: 9999 !important;
         }
 
-        /* --- END: Datepicker z-index fix --- */
-
-        /* --- START: Dark Mode Styles --- */
-        .dt-search,
-        .dt-info {
-            color: #000000;
+        /* Dark Mode Compatibility */
+        .mode-gelap .content-custom {
+            background-color: #1a202c !important;
+            color: #ffffff !important;
         }
 
         .mode-gelap .dt-search,
@@ -144,18 +169,12 @@
             color: #ffffff;
         }
 
-        .card {
-            background: #fff;
+        .mode-gelap table.dataTable thead th {
+            border-bottom: 1px solid #4a5568;
         }
 
         .mode-gelap .card {
             background: #192e50;
-        }
-
-        .fw-medium,
-        .form-label,
-        h5 {
-            color: #000000
         }
 
         .mode-gelap .fw-medium,
@@ -163,11 +182,9 @@
         .mode-gelap h5 {
             color: #ffffff;
         }
-
-        /* --- END: Dark Mode Styles --- */
     </style>
 
-    <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3">
+    <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3 mb-4">
         <h5 class="mb-3 fw-semibold">Income Gate Search</h5>
         <div class="row g-3">
             <div class="col-md-6">
@@ -190,22 +207,33 @@
         <div id="chartContainer" style="position: relative; height: 350px; display: none;" class="mb-4">
             <canvas id="incomeGateBar"></canvas>
         </div>
-        <table id="incomeGateSearch" class="table table-striped table-bordered" style="width:100%">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Pos Out</th>
-                    <th>Income</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data will be loaded here -->
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="incomeGateSearch" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Pos Out</th>
+                        <th>Income</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be loaded here -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     {{-- CDN for easepick --}}
     <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
+
+    {{-- CDN for DataTables Buttons and Responsive --}}
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -234,22 +262,28 @@
                 pageLength: 25,
                 ordering: true,
                 lengthChange: false,
-                searching: false, // You can enable this if you want a search box
+                searching: true, // Searching is now enabled
+                responsive: true, // Responsive is now enabled
                 data: [], // Start with empty data
                 columns: [{
-                        data: 'no',
+                        data: 'no'
                     },
                     {
-                        data: 'pos_out',
+                        data: 'pos_out'
                     },
                     {
-                        data: 'income',
+                        data: 'income'
                     }
                 ],
                 language: {
                     emptyTable: "Silakan pilih rentang tanggal, lalu klik 'Cari' untuk melihat data.",
                     zeroRecords: "Data tidak ditemukan untuk tanggal yang dipilih."
-                }
+                },
+                // Add DOM and Buttons for export functionality
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'pdf'
+                ]
             });
 
             let incomeChart = null; // Variable to hold the chart instance
@@ -261,21 +295,24 @@
 
                 // Validation
                 if (!startDate || !endDate) {
-                    $('#alertMessage').text('Silakan pilih rentang tanggal terlebih dahulu.').show();
+                    $('#alertMessage').text('Silakan pilih rentang tanggal terlebih dahulu.').removeClass(
+                        'd-none');
                     return;
                 } else {
-                    $('#alertMessage').hide();
+                    $('#alertMessage').addClass('d-none');
                 }
 
                 // Disable button and show spinner
-                $cariButton.prop('disabled', true);
+                $cariButton.prop('disabled', true).html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mencari...'
+                );
                 incomeGateSearchTable.clear().draw();
                 const spinnerHtml = `
                     <tr>
                         <td colspan="3">
                             <div class="spinner-container">
                                 <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                                <strong>Loading...</strong>
+                                <strong>Memuat data...</strong>
                             </div>
                         </td>
                     </tr>
@@ -320,13 +357,10 @@
                             // Chart logic
                             const colors = [
                                 '#D10300', '#9966FF', '#7E00F5', '#36A2EB', '#00FFFF',
-                                '#FF6347',
-                                '#E67E00', '#F4A460', '#FFCE56', '#90EE90', '#148F49',
-                                '#708090',
-                                '#DAB370', '#F8AD2B', '#DFC639', '#E3E32A', '#00943E',
-                                '#0E17C4',
-                                '#057385', '#101A9F', '#4F236E', '#634E32', '#C233EE',
-                                '#BC8F8F'
+                                '#FF6347', '#E67E00', '#F4A460', '#FFCE56', '#90EE90',
+                                '#148F49', '#708090', '#DAB370', '#F8AD2B', '#DFC639',
+                                '#E3E32A', '#00943E', '#0E17C4', '#057385', '#101A9F',
+                                '#4F236E', '#634E32', '#C233EE', '#BC8F8F'
                             ];
 
                             const combined = incomeGate.map(item => ({
@@ -402,7 +436,8 @@
                     },
                     complete: function() {
                         // Re-enable button
-                        $cariButton.prop('disabled', false);
+                        $cariButton.prop('disabled', false).html(
+                            '<i class="bi bi-search me-1"></i> Cari');
                     }
                 });
             });

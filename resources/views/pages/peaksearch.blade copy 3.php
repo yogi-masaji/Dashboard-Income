@@ -428,11 +428,10 @@
             });
 
             // =================================================================
-            // VARIABEL GLOBAL
+            // VARIABEL GLOBAL BARU
             // =================================================================
-            let savedHours = null; // Untuk data chart utama
-            let savedGateDetails = null; // Untuk data detail gate yang sudah diproses
-            let fullGateDetails = null; // [FIX] Untuk menyimpan data gate lengkap dari API
+            let savedHours = null;
+            let savedGateDetails = null; // Untuk menyimpan data detail gate yang sudah di-load
             const isSpecialLocation = ['PMBE', 'GACI', 'BMP'].includes("{{ $kodeLokasi }}");
 
 
@@ -735,7 +734,7 @@
 
 
             // =================================================================
-            // Event handler untuk tombol 'Cari'
+            // MODIFIKASI: Event handler untuk tombol 'Cari'
             // =================================================================
             $('#cari').on('click', function() {
                 const startDate1 = picker1.getStartDate()?.format('YYYY-MM-DD');
@@ -759,7 +758,9 @@
 
                 // Kondisi untuk lokasi khusus (PMBE, GACI, BMP)
                 if (isSpecialLocation) {
-                    // 1. Request untuk Peak Search (data chart utama)
+                    const selectedJamType = $('#jamType').val();
+
+                    // 1. Request untuk Peak Search (data chart utama, tidak berubah)
                     const peakSearchRequest = $.ajax({
                         url: '{{ route('peakSearch') }}',
                         method: 'POST',
@@ -776,9 +777,9 @@
                         })
                     });
 
-                    // 2. Request untuk data per gate
+                    // 2. MODIFIKASI: Request untuk data per gate menggunakan API baru
                     const perGateRequest = $.ajax({
-                        url: '{{ route('peakSearchPerGate') }}',
+                        url: '{{ route('peakSearchPerGate') }}', // Menggunakan route baru
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -797,17 +798,32 @@
                     // Menjalankan semua request secara paralel
                     $.when(peakSearchRequest, perGateRequest)
                         .done(function(peakRes, perGateRes) {
-                            // [FIX] Menyimpan hasil mentah dari API
+                            // peakRes[0] adalah response dari peakSearchRequest
+                            // perGateRes[0] adalah response dari perGateRequest
+
+                            // Menyimpan hasil dari API utama
                             savedHours = peakRes[0].data[0];
-                            fullGateDetails = perGateRes[0].data[0]; // Simpan data gate lengkap
+
+                            // MODIFIKASI: Memproses dan menyimpan data per gate dari API baru
+                            const perGateData = perGateRes[0].data[0];
+                            if (selectedJamType === 'entry') {
+                                savedGateDetails = {
+                                    first_period: perGateData.parking_entry_hours[0].first_period,
+                                    second_period: perGateData.parking_entry_hours[0].second_period
+                                };
+                            } else { // 'exit'
+                                savedGateDetails = {
+                                    first_period: perGateData.parking_exit_hours[0].first_period,
+                                    second_period: perGateData.parking_exit_hours[0].second_period
+                                };
+                            }
 
                             console.log("All data loaded and saved:", {
                                 savedHours,
-                                fullGateDetails
+                                savedGateDetails
                             });
 
-                            // [FIX] Proses dan tampilkan data berdasarkan pilihan jam saat ini
-                            updateDataAndView();
+                            showJamBasedOnType(); // Render chart setelah semua data siap
                         })
                         .fail(function(xhr, status, error) {
                             console.error("Error during parallel AJAX requests:", error, xhr
@@ -819,7 +835,7 @@
                         });
 
                 } else {
-                    // Logika original untuk lokasi lain
+                    // Logika original untuk lokasi lain (tidak ada perubahan)
                     $.ajax({
                         url: '{{ route('peakSearch') }}',
                         method: 'POST',
@@ -837,9 +853,7 @@
                         success: function(response) {
                             console.log("Laravel Controller Response:", response);
                             savedHours = response.data[0];
-                            fullGateDetails = null; // Reset data gate
-                            savedGateDetails = null;
-                            updateDataAndView(); // Gunakan fungsi yang sama
+                            showJamBasedOnType();
                         },
                         error: function(xhr, status, error) {
                             console.error("Error from Laravel:", error);
@@ -852,17 +866,28 @@
                 }
             });
 
-            // =================================================================
-            // [FIX] Event handler untuk perubahan Tipe Jam
-            // =================================================================
+
             $('#jamType').on('change', function() {
-                // Jika data sudah ada, proses ulang dengan tipe jam yang baru
+                // MODIFIKASI: Jika data sudah ada, proses ulang dengan tipe jam yang baru
                 if (savedHours) {
-                    updateDataAndView();
+                    const selectedJamType = $(this).val();
+                    const perGateData = savedGateDetails; // Data sudah disimpan sebelumnya
+
+                    if (selectedJamType === 'entry') {
+                        savedGateDetails = {
+                            first_period: perGateData.first_period,
+                            second_period: perGateData.second_period
+                        };
+                    } else { // 'exit'
+                        savedGateDetails = {
+                            first_period: perGateData.first_period,
+                            second_period: perGateData.second_period
+                        };
+                    }
+                    showJamBasedOnType();
                 }
             });
 
-            // Variabel untuk instance chart
             let mobilFirstPeriodChart = null;
             let mobilSecondPeriodChart = null;
             let motorbikeFirstPeriodChart = null;
@@ -881,35 +906,8 @@
             }
 
             // =================================================================
-            // [FIX] FUNGSI BARU: Memproses data dan memperbarui tampilan
-            // =================================================================
-            function updateDataAndView() {
-                if (!savedHours || (isSpecialLocation && !fullGateDetails)) {
-                    // Jika salah satu data yang diperlukan belum ada, jangan lakukan apa-apa
-                    return;
-                }
-
-                const selectedJamType = $('#jamType').val();
-
-                // Update savedGateDetails berdasarkan pilihan jam jika lokasi spesial
-                if (isSpecialLocation) {
-                    const gateDataSource = selectedJamType === 'entry' ?
-                        fullGateDetails.parking_entry_hours[0] :
-                        fullGateDetails.parking_exit_hours[0];
-
-                    savedGateDetails = {
-                        first_period: gateDataSource.first_period,
-                        second_period: gateDataSource.second_period
-                    };
-                }
-
-                // Render ulang chart dan tabel utama
-                showJamBasedOnType();
-            }
-
-
-            // =================================================================
-            // FUNGSI: Menampilkan detail gate dari data yang sudah di-load
+            // FUNGSI BARU: Menampilkan detail dari data yang sudah di-load (cache)
+            // Diadaptasi untuk struktur JSON baru
             // =================================================================
             function showGateDetailsFromCache(vehicleType, timeInterval, period) {
                 $('#modalVehicleType').text(vehicleType);
@@ -976,7 +974,7 @@
 
 
             // =================================================================
-            // FUNGSI: Membuat atau memperbarui chart
+            // MODIFIKASI: Event onClick pada chart & Dark Mode Compatibility
             // =================================================================
             function createOrUpdateChart(canvasId, chartInstance, chartData, chartLabel, vehicleType, period) {
                 const ctx = document.getElementById(canvasId)?.getContext('2d');
@@ -1024,7 +1022,7 @@
                         plugins: {
                             legend: {
                                 labels: {
-                                    color: textColor
+                                    color: textColor // Warna teks legenda dinamis
                                 }
                             }
                         },
@@ -1032,18 +1030,18 @@
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    color: textColor
+                                    color: textColor // Warna teks sumbu Y dinamis
                                 },
                                 grid: {
-                                    color: gridColor
+                                    color: gridColor // Warna grid sumbu Y dinamis
                                 }
                             },
                             x: {
                                 ticks: {
-                                    color: textColor
+                                    color: textColor // Warna teks sumbu X dinamis
                                 },
                                 grid: {
-                                    color: gridColor
+                                    color: gridColor // Warna grid sumbu X dinamis
                                 }
                             }
                         }
@@ -1055,9 +1053,6 @@
                 return newChartInstance;
             }
 
-            // =================================================================
-            // FUNGSI: Menampilkan data chart dan tabel utama berdasarkan tipe jam
-            // =================================================================
             function showJamBasedOnType() {
                 if (!savedHours) {
                     console.warn("Belum ada data, klik tombol 'Cari' dulu.");
@@ -1116,7 +1111,6 @@
                 TableTaxiFirstPeriod.clear().rows.add(taxiFirst.table).draw();
                 TableTaxiSecondPeriod.clear().rows.add(taxiSecond.table).draw();
 
-                // Update Charts
                 mobilFirstPeriodChart = createOrUpdateChart('CarFirstPeriodBar', mobilFirstPeriodChart, carFirst
                     .chart, 'Car First Period', 'Car', 'first_period');
                 mobilSecondPeriodChart = createOrUpdateChart('CarSecondPeriodBar', mobilSecondPeriodChart, carSecond

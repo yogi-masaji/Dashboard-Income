@@ -11,6 +11,9 @@
         $navbarTitle = $lokasiName;
     @endphp
 
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+
     <style>
         /* General table and layout styles */
         tbody {
@@ -21,6 +24,7 @@
         .dt-buttons {
             display: inline-flex;
             gap: 10px;
+            margin-bottom: 1rem;
         }
 
         .dt-search {
@@ -89,7 +93,14 @@
             color: #065f46;
         }
 
-        /* --- START: New Spinner Styles --- */
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .metrics-container {
+                flex-direction: column;
+            }
+        }
+
+        /* Spinner Styles */
         .spinner-container {
             display: flex;
             flex-direction: column;
@@ -141,16 +152,12 @@
             }
         }
 
-        /* --- END: New Spinner Styles --- */
-
-        /* --- START: Datepicker z-index fix --- */
+        /* Datepicker z-index fix */
         .easepick-wrapper {
             z-index: 9999 !important;
         }
 
-        /* --- END: Datepicker z-index fix --- */
-
-        /* --- START: Dark Mode Styles --- */
+        /* Dark Mode Styles */
         .dt-search,
         .dt-info,
         p,
@@ -180,7 +187,7 @@
         .fw-medium,
         .form-label,
         h5 {
-            color: #000000
+            color: #000000;
         }
 
         .mode-gelap .fw-medium,
@@ -188,8 +195,6 @@
         .mode-gelap h5 {
             color: #ffffff;
         }
-
-        /* --- END: Dark Mode Styles --- */
     </style>
 
     <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3 mb-4">
@@ -235,43 +240,48 @@
 
     <div class="content-custom mt-4 result" style="display: none;">
         <h5 class="fw-semibold">Occupancy Rate On: <span class="tgl-selected"></span></h5>
-        <table class="table table-striped table-bordered mt-3" id="occupancyRateTable" style="width:100%">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Time</th>
-                    <th>Quantity</th>
-                    <th>Occupancy Rate</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data will be loaded here -->
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered mt-3" id="occupancyRateTable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Time</th>
+                        <th>Quantity</th>
+                        <th>Occupancy Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be loaded here -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    {{-- CDN for easepick --}}
+    {{-- CDN for easepick and DataTables Buttons --}}
     <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 
     <script>
         $(document).ready(function() {
             // Initialize easepick
             const picker = new easepick.create({
                 element: document.getElementById('datepicker'),
-                css: [
-                    'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
-                ],
+                css: ['https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css'],
                 format: 'YYYY-MM-DD',
             });
 
             function formatDate(dateString) {
                 const date = new Date(dateString);
-                const options = {
+                return date.toLocaleDateString('id-ID', {
                     day: 'numeric',
                     month: 'long',
                     year: 'numeric'
-                };
-                return date.toLocaleDateString('id-ID', options);
+                });
             }
 
             const today = new Date().toISOString().split('T')[0];
@@ -288,32 +298,9 @@
                 $('.current-time').text(formatter.format(now));
             }
             updateJakartaTime();
-            setInterval(updateJakartaTime, 60000); // Update every minute
+            setInterval(updateJakartaTime, 60000);
 
-            const occupancyRateTable = $('#occupancyRateTable').DataTable({
-                lengthChange: false,
-                searching: false,
-                paging: false,
-                ordering: false,
-                info: false,
-                data: [],
-                columns: [{
-                        data: 'no'
-                    },
-                    {
-                        data: 'time'
-                    },
-                    {
-                        data: 'quantity'
-                    },
-                    {
-                        data: 'occupancy_rate'
-                    }
-                ],
-                language: {
-                    emptyTable: "Silakan pilih tanggal, lalu klik 'Cari' untuk melihat data.",
-                }
-            });
+            let occupancyRateTable;
 
             $('#cari').click(function() {
                 const startDate = picker.getDate()?.format('YYYY-MM-DD');
@@ -326,20 +313,16 @@
                     $('#alertMessage').hide();
                 }
 
-                $cariButton.prop('disabled', true);
-                occupancyRateTable.clear().draw();
+                $cariButton.prop('disabled', true).html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+                    );
+                if (occupancyRateTable) {
+                    occupancyRateTable.clear().draw();
+                }
                 $('.result').show();
 
-                const spinnerHtml = `
-                    <tr>
-                        <td colspan="4">
-                            <div class="spinner-container">
-                                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                                <strong>Memuat data...</strong>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                const spinnerHtml =
+                    `<tr><td colspan="4"><div class="spinner-container"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><strong>Memuat data...</strong></div></td></tr>`;
                 $('#occupancyRateTable tbody').html(spinnerHtml);
 
                 $.ajax({
@@ -350,6 +333,7 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
+                        $('#occupancyRateTable tbody').empty();
                         $('.tgl-selected').text(formatDate(startDate));
                         $('.occupancy').text(response.data_realtime[0].occupancyrate);
                         $('.available').text(response.data_realtime[0].quantity);
@@ -361,17 +345,50 @@
                             occupancy_rate: item.occupancyrate,
                         }));
 
-                        occupancyRateTable.clear().rows.add(formattedData).draw();
+                        if (occupancyRateTable) {
+                            occupancyRateTable.destroy();
+                        }
+
+                        occupancyRateTable = $('#occupancyRateTable').DataTable({
+                            destroy: true,
+                            lengthChange: false,
+                            searching: false,
+                            paging: false,
+                            ordering: false,
+                            info: false,
+                            data: formattedData,
+                            columns: [{
+                                    data: 'no'
+                                },
+                                {
+                                    data: 'time'
+                                },
+                                {
+                                    data: 'quantity'
+                                },
+                                {
+                                    data: 'occupancy_rate'
+                                }
+                            ],
+                            dom: 'Bfrtip',
+                            buttons: [{
+                                    extend: 'excelHtml5',
+                                    title: `Occupancy Rate ${startDate}`
+                                },
+                                {
+                                    extend: 'pdfHtml5',
+                                    title: `Occupancy Rate ${startDate}`
+                                }
+                            ],
+                            language: {
+                                emptyTable: "Tidak ada data untuk tanggal yang dipilih.",
+                            }
+                        });
                     },
                     error: function(xhr, status, error) {
                         console.error('AJAX Error:', error);
-                        const errorHtml = `
-                            <tr>
-                                <td colspan="4" class="text-center text-danger" style="padding: 20px;">
-                                    Terjadi kesalahan saat mengambil data. Silakan coba lagi.
-                                </td>
-                            </tr>
-                        `;
+                        const errorHtml =
+                            `<tr><td colspan="4" class="text-center text-danger" style="padding: 20px;">Terjadi kesalahan saat mengambil data.</td></tr>`;
                         $('#occupancyRateTable tbody').html(errorHtml);
                     },
                     complete: function() {

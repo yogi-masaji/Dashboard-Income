@@ -12,9 +12,11 @@
     @endphp
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    {{-- Add DataTables Responsive CSS --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
 
 
-    {{-- Custom Styles for Light Theme --}}
+    {{-- Custom Styles for Light & Dark Theme --}}
     <style>
         /* --- Base Styles --- */
         body {
@@ -26,6 +28,14 @@
         .card,
         .modal-content {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Make table responsive */
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* --- Light Theme --- */
@@ -277,21 +287,23 @@
                 <h3 class="mb-0">Location List</h3>
             </div>
             <div class="card-body mt-3">
-                <table id="location-table" class="table table-striped table-hover" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th class="text-center">No</th>
-                            <th class="text-center">Location Code</th>
-                            <th class="text-center">Location Name</th>
-                            <th class="text-center">Location IP</th>
-                            <th class="text-center">System</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{-- Data will be loaded via AJAX --}}
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="location-table" class="table table-striped table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Location Code</th>
+                                <th class="text-center">Location Name</th>
+                                <th class="text-center">Location IP</th>
+                                <th class="text-center">System</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- Data will be loaded via AJAX --}}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -302,9 +314,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title">Edit Location</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    {{-- BUG FIX: Removed data-dismiss="modal" --}}
+                    {{-- <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>
+                    </button> --}}
                 </div>
                 <div class="modal-body">
                     <form id="formEdit">
@@ -341,7 +354,8 @@
                     </form>
                 </div>
                 <div class="modal-footer gap-2">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    {{-- BUG FIX: Removed data-dismiss="modal" --}}
+                    <button type="button" class="btn btn-secondary">Close</button>
                     <button type="button" id="btn_update" class="btn btn-primary"><i class="fas fa-save"></i>
                         Update</button>
                 </div>
@@ -351,10 +365,15 @@
 
 
 
-    {{-- Add jQuery, DataTables, and SweetAlert2 --}}
+    {{-- Add jQuery, Popper.js, Bootstrap, DataTables, and SweetAlert2 --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    {{-- Add DataTables Responsive JS --}}
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -376,9 +395,10 @@
                 }
             });
 
-            // Initialize DataTable for client-side processing
+            // Initialize DataTable for client-side processing with responsive option
             var table = $('#location-table').DataTable({
                 processing: true,
+                responsive: true, // Enable responsive feature
                 ajax: {
                     url: "{{ route('config.locations.data') }}",
                     dataSrc: 'data'
@@ -386,7 +406,8 @@
                 columns: [{
                         data: null,
                         searchable: false,
-                        orderable: false
+                        orderable: false,
+                        className: 'text-center'
                     },
                     {
                         data: 'kode_Lokasi'
@@ -404,12 +425,13 @@
                         data: 'id_Lokasi',
                         searchable: false,
                         orderable: false,
+                        className: 'text-center',
                         render: function(data, type, row) {
                             let editButton =
                                 `<button type="button" class="btn btn-info btn-sm item_edit" data-id="${data}">Edit</button>`;
                             let deleteButton =
                                 `<button type="button" class="btn btn-danger btn-sm item_hapus" data-id="${data}">Delete</button>`;
-                            return `<div class="text-center">${editButton} &nbsp; ${deleteButton}</div>`;
+                            return `${editButton} &nbsp; ${deleteButton}`;
                         }
                     }
                 ]
@@ -423,6 +445,11 @@
                 }).nodes().each(function(cell, i) {
                     cell.innerHTML = i + 1 + PageInfo.start;
                 });
+            });
+
+            // BUG FIX: Manually handle modal closing to fix bug where data-dismiss is not working
+            $('#modalEdit .close, #modalEdit .modal-footer .btn-secondary').on('click', function() {
+                $('#modalEdit').modal('hide');
             });
 
 

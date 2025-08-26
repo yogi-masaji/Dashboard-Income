@@ -13,14 +13,32 @@
 
     <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    {{-- Add DataTables Responsive CSS --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
 
-    {{-- Custom Styles for Light Theme --}}
+    {{-- Custom Styles for Light & Dark Theme --}}
     <style>
+        /* --- Base Styles --- */
         body {
             background-color: #f8f9fa;
             color: #212529;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        .card,
+        .modal-content {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Make table responsive */
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* --- Light Theme --- */
         .card {
             background-color: #ffffff !important;
             border: #d9d9d9 1px solid !important;
@@ -61,7 +79,6 @@
             color: #6c757d;
         }
 
-        /* DataTables light theme adjustments */
         #user-table {
             color: #212529;
         }
@@ -97,7 +114,6 @@
             color: #007bff;
         }
 
-        /* Modal light theme */
         .modal-content {
             background-color: #ffffff;
             color: #212529;
@@ -119,108 +135,111 @@
         .modal-footer {
             border-top: 1px solid #dee2e6;
         }
-    </style>
 
-    <style>
-        .mode-gelap body {
-            background-color: #121212;
-            color: #e0e0e0;
+        /* --- Dark Theme --- */
+        body.mode-gelap {
+            background-color: #212121 !important;
+            color: #ffffff;
         }
 
-        .mode-gelap .card {
+        body.mode-gelap .card {
             background-color: #192e50 !important;
-            border: #333 1px solid !important;
-            color: #e0e0e0 !important;
-        }
-
-        .mode-gelap .card-header {
-            background-color: #070d17 !important;
-            color: #ffffff;
-            border-bottom: 1px solid #333;
-        }
-
-        .mode-gelap label {
-            color: #e0e0e0;
-        }
-
-        .mode-gelap .form-control {
-            background-color: #1e1e1e;
-            color: #ffffff;
-            border: 1px solid #444;
-        }
-
-        .mode-gelap .form-control:focus {
-            background-color: #1e1e1e;
-            color: #ffffff;
-            border-color: #66afe9;
-            box-shadow: 0 0 0 0.2rem rgba(102, 175, 233, .25);
-        }
-
-        .mode-gelap .form-control option {
-            background: #1e1e1e;
-            color: #ffffff;
-        }
-
-        .mode-gelap .form-control::placeholder {
-            color: #aaaaaa;
-        }
-
-        /* DataTables dark theme adjustments */
-        .mode-gelap #user-table {
-            color: #e0e0e0;
-        }
-
-        .mode-gelap #user-table thead th {
-            color: #ffffff;
-        }
-
-        .mode-gelap .dataTables_wrapper .dataTables_length,
-        .mode-gelap .dataTables_wrapper .dataTables_filter,
-        .mode-gelap .dataTables_wrapper .dataTables_info,
-        .mode-gelap .dataTables_wrapper .dataTables_processing,
-        .mode-gelap .dataTables_wrapper .dataTables_paginate {
-            color: #e0e0e0 !important;
-        }
-
-        .mode-gelap .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border-color: #424242 !important;
             color: #ffffff !important;
         }
 
-        .mode-gelap .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-            color: #666666 !important;
-        }
-
-        .mode-gelap .page-item.active .page-link {
-            background-color: #66afe9;
-            border-color: #66afe9;
-        }
-
-        .mode-gelap .page-link {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            color: #66afe9;
-        }
-
-        /* Modal dark theme */
-        .mode-gelap .modal-content {
-            background-color: #1e1e1e;
-            color: #e0e0e0;
-            border: 1px solid rgba(255, 255, 255, .1);
-        }
-
-        .mode-gelap .modal-header {
-            background-color: #2a2a2a;
+        body.mode-gelap .card-header {
+            background-color: #121E32 !important;
             color: #ffffff;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #424242;
         }
 
-        .mode-gelap .close {
+        body.mode-gelap label,
+        body.mode-gelap h3,
+        body.mode-gelap h4,
+        body.mode-gelap h5 {
             color: #ffffff;
-            text-shadow: 0 1px 0 #000000;
         }
 
-        .mode-gelap .modal-footer {
-            border-top: 1px solid #333;
+        body.mode-gelap .form-control {
+            background-color: #2c3e50;
+            color: #ffffff;
+            border: 1px solid #424242;
+        }
+
+        body.mode-gelap .form-control:focus {
+            background-color: #2c3e50;
+            color: #ffffff;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+        }
+
+        body.mode-gelap .form-control option {
+            background: #2c3e50;
+            color: #ffffff;
+        }
+
+        body.mode-gelap .form-control::placeholder {
+            color: #bdc3c7;
+        }
+
+        body.mode-gelap .table {
+            color: #ffffff;
+            --bs-table-striped-bg: #121E32;
+            --bs-table-striped-color: #ffffff;
+            --bs-table-hover-bg: #1f3a5a;
+            --bs-table-hover-color: #ffffff;
+        }
+
+        body.mode-gelap #user-table thead th {
+            color: #ffffff;
+        }
+
+        body.mode-gelap .dataTables_wrapper .dataTables_length,
+        body.mode-gelap .dataTables_wrapper .dataTables_filter,
+        body.mode-gelap .dataTables_wrapper .dataTables_info,
+        body.mode-gelap .dataTables_wrapper .dataTables_processing,
+        body.mode-gelap .dataTables_wrapper .dataTables_paginate {
+            color: #ffffff !important;
+        }
+
+        body.mode-gelap .dataTables_wrapper .dataTables_paginate .paginate_button {
+            color: #ffffff !important;
+        }
+
+        body.mode-gelap .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            color: #6c757d !important;
+        }
+
+        body.mode-gelap .page-link {
+            background-color: #2c3e50;
+            border-color: #424242;
+            color: #ffffff;
+        }
+
+        body.mode-gelap .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        body.mode-gelap .modal-content {
+            background-color: #192e50;
+            color: #ffffff;
+            border-color: #424242;
+        }
+
+        body.mode-gelap .modal-header {
+            background-color: #121E32;
+            border-bottom-color: #424242;
+        }
+
+        body.mode-gelap .modal-footer {
+            border-top-color: #424242;
+        }
+
+        body.mode-gelap .close {
+            color: #ffffff;
+            text-shadow: none;
         }
     </style>
     <div class="container-fluid mt-4">
@@ -285,22 +304,24 @@
                 <h4 class="mb-0">Table Show</h4>
             </div>
             <div class="card-body">
-                <table id="user-table" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Email</th>
-                            <th>User Type</th>
-                            <th>Group/Location</th>
-                            <th>Location Name</th>
-                            <th>IP Location</th>
-                            <th>System Location</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="user-table" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Email</th>
+                                <th>User Type</th>
+                                <th>Group/Location</th>
+                                <th>Location Name</th>
+                                <th>IP Location</th>
+                                <th>System Location</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -311,9 +332,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Change User Account</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    {{-- <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>
+                    </button> --}}
                 </div>
                 <div class="modal-body">
                     <form id="formChange" method="POST">
@@ -331,7 +352,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary me-2" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary me-2">Close</button>
                     <button type="button" id="btn_change" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
@@ -344,9 +365,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Default Location</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    {{-- <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>
+                    </button> --}}
                 </div>
                 <div class="modal-body">
                     <form id="formEdit" method="POST">
@@ -371,7 +392,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary me-2" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary me-2">Close</button>
                     <button type="button" id="btn_edit" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
@@ -383,6 +404,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    {{-- Add DataTables Responsive JS --}}
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -407,10 +431,11 @@
 
             var table = $('#user-table').DataTable({
                 processing: true,
-                serverSide: false, // Set to false as we load all data at once
+                serverSide: false,
+                responsive: true, // Enable responsive feature
                 ajax: {
                     url: '{{ route('form.user.data') }}',
-                    dataSrc: '' // Menunjukkan bahwa data adalah array langsung
+                    dataSrc: ''
                 },
                 columns: [{
                         data: null,
@@ -468,8 +493,18 @@
                 ]
             });
 
+            // BUG FIX: Manually handle modal closing
+            $('#modalChange .close, #modalChange .modal-footer .btn-secondary').on('click', function() {
+                $('#modalChange').modal('hide');
+            });
+
+            $('#modalEdit .close, #modalEdit .modal-footer .btn-secondary').on('click', function() {
+                $('#modalEdit').modal('hide');
+            });
+
+
             function reloadTable() {
-                table.ajax.reload(null, false); // User-friendly reload
+                table.ajax.reload(null, false);
             }
 
             function show_id() {

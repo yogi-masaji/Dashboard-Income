@@ -1669,7 +1669,7 @@
                                     backgroundColor: 'rgba(153, 102, 255, 1)',
                                 },
                                 {
-                                    label: 'dkijackpayment',
+                                    label: 'jackcard',
                                     data: [incomePaymentDataFirstPeriod[5],
                                         incomePaymentDataSecondPeriod[5]
                                     ],
@@ -1683,7 +1683,7 @@
                                     backgroundColor: 'rgba(188, 4, 4, 1)',
                                 },
                                 {
-                                    label: 'qrisepayment',
+                                    label: 'qris',
                                     data: [incomePaymentDataFirstPeriod[7],
                                         incomePaymentDataSecondPeriod[7]
                                     ],

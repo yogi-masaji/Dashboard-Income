@@ -11,111 +11,98 @@
         $navbarTitle = $lokasiName;
     @endphp
 
+    {{-- CSS for Datatable Buttons --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+
     <style>
-        /* Apply flextruck to the wrapper that contains the search and buttons */
-        #membershipTable_wrapper .dt-top {
+        /* Styling for the container of search and buttons */
+        #occupancyTable_wrapper .dt-top {
             display: flex;
-            justify-content: flex-start;
-            /* Align buttons and search to the left */
-            gap: 20px;
-            /* Add space between the buttons and search */
+            justify-content: space-between;
             align-items: center;
-        }
-
-        table.dataTable thead th,
-        table.dataTable thead td {
-            padding: 16px;
-            border-bottom: 1px solid #111
-        }
-
-        tbody {
-            white-space: normal;
-            word-break: break-all;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding-bottom: 1rem;
         }
 
         /* Ensure the buttons are inline and spaced correctly */
         .dt-buttons {
             display: inline-flex;
             gap: 10px;
-            /* Space between individual buttons */
         }
 
-        /* Make sure the search input aligns properly */
-        .dt-search input {
-            display: inline-block;
-            margin-right: 10px;
-            /* Space between the search input and buttons */
-        }
-
-        .dt-search {
-            float: right !important;
-            margin-bottom: 5px;
-        }
-
-        button.dt-paging-button {
-            background-color: #ffffff !important;
-            padding: 10px;
-            width: 30px;
-            border-radius: 10px;
-            border: none !important;
-            margin-right: 2px;
-            margin-left: 2px;
-        }
-
+        /* Style for individual datatable buttons */
         .dt-button {
             background-color: #FCB900 !important;
-            padding: 10px;
+            color: #000 !important;
+            padding: 10px 20px;
             border-radius: 10px;
             border: none !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .dt-button:hover {
+            background-color: #e0a800 !important;
+        }
+
+
+        .dt-search {
+            margin-bottom: 5px;
         }
 
         #dt-search-0 {
             height: 40px;
             border-radius: 10px;
-            margin-left: 10px;
+            border: 1px solid #ccc;
+            padding-left: 10px;
         }
-    </style>
-    <style>
+
+        /* Custom styles for the main content area */
         .content-custom {
-            padding: 10px !important;
+            padding: 20px !important;
             background-color: #ffffff !important;
             border-radius: 10px !important;
             box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
             color: #000000 !important;
+            width: 100%;
+            overflow-x: hidden;
+            /* Prevent horizontal scroll on the main container */
+            box-sizing: border-box;
         }
 
         .search-wrapper {
             width: 100%;
         }
-    </style>
-    <style>
-        .content-custom {
+
+        /* Wrapper to make table scrollable */
+        .table-scroll-wrapper {
             width: 100%;
-            overflow-x: hidden;
-            padding: 20px;
-            box-sizing: border-box;
+            overflow-x: auto;
+            /* This makes the table scroll horizontally */
+            -webkit-overflow-scrolling: touch;
+            /* Smooth scrolling on iOS */
         }
 
         .wide-data-table {
             width: 100%;
-            table-layout: fixed;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 14px;
             text-align: center;
         }
 
         .wide-data-table th,
         .wide-data-table td {
-            /* padding: 4px 6px; */
+            padding: 12px 8px;
             border: 1px solid #ddd;
-            word-wrap: break-word;
+            white-space: nowrap;
+            /* Prevent content from wrapping */
         }
 
-        /* Optional: sticky header */
         .wide-data-table thead th {
+            background-color: #f8f9fa;
             position: sticky;
             top: 0;
-            background-color: #ffffff;
             z-index: 1;
         }
 
@@ -126,33 +113,6 @@
         .mode-gelap .wide-data-table td {
             background-color: #192e50;
             color: #ffffff;
-        }
-
-        .wide-data-table td {
-            position: sticky;
-            top: 0;
-            background-color: #ffffff;
-            z-index: 1;
-        }
-
-        /* Adjust column widths */
-        .wide-data-table th:first-child,
-        .wide-data-table td:first-child {
-            width: 75px;
-            /* Adjust this as needed */
-            font-size: 11px;
-        }
-
-        /* Rest of the columns distributed equally */
-        .wide-data-table th:not(:first-child),
-        .wide-data-table td:not(:first-child) {
-            width: calc((100% - 80px) / 26);
-        }
-
-        table.dataTable thead th,
-        table.dataTable thead td {
-            padding: 2px;
-            border-bottom: 1px solid #111;
         }
 
         .form-label {
@@ -168,29 +128,25 @@
             position: relative;
         }
 
-        /* Loading Overlay Styles - Changed to absolute positioning */
+        /* Loading Overlay Styles */
         #loading-overlay {
             position: absolute;
-            /* Changed from fixed */
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(255, 255, 255, 0.8);
-            /* Lighter background */
             z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: #333;
-            /* Darker text for better contrast on light bg */
             font-size: 1.2rem;
             border-radius: 10px;
-            /* Match container radius */
         }
 
-        /* New Spinner Styles */
+        /* Spinner Styles */
         .spinner {
             display: flex;
             justify-content: space-around;
@@ -241,8 +197,9 @@
     </div>
 
     <div class="content-custom mt-5">
+        <h5>Occupancy data</h5>
         <div id="table-container">
-            <!-- Loading Overlay HTML - Moved inside the container -->
+            <!-- Loading Overlay HTML -->
             <div id="loading-overlay" style="display: none;">
                 <div class="spinner">
                     <div class="dot1"></div>
@@ -280,17 +237,19 @@
                             <th>21:00</th>
                             <th>22:00</th>
                             <th>23:00</th>
-
                             <th>Total</th>
                             <th>Average</th>
                         </tr>
                     </thead>
-
+                    <tbody>
+                        {{-- Data will be inserted here by DataTables --}}
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    {{-- Scripts for Date Picker --}}
     <script>
         const dateInputs = [{
             start: '#start-date-1',
@@ -310,109 +269,130 @@
         });
     </script>
 
-    <script>
-        const occupancyTable = $('#occupancyTable').DataTable({
-            searching: false,
-            paging: false,
-            pageLength: false,
-            lengthChange: false,
-            bInfo: false,
-            columns: [{
-                    data: 'floor_name'
-                },
-                {
-                    data: '00:00'
-                },
-                {
-                    data: '01:00'
-                },
-                {
-                    data: '02:00'
-                },
-                {
-                    data: '03:00'
-                },
-                {
-                    data: '04:00'
-                },
-                {
-                    data: '05:00'
-                },
-                {
-                    data: '06:00'
-                },
-                {
-                    data: '07:00'
-                },
-                {
-                    data: '08:00'
-                },
-                {
-                    data: '09:00'
-                },
-                {
-                    data: '10:00'
-                },
-                {
-                    data: '11:00'
-                },
-                {
-                    data: '12:00'
-                },
-                {
-                    data: '13:00'
-                },
-                {
-                    data: '14:00'
-                },
-                {
-                    data: '15:00'
-                },
-                {
-                    data: '16:00'
-                },
-                {
-                    data: '17:00'
-                },
-                {
-                    data: '18:00'
-                },
-                {
-                    data: '19:00'
-                },
-                {
-                    data: '20:00'
-                },
-                {
-                    data: '21:00'
-                },
-                {
-                    data: '22:00'
-                },
-                {
-                    data: '23:00'
-                },
+    {{-- Scripts for DataTables Buttons --}}
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 
-                {
-                    data: 'total'
-                },
-                {
-                    data: 'average'
-                }
-            ]
-        });
+    {{-- Main script for DataTables and AJAX call --}}
+    <script>
         $(document).ready(function() {
+            // Initialize DataTable
+            const occupancyTable = $('#occupancyTable').DataTable({
+                searching: false,
+                paging: false,
+                info: false,
+                // Add DOM configuration for buttons
+                dom: 'Brt', // B for buttons, r for processing, t for table
+                // Configure buttons
+                buttons: [{
+                        extend: 'excelHtml5',
+                        title: 'Occupancy Report'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Occupancy Report',
+                        orientation: 'landscape', // PDF in landscape mode for wide tables
+                        pageSize: 'A3'
+                    }
+                ],
+                // Define columns
+                columns: [{
+                        data: 'floor_name'
+                    },
+                    {
+                        data: '00:00'
+                    },
+                    {
+                        data: '01:00'
+                    },
+                    {
+                        data: '02:00'
+                    },
+                    {
+                        data: '03:00'
+                    },
+                    {
+                        data: '04:00'
+                    },
+                    {
+                        data: '05:00'
+                    },
+                    {
+                        data: '06:00'
+                    },
+                    {
+                        data: '07:00'
+                    },
+                    {
+                        data: '08:00'
+                    },
+                    {
+                        data: '09:00'
+                    },
+                    {
+                        data: '10:00'
+                    },
+                    {
+                        data: '11:00'
+                    },
+                    {
+                        data: '12:00'
+                    },
+                    {
+                        data: '13:00'
+                    },
+                    {
+                        data: '14:00'
+                    },
+                    {
+                        data: '15:00'
+                    },
+                    {
+                        data: '16:00'
+                    },
+                    {
+                        data: '17:00'
+                    },
+                    {
+                        data: '18:00'
+                    },
+                    {
+                        data: '19:00'
+                    },
+                    {
+                        data: '20:00'
+                    },
+                    {
+                        data: '21:00'
+                    },
+                    {
+                        data: '22:00'
+                    },
+                    {
+                        data: '23:00'
+                    },
+                    {
+                        data: 'total'
+                    },
+                    {
+                        data: 'average'
+                    }
+                ]
+            });
+
+            // Handle search button click
             $('#cari').click(function() {
                 const startDate = $('#start-date-1').val();
 
                 if (!startDate) {
-                    // I'm replacing alert with a more modern approach, like a toast notification or a modal.
-                    // For now, I'll keep it simple to avoid adding new libraries.
                     alert('Silakan pilih tanggal terlebih dahulu.');
                     return;
                 }
 
-                // Show loading screen
                 $('#loading-overlay').show();
 
                 $.ajax({
@@ -423,11 +403,10 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-
                         const occupancyData = response.data;
-                        console.log(occupancyData)
+                        console.log(occupancyData);
 
-                        const formattedOccupancyData = occupancyData.map((item, index) => ({
+                        const formattedOccupancyData = occupancyData.map(item => ({
                             floor_name: item.floor_name,
                             '00:00': item.jam1,
                             '01:00': item.jam2,
@@ -464,8 +443,6 @@
                         alert('Terjadi kesalahan saat mengambil data.');
                     },
                     complete: function() {
-                        // This function will run regardless of success or error
-                        // Hide loading screen
                         $('#loading-overlay').hide();
                     }
                 });

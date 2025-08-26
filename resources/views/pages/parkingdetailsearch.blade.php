@@ -10,19 +10,27 @@
         $navbarTitle = $lokasiName;
     @endphp
 
+    {{-- CDN for DataTables Responsive and Buttons CSS --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+
     <style>
         /* General table and layout styles */
-        #membershipTable_wrapper .dt-top {
+        #detailParkirTable_wrapper .dt-top {
             display: flex;
-            justify-content: flex-start;
-            gap: 20px;
+            flex-wrap: wrap;
+            /* Allow items to wrap on smaller screens */
+            justify-content: space-between;
+            /* Space out items */
+            gap: 15px;
             align-items: center;
+            padding-bottom: 1rem;
         }
 
         table.dataTable thead th,
         table.dataTable thead td {
             padding: 16px;
-            border-bottom: 1px solid #111
+            border-bottom: 1px solid #dee2e6;
         }
 
         tbody {
@@ -32,48 +40,67 @@
 
         .dt-buttons {
             display: inline-flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .dt-search {
-            float: right !important;
             margin-bottom: 5px;
         }
 
         button.dt-paging-button {
             background-color: #ffffff !important;
             padding: 10px;
-            width: 30px;
-            border-radius: 10px;
-            border: none !important;
-            margin-right: 2px;
-            margin-left: 2px;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            border: 1px solid #ddd !important;
+            margin: 0 2px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        button.dt-paging-button:hover {
+            background-color: #f0f0f0 !important;
+        }
+
+        button.dt-paging-button.current {
+            background-color: #FCB900 !important;
+            color: #fff !important;
+            border-color: #FCB900 !important;
         }
 
         .dt-button {
             background-color: #FCB900 !important;
-            padding: 10px;
-            border-radius: 10px;
+            color: #ffffff !important;
+            padding: 8px 16px;
+            border-radius: 8px !important;
             border: none !important;
+            transition: all 0.2s ease-in-out;
         }
 
-        #dt-search-0 {
+        .dt-button:hover {
+            opacity: 0.9;
+        }
+
+        .dt-search input {
             height: 40px;
-            border-radius: 10px;
+            border-radius: 8px;
             margin-left: 10px;
+            border: 1px solid #ccc;
+            padding: 0 10px;
         }
 
         .content-custom {
-            padding: 10px !important;
+            padding: 20px !important;
             background-color: #ffffff !important;
             border-radius: 10px !important;
-            box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             color: #000000 !important;
         }
 
-
-
-        /* --- START: New Spinner Styles --- */
+        /* Spinner Styles */
         .spinner-container {
             display: flex;
             flex-direction: column;
@@ -125,59 +152,46 @@
             }
         }
 
-        /* --- END: New Spinner Styles --- */
-
-        /* --- START: Datepicker z-index fix --- */
+        /* Datepicker z-index fix */
         .easepick-wrapper {
             z-index: 9999 !important;
         }
 
-        /* --- END: Datepicker z-index fix --- */
-
-        .dt-search {
-            color: #000000;
+        /* Dark Mode Compatibility */
+        .mode-gelap .content-custom {
+            background-color: #1a202c !important;
+            color: #ffffff !important;
         }
 
-        .dt-info {
-            color: #000000;
-        }
-
-        .mode-gelap .dt-search {
-            color: #ffffff;
-        }
-
+        .mode-gelap .dt-search,
         .mode-gelap .dt-info {
             color: #ffffff;
         }
 
-        .card {
-            background: #fff;
+        .mode-gelap table.dataTable thead th {
+            border-bottom: 1px solid #4a5568;
         }
 
         .mode-gelap .card {
             background: #192e50;
         }
 
-        .fw-medium {
-            color: #000000
-        }
-
-        .mode-gelap .fw-medium {
+        .mode-gelap .fw-medium,
+        .mode-gelap .form-label {
             color: #ffffff;
         }
     </style>
 
-    <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3">
-        <h5 class="mb-3 text-dark fw-semibold">Detail Parkir Search</h5>
+    <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3 mb-4">
+        <h5 class="mb-3 fw-semibold">Detail Parkir Search</h5>
 
-        {{-- Input for date range using easepick --}}
         <div class="mb-3">
-            <label for="datepicker" class="fw-medium">Rentang Tanggal</label>
+            <label for="datepicker" class="form-label fw-medium">Rentang Tanggal</label>
             <input id="datepicker" class="form-control" placeholder="Pilih rentang tanggal" />
         </div>
 
         <div class="d-flex align-items-center gap-2">
-            <button type="button" class="btn btn-primary px-4" id="cari">
+            <button type="button" class="btn btn-submit px-4" id="cari">
                 <i class="bi bi-search me-1"></i> Cari
             </button>
             <div id="alertMessage" class="alert alert-danger py-2 px-3 mb-0 small flex-grow-1 d-none" role="alert">
@@ -187,33 +201,44 @@
     </div>
 
 
-    <div class="result mt-5">
-        <table id="detailParkirTable" class="table table-striped table-bordered" style="width:100%">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Tanggal Masuk</th>
-                    <th>Tanggal Keluar</th>
-                    <th>Nopol</th>
-                    <th>Barcode</th>
-                    <th>Kendaraan</th>
-                    <th>Tarif Parkir</th>
-                    <th>Denda</th>
-                    <th>Post Masuk</th>
-                    <th>Post Keluar</th>
-                    <th>Bank</th>
-                    <th>Shift</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data will be loaded here -->
-            </tbody>
-        </table>
+    <div class="content-custom mt-4">
+        <div class="table-responsive">
+            <table id="detailParkirTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Tanggal Masuk</th>
+                        <th>Tanggal Keluar</th>
+                        <th>Nopol</th>
+                        <th>Barcode</th>
+                        <th>Kendaraan</th>
+                        <th>Tarif Parkir</th>
+                        <th>Denda</th>
+                        <th>Post Masuk</th>
+                        <th>Post Keluar</th>
+                        <th>Bank</th>
+                        <th>Shift</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be loaded here -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     {{-- CDN for easepick --}}
     <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
+
+    {{-- CDN for DataTables Buttons and Responsive --}}
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -239,17 +264,12 @@
 
             // Initialize DataTable
             let detailParkirTable = $('#detailParkirTable').DataTable({
-                dom: "Bfltip",
                 pageLength: 25,
                 ordering: true,
                 lengthChange: false,
-                paging: true,
+                searching: true,
+                responsive: true, // Enable responsive feature
                 data: [], // Start with empty data
-                layout: {
-                    topEnd: {
-                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
-                    },
-                },
                 columns: [{
                         data: 'no'
                     },
@@ -293,7 +313,12 @@
                 language: {
                     emptyTable: "Silakan pilih rentang tanggal dan klik 'Cari' untuk melihat data.",
                     zeroRecords: "Data tidak ditemukan untuk rentang tanggal yang dipilih."
-                }
+                },
+                // Add DOM and Buttons for export functionality
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'pdf', 'print'
+                ]
             });
 
             $('#cari').click(function() {
@@ -302,30 +327,28 @@
                 const endDate = picker.getEndDate()?.format('YYYY-MM-DD');
 
                 if (!startDate || !endDate) {
-                    $('#alertMessage').text('Silakan pilih rentang tanggal terlebih dahulu.').show();
+                    $('#alertMessage').text('Silakan pilih rentang tanggal terlebih dahulu.').removeClass(
+                        'd-none');
                     return;
                 } else {
-                    $('#alertMessage').hide();
+                    $('#alertMessage').addClass('d-none');
                 }
 
-                // Disable button
-                $cariButton.prop('disabled', true);
-
-                // --- START: Show loading spinner in table ---
-                // Clear the table and show the spinner
+                $cariButton.prop('disabled', true).html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mencari...'
+                );
                 detailParkirTable.clear().draw();
                 const spinnerHtml = `
                     <tr>
                         <td colspan="13">
                             <div class="spinner-container">
                                 <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                                <strong>Loading...</strong>
+                                <strong>Memuat data...</strong>
                             </div>
                         </td>
                     </tr>
                 `;
                 $('#detailParkirTable tbody').html(spinnerHtml);
-                // --- END: Show loading spinner in table ---
 
                 $.ajax({
                     url: '{{ route('parkingDetailSearch') }}',
@@ -355,12 +378,10 @@
                                 status: item.statustransaction
                             }));
                         }
-                        // Update table data. This will automatically remove the spinner.
                         detailParkirTable.clear().rows.add(formattedDetailParkir).draw();
                     },
                     error: function(xhr) {
                         console.error(xhr.responseText);
-                        // Show an error message in the table
                         const errorHtml = `
                             <tr>
                                 <td colspan="13" class="text-center text-danger" style="padding: 20px;">
@@ -371,8 +392,8 @@
                         $('#detailParkirTable tbody').html(errorHtml);
                     },
                     complete: function() {
-                        // Re-enable button
-                        $cariButton.prop('disabled', false);
+                        $cariButton.prop('disabled', false).html(
+                            '<i class="bi bi-search me-1"></i> Cari');
                     }
                 });
             });

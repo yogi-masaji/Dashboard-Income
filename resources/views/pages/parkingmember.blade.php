@@ -13,81 +13,99 @@
 
     <!-- Easepick CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css" />
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+
 
     <style>
+        /* General Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
         /* Apply flexbox to the wrapper that contains the search and buttons */
         #ParkirMemberTable_wrapper .dt-top {
             display: flex;
-            justify-content: flex-start;
-            /* Align buttons and search to the left */
-            gap: 20px;
-            /* Add space between the buttons and search */
+            flex-wrap: wrap;
+            /* Allow items to wrap on smaller screens */
+            justify-content: space-between;
+            /* Space out items */
+            gap: 15px;
             align-items: center;
+            padding: 10px 0;
         }
 
         table.dataTable thead th,
         table.dataTable thead td {
             padding: 16px;
-            border-bottom: 1px solid #111
+            border-bottom: 1px solid #dee2e6;
+            background-color: #f8f9fa;
         }
 
         tbody {
             white-space: normal;
-            word-break: break-all;
+            word-break: break-word;
         }
 
-        /* Ensure the buttons are inline and spaced correctly */
         .dt-buttons {
             display: inline-flex;
             gap: 10px;
-            /* Space between individual buttons */
-        }
-
-        /* Make sure the search input aligns properly */
-        .dt-search input {
-            display: inline-block;
-            margin-right: 10px;
-            /* Space between the search input and buttons */
         }
 
         .dt-search {
-            float: right !important;
             margin-bottom: 5px;
+        }
+
+        .dt-search input {
+            display: inline-block;
+            width: auto;
+            /* Adjust width */
+            min-width: 200px;
+            /* Minimum width */
+            margin-left: 10px;
         }
 
         button.dt-paging-button {
             background-color: #ffffff !important;
             padding: 10px;
-            width: 30px;
+            width: auto;
+            min-width: 30px;
             border-radius: 10px;
-            border: none !important;
-            margin-right: 2px;
-            margin-left: 2px;
+            border: 1px solid #dee2e6 !important;
+            margin: 0 2px;
+            transition: background-color 0.3s;
+        }
+
+        button.dt-paging-button:hover {
+            background-color: #f1f1f1 !important;
         }
 
         .dt-button {
             background-color: #FCB900 !important;
-            padding: 10px;
+            color: #fff !important;
+            padding: 10px 20px;
             border-radius: 10px;
             border: none !important;
+            transition: background-color 0.3s;
+        }
+
+        .dt-button:hover {
+            background-color: #e0a800 !important;
         }
 
         #dt-search-0 {
             height: 40px;
             border-radius: 10px;
-            margin-left: 10px;
         }
 
         .content-custom {
-            padding: 10px !important;
+            padding: 20px !important;
             background-color: #ffffff !important;
             border-radius: 10px !important;
-            box-shadow: 1px -2px 15px -1px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             color: #000000 !important;
             border: #d9d9d9 1px solid !important;
         }
-
-
 
         /* Dark Mode Styles */
         .mode-gelap .content-custom,
@@ -101,7 +119,9 @@
         .mode-gelap h4,
         .mode-gelap h6,
         .mode-gelap small,
-        .mode-gelap p {
+        .mode-gelap p,
+        .mode-gelap .dt-info,
+        .mode-gelap .dt-search {
             color: #ffffff !important;
         }
 
@@ -115,96 +135,28 @@
             color: #aaa;
         }
 
-        /* Easepick Dark Mode Styles */
-        .mode-gelap .easepick-wrapper {
-            background-color: #333;
-            border-color: #555;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #ParkirMemberTable_wrapper .dt-top {
+                flex-direction: column;
+                align-items: stretch;
+            }
 
-        .mode-gelap .easepick-wrapper .ep-header {
-            background-color: #444;
-        }
+            .dt-search {
+                width: 100%;
+                text-align: left;
+                margin-bottom: 10px;
+            }
 
-        .mode-gelap .easepick-wrapper .ep-header button {
-            color: #ddd;
-        }
+            .dt-search input {
+                width: 100%;
+                margin-left: 0;
+            }
 
-        .mode-gelap .easepick-wrapper .ep-header button:hover {
-            background-color: #555;
-            color: #fff;
-        }
-
-        .mode-gelap .easepick-wrapper .ep-month-name {
-            color: #fff;
-        }
-
-        .mode-gelap .easepick-wrapper .ep-day-name {
-            color: #aaa;
-        }
-
-        .mode-gelap .easepick-wrapper .ep-day {
-            color: #ddd;
-        }
-
-        .mode-gelap .easepick-wrapper .ep-day.ep-today {
-            color: #FCB900;
-            background-color: rgba(252, 185, 0, 0.2);
-        }
-
-        .mode-gelap .easepick-wrapper .ep-day.ep-selected {
-            background-color: #FCB900;
-            color: #000;
-        }
-
-        .mode-gelap .easepick-wrapper .ep-day.in-range {
-            background-color: rgba(252, 185, 0, 0.3);
-        }
-
-        .mode-gelap .easepick-wrapper .ep-day:not(.ep-disabled):hover {
-            background-color: rgba(252, 185, 0, 0.5);
-            color: #000;
-        }
-
-        .mode-gelap .easepick-wrapper .ep-day.ep-disabled {
-            color: #666;
-        }
-
-        .mode-gelap .easepick-wrapper .ep-footer {
-            background-color: #444;
-            border-top: 1px solid #555;
-        }
-
-        .mode-gelap .easepick-wrapper .ep-footer button {
-            background-color: #555;
-            color: #ddd;
-        }
-
-        .mode-gelap .easepick-wrapper .ep-footer button:hover {
-            background-color: #666;
-        }
-
-        /* Fix for datepicker overlapping issue */
-        .easepick-wrapper {
-            z-index: 1060;
-        }
-
-        .form-label {
-            color: #000;
-        }
-
-        .mode-gelap .form-label {
-            color: #fff;
-        }
-
-        .dt-info,
-        .dt-search {
-            color: #000;
-        }
-
-        .mode-gelap .dt-info,
-        .mode-gelap .dt-search {
-            color: #fff;
+            .dt-buttons {
+                width: 100%;
+                justify-content: flex-start;
+            }
         }
 
         /* Style for table loading spinner */
@@ -213,6 +165,10 @@
             justify-content: center;
             align-items: center;
             padding: 50px 0;
+        }
+
+        .easepick-wrapper {
+            z-index: 1060;
         }
     </style>
 
@@ -232,7 +188,7 @@
             Please fill in all the date fields before submitting.
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-5 gap-2 gap-md-0">
         <div class="col-md-4">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
@@ -276,7 +232,7 @@
             </div>
         </div>
     </div>
-    <div class="result mt-5">
+    <div class="result mt-5 content-custom">
         <!-- Loading Spinner -->
         <div id="table-loading-spinner" class="spinner-container" style="display: none;">
             <div class="spinner-border" role="status">
@@ -284,8 +240,8 @@
             </div>
         </div>
         <!-- Table -->
-        <div id="table-container" style="display: none;">
-            <table id="ParkirMemberTable" class="table table-striped table-bordered">
+        <div id="table-container" class="table-responsive" style="display: none;">
+            <table id="ParkirMemberTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
                         <th>Periode</th>
@@ -304,6 +260,9 @@
 
     <!-- Easepick JS -->
     <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
+    <!-- DataTables Responsive JS -->
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
 
     <script>
         $(document).ready(function() {
@@ -317,11 +276,12 @@
                 RangePlugin: {
                     delimiter: ' to ',
                 },
-                format: 'YYYY-MM-DD' // Ensure the format is correct for the backend
+                format: 'YYYY-MM-DD'
             });
 
             // Initialize DataTable once on page load
             const table = $('#ParkirMemberTable').DataTable({
+                responsive: true, // Enable responsive extension
                 dom: "Bfltip",
                 pageLength: 25,
                 ordering: true,
@@ -329,7 +289,32 @@
                 bDestroy: true,
                 layout: {
                     topEnd: {
-                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
+                        buttons: [{
+                                extend: 'excelHtml5',
+                                title: 'Parking Member Report',
+                                text: 'Excel'
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                title: 'Parking Member Report',
+                                text: 'PDF',
+                                orientation: 'landscape', // Changed to landscape for better fit
+                                pageSize: 'A4', // Standard page size
+                                customize: function(doc) {
+                                    // Customizations to match parking-member.php style
+                                    doc.pageMargins = [40, 60, 40,
+                                        60
+                                    ]; // [left, top, right, bottom]
+                                    doc.defaultStyle.fontSize = 10;
+                                    doc.styles.tableHeader.fontSize = 12;
+                                    doc.styles.title.fontSize = 15;
+                                    doc.styles.title.alignment = 'center';
+                                    doc.content[1].table.widths =
+                                        Array(doc.content[1].table.body[0].length + 1).join('*')
+                                        .split('');
+                                }
+                            }
+                        ],
                     },
                 },
                 columns: [{
@@ -362,7 +347,6 @@
 
             $('#cari').click(function() {
                 const $cariButton = $(this);
-                // Get dates from the easepick instance
                 const startDate = picker.getStartDate() ? picker.getStartDate().format('YYYY-MM-DD') : null;
                 const endDate = picker.getEndDate() ? picker.getEndDate().format('YYYY-MM-DD') : null;
 
@@ -373,12 +357,10 @@
                     $('#alertMessage').hide();
                 }
 
-                // Disable button and show loading spinner
                 $cariButton.prop('disabled', true).html(
                     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
                 );
 
-                // Hide table and show spinner
                 $('#table-container').hide();
                 $('#table-loading-spinner').show();
 
@@ -404,7 +386,6 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            console.log(response);
                             const totalMotorbike = formatRupiah(response.summary.motor
                                 .total_income);
                             const totalCar = formatRupiah(response.summary.mobil.total_income);
@@ -421,7 +402,7 @@
                             $('.countBox').text(countBox + ' Box');
 
                             const parkingMemberData = response.data;
-                            const formattedData = parkingMemberData.map((item, index) => ({
+                            const formattedData = parkingMemberData.map((item) => ({
                                 periode: item.transactionDate,
                                 vehicleType: item.vehicleType,
                                 nameTenant: item.nameTenant,
@@ -435,20 +416,20 @@
                             table.clear().rows.add(formattedData).draw();
 
                         } else {
-                            alert('No data found!');
-                            table.clear().draw(); // Clear table if no data
+                            // Using a more user-friendly notification instead of alert
+                            $('#alertMessage').text(
+                                'No data found for the selected date range.').show();
+                            table.clear().draw();
                         }
                     },
                     error: function(xhr) {
                         console.error(xhr.responseText);
-                        alert('An error occurred while fetching data.');
+                        $('#alertMessage').text('An error occurred while fetching data.')
+                            .show();
                     },
                     complete: function() {
-                        // Hide spinner and show table
                         $('#table-loading-spinner').hide();
                         $('#table-container').show();
-
-                        // Re-enable button and restore text
                         $cariButton.prop('disabled', false).html('Cari');
                     }
                 });

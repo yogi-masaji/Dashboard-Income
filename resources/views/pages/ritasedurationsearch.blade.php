@@ -13,6 +13,9 @@
 
     <!-- Easepick Stylesheet -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css" />
+    <!-- Chart.js and DataLabels plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
     <style>
         /* Custom styles for content blocks */
@@ -44,10 +47,8 @@
             margin-left: 10px;
         }
 
-        /* Wide table styles */
+        /* Wide table styles for responsiveness */
         .wide-data-table {
-            width: 100%;
-            table-layout: fixed;
             border-collapse: collapse;
             font-size: 12px;
             text-align: center;
@@ -57,18 +58,15 @@
         .wide-data-table td {
             border: 1px solid #ddd;
             word-wrap: break-word;
+            padding: 8px 5px !important;
+            /* Adjusted padding */
         }
 
         .wide-data-table thead th {
             position: sticky;
             top: 0;
             z-index: 1;
-        }
-
-        table.dataTable thead th,
-        table.dataTable tbody td,
-        table.dataTable tfoot th {
-            padding: 10px 0 !important;
+            background-color: #f8f9fa;
         }
 
         /* Light Mode Text Color */
@@ -79,10 +77,6 @@
 
         .form-select {
             color: #000000;
-        }
-
-        .mode-gelap .form-select {
-            color: #ffffff;
         }
 
         /* Dark Mode Compatibility */
@@ -114,15 +108,12 @@
 
         .mode-gelap .wide-data-table tbody td {
             background-color: #283447;
-            /* Darker background for table body cells */
             color: #e2e8f0;
-            /* White text for table body */
         }
 
         .mode-gelap .wide-data-table tfoot th {
             background-color: #1e293b;
         }
-
 
         /* Ensure easepick calendar appears above other elements */
         .easepick-wrapper {
@@ -205,7 +196,7 @@
                             <th>22</th>
                             <th>23</th>
                             <th>24</th>
-                            <th> > 24</th>
+                            <th>> 24</th>
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -246,7 +237,7 @@
         </div>
     </div>
 
-    <!-- Easepick and Chart.js Scripts -->
+    <!-- Easepick Script -->
     <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
 
     <script>
@@ -254,12 +245,10 @@
             // Initialize Easepick Date Range Picker
             const picker = new easepick.create({
                 element: document.getElementById('datepicker'),
-                css: [
-                    'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
-                ],
+                css: ['https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css'],
                 plugins: ['RangePlugin'],
                 RangePlugin: {
-                    delimiter: ' to ',
+                    delimiter: ' to '
                 },
                 format: 'YYYY-MM-DD'
             });
@@ -387,7 +376,7 @@
                                 return new Intl.NumberFormat().format(quantity);
                             }
 
-                            const ritaseDurationData = response.data.map(item => ({
+                            const tableData = response.data.map(item => ({
                                 tanggal: item.tanggal,
                                 '01': formatQuantity(item.jam1),
                                 '02': formatQuantity(item.jam2),
@@ -417,14 +406,32 @@
                                 total: formatQuantity(item.total),
                             }));
 
-                            ritaseDurationTable.clear().rows.add(ritaseDurationData).draw();
+                            ritaseDurationTable.clear().rows.add(tableData).draw();
 
-                            // Chart Update Logic
-                            const labels = response.data.map(item => item.tanggal);
-                            const dataRitaseDuration = response.data.map(item => item.total);
+                            // --- Chart Update Logic ---
+                            const hourlyTotals = Array(25).fill(0); // 24 hours + '>24' category
+                            const keys = Array.from({
+                                length: 24
+                            }, (_, i) => `jam${i + 1}`);
+                            keys.push('over24jam');
+
+                            response.data.forEach(dayData => {
+                                keys.forEach((key, index) => {
+                                    if (dayData[key]) {
+                                        hourlyTotals[index] += dayData[key];
+                                    }
+                                });
+                            });
+
+                            const chartLabels = Array.from({
+                                length: 24
+                            }, (_, i) => `${(i + 1).toString().padStart(2, '0')}`);
+                            chartLabels.push('> 24');
+                            const chartData = hourlyTotals;
+                            const maxValue = Math.max(...chartData);
+
                             const ctx = document.getElementById('RitaseDurationChart')
                                 .getContext('2d');
-
                             if (window.ritaseDurationChart instanceof Chart) {
                                 window.ritaseDurationChart.destroy();
                             }
@@ -434,14 +441,13 @@
                             const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' :
                                 'rgba(0, 0, 0, 0.1)';
 
-
                             window.ritaseDurationChart = new Chart(ctx, {
                                 type: 'bar',
                                 data: {
-                                    labels: labels,
+                                    labels: chartLabels,
                                     datasets: [{
-                                        label: 'Total per tanggal',
-                                        data: dataRitaseDuration,
+                                        label: 'Total Kendaraan Per Durasi (Jam)',
+                                        data: chartData,
                                         backgroundColor: 'rgba(252, 185, 0, 0.8)',
                                         borderColor: 'rgba(252, 185, 0, 1)',
                                         borderWidth: 1
@@ -453,6 +459,8 @@
                                     scales: {
                                         y: {
                                             beginAtZero: true,
+                                            suggestedMax: maxValue + (maxValue *
+                                            0.1), // Add 10% grace
                                             ticks: {
                                                 color: textColor
                                             },
@@ -495,7 +503,6 @@
                                 plugins: [ChartDataLabels]
                             });
                         } else {
-                            // Handle no data found
                             ritaseDurationTable.clear().draw();
                             $('.chartRitase').hide();
                             alert('No data found for the selected criteria.');

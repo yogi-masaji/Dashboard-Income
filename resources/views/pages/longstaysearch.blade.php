@@ -34,6 +34,14 @@
         .mode-gelap .form-label {
             color: #fff;
         }
+
+        b {
+            color: #000000;
+        }
+
+        .mode-gelap b {
+            color: #fff;
+        }
     </style>
 
 
@@ -63,7 +71,7 @@
                     </div>
                     <div class="row mt-2">
                         <div class="col-sm-6">
-                            <button type="submit" id="btn_submit" class="btn btn-info">
+                            <button type="submit" id="btn_submit" class="btn btn-submit">
                                 <span id="btn-text">Cari</span>
                                 <span id="btn-loader" class="spinner-border spinner-border-sm" role="status"
                                     aria-hidden="true" style="display: none;"></span>
