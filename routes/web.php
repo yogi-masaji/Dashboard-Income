@@ -189,7 +189,7 @@ Route::middleware('custom.auth')->group(function () {
 
     Route::get('/simulasi-tarif', [TarifController::class, 'index'])->name('tarif.index');
 
-    // Route untuk menghandle submit form dan menampilkan hasil kalkulasi
+
     Route::post('/simulasi-tarif', [TarifController::class, 'calculate'])->name('tarif.calculate');
 
     Route::get('/change-password', [Login::class, 'showChangePasswordForm'])->name('password.change.form');
@@ -197,6 +197,7 @@ Route::middleware('custom.auth')->group(function () {
 
     Route::get('/lama-parkir', [SearchController::class, 'longstaySearchView'])->name('longstay.index');
 
-    // Route untuk menghandle submit form dan mengambil data dari API
+
     Route::post('/long-stay-search', [SearchController::class, 'longstaySearchAPI'])->name('longstay.search');
-}); // End of auth middleware group
+    Route::post('/peak-search-per-gate-api', [SearchController::class, 'peaksearchPerGate'])->name('peakSearchPerGate');
+});

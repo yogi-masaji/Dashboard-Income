@@ -759,9 +759,8 @@
                 // Kondisi untuk lokasi khusus (PMBE, GACI, BMP)
                 if (isSpecialLocation) {
                     const selectedJamType = $('#jamType').val();
-                    const gateOption = selectedJamType === 'entry' ? 'IN' : 'OUT';
 
-                    // 1. Request untuk Peak Search (data chart)
+                    // 1. Request untuk Peak Search (data chart utama, tidak berubah)
                     const peakSearchRequest = $.ajax({
                         url: '{{ route('peakSearch') }}',
                         method: 'POST',
@@ -778,47 +777,57 @@
                         })
                     });
 
-                    // 2. Request untuk Quantity Per Gate - Periode 1
-                    const gateDetailsP1 = $.ajax({
-                        url: '{{ route('quantitypergatePmbeAPI') }}',
+                    // 2. MODIFIKASI: Request untuk data per gate menggunakan API baru
+                    const perGateRequest = $.ajax({
+                        url: '{{ route('peakSearchPerGate') }}', // Menggunakan route baru
                         method: 'POST',
-                        data: {
-                            tgl_awal: startDate1,
-                            tgl_akhir: endDate1,
-                            gate_option: gateOption,
-                            _token: '{{ csrf_token() }}'
-                        }
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            first_start_date: formatDateForBackend(startDate1),
+                            first_end_date: formatDateForBackend(endDate1),
+                            second_start_date: formatDateForBackend(startDate2),
+                            second_end_date: formatDateForBackend(endDate2),
+                            location_code: "{{ $kodeLokasi }}"
+                        })
                     });
 
-                    // 3. Request untuk Quantity Per Gate - Periode 2
-                    const gateDetailsP2 = $.ajax({
-                        url: '{{ route('quantitypergatePmbeAPI') }}',
-                        method: 'POST',
-                        data: {
-                            tgl_awal: startDate2,
-                            tgl_akhir: endDate2,
-                            gate_option: gateOption,
-                            _token: '{{ csrf_token() }}'
-                        }
-                    });
 
                     // Menjalankan semua request secara paralel
-                    $.when(peakSearchRequest, gateDetailsP1, gateDetailsP2)
-                        .done(function(peakRes, p1Res, p2Res) {
-                            // Menyimpan hasil dari semua API
+                    $.when(peakSearchRequest, perGateRequest)
+                        .done(function(peakRes, perGateRes) {
+                            // peakRes[0] adalah response dari peakSearchRequest
+                            // perGateRes[0] adalah response dari perGateRequest
+
+                            // Menyimpan hasil dari API utama
                             savedHours = peakRes[0].data[0];
-                            savedGateDetails = {
-                                first_period: p1Res[0].data,
-                                second_period: p2Res[0].data
-                            };
+
+                            // MODIFIKASI: Memproses dan menyimpan data per gate dari API baru
+                            const perGateData = perGateRes[0].data[0];
+                            if (selectedJamType === 'entry') {
+                                savedGateDetails = {
+                                    first_period: perGateData.parking_entry_hours[0].first_period,
+                                    second_period: perGateData.parking_entry_hours[0].second_period
+                                };
+                            } else { // 'exit'
+                                savedGateDetails = {
+                                    first_period: perGateData.parking_exit_hours[0].first_period,
+                                    second_period: perGateData.parking_exit_hours[0].second_period
+                                };
+                            }
+
                             console.log("All data loaded and saved:", {
                                 savedHours,
                                 savedGateDetails
                             });
+
                             showJamBasedOnType(); // Render chart setelah semua data siap
                         })
                         .fail(function(xhr, status, error) {
-                            console.error("Error during parallel AJAX requests:", error);
+                            console.error("Error during parallel AJAX requests:", error, xhr
+                                .responseText);
                             $('#alertMessage').text('Error fetching data. Please try again.').show();
                         })
                         .always(function() {
@@ -826,7 +835,7 @@
                         });
 
                 } else {
-                    // Logika original untuk lokasi lain
+                    // Logika original untuk lokasi lain (tidak ada perubahan)
                     $.ajax({
                         url: '{{ route('peakSearch') }}',
                         method: 'POST',
@@ -859,7 +868,24 @@
 
 
             $('#jamType').on('change', function() {
-                showJamBasedOnType();
+                // MODIFIKASI: Jika data sudah ada, proses ulang dengan tipe jam yang baru
+                if (savedHours) {
+                    const selectedJamType = $(this).val();
+                    const perGateData = savedGateDetails; // Data sudah disimpan sebelumnya
+
+                    if (selectedJamType === 'entry') {
+                        savedGateDetails = {
+                            first_period: perGateData.first_period,
+                            second_period: perGateData.second_period
+                        };
+                    } else { // 'exit'
+                        savedGateDetails = {
+                            first_period: perGateData.first_period,
+                            second_period: perGateData.second_period
+                        };
+                    }
+                    showJamBasedOnType();
+                }
             });
 
             let mobilFirstPeriodChart = null;
@@ -881,6 +907,7 @@
 
             // =================================================================
             // FUNGSI BARU: Menampilkan detail dari data yang sudah di-load (cache)
+            // Diadaptasi untuk struktur JSON baru
             // =================================================================
             function showGateDetailsFromCache(vehicleType, timeInterval, period) {
                 $('#modalVehicleType').text(vehicleType);
@@ -889,76 +916,58 @@
                 const tableBody = $('#gateDetailTableBody');
                 const tableTotal = $('#gateDetailTotal');
                 tableBody.empty();
-                tableTotal.text('0'); // Reset total
+                tableTotal.text('0');
 
                 const gateDetailModal = new bootstrap.Modal(document.getElementById('gateDetailModal'));
                 gateDetailModal.show();
 
-                if (!savedGateDetails) {
+                if (!savedGateDetails || !savedGateDetails[period]) {
                     tableBody.html(
-                        '<tr><td colspan="3" class="text-center text-danger">Gate detail data not loaded.</td></tr>'
+                        '<tr><td colspan="3" class="text-center text-danger">Gate detail data not available.</td></tr>'
                     );
-                    return;
-                }
-
-                const responseData = savedGateDetails[period];
-                if (!responseData) {
-                    tableBody.html('<tr><td colspan="3" class="text-center">No data for this period.</td></tr>');
                     return;
                 }
 
                 const vehicleTypeMap = {
                     'Car': 'car',
-                    'Motorbike': 'motorcycle',
+                    'Motorbike': 'motorbike',
                     'Truck': 'truck',
                     'Taxi': 'taxi'
                 };
-                const apiVehicleKey = vehicleTypeMap[vehicleType] || vehicleType.toLowerCase();
+                const apiVehicleKey = vehicleTypeMap[vehicleType];
 
-                const startHourStr = timeInterval.substring(0, 2);
-                const startHour = parseInt(startHourStr, 10);
-                let endHour;
+                // Cari data kendaraan yang sesuai
+                const periodData = savedGateDetails[period];
+                const vehicleDataArray = periodData.find(item => item.hasOwnProperty(apiVehicleKey));
 
-                if (startHour === 23) {
-                    endHour = '00';
-                } else {
-                    endHour = (startHour + 1).toString().padStart(2, '0');
-                }
-                const timeKey = `${startHourStr}-${endHour}`;
-
-                if (responseData[apiVehicleKey]) {
-                    const vehicleData = responseData[apiVehicleKey];
-                    let counter = 1;
-                    let totalQuantity = 0;
-                    let hasData = false;
-
-                    vehicleData.forEach(gateObject => {
-                        const gateName = Object.keys(gateObject)[0];
-                        const hourlyData = gateObject[gateName];
-                        const quantity = hourlyData[timeKey];
-
-                        if (quantity !== undefined) {
-                            hasData = true;
-                            totalQuantity += quantity;
-                            const row = `<tr>
-                                <td>${counter++}</td>
-                                <td>${gateName}</td>
-                                <td>${quantity}</td>
-                            </tr>`;
-                            tableBody.append(row);
-                        }
-                    });
-
-                    if (hasData) {
-                        tableTotal.text(totalQuantity);
-                    } else {
-                        tableBody.html(
-                            '<tr><td colspan="3" class="text-center">No data available for this time slot.</td></tr>'
-                        );
-                    }
-                } else {
+                if (!vehicleDataArray || !vehicleDataArray[apiVehicleKey]) {
                     tableBody.html(
                         '<tr><td colspan="3" class="text-center">No data available for this vehicle type.</td></tr>'
+                    );
+                    return;
+                }
+
+                // Filter data berdasarkan time_interval yang diklik
+                const filteredData = vehicleDataArray[apiVehicleKey].filter(item =>
+                    formatTimeInterval(item.time_interval) === timeInterval
+                );
+
+                if (filteredData.length > 0) {
+                    let counter = 1;
+                    let totalQuantity = 0;
+                    filteredData.forEach(item => {
+                        totalQuantity += item.vehicle_quantity;
+                        const row = `<tr>
+                            <td>${counter++}</td>
+                            <td>${item.traffic_gate_name}</td>
+                            <td>${item.vehicle_quantity}</td>
+                        </tr>`;
+                        tableBody.append(row);
+                    });
+                    tableTotal.text(totalQuantity);
+                } else {
+                    tableBody.html(
+                        '<tr><td colspan="3" class="text-center">No data available for this time slot.</td></tr>'
                     );
                 }
             }

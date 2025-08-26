@@ -1133,4 +1133,29 @@ class SearchController extends Controller
             ], 500);
         }
     }
+
+    public function peaksearchPerGate(Request $request)
+    {
+        $validated = $request->validate([
+            'first_start_date' => 'required|string',
+            'first_end_date' => 'required|string',
+            'second_start_date' => 'required|string',
+            'second_end_date' => 'required|string',
+            'location_code' => 'required|string',
+        ]);
+
+        $apiUrl = 'http://110.0.100.70:8080/v3/api/peaksearch-pergate';
+
+        $response = Http::post($apiUrl, $validated);
+
+        if ($response->successful()) {
+            return response()->json($response->json());
+        } else {
+            return response()->json([
+                'error' => 'API call failed',
+                'status' => $response->status(),
+                'body' => $response->body()
+            ], $response->status());
+        }
+    }
 }
