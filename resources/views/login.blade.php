@@ -76,6 +76,9 @@
                                         aria-describedby="password" required autofocus />
                                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 </div>
+                                <a href="{{ route('password.request') }}">
+                                    <small>Lupa Password?</small>
+                                </a>
                             </div>
 
                             <div class="mb-6">

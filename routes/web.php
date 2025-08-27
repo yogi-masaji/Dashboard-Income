@@ -12,6 +12,7 @@ use App\Http\Controllers\TrafficController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\IncomePaymentController;
+use App\Http\Controllers\lupaPassword;
 use App\Models\lokasi;
 use App\Models\grupMenu;
 use App\Models\grupLokasi;
@@ -29,8 +30,16 @@ Route::post('/login', [Login::class, 'authenticate']);
 
 // Logout route
 Route::post('/logout', [Login::class, 'logout'])->name('logout');
+Route::get('/forgot-password', [lupaPassword::class, 'viewLupaPassword'])->name('password.request');
 
+// Mengirim email reset
+Route::post('/forgot-password', [lupaPassword::class, 'sendResetLinkEmail'])->name('password.email');
 
+// Menampilkan form untuk memasukkan password baru
+Route::get('/reset-password/{token}', [lupaPassword::class, 'viewResetPassword'])->name('password.reset');
+
+// Menyimpan password baru
+Route::post('/reset-password', [lupaPassword::class, 'resetPassword'])->name('password.update');
 
 Route::middleware('custom.auth')->group(function () {
     // Default landing page (can be a public welcome page)

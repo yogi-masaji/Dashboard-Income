@@ -540,12 +540,12 @@
                                 style="width:40px;border-left: 1px solid #000; border-top: 1px solid #000; border-right: 1px solid #000;">
                                 No
                             </th>
-                            <th scope="col" colspan="3" rowspan="1" class="text-start"
+                            <th scope="col" colspan="3" rowspan="1" class="text-center"
                                 style="border-top: 1px solid #000; border-right: 1px solid #000;">INCOME BY PAYMENT</th>
-                            <th scope="col" colspan="5" rowspan="1" class="text-start"
+                            <th scope="col" colspan="5" rowspan="1" class="text-center"
                                 style="border-top: 1px solid #000; border-right: 1px solid #000;">QUANTITY BY VEHICLE
                             </th>
-                            <th scope="col" colspan="3" rowspan="1" class="text-start"
+                            <th scope="col" colspan="3" rowspan="1" class="text-center"
                                 style="border-top: 1px solid #000; border-right: 1px solid #000;">INCOME BY VEHICLE</th>
                         </tr>
 
@@ -947,7 +947,7 @@
                 paging: true,
                 autoWidth: false,
                 ordering: false,
-                pageLength: 5,
+                pageLength: 10,
                 lengthChange: false,
                 info: false,
                 data: [],
@@ -1031,7 +1031,7 @@
                 },
                 autoWidth: false,
                 ordering: false,
-                pageLength: 5,
+                pageLength: 10,
                 lengthChange: false,
                 info: false,
                 data: [],
@@ -1241,7 +1241,7 @@
                 },
                 autoWidth: false,
                 ordering: false,
-                pageLength: 5,
+                pageLength: 10,
                 lengthChange: false,
                 info: false,
                 data: [],
@@ -1310,7 +1310,7 @@
                 },
                 autoWidth: false,
                 ordering: false,
-                pageLength: 5,
+                pageLength: 10,
                 lengthChange: false,
                 info: false,
                 data: [],
@@ -1379,7 +1379,7 @@
                     }
                 },
                 ordering: false,
-                pageLength: 5,
+                pageLength: 10,
                 lengthChange: false,
                 info: false,
                 data: [],
@@ -1448,7 +1448,7 @@
                 },
                 autoWidth: false,
                 ordering: false,
-                pageLength: 5,
+                pageLength: 10,
                 lengthChange: false,
                 info: false,
                 data: [],

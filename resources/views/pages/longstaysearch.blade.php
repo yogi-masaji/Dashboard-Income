@@ -42,6 +42,10 @@
         .mode-gelap b {
             color: #fff;
         }
+
+        .easepick-wrapper {
+            z-index: 9999 !important;
+        }
     </style>
 
 

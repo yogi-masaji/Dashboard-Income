@@ -64,14 +64,6 @@
 
 {{-- CSS Preloader --}}
 <style>
-    :root {
-        --hue: 223;
-        --bg: hsl(var(--hue), 90%, 90%);
-        --fg: hsl(var(--hue), 90%, 10%);
-        --primary: hsl(var(--hue), 90%, 50%);
-        --trans-dur: 0.3s;
-    }
-
     body.preloader-active {
         overflow: hidden;
     }
@@ -82,12 +74,29 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #061933;
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 999999;
         transition: opacity 0.7s ease, visibility 0.7s ease;
+        /* Added a gradient background to make glassmorphism visible */
+        background: linear-gradient(to right top, #0f2340, #0c1c36, #09162d, #061024, #061933, #1e1b4b, #312e81);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
 
     #preloader.hidden {
@@ -95,89 +104,189 @@
         visibility: hidden;
     }
 
-    .pl2 {
-        display: block;
-        width: 8em;
-        height: 8em;
+    .preloader-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        border-radius: 1rem;
+        /* Glassmorphism styles */
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        /* For Safari */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
 
-    .pl2__rect,
-    .pl2__rect-g {
-        animation: pl2-a 1.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    .logo-svg {
+        /* New animation for a subtle pulse/glow effect */
+        animation: pulse-glow 5s ease-in-out infinite;
     }
 
-    .pl2__rect {
-        animation-name: pl2-b;
+    .logo-path {
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        /* Start with no fill color */
+        fill: transparent;
+        /* A large dasharray value to cover the longest path */
+        stroke-dasharray: 2500;
+        stroke-dashoffset: 2500;
+        /* Animation definition for drawing the line */
+        animation-name: draw;
+        animation-duration: 5s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
     }
 
-    .pl2__rect-g .pl2__rect {
-        transform-origin: 20px 128px;
-    }
+    /* Keyframe animation for the line drawing effect */
+    @keyframes draw {
+        0% {
+            stroke-dashoffset: 2500;
+        }
 
-    .pl2__rect-g:first-child,
-    .pl2__rect-g:first-child .pl2__rect {
-        animation-delay: -0.25s;
-    }
+        /* Draw the line over 40% of the animation time */
+        40% {
+            stroke-dashoffset: 0;
+        }
 
-    .pl2__rect-g:nth-child(2),
-    .pl2__rect-g:nth-child(2) .pl2__rect {
-        animation-delay: -0.125s;
-    }
+        /* Hold the drawn state until 80% */
+        80% {
+            stroke-dashoffset: 0;
+        }
 
-    .pl2__rect-g:nth-child(2) .pl2__rect {
-        transform-origin: 64px 128px;
-    }
-
-    .pl2__rect-g:nth-child(3) .pl2__rect {
-        transform-origin: 108px 128px;
-    }
-
-    /* Dark theme */
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --bg: hsl(var(--hue), 90%, 10%);
-            --fg: hsl(var(--hue), 90%, 90%);
+        /* Undraw the line to loop */
+        100% {
+            stroke-dashoffset: -2500;
         }
     }
 
-    /* Animations */
-    @keyframes pl2-a {
+    /* Keyframes for filling the paths with color after they are drawn */
+    @keyframes fill-yellow {
 
-        from,
-        25%,
-        66.67%,
-        to {
-            transform: translateY(0);
+        0%,
+        40% {
+            fill: transparent;
+        }
+
+        /* Transparent while drawing */
+        45%,
+        80% {
+            fill: #fbb902;
+        }
+
+        /* Fill with color (faster transition) */
+        90%,
+        100% {
+            fill: transparent;
+        }
+
+        /* Back to transparent for the loop */
+    }
+
+    @keyframes fill-blue {
+
+        0%,
+        40% {
+            fill: transparent;
+        }
+
+        45%,
+        80% {
+            fill: #024b80;
+        }
+
+        90%,
+        100% {
+            fill: transparent;
+        }
+    }
+
+    @keyframes fill-white {
+
+        0%,
+        40% {
+            fill: transparent;
+        }
+
+        45%,
+        80% {
+            fill: #fdfdfd;
+        }
+
+        90%,
+        100% {
+            fill: transparent;
+        }
+    }
+
+    /* New keyframes for the pulse and glow effect on the whole SVG */
+    @keyframes pulse-glow {
+
+        0%,
+        100% {
+            transform: scale(1);
+            filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0));
         }
 
         50% {
-            animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0);
-            transform: translateY(-80px);
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
         }
     }
 
-    @keyframes pl2-b {
+    /* Apply the fill animations */
+    .path-yellow {
+        animation-name: draw, fill-yellow;
+    }
 
-        from,
-        to {
-            animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0);
-            width: 40px;
-            height: 24px;
-            transform: rotate(180deg) translateX(0);
+    .path-blue-outer,
+    .path-blue-inner {
+        animation-name: draw, fill-blue;
+    }
+
+    .path-p {
+        animation-name: draw, fill-white;
+    }
+
+    /* Stagger the animation start for each part of the new logo */
+    .path-blue-outer {
+        animation-delay: 0s;
+    }
+
+    .path-p {
+        animation-delay: 0.1s;
+    }
+
+    .path-blue-inner {
+        animation-delay: 0.2s;
+    }
+
+    .path-yellow {
+        animation-delay: 0.3s;
+    }
+
+
+    .loading-text {
+        margin-top: 1.5rem;
+        font-size: 1.125rem;
+        /* text-lg */
+        color: #e5e7eb;
+        /* Tailwind gray-200 for better contrast */
+        letter-spacing: 0.05em;
+        animation: pulseText 5s ease-in-out infinite;
+    }
+
+    @keyframes pulseText {
+
+        0%,
+        100% {
+            opacity: 0.5;
         }
 
-        33.33% {
-            animation-timing-function: cubic-bezier(0.33, 1, 0.67, 1);
-            width: 20px;
-            height: 64px;
-            transform: rotate(180deg) translateX(10px);
-        }
-
-        66.67% {
-            animation-timing-function: cubic-bezier(0.33, 1, 0.67, 1);
-            width: 28px;
-            height: 44px;
-            transform: rotate(180deg) translateX(6px);
+        50% {
+            opacity: 1;
         }
     }
 </style>

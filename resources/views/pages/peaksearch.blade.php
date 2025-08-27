@@ -957,21 +957,27 @@
                 if (filteredData.length > 0) {
                     let counter = 1;
                     let totalQuantity = 0;
+
+                    // urutkan descending berdasarkan vehicle_quantity
+                    filteredData.sort((a, b) => b.vehicle_quantity - a.vehicle_quantity);
+
                     filteredData.forEach(item => {
                         totalQuantity += item.vehicle_quantity;
                         const row = `<tr>
-                            <td>${counter++}</td>
-                            <td>${item.traffic_gate_name}</td>
-                            <td>${item.vehicle_quantity}</td>
-                        </tr>`;
+            <td>${counter++}</td>
+            <td>${item.traffic_gate_name}</td>
+            <td>${item.vehicle_quantity}</td>
+        </tr>`;
                         tableBody.append(row);
                     });
+
                     tableTotal.text(totalQuantity);
                 } else {
                     tableBody.html(
                         '<tr><td colspan="3" class="text-center">No data available for this time slot.</td></tr>'
                     );
                 }
+
             }
 
 
