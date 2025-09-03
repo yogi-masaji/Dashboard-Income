@@ -101,7 +101,7 @@
 
         /* CSS tambahan untuk z-index easepick */
         .easepick-wrapper {
-            z-index: 1060;
+            z-index: 1060 !important;
         }
 
         .form-select {

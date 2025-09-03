@@ -182,6 +182,10 @@
                 transform: scale(1.0);
             }
         }
+
+        .easepick-wrapper {
+            z-index: 9999 !important;
+        }
     </style>
 
     <div class="search-wrapper">

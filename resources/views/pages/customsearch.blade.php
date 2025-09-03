@@ -1575,57 +1575,91 @@
                         const vipincome2 = secondPeriodTotals.vipincome + secondPeriodTotals
                             .vipramayanaincome +
                             secondPeriodTotals.vipnonramayanaincome;
-                        const quantityVehicleDataFirstPeriod = [
-                            firstPeriodTotals.carqty,
-                            firstPeriodTotals.motorbikeqty,
-                            firstPeriodTotals.truckqty,
-                            firstPeriodTotals.taxiqty,
-                            vipsum1,
-                            firstPeriodTotals.carpreferredqty,
-                            firstPeriodTotals.motorbikepreferredqty,
-                            firstPeriodTotals.evipqty,
-                            firstPeriodTotals.extendchargingqty,
-                            firstPeriodTotals.lostticketqty,
-                        ]
 
-                        const quantityVehicleDataSecondPeriod = [
-                            secondPeriodTotals.carqty,
-                            secondPeriodTotals.motorbikeqty,
-                            secondPeriodTotals.truckqty,
-                            secondPeriodTotals.taxiqty,
-                            vipsum2,
-                            secondPeriodTotals.carpreferredqty,
-                            secondPeriodTotals.motorbikepreferredqty,
-                            secondPeriodTotals.evipqty,
-                            secondPeriodTotals.extendchargingqty,
-                            secondPeriodTotals.lostticketqty,
-                        ]
+                        // =================== START: DYNAMIC VEHICLE DATA LOGIC ===================
+                        const isGI2 = kodeLokasi === 'GI2';
 
-                        const incomeVehicleDataFirstPeriod = [
-                            firstPeriodTotals.carincome,
-                            firstPeriodTotals.motorbikeincome,
-                            firstPeriodTotals.truckincome,
-                            firstPeriodTotals.taxiincome,
-                            vipincome1,
-                            firstPeriodTotals.carpreferredincome,
-                            firstPeriodTotals.motorbikepreferredincome,
-                            firstPeriodTotals.evipincome,
-                            firstPeriodTotals.extendchargingincome,
-                            firstPeriodTotals.lostticketincome,
-                        ]
+                        // Define labels based on location
+                        const baseVehicleLabels = ['Car', 'Motorbike', 'Truck', 'Taxi'];
+                        const gi2VehicleLabels = ['VIP', 'Preferred Car', 'Preferred Motorbike',
+                            'E-VIP', 'Extend Charging'
+                        ];
+                        const finalVehicleLabels = isGI2 ? [...baseVehicleLabels, ...
+                            gi2VehicleLabels, 'Lost Ticket'
+                        ] : [...baseVehicleLabels, 'Lost Ticket'];
 
-                        const incomeVehicleDataSecondPeriod = [
-                            secondPeriodTotals.carincome,
-                            secondPeriodTotals.motorbikeincome,
-                            secondPeriodTotals.truckincome,
-                            secondPeriodTotals.taxiincome,
-                            vipincome2,
-                            secondPeriodTotals.carpreferredincome,
-                            secondPeriodTotals.motorbikepreferredincome,
-                            secondPeriodTotals.evipincome,
-                            secondPeriodTotals.extendchargingincome,
-                            secondPeriodTotals.lostticketincome,
-                        ]
+                        // Define data arrays based on location
+                        const getVehicleData = (periodTotals, type) => {
+                            const isQuantity = type === 'quantity';
+                            const keySuffix = isQuantity ? 'qty' : 'income';
+
+                            let baseData = [
+                                periodTotals[`car${keySuffix}`],
+                                periodTotals[`motorbike${keySuffix}`],
+                                periodTotals[`truck${keySuffix}`],
+                                periodTotals[`taxi${keySuffix}`]
+                            ];
+
+                            if (isGI2) {
+                                const vipValue = isQuantity ? vipsum1 : vipincome1;
+                                if (periodTotals === secondPeriodTotals) {
+                                    const vipValue = isQuantity ? vipsum2 : vipincome2;
+                                }
+                                baseData.push(
+                                    vipValue,
+                                    periodTotals[`carpreferred${keySuffix}`],
+                                    periodTotals[`motorbikepreferred${keySuffix}`],
+                                    periodTotals[`evip${keySuffix}`],
+                                    periodTotals[`extendcharging${keySuffix}`]
+                                );
+                            }
+
+                            baseData.push(isQuantity ? periodTotals.lostticketqty :
+                                periodTotals.lostticket);
+                            return baseData;
+                        };
+
+                        const quantityData1 = getVehicleData(firstPeriodTotals, 'quantity');
+                        const quantityData2 = getVehicleData(secondPeriodTotals, 'quantity');
+                        const incomeData1 = getVehicleData(firstPeriodTotals, 'income');
+                        const incomeData2 = getVehicleData(secondPeriodTotals, 'income');
+
+                        // Define colors based on location
+                        const baseColors = [
+                            'rgba(231, 76, 60, 1)', // Car
+                            'rgba(52, 152, 219, 1)', // Motorbike
+                            'rgba(241, 196, 15, 1)', // Truck
+                            'rgba(46, 204, 113, 1)' // Taxi
+                        ];
+                        const gi2Colors = [
+                            'rgba(155, 89, 182, 1)', // VIP
+                            'rgba(230, 126, 34, 1)', // Preferred Car
+                            'rgba(26, 188, 156, 1)', // Preferred Motorbike
+                            'rgba(149, 165, 166, 1)', // E-VIP
+                            'rgba(234, 345, 10, 1)' // Extend Charging
+                        ];
+                        const finalColor = 'rgba(52, 73, 94, 1)'; // Lost Ticket
+                        const vehicleColors = isGI2 ? [...baseColors, ...gi2Colors,
+                            finalColor
+                        ] : [...baseColors, finalColor];
+
+                        // Generate chart datasets dynamically
+                        const quantityVehicleDatasets = finalVehicleLabels.map((label, index) =>
+                            ({
+                                label: label,
+                                data: [quantityData1[index], quantityData2[index]],
+                                backgroundColor: vehicleColors[index],
+                            }));
+
+                        const incomeVehicleDatasets = finalVehicleLabels.map((label, index) =>
+                            ({
+                                label: label,
+                                data: [incomeData1[index], incomeData2[index]],
+                                backgroundColor: vehicleColors[index],
+                            }));
+
+                        // =================== END: DYNAMIC VEHICLE DATA LOGIC ===================
+
 
                         const labels = [tgl_row1, tgl_row2];
 
@@ -1751,79 +1785,7 @@
 
                         const quantityVehicleBarData = {
                             labels: labels,
-                            datasets: [{
-                                    label: 'Car',
-                                    data: [quantityVehicleDataFirstPeriod[0],
-                                        quantityVehicleDataSecondPeriod[0]
-                                    ],
-                                    backgroundColor: 'rgba(231, 76, 60, 1)',
-                                },
-                                {
-                                    label: 'Motorbike',
-                                    data: [quantityVehicleDataFirstPeriod[1],
-                                        quantityVehicleDataSecondPeriod[1]
-                                    ],
-                                    backgroundColor: 'rgba(52, 152, 219, 1)',
-                                },
-                                {
-                                    label: 'Truck',
-                                    data: [quantityVehicleDataFirstPeriod[2],
-                                        quantityVehicleDataSecondPeriod[2]
-                                    ],
-                                    backgroundColor: 'rgba(241, 196, 15, 1)',
-
-                                },
-                                {
-                                    label: 'Taxi',
-                                    data: [quantityVehicleDataFirstPeriod[3],
-                                        quantityVehicleDataSecondPeriod[3]
-                                    ],
-                                    backgroundColor: 'rgba(46, 204, 113, 1)',
-                                },
-                                {
-                                    label: 'Valet',
-                                    data: [quantityVehicleDataFirstPeriod[4],
-                                        quantityVehicleDataSecondPeriod[4]
-                                    ],
-                                    backgroundColor: 'rgba(155, 89, 182, 1)',
-                                },
-                                {
-                                    label: 'Car Preferred',
-                                    data: [quantityVehicleDataFirstPeriod[5],
-                                        quantityVehicleDataSecondPeriod[5]
-                                    ],
-                                    backgroundColor: 'rgba(230, 126, 34, 1)',
-                                },
-                                {
-                                    label: 'Motorbike Preferred',
-                                    data: [quantityVehicleDataFirstPeriod[6],
-                                        quantityVehicleDataSecondPeriod[6]
-                                    ],
-                                    backgroundColor: 'rgba(26, 188, 156, 1)',
-                                },
-                                {
-                                    label: 'EVIP',
-                                    data: [quantityVehicleDataFirstPeriod[7],
-                                        quantityVehicleDataSecondPeriod[7]
-                                    ],
-                                    backgroundColor: 'rgba(149, 165, 166, 1)',
-
-                                },
-                                {
-                                    label: 'Extend Charging',
-                                    data: [quantityVehicleDataFirstPeriod[8],
-                                        quantityVehicleDataSecondPeriod[8]
-                                    ],
-                                    backgroundColor: 'rgba(234, 345, 10, 1)',
-                                },
-                                {
-                                    label: 'Lost Ticket',
-                                    data: [quantityVehicleDataFirstPeriod[9],
-                                        quantityVehicleDataSecondPeriod[9]
-                                    ],
-                                    backgroundColor: 'rgba(52, 73, 94, 1)',
-                                }
-                            ]
+                            datasets: quantityVehicleDatasets // Use dynamically generated datasets
                         };
 
                         const quantityVehicleBarOptions = {
@@ -1982,12 +1944,12 @@
 
                         // Ambil nilai untuk 4 kategori pertama + jumlah sisanya
                         const simplifiedData = [
-                            quantityVehicleDataFirstPeriod[0], // Car
-                            quantityVehicleDataFirstPeriod[1], // Motorbike
-                            quantityVehicleDataFirstPeriod[2], // Truck
-                            quantityVehicleDataFirstPeriod[3], // Taxi
-                            // Other: jumlah dari index 4 sampai 9
-                            quantityVehicleDataFirstPeriod.slice(4).reduce((sum, val) =>
+                            quantityData1[0], // Car
+                            quantityData1[1], // Motorbike
+                            quantityData1[2], // Truck
+                            quantityData1[3], // Taxi
+                            // Other: jumlah dari index 4 sampai akhir
+                            quantityData1.slice(4).reduce((sum, val) =>
                                 sum + val, 0)
                         ];
 
@@ -2061,12 +2023,12 @@
                             });
 
                         const simplifiedDataSecondPeriod = [
-                            quantityVehicleDataSecondPeriod[0], // Car 
-                            quantityVehicleDataSecondPeriod[1], // Motorbike
-                            quantityVehicleDataSecondPeriod[2], // Truck
-                            quantityVehicleDataSecondPeriod[3], // Taxi
+                            quantityData2[0], // Car 
+                            quantityData2[1], // Motorbike
+                            quantityData2[2], // Truck
+                            quantityData2[3], // Taxi
                             // Other: jumlah dari index 
-                            quantityVehicleDataSecondPeriod.slice(4).reduce((sum, val) =>
+                            quantityData2.slice(4).reduce((sum, val) =>
                                 sum + val, 0)
                         ];
 
@@ -2105,21 +2067,6 @@
                                 },
                                 datalabels: {
                                     color: '#000',
-                                    // formatter: (value, context) => {
-                                    //     const total = context.chart.data.datasets[0]
-                                    //         .data.reduce((sum, val) => sum + val, 0);
-                                    //     const percentage = ((value / total) * 100)
-                                    //         .toFixed(1); // 1 decimal
-                                    //     const label = context.chart.data.labels[context
-                                    //         .dataIndex];
-                                    //     return `${label}: ${percentage}% (${formatQuantity(value)})`;
-                                    // },
-                                    // anchor: 'center',
-                                    // align: 'center',
-                                    // font: {
-                                    //     size: 10,
-                                    //     weight: 'bold',
-                                    // }
                                 }
                             },
 
@@ -2148,78 +2095,7 @@
 
                         const incomeVehicleBarData = {
                             labels: labels,
-                            datasets: [{
-                                    label: 'Car',
-                                    data: [incomeVehicleDataFirstPeriod[0],
-                                        incomeVehicleDataSecondPeriod[0]
-                                    ],
-                                    backgroundColor: 'rgba(231, 76, 60, 1)',
-                                },
-                                {
-                                    label: 'Motorbike',
-                                    data: [incomeVehicleDataFirstPeriod[1],
-                                        incomeVehicleDataSecondPeriod[1]
-                                    ],
-                                    backgroundColor: 'rgba(52, 152, 219, 1)',
-                                },
-                                {
-                                    label: 'Truck',
-                                    data: [incomeVehicleDataFirstPeriod[2],
-                                        incomeVehicleDataSecondPeriod[2]
-                                    ],
-                                    backgroundColor: 'rgba(241, 196, 15, 1)',
-
-                                },
-                                {
-                                    label: 'Taxi',
-                                    data: [incomeVehicleDataFirstPeriod[3],
-                                        incomeVehicleDataSecondPeriod[3]
-                                    ],
-                                    backgroundColor: 'rgba(46, 204, 113, 1)',
-                                },
-                                {
-                                    label: 'Valet',
-                                    data: [incomeVehicleDataFirstPeriod[4],
-                                        incomeVehicleDataSecondPeriod[4]
-                                    ],
-                                    backgroundColor: 'rgba(155, 89, 182, 1)',
-                                },
-                                {
-                                    label: 'Car Preferred',
-                                    data: [incomeVehicleDataFirstPeriod[5],
-                                        incomeVehicleDataSecondPeriod[5]
-                                    ],
-                                    backgroundColor: 'rgba(230, 126, 34, 1)',
-                                },
-                                {
-                                    label: 'Motorbike Preferred',
-                                    data: [incomeVehicleDataFirstPeriod[6],
-                                        incomeVehicleDataSecondPeriod[6]
-                                    ],
-                                    backgroundColor: 'rgba(26, 188, 156, 1)',
-                                },
-                                {
-                                    label: 'EVIP',
-                                    data: [incomeVehicleDataFirstPeriod[7],
-                                        incomeVehicleDataSecondPeriod[7]
-                                    ],
-                                    backgroundColor: 'rgba(149, 165, 166, 1)',
-                                },
-                                {
-                                    label: 'Extend Charging',
-                                    data: [incomeVehicleDataFirstPeriod[8],
-                                        incomeVehicleDataSecondPeriod[8]
-                                    ],
-                                    backgroundColor: 'rgba(234, 345, 10, 1)',
-                                },
-                                {
-                                    label: 'Lost Ticket',
-                                    data: [incomeVehicleDataFirstPeriod[9],
-                                        incomeVehicleDataSecondPeriod[9]
-                                    ],
-                                    backgroundColor: 'rgba(52, 73, 94, 1)',
-                                }
-                            ]
+                            datasets: incomeVehicleDatasets // Use dynamically generated datasets
                         };
 
                         const incomeVehicleBarOptions = {
@@ -3183,67 +3059,37 @@
 
                             // Membuat HTML string untuk setiap perbandingan
                             return `
-        <div class="col-md-2">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="text-muted mb-1">${label}</h6>
-                            <h4 style="color: #000;" class="fw-bold mb-0">${formatRupiah(firstPeriod)}</h4>
-                            <small class="text-muted tgl_row1">Total second period :</small>
-                            <p style="color: #000 !important;" class="text-muted tgl_row1">${formatRupiah(secondPeriod)}</p>
-                        </div>
-                        <div class="${colorClass}">${percentageText}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
+                                <div class="col-md-2">
+                                    <div class="card shadow-sm border-0">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <h6 class="text-muted mb-1">${label}</h6>
+                                                    <h4 style="color: #000;" class="fw-bold mb-0">${formatRupiah(firstPeriod)}</h4>
+                                                    <small class="text-muted tgl_row1">Total second period :</small>
+                                                    <p style="color: #000 !important;" class="text-muted tgl_row1">${formatRupiah(secondPeriod)}</p>
+                                                </div>
+                                                <div class="${colorClass}">${percentageText}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
                         });
 
-                        console.log(paymentComparisonResult);
+                        // Generate comparison cards dynamically
+                        const compareVehicleLabel = finalVehicleLabels.map((label, index) => ({
+                            label: label,
+                            firstPeriod: quantityData1[index],
+                            secondPeriod: quantityData2[index],
+                        }));
 
-                        const compareVehicleLabel = [{
-                            label: 'Car',
-                            firstPeriod: firstPeriodTotals.carqty,
-                            secondPeriod: secondPeriodTotals.carqty,
-                        }, {
-                            label: 'Motorbike',
-                            firstPeriod: firstPeriodTotals.motorbikeqty,
-                            secondPeriod: secondPeriodTotals.motorbikeqty,
-                        }, {
-                            label: 'Truck',
-                            firstPeriod: firstPeriodTotals.truckqty,
-                            secondPeriod: secondPeriodTotals.truckqty,
-                        }, {
-                            label: 'Taxi',
-                            firstPeriod: firstPeriodTotals.taxiqty,
-                            secondPeriod: secondPeriodTotals.taxiqty,
-                        }, {
-                            label: 'VIP',
-                            firstPeriod: vipsum1,
-                            secondPeriod: vipsum2,
-                        }, {
-                            label: 'Preferred Car',
-                            firstPeriod: firstPeriodTotals.carpreferredqty,
-                            secondPeriod: secondPeriodTotals.carpreferredqty,
-                        }, {
-                            label: 'Preferred Motorbike',
-                            firstPeriod: firstPeriodTotals.motorbikepreferredqty,
-                            secondPeriod: secondPeriodTotals.motorbikepreferredqty,
-                        }, {
-                            label: 'E-VIP',
-                            firstPeriod: firstPeriodTotals.evipqty,
-                            secondPeriod: secondPeriodTotals.evipqty,
-                        }, {
-                            label: 'Extend Charging',
-                            firstPeriod: firstPeriodTotals.extendchargingqty,
-                            secondPeriod: secondPeriodTotals.extendchargingqty,
-                        }, {
-                            label: 'Lost Ticket',
-                            firstPeriod: firstPeriodTotals.lostticketqty,
-                            secondPeriod: secondPeriodTotals.lostticketqty,
-                        }]
+                        const labelIncomeVehicle = finalVehicleLabels.map((label, index) => ({
+                            label: label,
+                            firstPeriod: incomeData1[index],
+                            secondPeriod: incomeData2[index],
+                        }));
+
 
                         const vehicleComparisonResult = compareVehicleLabel.map(item => {
                             const {
@@ -3273,76 +3119,24 @@
 
                             // Membuat HTML string untuk setiap perbandingan
                             return `
-        <div class="col-md-2">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="text-muted mb-1">${label}</h6>
-                            <h4 style="color: #000;" class="fw-bold mb-0">${formatQuantity(firstPeriod)}</h4>
-                            <small class="text-muted tgl_row1">Total second period :</small>
-                            <p style="color: #000 !important;" class="text-muted tgl_row1">${formatQuantity(secondPeriod)}</p>
-                        </div>
-                        <div class="${colorClass}">${percentageText}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
+                                <div class="col-md-2">
+                                    <div class="card shadow-sm border-0">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <h6 class="text-muted mb-1">${label}</h6>
+                                                    <h4 style="color: #000;" class="fw-bold mb-0">${formatQuantity(firstPeriod)}</h4>
+                                                    <small class="text-muted tgl_row1">Total second period :</small>
+                                                    <p style="color: #000 !important;" class="text-muted tgl_row1">${formatQuantity(secondPeriod)}</p>
+                                                </div>
+                                                <div class="${colorClass}">${percentageText}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
                         });
 
-
-                        const labelIncomeVehicle = [{
-                                label: 'Car',
-                                firstPeriod: firstPeriodTotals.carincome,
-                                secondPeriod: secondPeriodTotals.carincome,
-                            },
-                            {
-                                label: 'Motorbike',
-                                firstPeriod: firstPeriodTotals.motorbikeincome,
-                                secondPeriod: secondPeriodTotals.motorbikeincome,
-                            },
-                            {
-                                label: 'Truck',
-                                firstPeriod: firstPeriodTotals.truckincome,
-                                secondPeriod: secondPeriodTotals.truckincome,
-                            },
-                            {
-                                label: 'Taxi',
-                                firstPeriod: firstPeriodTotals.taxiincome,
-                                secondPeriod: secondPeriodTotals.taxiincome,
-                            },
-                            {
-                                label: 'VIP',
-                                firstPeriod: vipincome1,
-                                secondPeriod: vipincome2,
-                            },
-                            {
-                                label: 'Preferred Car',
-                                firstPeriod: firstPeriodTotals.carpreferredincome,
-                                secondPeriod: secondPeriodTotals.carpreferredincome,
-                            },
-                            {
-                                label: 'Preferred Motorbike',
-                                firstPeriod: firstPeriodTotals.motorbikepreferredincome,
-                                secondPeriod: secondPeriodTotals.motorbikepreferredincome,
-                            },
-                            {
-                                label: 'E-VIP',
-                                firstPeriod: firstPeriodTotals.evipincome,
-                                secondPeriod: secondPeriodTotals.evipincome,
-                            },
-                            {
-                                label: 'Extend Charging',
-                                firstPeriod: firstPeriodTotals.extendchargingincome,
-                                secondPeriod: secondPeriodTotals.extendchargingincome,
-                            },
-                            {
-                                label: 'Lost Ticket',
-                                firstPeriod: firstPeriodTotals.lostticket,
-                                secondPeriod: secondPeriodTotals.lostticket,
-                            }
-                        ]
 
                         const incomeVehicleComparisonResult = labelIncomeVehicle.map(item => {
                             const {
@@ -3372,25 +3166,24 @@
 
                             // Membuat HTML string untuk setiap perbandingan
                             return `
-        <div class="col-md-2">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="text-muted mb-1">${label}</h6>
-                            <h4 style="color: #000;" class="fw-bold mb-0">${formatRupiah(firstPeriod)}</h4>
-                            <small class="text-muted tgl_row1">Total second period :</small>
-                            <p style="color: #000 !important;" class="text-muted tgl_row1">${formatRupiah(secondPeriod)}</p>
-                        </div>
-                        <div class="${colorClass}">${percentageText}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
+                                <div class="col-md-2">
+                                    <div class="card shadow-sm border-0">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <h6 class="text-muted mb-1">${label}</h6>
+                                                    <h4 style="color: #000;" class="fw-bold mb-0">${formatRupiah(firstPeriod)}</h4>
+                                                    <small class="text-muted tgl_row1">Total second period :</small>
+                                                    <p style="color: #000 !important;" class="text-muted tgl_row1">${formatRupiah(secondPeriod)}</p>
+                                                </div>
+                                                <div class="${colorClass}">${percentageText}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
                         });
 
-                        console.log(vehicleComparisonResult);
                         document.getElementById('compare-result').innerHTML =
                             paymentComparisonResult.join('');
                         document.getElementById('compare-quantity').innerHTML =

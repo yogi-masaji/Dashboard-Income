@@ -287,7 +287,7 @@
                 <form method="POST" action="{{ route('set.location') }}">
                     @csrf
                     <div class="p-2">
-                        <h5 class="brand-title text-center mt-5 mb-5" style="color: #fff !important">
+                        <h5 class="brand-title text-center" style="color: #fff !important">
                             {{ session('selected_location_name', 'GRAND INDONESIA') }}</h5>
 
                         <label for="locationSelect" class="select-label">Select Location</label>
@@ -304,7 +304,7 @@
                     </div>
                 </form>
 
-                <div class="scrollbar-container mt-5"
+                <div class="scrollbar-container"
                     style="max-height: calc(100vh - 100px); overflow-y: auto;overflow-x: hidden;" id="scrollbar">
                     
                     {{-- START: LOGIKA BARU UNTUK NAVIGASI --}}
@@ -513,35 +513,16 @@
 
 
 </body>
-
-{{-- [MODIFIED] Preloader script with conditional logic --}}
+{{-- Preloader Script --}}
 <script>
     window.addEventListener('load', function() {
-        // This script provides a fallback for pages that DON'T use dashboard.js
-        // It checks if the main content area for the dashboard exists.
-        if (document.getElementById('main-content') === null) {
-            // If it doesn't exist, we are on a different page. Hide the preloader.
+        setTimeout(function() {
             const preloader = document.getElementById('preloader');
-            if (preloader) {
-                // Set a timeout of 5 seconds (5000 milliseconds)
-                setTimeout(function() {
-                    // Start the fade-out transition by applying styles directly
-                    preloader.style.opacity = '0';
-                    preloader.style.visibility = 'hidden';
-
-                    // After the transition ends (matches the 0.7s in CSS), remove the active class from the body
-                    // This prevents the body from being unscrollable
-                    setTimeout(function() {
-                        document.body.classList.remove('preloader-active');
-                    }, 700); // This should match the transition duration in the CSS
-
-                }, 5000); // 5000ms = 5 seconds
-            }
-        }
-        // If #main-content exists, do nothing. dashboard.js will handle the preloader.
+            preloader.classList.add('hidden');
+            document.body.classList.remove('preloader-active');
+        }, 5000); // 5000 milliseconds = 5 seconds to match animation
     });
 </script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const mobileToggle = document.getElementById('mobile-toggle');

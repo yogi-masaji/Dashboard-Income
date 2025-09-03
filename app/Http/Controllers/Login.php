@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use App\Models\MsLogin;
 use App\Models\TrStaff;
 use App\Models\MsStaff;
@@ -22,7 +23,9 @@ class Login extends Controller
      */
     public function LoginView()
     {
-        return view('login');
+        return response()
+            ->view('login')
+            ->header('Clear-Site-Data', '"cache", "storage", "executionContexts"');
     }
 
     /**
@@ -172,7 +175,9 @@ class Login extends Controller
         $request->session()->flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
+        $response = response()->redirectToRoute('login')
+            ->withCookie(Cookie::forget('income_session'))
+            ->withCookie(Cookie::forget('XSRF-TOKEN'));
         // Buat URL ke halaman login
         $loginUrl = route('login');
 

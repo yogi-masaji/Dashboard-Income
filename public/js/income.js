@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    // --- CHART INSTANCES ---
+    let dailyIncomeChart, weeklyIncomeBarChart, weeklyIncomeLineChart, monthlyIncomeBarChart, monthlyIncomeLineChart;
+
     // --- FUNGSI UTILITAS ---
     const formatRupiah = (number) => {
         const num = parseFloat(number);
@@ -8,6 +11,27 @@ $(document).ready(function() {
             minimumFractionDigits: 0
         }).format(num);
     };
+
+    /**
+     * Updates a Chart.js instance with new data while preserving the visibility state of datasets.
+     * @param {Chart} chartInstance - The Chart.js instance to update.
+     * @param {object} newData - The new data object for the chart, containing labels and datasets.
+     */
+    function updateChartPreservingLegend(chartInstance, newData) {
+        if (!chartInstance || !newData) {
+            return;
+        }
+        chartInstance.data.labels = newData.labels;
+        newData.datasets.forEach((newDataset, index) => {
+            const existingDataset = chartInstance.data.datasets[index];
+            if (existingDataset) {
+                existingDataset.data = newDataset.data;
+                existingDataset.backgroundColor = newDataset.backgroundColor;
+                existingDataset.borderColor = newDataset.borderColor;
+            }
+        });
+        chartInstance.update('none');
+    }
 
     /**
      * Menerapkan warna berbasis tema ke objek opsi grafik.
@@ -97,34 +121,36 @@ $(document).ready(function() {
                 dailyIncomeTable.clear().rows.add(rows.map((item, index) => ({ no: index + 1, vehicle: item.type, yesterday: formatRupiah(item.yesterday), today: formatRupiah(item.today) }))).draw();
                 $('#dailyIncome tfoot').html(`<tr><th colspan="2" style="text-align:left">All Vehicle</th><th>${formatRupiah(yesterday.grandtotal)}</th><th>${formatRupiah(today.grandtotal)}</th></tr><tr><th colspan="2" style="text-align:left">All Sticker Income</th><th>${formatRupiah(yesterday.stickerincome)}</th><th>${formatRupiah(today.stickerincome)}</th></tr>`);
 
-                if (window.dailyIncomeChart) window.dailyIncomeChart.destroy();
-                
                 const donutData = { labels: ['Car', 'Motorbike', 'Truck', 'Taxi', 'Other'], datasets: [{ label: 'Income by Vehicle', data: [today.carincome, today.motorbikeincome, today.truckincome, today.taxiincome, today.otherincome], backgroundColor: ['#0D61E2', '#EF0F51', '#FFCD56', '#32CD7D', '#5a0e0eff'] }] };
                 
-                const donutConfig = { 
-                    type: 'doughnut', 
-                    data: donutData, 
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        plugins: { 
-                            legend: { position: 'top', labels: { /* color diatur oleh fungsi tema */ } }, 
-                            datalabels: { 
-                                formatter: (value) => formatRupiah(value), 
-                                font: { weight: 'bold' }, 
-                                padding: 6, 
-                                borderRadius: 25, 
-                                borderWidth: 3 
+                if (dailyIncomeChart) {
+                    updateChartPreservingLegend(dailyIncomeChart, donutData);
+                } else {
+                    const donutConfig = { 
+                        type: 'doughnut', 
+                        data: donutData, 
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: false, 
+                            plugins: { 
+                                legend: { position: 'top', labels: { /* color diatur oleh fungsi tema */ } }, 
+                                datalabels: { 
+                                    formatter: (value) => formatRupiah(value), 
+                                    font: { weight: 'bold' }, 
+                                    padding: 6, 
+                                    borderRadius: 25, 
+                                    borderWidth: 3 
+                                } 
                             } 
-                        } 
-                    }, 
-                    plugins: [ChartDataLabels] 
-                };
-                
-                applyThemeToChartOptions(donutConfig.options); // Terapkan tema
+                        }, 
+                        plugins: [ChartDataLabels] 
+                    };
+                    
+                    applyThemeToChartOptions(donutConfig.options); // Terapkan tema
 
-                const ctx = document.getElementById('dailyIncomedonut')?.getContext('2d');
-                if (ctx) window.dailyIncomeChart = new Chart(ctx, donutConfig);
+                    const ctx = document.getElementById('dailyIncomedonut')?.getContext('2d');
+                    if (ctx) dailyIncomeChart = new Chart(ctx, donutConfig);
+                }
             }
         });
     }
@@ -148,15 +174,16 @@ $(document).ready(function() {
                 const rows = [{ type: 'Car', thisWeekIncome: this_week.totals.carincome, lastWeekIncome: last_week.totals.carincome }, { type: 'Motorbike', thisWeekIncome: this_week.totals.motorbikeincome, lastWeekIncome: last_week.totals.motorbikeincome }, { type: 'Truck', thisWeekIncome: this_week.totals.truckincome, lastWeekIncome: last_week.totals.truckincome }, { type: 'Taxi', thisWeekIncome: this_week.totals.taxiincome, lastWeekIncome: last_week.totals.taxiincome }, { type: 'lost ticket', thisWeekIncome: this_week.totals.ticketincome, lastWeekIncome: last_week.totals.ticketincome }, { type: 'Other', thisWeekIncome: this_week.totals.otherincome, lastWeekIncome: last_week.totals.otherincome }, ];
                 weeklyIncomeTable.clear().rows.add(rows.map((item, index) => ({ no: index + 1, vehicle: item.type, this_week: formatRupiah(item.thisWeekIncome), last_week: formatRupiah(item.lastWeekIncome) }))).draw();
                 $('#weeklyIncome tfoot').html(`<tr><th colspan="2" style="text-align:left">All Casual Income</th><th style="font-size:12px;">${formatRupiah(last_week.totals.vehicleincome)}</th><th style="font-size:12px;">${formatRupiah(this_week.totals.vehicleincome)}</th></tr><tr><th colspan="2" style="text-align:left">All Sticker Income</th><th style="font-size:12px;">${formatRupiah(last_week.totals.stickerincome)}</th><th style="font-size:12px;">${formatRupiah(this_week.totals.stickerincome)}</th></tr>`);
-
-                if (window.weeklyIncomeBarChart) window.weeklyIncomeBarChart.destroy();
-                if (window.weeklyIncomeLineChart) window.weeklyIncomeLineChart.destroy();
                 
                 const labels = this_week.data.map(item => new Date(item.tanggal).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
                 const vehicleTypes = ['car', 'motorbike', 'truck', 'taxi', 'vehicle'];
                 const colors = ['#0D61E2', '#E60045', '#FFCD56', '#32CD7D', '#E69500'];
                 const datasets = vehicleTypes.map((v, i) => ({ label: v.charAt(0).toUpperCase() + v.slice(1), data: this_week.data.map(item => item[`${v}income`]), backgroundColor: colors[i], borderColor: colors[i], hidden: i > 0, datalabels: { anchor: 'end', align: 'end' } }));
-                
+                const lineDatasets = datasets.map(ds => ({ ...ds, borderWidth: 3, tension: 0.5 }));
+
+                const weeklyBarData = { labels, datasets };
+                const weeklyLineData = { labels, datasets: lineDatasets };
+
                 const commonOptions = { 
                     responsive: true, 
                     maintainAspectRatio: false, 
@@ -180,12 +207,21 @@ $(document).ready(function() {
                 
                 applyThemeToChartOptions(commonOptions); // Terapkan tema
 
-                const ctxBar = document.getElementById('weeklyIncomeBar')?.getContext('2d');
-                if (ctxBar) window.weeklyIncomeBarChart = new Chart(ctxBar, { type: 'bar', data: { labels, datasets }, options: commonOptions, plugins: [ChartDataLabels] });
+                if(weeklyIncomeBarChart) {
+                    updateChartPreservingLegend(weeklyIncomeBarChart, weeklyBarData);
+                } else {
+                    const ctxBar = document.getElementById('weeklyIncomeBar')?.getContext('2d');
+                    if (ctxBar) weeklyIncomeBarChart = new Chart(ctxBar, { type: 'bar', data: weeklyBarData, options: commonOptions, plugins: [ChartDataLabels] });
+                }
                 
                 const lineOptions = { ...commonOptions, plugins: { ...commonOptions.plugins, datalabels: { ...commonOptions.plugins.datalabels, padding: 3, offset: 4 }}};
-                const ctxLine = document.getElementById('weeklyIncomeLine')?.getContext('2d');
-                if (ctxLine) window.weeklyIncomeLineChart = new Chart(ctxLine, { type: 'line', data: { labels, datasets: datasets.map(ds => ({ ...ds, borderWidth: 3, tension: 0.5 })) }, options: lineOptions , plugins: [ChartDataLabels] });
+                
+                if(weeklyIncomeLineChart) {
+                    updateChartPreservingLegend(weeklyIncomeLineChart, weeklyLineData);
+                } else {
+                    const ctxLine = document.getElementById('weeklyIncomeLine')?.getContext('2d');
+                    if (ctxLine) weeklyIncomeLineChart = new Chart(ctxLine, { type: 'line', data: weeklyLineData, options: lineOptions , plugins: [ChartDataLabels] });
+                }
             }
         });
     }
@@ -210,14 +246,14 @@ $(document).ready(function() {
                 monthlyIncomeTable.clear().rows.add(rows.map((item, index) => ({ no: index + 1, vehicle: item.type, this_month: formatRupiah(item.thisMonthIncome), last_month: formatRupiah(item.lastMonthIncome) }))).draw();
                 $('#monthlyIncome tfoot').html(`<tr><th colspan="2" style="text-align:left">All Casual Income</th><th style="font-size:12px;">${formatRupiah(last_Month.totals.vehicleincome)}</th><th style="font-size:12px;">${formatRupiah(this_Month.totals.vehicleincome)}</th></tr><tr><th colspan="2" style="text-align:left">All Sticker Income</th><th style="font-size:12px;">${formatRupiah(last_Month.totals.stickerincome)}</th><th style="font-size:12px;">${formatRupiah(this_Month.totals.stickerincome)}</th></tr>`);
                 
-                if (window.monthlyIncomeBarChart) window.monthlyIncomeBarChart.destroy();
-                if (window.monthlyIncomeLineChart) window.monthlyIncomeLineChart.destroy();
-                
                 const labels = Object.keys(this_Month.weekly_totals);
                 const vehicleTypes = ['car', 'motorbike', 'truck', 'taxi', 'other', 'vehicle'];
                 const colors = ['#51AA20', '#DB6715', '#8D60ED', '#C46EA6', '#5a0e0eff', '#D3D6DD'];
                 const datasets = vehicleTypes.map((v, i) => ({ label: v.charAt(0).toUpperCase() + v.slice(1), data: labels.map(label => this_Month.weekly_totals[label][`${v}income`]), backgroundColor: colors[i], borderColor: colors[i], hidden: i > 0 }));
                 
+                const monthlyBarData = { labels, datasets };
+                const monthlyLineData = { labels, datasets: datasets.map(ds => ({ ...ds, borderWidth: 3, tension: 0.5, fill: false })) };
+
                 const commonOptions = { 
                     responsive: true, 
                     maintainAspectRatio: false, 
@@ -243,12 +279,21 @@ $(document).ready(function() {
                 
                 applyThemeToChartOptions(commonOptions); // Terapkan tema
 
-                const ctxBar = document.getElementById('monthlyIncomeBar')?.getContext('2d');
-                if (ctxBar) window.monthlyIncomeBarChart = new Chart(ctxBar, { type: 'bar', data: { labels, datasets }, options: commonOptions, plugins: [ChartDataLabels] });
-
+                if(monthlyIncomeBarChart) {
+                    updateChartPreservingLegend(monthlyIncomeBarChart, monthlyBarData);
+                } else {
+                    const ctxBar = document.getElementById('monthlyIncomeBar')?.getContext('2d');
+                    if (ctxBar) monthlyIncomeBarChart = new Chart(ctxBar, { type: 'bar', data: monthlyBarData, options: commonOptions, plugins: [ChartDataLabels] });
+                }
+                
                 const lineOptions = { ...commonOptions, plugins: { ...commonOptions.plugins, datalabels: { ...commonOptions.plugins.datalabels, padding: 3, offset: 4 }}};
-                const ctxLine = document.getElementById('monthlyIncomeLine')?.getContext('2d');
-                if (ctxLine) window.monthlyIncomeLineChart = new Chart(ctxLine, { type: 'line', data: { labels, datasets: datasets.map(ds => ({ ...ds, borderWidth: 3, tension: 0.5, fill: false })) }, options: lineOptions, plugins: [ChartDataLabels] });
+
+                if(monthlyIncomeLineChart) {
+                    updateChartPreservingLegend(monthlyIncomeLineChart, monthlyLineData);
+                } else {
+                    const ctxLine = document.getElementById('monthlyIncomeLine')?.getContext('2d');
+                    if (ctxLine) monthlyIncomeLineChart = new Chart(ctxLine, { type: 'line', data: monthlyLineData, options: lineOptions, plugins: [ChartDataLabels] });
+                }
             }
         });
     }
@@ -274,5 +319,5 @@ $(document).ready(function() {
 
     // --- INISIALISASI SKRIP ---
     loadAllIncomeData();
-    setInterval(loadAllIncomeData, 5000);
+    setInterval(loadAllIncomeData, 15000);
 });

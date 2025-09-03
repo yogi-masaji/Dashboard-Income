@@ -79,6 +79,10 @@
             border-radius: 10px;
             margin-left: 10px;
         }
+
+        .easepick-wrapper {
+            z-index: 9999 !important;
+        }
     </style>
     <style>
         .content-custom {
@@ -211,10 +215,10 @@
                                 <th colspan="3" style="text-align:center;">Brizzi</th>
                                 <th colspan="3" style="text-align:center;">Tapcash</th>
                                 <!-- <th scope="col">DKIJack</th>
-                                                                                                                        <th scope="col">EDC</th>
-                                                                                                                        <th scope="col">Luminous</th>
-                                                                                                                        <th scope="col">Mega</th>
-                                                                                                                        <th scope="col">Nabu</th> -->
+                                                                                                                            <th scope="col">EDC</th>
+                                                                                                                            <th scope="col">Luminous</th>
+                                                                                                                            <th scope="col">Mega</th>
+                                                                                                                            <th scope="col">Nabu</th> -->
                             </tr>
                             <tr>
                                 <th>CP</th>

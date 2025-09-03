@@ -1,9 +1,34 @@
 $(document).ready(function() {
+    // --- CHART INSTANCES ---
+    let dailyBarChart, dailyLineChart;
+    let weeklyQuantityBarChart, weeklyPassQuantityBarChart, weeklyQuantityLineChart, weeklyPassQuantityLineChart;
+    let monthlyBarChart, monthlyBarPassChart, monthlyLineChart, monthlyLinePassChart;
+
     // --- UTILITY FUNCTIONS ---
     function formatQuantity(quantity) {
-        // Handles null, undefined, or non-numeric values gracefully
         const num = parseInt(quantity, 10);
         return isNaN(num) ? '0' : new Intl.NumberFormat('id-ID').format(num);
+    }
+
+    /**
+     * Updates a Chart.js instance with new data while preserving the visibility state of datasets.
+     * @param {Chart} chartInstance - The Chart.js instance to update.
+     * @param {object} newData - The new data object for the chart, containing labels and datasets.
+     */
+    function updateChartPreservingLegend(chartInstance, newData) {
+        if (!chartInstance || !newData) {
+            return;
+        }
+        chartInstance.data.labels = newData.labels;
+        newData.datasets.forEach((newDataset, index) => {
+            const existingDataset = chartInstance.data.datasets[index];
+            if (existingDataset) {
+                existingDataset.data = newDataset.data;
+                existingDataset.backgroundColor = newDataset.backgroundColor;
+                existingDataset.borderColor = newDataset.borderColor;
+            }
+        });
+        chartInstance.update('none');
     }
 
     /**
@@ -33,7 +58,6 @@ $(document).ready(function() {
 
 
     // --- DATATABLE INITIALIZATION ---
-    // It's good practice to initialize all DataTables at once.
     const dtOptions = {
         searching: false,
         paging: false,
@@ -76,7 +100,6 @@ $(document).ready(function() {
      * @returns {Promise} The jQuery AJAX promise.
      */
     function fetchDailyTransaction() {
-        // Return the AJAX promise
         return $.ajax({
             url: dailyTransactionURL,
             method: 'GET',
@@ -126,10 +149,7 @@ $(document).ready(function() {
                 const labels = ['Car', 'Motorbike', 'Truck', 'Taxi', 'Other'];
                 const casualData = [today.carcasual, today.motorbikecasual, today.truckcasual, today.taxicasual, today.othercasual];
                 const passData = [today.carpass, today.motorbikepass, today.truckpass, today.taxipass, today.otherpass];
-
-                if (window.dailyBarChart) window.dailyBarChart.destroy();
-                if (window.dailyLineChart) window.dailyLineChart.destroy();
-
+                
                 const commonOptions = {
                     responsive: true, maintainAspectRatio: false,
                     plugins: {
@@ -160,13 +180,22 @@ $(document).ready(function() {
                     ]
                 };
                 
-                const ctxBar = document.getElementById('dailyQuantityBar')?.getContext('2d');
-                if (ctxBar) window.dailyBarChart = new Chart(ctxBar, { type: 'bar', data: barData, options: commonOptions, plugins: [ChartDataLabels] });
-
+                // Update or create daily bar chart
+                if (dailyBarChart) {
+                    updateChartPreservingLegend(dailyBarChart, barData);
+                } else {
+                    const ctxBar = document.getElementById('dailyQuantityBar')?.getContext('2d');
+                    if (ctxBar) dailyBarChart = new Chart(ctxBar, { type: 'bar', data: barData, options: commonOptions, plugins: [ChartDataLabels] });
+                }
+                
+                // Update or create daily line chart
                 const lineOptions = { ...commonOptions, plugins: { ...commonOptions.plugins, datalabels: { ...commonOptions.plugins.datalabels, padding: 3, offset: 4 }}};
-
-                const ctxLine = document.getElementById('dailyQuantityLine')?.getContext('2d');
-                if (ctxLine) window.dailyLineChart = new Chart(ctxLine, { type: 'line', data: lineData, options: lineOptions, plugins: [ChartDataLabels] });
+                if(dailyLineChart) {
+                    updateChartPreservingLegend(dailyLineChart, lineData);
+                } else {
+                    const ctxLine = document.getElementById('dailyQuantityLine')?.getContext('2d');
+                    if (ctxLine) dailyLineChart = new Chart(ctxLine, { type: 'line', data: lineData, options: lineOptions, plugins: [ChartDataLabels] });
+                }
             }
         });
     }
@@ -176,7 +205,6 @@ $(document).ready(function() {
      * @returns {Promise} The jQuery AJAX promise.
      */
     function fetchWeeklyTransactionData() {
-        // Return the AJAX promise
         return $.ajax({
             url: weeklyTransactionURL,
             method: 'GET',
@@ -248,25 +276,36 @@ $(document).ready(function() {
                 
                 applyThemeToChartOptions(baseOptions);
 
-                const buildChart = (canvasId, type, data) => {
-                    const chartInstanceName = `${canvasId}Chart`;
-                    if (window[chartInstanceName]) window[chartInstanceName].destroy();
-                    
-                    const ctx = document.getElementById(canvasId)?.getContext('2d');
-                    if (ctx) {
-                        window[chartInstanceName] = new Chart(ctx, {
-                            type,
-                            data: { labels, datasets: buildDataset(data, type) },
-                            options: baseOptions,
-                            plugins: [ChartDataLabels]
-                        });
-                    }
-                };
+                // Chart data
+                const weeklyCasualBarData = { labels, datasets: buildDataset(casualData, 'bar') };
+                const weeklyPassBarData = { labels, datasets: buildDataset(passData, 'bar') };
+                const weeklyCasualLineData = { labels, datasets: buildDataset(casualData, 'line') };
+                const weeklyPassLineData = { labels, datasets: buildDataset(passData, 'line') };
 
-                buildChart('weeklyQuantityBar', 'bar', casualData);
-                buildChart('weeklyPassQuantityBar', 'bar', passData);
-                buildChart('weeklyQuantityLine', 'line', casualData);
-                buildChart('weeklyPassQuantityLine', 'line', passData);
+                // Update or create charts
+                if (weeklyQuantityBarChart) { updateChartPreservingLegend(weeklyQuantityBarChart, weeklyCasualBarData); } 
+                else { 
+                    const ctx = document.getElementById('weeklyQuantityBar')?.getContext('2d');
+                    if (ctx) weeklyQuantityBarChart = new Chart(ctx, { type: 'bar', data: weeklyCasualBarData, options: baseOptions, plugins: [ChartDataLabels] });
+                }
+
+                if (weeklyPassQuantityBarChart) { updateChartPreservingLegend(weeklyPassQuantityBarChart, weeklyPassBarData); }
+                else {
+                    const ctx = document.getElementById('weeklyPassQuantityBar')?.getContext('2d');
+                    if (ctx) weeklyPassQuantityBarChart = new Chart(ctx, { type: 'bar', data: weeklyPassBarData, options: baseOptions, plugins: [ChartDataLabels] });
+                }
+
+                if (weeklyQuantityLineChart) { updateChartPreservingLegend(weeklyQuantityLineChart, weeklyCasualLineData); }
+                else {
+                    const ctx = document.getElementById('weeklyQuantityLine')?.getContext('2d');
+                    if (ctx) weeklyQuantityLineChart = new Chart(ctx, { type: 'line', data: weeklyCasualLineData, options: baseOptions, plugins: [ChartDataLabels] });
+                }
+
+                if (weeklyPassQuantityLineChart) { updateChartPreservingLegend(weeklyPassQuantityLineChart, weeklyPassLineData); }
+                else {
+                    const ctx = document.getElementById('weeklyPassQuantityLine')?.getContext('2d');
+                    if (ctx) weeklyPassQuantityLineChart = new Chart(ctx, { type: 'line', data: weeklyPassLineData, options: baseOptions, plugins: [ChartDataLabels] });
+                }
             }
         });
     }
@@ -276,7 +315,6 @@ $(document).ready(function() {
      * @returns {Promise} The jQuery AJAX promise.
      */
     function loadMonthlyTransactionData() {
-        // Return the AJAX promise
         return $.ajax({
             url: monthlyTransactionURL,
             method: 'GET',
@@ -349,23 +387,34 @@ $(document).ready(function() {
                     };
                 };
 
-                const chartMap = [
-                    { ctx: 'monthlyQuantityBar', data: response.this_month.weekly_totals.casual, line: false, name: 'monthlyBar' },
-                    { ctx: 'monthlyPassQuantityBar', data: response.this_month.weekly_totals.pass, line: false, name: 'monthlyBarPass' },
-                    { ctx: 'monthlyQuantityLine', data: response.this_month.weekly_totals.casual, line: true, name: 'monthlyLine' },
-                    { ctx: 'monthlyPassQuantityLine', data: response.this_month.weekly_totals.pass, line: true, name: 'monthlyLinePass' },
-                ];
-                
-                chartMap.forEach(({ ctx, data, line, name }) => {
-                    if (window[name]) window[name].destroy();
-                    
-                    const canvas = document.getElementById(ctx)?.getContext('2d');
-                    if (canvas) {
-                        const config = chartOptions(line);
-                        config.data = { labels, datasets: buildDataset(data, line) };
-                        window[name] = new Chart(canvas, config);
-                    }
-                });
+                const monthlyCasualBarData = { labels, datasets: buildDataset(response.this_month.weekly_totals.casual, false) };
+                const monthlyPassBarData = { labels, datasets: buildDataset(response.this_month.weekly_totals.pass, false) };
+                const monthlyCasualLineData = { labels, datasets: buildDataset(response.this_month.weekly_totals.casual, true) };
+                const monthlyPassLineData = { labels, datasets: buildDataset(response.this_month.weekly_totals.pass, true) };
+
+                if (monthlyBarChart) { updateChartPreservingLegend(monthlyBarChart, monthlyCasualBarData); }
+                else {
+                    const canvas = document.getElementById('monthlyQuantityBar')?.getContext('2d');
+                    if (canvas) monthlyBarChart = new Chart(canvas, { ...chartOptions(false), data: monthlyCasualBarData });
+                }
+
+                if (monthlyBarPassChart) { updateChartPreservingLegend(monthlyBarPassChart, monthlyPassBarData); }
+                else {
+                    const canvas = document.getElementById('monthlyPassQuantityBar')?.getContext('2d');
+                    if (canvas) monthlyBarPassChart = new Chart(canvas, { ...chartOptions(false), data: monthlyPassBarData });
+                }
+
+                if (monthlyLineChart) { updateChartPreservingLegend(monthlyLineChart, monthlyCasualLineData); }
+                else {
+                    const canvas = document.getElementById('monthlyQuantityLine')?.getContext('2d');
+                    if (canvas) monthlyLineChart = new Chart(canvas, { ...chartOptions(true), data: monthlyCasualLineData });
+                }
+
+                if (monthlyLinePassChart) { updateChartPreservingLegend(monthlyLinePassChart, monthlyPassLineData); }
+                else {
+                    const canvas = document.getElementById('monthlyPassQuantityLine')?.getContext('2d');
+                    if (canvas) monthlyLinePassChart = new Chart(canvas, { ...chartOptions(true), data: monthlyPassLineData });
+                }
             }
         });
     }
@@ -376,7 +425,6 @@ $(document).ready(function() {
      */
     async function loadAllTransactionData() {
         console.log("Refreshing all transaction data...");
-        // Show a loader if you have one
         const promises = [
             fetchDailyTransaction(),
             fetchWeeklyTransactionData(),
@@ -384,22 +432,14 @@ $(document).ready(function() {
         ];
 
         try {
-            // Wait for all ajax calls to complete
             await Promise.all(promises);
             console.log("All transaction data refreshed successfully.");
         } catch (error) {
-            // Log any error that occurs during the fetch
             console.error("An error occurred while refreshing transaction data:", error);
-        } finally {
-            // Hide loader if you have one
         }
     }
 
     // --- SCRIPT INITIALIZATION ---
-    
-    // Perform the initial data load when the page is ready
     loadAllTransactionData();
-
-    // Set a single interval to refresh all data periodically
-    setInterval(loadAllTransactionData, 5000); // Refresh every 5 seconds
+    setInterval(loadAllTransactionData, 15000); // Refresh every 5 seconds
 });

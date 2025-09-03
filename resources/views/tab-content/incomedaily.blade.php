@@ -42,7 +42,7 @@
 
             <div class="col-12 mt-3 mt-md-0 col-md-6 d-flex">
                 <div class="content-custom flex-fill">
-                    <table id="dailyIncome" class="table table-striped table-bordered">
+                    <table id="dailyIncome" class="table table-striped">
                         <thead>
                             <tr>
                                 <th>No</th>

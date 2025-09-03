@@ -183,6 +183,10 @@
         .mode-gelap .form-select {
             color: #ffffff;
         }
+
+        .easepick-wrapper {
+            z-index: 9999 !important;
+        }
     </style>
 
     <div class="search-wrapper card shadow-sm p-4 border-0 rounded-3 mb-4">

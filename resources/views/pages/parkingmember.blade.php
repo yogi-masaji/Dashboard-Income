@@ -168,7 +168,7 @@
         }
 
         .easepick-wrapper {
-            z-index: 1060;
+            z-index: 1060 !important;
         }
     </style>
 
